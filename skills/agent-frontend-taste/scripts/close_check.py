@@ -1,0 +1,221 @@
+#!/usr/bin/env python3
+# /// script
+# requires-python = ">=3.10"
+# ///
+"""Il check di chiusura, in un comando solo — e con una traccia.
+
+Perché esiste, misurato. Le regole di chiusura c'erano già: colore verificato,
+responsive provato, nessun segnaposto, `dati_verosimili` nel DESIGN. Erano
+quattro cose sparse, e l'ultima riga di `apply-frontend.md` le elencava tutte
+insieme — il punto del documento che si legge quando il contesto è più lungo e
+la pagina sembra finita. Su cinque pagine prodotte negli eval, **tre uscivano
+con `palette_guard` a 1**: `#395058` croma 12.2, `#273139` croma 7.1,
+`#1d5b62` croma 27.1, tutte su fasce a piena larghezza. Non perché la regola
+mancasse: perché nessuno aveva eseguito il controllo prima di consegnare.
+
+Quattro comandi da ricordare diventano uno da eseguire. E l'esito non resta in
+chat: `--design` lo scrive nel DESIGN.md, così «ho chiuso la pagina» è una cosa
+che si può verificare dopo, invece di una cosa che si dichiara.
+
+Cosa controlla:
+  1. colore      — palette_guard: croma dello scuro, settore dominante, serie,
+                   i tre hard-reject (il motore vero sta in palette_guard.py)
+  2. responsive  — viewport meta, griglie che collassano, niente larghezze fisse
+  3. finito      — nessun TODO / lorem ipsum / «da sostituire» nel consegnato
+  4. traccia     — `dati_verosimili:` nel DESIGN.md quando i testi non erano dati
+
+Usage:
+    uv run scripts/close_check.py apps/<slug>/index.html
+    uv run scripts/close_check.py apps/<slug>/index.html --ledger _bmad/memory/agent-frontend-taste/hue-ledger.json
+    uv run scripts/close_check.py apps/<slug>/index.html --design apps/<slug>/DESIGN.md
+    uv run scripts/close_check.py apps/<slug>/*.html --format json
+
+Exit: 0 si consegna · 1 c'è da correggere · 2 non misurabile (non è un pass).
+"""
+
+from __future__ import annotations
+
+import argparse
+import importlib.util
+import json
+import re
+import sys
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+
+
+def _palette_guard():
+    """Il guard è il motore del colore: si importa, non si riscrive."""
+    spec = importlib.util.spec_from_file_location("palette_guard", HERE / "palette_guard.py")
+    if not spec or not spec.loader:
+        raise SystemExit("palette_guard.py non trovato accanto a close_check.py")
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules.setdefault("palette_guard", mod)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+VIEWPORT_RE = re.compile(r"<meta[^>]+name=[\"']viewport[\"'][^>]*width=device-width", re.I)
+MEDIA_RE = re.compile(r"@media[^{]*\(", re.I)
+FLUID_GRID_RE = re.compile(r"auto-fit|auto-fill|minmax\(|flex-wrap|grid-template-columns:\s*1fr", re.I)
+FIXED_WIDTH_RE = re.compile(r"(?:^|[^-\w])width\s*:\s*(\d{4,})px", re.I)
+
+# I marcatori che un lavoro consegnato non contiene mai. `\bTODO\b` con i
+# confini di parola, o «Metodo» conta come segnaposto — successo davvero,
+# durante la review di questo skill.
+PLACEHOLDER_RE = re.compile(
+    r"\bTODO\b|\bFIXME\b|\bXXX\b|lorem ipsum|\[INSERIRE|da sostituire|"
+    r"testo di esempio|your headline here|placeholder text", re.I)
+
+# Un contatto vero, non un carattere che gli somiglia: cercare `@` da solo
+# faceva scattare `@media` — la stessa trappola di `TODO` dentro «Metodo».
+DATA_HINT_RE = re.compile(
+    r"[\w.+-]+@[\w-]+\.[a-z]{2,}"          # email
+    r"|\+39[\s./-]?\d[\s./-]?\d{2,}"       # telefono con prefisso
+    r"|\b0\d{1,3}[\s./-]?\d{5,}\b"         # fisso italiano
+    r"|€\s?\d|\d+[.,]\d{2}\s?€"            # prezzi
+    r"|\b\d{1,2}[:.]\d{2}\s?[–-]\s?\d{1,2}[:.]\d{2}\b",   # fasce orarie
+    re.I)
+
+
+def check_responsive(text: str) -> tuple[bool, list[str]]:
+    problems = []
+    if not VIEWPORT_RE.search(text):
+        problems.append("manca il `<meta name=\"viewport\" content=\"width=device-width…\">`: "
+                        "sul telefono la pagina esce rimpicciolita")
+    if not (MEDIA_RE.search(text) or FLUID_GRID_RE.search(text)):
+        problems.append("nessuna media query e nessuna griglia fluida: il layout non collassa")
+    fixed = [m.group(1) for m in FIXED_WIDTH_RE.finditer(text) if int(m.group(1)) >= 1000]
+    if fixed:
+        problems.append(f"larghezza fissa di {fixed[0]}px: sotto quella misura la pagina sfora")
+    return not problems, problems
+
+
+def check_finished(text: str) -> tuple[bool, list[str]]:
+    found = sorted({m.group(0).lower() for m in PLACEHOLDER_RE.finditer(text)})
+    return (not found), ([f"segnaposto nel file consegnato: {', '.join(found)}"] if found else [])
+
+
+def check_design(design: Path | None, page_text: str) -> tuple[bool, list[str]]:
+    """`dati_verosimili` serve quando la pagina espone contatti, prezzi, orari."""
+    if not DATA_HINT_RE.search(page_text):
+        return True, []
+    if design is None or not design.is_file():
+        return False, ["la pagina espone contatti/prezzi/orari ma non c'è un DESIGN.md: "
+                       "l'elenco di cosa è inventato deve restare scritto (la chat sparisce, "
+                       "il sito no)"]
+    if "dati_verosimili" not in design.read_text(encoding="utf-8", errors="replace"):
+        return False, [f"`{design.name}` non dichiara `dati_verosimili:`: senza, fra sei mesi "
+                       "nessuno sa quale numero di telefono era inventato"]
+    return True, []
+
+
+def check_colour(pg, text: str, last: list[str], ledger: Path | None,
+                 page: Path) -> tuple[int, dict, list[str]]:
+    """(stato, report, problemi) — stato 0 ok, 1 violazioni, 2 non misurabile."""
+    pairs, painted, small, ok = pg.measured_pairs(text)
+    if not ok or not pairs:
+        return 2, {}, [pg.unmeasurable_note(text)]
+    report = pg.analyse(pairs, painted, small)
+    rejects = pg.hard_rejects(text, pg.palette_colours(text, report["colours"]))
+    entries = []
+    if ledger:
+        entries = pg.ledger_load(ledger)
+        if not any(s.strip() for s in last):
+            last = pg.ledger_sectors(entries)
+    problems = pg.violations(report, last) + rejects
+    if ledger:
+        pg.ledger_record(ledger, entries, str(page.resolve()), report)
+    return (1 if problems else 0), report, problems
+
+
+def design_lines(report: dict) -> list[str]:
+    ink = report.get("ink") or {}
+    return [
+        "```yaml",
+        f"hue_sector: {report.get('dominant_sector')}",
+        f"ink_family: {report.get('ink_family')}"
+        + (f"   # {ink.get('hex')} croma {ink.get('chroma')}" if ink else ""),
+        "close_check: passato",
+        "```",
+    ]
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description="Check di chiusura di una pagina consegnata")
+    ap.add_argument("pages", nargs="+", help="file HTML consegnati")
+    ap.add_argument("--design", help="DESIGN.md di accompagnamento")
+    ap.add_argument("--ledger", help="registro dei settori di tinta")
+    ap.add_argument("--last", default="", help="settori recenti, il più recente per primo")
+    ap.add_argument("--format", choices=("md", "json"), default="md")
+    args = ap.parse_args()
+
+    pg = _palette_guard()
+    design = Path(args.design) if args.design else None
+    ledger = Path(args.ledger) if args.ledger else None
+    last = args.last.split(",")
+
+    worst, out, blocks, reports = 0, [], [], []
+    for raw in args.pages:
+        page = Path(raw)
+        if not page.is_file():
+            raise SystemExit(f"file inesistente: {page}")
+        text = page.read_text(encoding="utf-8", errors="replace")
+
+        colour_state, report, colour_problems = check_colour(pg, text, last, ledger, page)
+        resp_ok, resp_problems = check_responsive(text)
+        fin_ok, fin_problems = check_finished(text)
+        des_ok, des_problems = check_design(design, text)
+
+        problems = colour_problems + resp_problems + fin_problems + des_problems
+        state = 2 if colour_state == 2 else (1 if problems else 0)
+        worst = max(worst, state)
+        if report:
+            reports.append(report)
+        out.append({
+            "page": str(page), "state": state,
+            "colour": {"dominant_sector": report.get("dominant_sector"),
+                       "ink_family": report.get("ink_family")} if report else None,
+            "problems": problems,
+        })
+
+        lines = [f"## {page}", ""]
+        mark = {0: "OK", 1: "DA CORREGGERE", 2: "NON MISURABILE"}[state]
+        lines.append(f"**{mark}**")
+        if report:
+            ink = report.get("ink") or {}
+            lines.append(f"- colore: settore **{report['dominant_sector']}** · "
+                         f"`ink_family: {report['ink_family']}`"
+                         + (f" ({ink.get('hex')}, croma {ink.get('chroma')})" if ink else ""))
+        lines.append(f"- responsive: {'ok' if resp_ok else 'da correggere'}")
+        lines.append(f"- finito: {'nessun segnaposto' if fin_ok else 'da correggere'}")
+        lines.append(f"- traccia: {'ok' if des_ok else 'da correggere'}")
+        if problems:
+            lines.append("")
+            lines.extend(f"  - {p}" for p in problems)
+        blocks.append("\n".join(lines))
+
+    if args.format == "json":
+        print(json.dumps({"pages": out, "state": worst}, ensure_ascii=False, indent=1))
+        return worst
+
+    print("# Check di chiusura\n")
+    print("\n\n".join(blocks))
+    print()
+    if worst == 0:
+        print("Si consegna. Nel `DESIGN.md` va la traccia di ciò che è stato misurato "
+              "— così «l'ho controllato» resta verificabile anche fra sei mesi:\n")
+        print("\n".join(design_lines(reports[0] if reports else {})))
+    elif worst == 1:
+        print("**Non si consegna così:** correggi i punti qui sopra e rilancia. "
+              "Un difetto trovato adesso costa una riga; trovato dal cliente costa la pagina.")
+    else:
+        print("**Non è un pass:** la palette non è leggibile da questo file. Misura il file "
+              "che dichiara i colori, o passa la palette a `palette_guard.py --hex`. "
+              "Finché non è misurata, non si dichiara «pulita».")
+    return worst
+
+
+if __name__ == "__main__":
+    sys.exit(main())
