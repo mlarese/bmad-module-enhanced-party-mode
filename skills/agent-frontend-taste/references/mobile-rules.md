@@ -146,8 +146,8 @@ quali decisioni hanno agito, `--flat` ripristina l'estrazione uniforme, e il det
 resta pieno: stesso seed+dominio → stessa ricetta.
 
 La ricetta **propone**. DX/UE/AF confermano o alterano ogni decisione contro `activity`,
-dominio e corpus — e poi lo **dichiarano**. Un decisione non dichiarato è una decisione
-ereditato per riflesso.
+dominio e corpus — e poi la **dichiarano**. Una decisione non dichiarata è una
+decisione ereditata per riflesso.
 
 ## Decisioni grafici (il motivo per cui questo file esiste)
 

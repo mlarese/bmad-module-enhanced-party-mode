@@ -83,7 +83,7 @@ sul renderizzato.
 
 **Pesi di dominio (2026-07-26):** con `--domain` l'estrazione è pesata (`DOMAIN_WEIGHTS`: pos ↑ dense-pro/compact-zebra, analytics ↑ inline-chart/mono, finance ↑ sharp/mono…). Bias dichiarato nella ricetta, mai un'esclusione, `--flat` per l'estrazione uniforme, determinismo pieno.
 
-La ricetta **propone**. DX/UE/AF confermano o alterano ogni decisione contro `activity`, dominio e corpus — e poi lo **dichiarano**. Un decisione non dichiarato è una decisione ereditata per riflesso.
+La ricetta **propone**. DX/UE/AF confermano o alterano ogni decisione contro `activity`, dominio e corpus — e poi la **dichiarano**. Una decisione non dichiarata è una decisione ereditata per riflesso.
 
 ## Decisioni (pool nel codice, non duplicati qui)
 

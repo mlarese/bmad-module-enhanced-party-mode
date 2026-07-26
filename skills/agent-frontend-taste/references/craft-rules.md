@@ -41,7 +41,7 @@ che consegni.
 | Tipografia sistema | la legge dei testi: quali font, quanto grandi, quanto spaziati | `type_voices` (3 ruoli) · `type_scale` · tracking 2 poli · leading | `last_type_voices` | `craft_axes.py` per la legge di scala |
 | Composizione | come è impaginata la pagina: colonne, allineamenti, larghezza dei bordi | `grid_system` · `alignment_map` · `bleed_rhythm` · misura `ch` | `last_grid_systems` | `craft_axes.py` seed |
 | Superfici | come cambiano i fondi scendendo nella pagina, e che trama hanno | `surface_rhythm` · `surface_texture` · token materiali | `last_surface_textures` | `craft_axes.py` seed |
-| Chrome geometry | quanto sono arrotondati bottoni, schede e campi | `radius_family` + `--r-btn/box/chip` | `last_radius_families` | + batch ≥30 corner language |
+| Forma di bottoni e schede | quanto sono arrotondati bottoni, schede e campi | `radius_family` + `--r-btn/box/chip` | `last_radius_families` | + batch ≥30 corner language |
 | Hero archetipo | lo schema del primo schermo, scelto dal catalogo | `hero_archetype` (id del catalogo) | `last_hero_archetypes` | `hero_gallery.py --suggest` — shortlist da seed, scelta tua |
 | Hero immagine | come è trattata l'immagine del primo schermo | `hero_treatment` | `last_hero_treatments` | mai velo scuro full-bleed default |
 | Hero copy | dove sta scritto il testo nel primo schermo | `hero_copy` · placement · panel | `last_hero_copy` | `hero_copy.py` seed |

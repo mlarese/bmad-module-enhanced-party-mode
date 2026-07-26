@@ -28,7 +28,7 @@ Extract **structure** only — never hex/assets. Invented URLs or cloning one En
 
 **DESIGN.md modelli:** `references/design-md-landing.md` · `design-md-dashboard.md` · `design-md-saas.md` · `design-md-mobile-web-app.md`.
 
-Dopo il batch ≥30 annota anche la **chrome geometry** (angoli): conta sharp / soft / rounded / pill sui migliori 8–12 e dichiara `radius_family` coerente col mix **e** con activity (vedi `craft-rules.md` → Chrome geometry). Non defaultare a box quadrati.
+Dopo il batch ≥30 annota anche la **forma degli angoli** (la «chrome geometry»: angoli): conta sharp / soft / rounded / pill sui migliori 8–12 e dichiara `radius_family` coerente col mix **e** con activity (vedi `craft-rules.md` → Chrome geometry). Non defaultare a box quadrati.
 
 **Misura, non impressioni.** Su 2–4 riferimenti migliori esegui `awwwards-scout.py --site <slug> --inspect` (o `--live <url>`): segue il sito premiato e conta sul CSS reale famiglie/tracking/leading, `repeat(N)` e `grid-column` espliciti vs `span`, `text-align` / `justify-self`, hairline solid vs dashed, `background-size`, radial vs linear, blend, blur, `data-theme`. Da quei conteggi ricavi `grid_system`, `alignment_map`, `bleed_rhythm`, `surface_texture`, `type_voices`, `type_scale`. Costo: ~5 request per sito (`--css-limit` per alzare/abbassare).
 
