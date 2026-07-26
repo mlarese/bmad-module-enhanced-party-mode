@@ -1,7 +1,7 @@
 code: epm
 name: "Enhanced Party Mode"
 description: "Consiglio di esperti craft/legal/infra/WP/fiscale per party mode e cantiere — Vesper, Vera, Jane, Elena, Rex, Niki, Dan Arrow."
-module_version: 1.19.1
+module_version: 1.19.2
 default_selected: false
 module_greeting: >
   Enhanced Party Mode (epm) è pronto.
@@ -70,8 +70,10 @@ post-install-notes: >
   Poi: attiva bmad-party-mode (gruppo super-esperti se configurato) oppure chiama
   direttamente Vesper, Vera, Jane, Elena, Rex, Niki o Dan Arrow.
 
-  Per aggiornare, reinstalla ELENCANDO epm fra i moduli — npx bmad-method install
-  --directory . --modules bmm,epm --custom-source <url> --tools <i tuoi> --yes —
-  e poi riesegui epm-setup. Attenzione: --action quick-update NON aggiorna questo
-  modulo, tocca solo quelli ufficiali; e una reinstallazione che non elenca epm
-  lo cancella.
+  Per aggiornare basta npx bmad-method install --action quick-update: aggiorna i
+  file anche di questo modulo. Ma NON riscrive epm.version in _bmad/config.yaml —
+  quel campo lo scrive solo epm-setup — quindi dopo l aggiornamento rilancia
+  epm-setup, o la config resta indietro e sembra che non sia successo niente.
+
+  Se invece reinstalli, ELENCA epm fra i moduli: una reinstallazione che non lo
+  elenca lo cancella.
