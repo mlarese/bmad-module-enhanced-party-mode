@@ -91,8 +91,12 @@ irriconoscibile ciò che tutti chiamano così. Ma si spiega la prima volta, semp
 | casi limite | cosa succede **ai bordi**: nessun dato, troppi dati, testo lunghissimo, connessione assente |
 | review avversaria | una lettura fatta **apposta per trovare il difetto**, non per confermare |
 | slice (fetta verticale) | un pezzo di lavoro **completo e consegnabile da solo**: schermo, dati e logica di quella funzione insieme |
-| `slice_plan` | l'**ordine delle fette**: prima la landing, poi il back office, e così via |
+| `slice_plan` | l'**ordine delle fette**: prima la landing, poi il back office, e così via. Si scrive intero, si esegue **una riga per volta** |
+| confine di slice | il punto in cui **una fetta finisce e si consegna**: il lavoro si chiude lì, e la fetta dopo la chiede l'owner. Non è una domanda — è una consegna |
+| orchestratore della slice | **John** (il PM): tiene il piano, l'ordine degli agenti dentro la fetta aperta e la sua chiusura. Non decide l'aspetto: il craft non si vota |
 | spec eseguibile | la **scheda di lavoro** di una fetta: cosa fare, dove, e come si verifica che sia fatto |
+| `ready-for-dev` | il **timbro** sulla scheda di lavoro che dice «si può implementare così com'è»: è anche ciò che fa entrare `bmad-quick-dev` direttamente nell'implementazione, saltando le sue domande |
+| `Ask First` | un campo del modello di scheda che **genera fermate**: ciò che ci scrivi dentro diventa una domanda all'umano a metà implementazione. Qui resta vuoto |
 | varianza | il **verbale di uno scostamento**: cosa ci si aspettava, cosa si è fatto, perché |
 | workflow «che si ferma» | un procedimento BMAD che a un certo punto **chiede qualcosa a un umano**: qui non si invoca, se ne copia il formato |
 | **modello** (era «stampo») | usare **la forma** di un procedimento — i suoi schemi e criteri — senza farlo partire |

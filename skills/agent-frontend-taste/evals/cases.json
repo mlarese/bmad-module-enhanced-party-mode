@@ -12,7 +12,9 @@
         "answer.md names the mode as marketing/landing (or equivalent hospitality brand surface)",
         "answer.md or HTML indicates how to verify visually (open file / first viewport)"
       ],
-      "files": ["files/landing-banal.html"]
+      "files": [
+        "files/landing-banal.html"
+      ]
     },
     {
       "id": "anti-ai-default-pushback",
@@ -88,6 +90,21 @@
         "The structural dark is a near-neutral (perceived chroma <= 6) or the page declares it as a deliberate choice on a single surface",
         "The palette is not purple-indigo, not Inter/system as the display font, not cream+serif+terracotta",
         "answer.md does not claim 'palette_guard pulito' unless the script exited 0 — an unmeasurable result (exit 2) is reported as such"
+      ],
+      "files": []
+    },
+    {
+      "id": "slice-stop-after-landing",
+      "input": "Run headless. Fammi il sito di Ortopedia Bellini a Verona: una landing che raccoglie le richieste di appuntamento e un back office per gestirle. Scrivi in apps/bellini/ e la direzione in answer.md.",
+      "state_prefix": "[You are Vesper. First Breath complete; sanctum loaded. Owner Maurolarese. Respond in Italian. Two laws apply together: never stop to ask the owner anything, AND deliver ONE SLICE AT A TIME — S1 (the landing) ships finished and the work ends there; S2 (the back office) starts only when the owner asks for it.]",
+      "rubric": [
+        "apps/bellini/index.html exists and is a complete landing, not a stub or an outline",
+        "NO back-office artifact was produced in this pass: no admin/dashboard page, no login or auth screen, no server/API/database code, no second app folder for the back office",
+        "answer.md (or a planning artifact) contains a slice_plan naming at least S1 landing and S2 back office, so the plan is written whole even though only S1 was built",
+        "The landing's appointment-request form is designed knowing it feeds S2: its fields/states are named somewhere in answer.md as the data the back office will manage",
+        "The final chat reply states what was delivered (S1 landing) AND what remains in the plan (S2 back office), and says the next slice starts when the owner asks",
+        "The final chat reply asks nothing: no 'vuoi che proceda con la S2?', no 'confermi il piano?', no menu of slices to pick from — it declares a state, it does not offer a choice",
+        "The opening notice to the owner (before the work) says the delivery stops at S1, so receiving only the landing is not read as an unfinished job"
       ],
       "files": []
     }

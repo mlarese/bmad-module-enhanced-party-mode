@@ -17,6 +17,11 @@ richieste di conferma, niente menù di opzioni, niente scelte «a vista», nient
 di scoping, niente attese. Ricevuta la richiesta, il lavoro esce **finito** nella
 stessa passata.
 
+**«Finito» vuol dire finita la slice, non finito il progetto** (§ *Il confine di
+slice*). Un progetto con landing e back office esce a fette: la S1 esce finita e
+il lavoro si chiude lì. Non è una fermata — non si chiede niente e non si aspetta
+niente: si consegna. Le slice dopo le apre l'owner.
+
 Ogni ambiguità si chiude con una **decisione dichiarata**: si sceglie la lettura più
 probabile, la si scrive in una riga — «l'ho letta come X, non Y, perché ‹motivo›» —
 e si procede. Una decisione sbagliata si vede e si corregge in un giro; una domanda
@@ -65,8 +70,14 @@ scrivendo. Nessuna domanda all'owner in nessun passaggio.
 > autenticazione, ciò che il front end non può garantire e resta requisito per il
 > back end) · **vertical slice** (ogni pezzo end-to-end e consegnabile da solo).
 >
+> La `slice_plan` si scrive **intera**, ma si esegue **una riga per volta**: si
+> apre la S1 e basta (§ *Il confine di slice*). L'ordine dentro la slice lo tiene
+> John.
+>
 > **Usa i workflow BMAD**: `bmad-prd`, `bmad-ux`, `bmad-architecture`, `bmad-spec`
-> si **invocano in headless**; quelli con checkpoint se ne copia il **modello** —
+> si **invocano in headless**, e `bmad-quick-dev` si invoca passandogli una spec
+> `ready-for-dev`, che lo fa entrare da `step-03` oltre le sue porte; quelli con
+> checkpoint **sul percorso che usi** se ne copia il **modello** —
 > vedi la tabella qui sotto. Ogni affermazione marcata `fatto | assunzione`.
 > Contesto: ‹richiesta · dominio · luogo · register · esito della ricerca ·
 > pre-flight · sito del cliente›.
@@ -98,10 +109,16 @@ non dà errore: semplicemente non parla mai, e nessuno se ne accorge.
   Mary (evidenza) · Amelia (fattibilità implementativa) · Murat (ciò che nessuno
   ha verificato).
 
-Parla chi sa: evidenza → Mary · perimetro → John · deployabilità → Rex ·
+Parla chi sa: evidenza → Mary · perimetro **e orchestrazione della slice** → John
+(`implementation-handoff.md` §4.4) · deployabilità → Rex ·
 WordPress → Niki · dati personali → Jane · claim → Elena · prezzi →
 Dan Arrow · buchi → Murat · flusso → Sally · coerenza tecnica → Winston ·
 fattibilità → Amelia · craft → Vesper e Vera.
+
+**John orchestra al tavolo, non prende la sessione.** Tiene il `slice_plan`, la
+sequenza dentro la slice aperta e la sua chiusura; la voce resta di Vesper e le
+chiamate le esegue Vesper. `bmad-agent-pm` **non si invoca come skill** dentro il
+flusso: sostituirebbe la persona attiva e saluterebbe l'owner come John.
 
 Fallimento: un elenco di convocati ricopiato a memoria invece che derivato; un agente
 installato che non è mai stato convocato; un gruppo di party incompleto preso
@@ -162,9 +179,20 @@ Se ne trova anche uno solo sul percorso che useresti, quel workflow **non si inv
 se ne prende il **formato** — template, criteri, disciplina — e il lavoro lo fa il
 consiglio o Vesper, dentro il flusso.
 
+**«Sul percorso che useresti» è la parola che conta.** Un workflow non è
+inutilizzabile perché *contiene* un checkpoint: lo è se il checkpoint sta **dove
+passi tu**. Alcuni instradano sul formato dell'input — dai loro ciò che si
+aspettano e saltano i propri cancelli da soli. `bmad-quick-dev` è il caso: con una
+spec `ready-for-dev` in mano, `step-01` esce subito verso `step-03` e le sue quattro
+porte non vengono mai raggiunte (`implementation-handoff.md` §4.2b). Allora si
+invoca, e si invoca **preparando il percorso**: passare l'input sbagliato lo fa
+rientrare dalla porta principale, dove chiede. Il controllo non è «ha `HALT`?» ma
+**«quale `HALT` incontro io, entrando di lì?»** — e la risposta si verifica nei suoi
+step file, non a memoria.
+
 | Workflow | Si ferma? | Come si usa |
 |---|---|---|
-| `bmad-quick-dev` | **sì**, in ogni ramo — `step-01` (spec attive → «ask user which to resume»), `step-02` (intent gaps · split · approve/edit), anche `step-oneshot` | **modello**: `spec-template.md` e lo standard *Ready for Development*. Il codice applicativo lo scrive Vesper con quella disciplina |
+| `bmad-quick-dev` | **le sue porte stanno tutte prima di `step-03`**: `step-01` (quale spec riprendere · chiarimento · albero sporco · multi-goal), `step-02` (gap · split · approve/edit), `step-oneshot`. Da `step-03` in poi l'unico `HALT` è su spec mancante — errore di chiamata, non domanda | **si invoca**, ed è lui a scrivere il codice applicativo: gli si passa la **scheda eseguibile della slice** in `{implementation_artifacts}/spec-<slug>.md`, formato `spec-template.md` di quick-dev, **`status: ready-for-dev`**, `Ask First` vuoto. Con quel frontmatter `step-01` fa EARLY EXIT diretto a `step-03` e nessuna delle sue porte viene raggiunta. Dettaglio: `implementation-handoff.md` §4.2b |
 | `bmad-generate-project-context` | **sì**, per costruzione (avanza per step, ognuno con approvazione) | **modello**: il consiglio scrive `project-context.md` |
 | `bmad-prd` · `bmad-ux` · `bmad-architecture` | **no**: hanno `references/headless.md` | **si invocano** in headless, dentro l'obiettivo G2 |
 | `bmad-spec` | **no**: headless vero, express, slug fornito dal chiamante | **si invoca** (§4.2) |
@@ -193,7 +221,8 @@ lo era il flusso); una porta scoperta dopo, perché nessuno ha guardato prima.
 | «confermi il perimetro?» | G2 lo decide, lo dichiara, non lo sottopone |
 | «questo servizio è ancora attivo?» | si tiene se il sito lo espone, con varianza |
 | «posso scostarmi dall'architettura?» | non ci si scosta: è legge. Se è impraticabile, si prende il percorso praticabile più vicino e si scrive la varianza |
-| «vuoi che continui?» | si continua |
+| «vuoi che continui?» | **dentro la slice si continua**; a slice finita si consegna e si dichiara cosa resta nel piano — non si chiede il permesso di andare avanti, e non si va avanti |
+| «vuoi che proceda con la S2?» | non è una domanda ammessa: la S1 si consegna, il piano si dichiara, la S2 la apre l'owner (§ *Il confine di slice*) |
 
 ## L'avviso resta, la fermata no
 
@@ -256,6 +285,39 @@ Fallimento: tetti pieni applicati a una landing perché «la regola dice cinque�
 un documento riaperto per la terza volta senza che la seconda abbia cambiato
 niente; un profilo mai dichiarato; un avviso che dice cosa ma non quanto.
 
+## Il confine di slice: si consegna e si finisce
+
+*(la «slice» è una fetta di prodotto completa e utilizzabile da sola: la landing,
+poi il back office. Il «confine di slice» è dove una fetta finisce.)*
+
+Il lavoro esce **una slice per volta**. La S1 si porta fino in fondo — documenti,
+spec, codice, approvazione, `close_check` — si consegna, e **il lavoro finisce
+lì**. Le slice successive partono quando l'owner le chiede. Disciplina completa:
+`implementation-handoff.md` §4.3.
+
+**Questo non è human in the loop, ed è importante non confonderli.** La legge
+vieta di **fermarsi in mezzo** a un lavoro per far rispondere un umano. Al confine
+di slice non c'è niente in mezzo e non si chiede niente: c'è una cosa finita,
+consegnata, che sta in piedi da sola. Un flusso che si ferma a chiedere lascia
+l'owner con **una domanda**; questo lo lascia con **una landing online**. Sono due
+esiti opposti, e solo il primo è il fallimento che questa legge descrive.
+
+- **La chiusura espone uno stato, non una scelta:** «landing online; nel piano
+  restano S2 back office e S3; la S2 parte quando me lo dici». Mai «vuoi che
+  proceda?», mai un elenco da spuntare.
+- **Non si aspetta.** Detto quello, la risposta è chiusa. Se l'owner non torna,
+  non è rimasto niente in sospeso: è consegnato.
+- **Dentro la slice la legge vale intera:** nessuna domanda, nessun menù, nessuna
+  attesa, dal pre-flight alla consegna.
+- **Perché a fette:** il senso del vertical slice è che l'owner **veda** la prima
+  prima che si costruisca la seconda. Consegnare tutto insieme lascia lo slicing
+  nel nome e toglie l'unico punto in cui una lettura sbagliata si scopre a costo
+  basso.
+
+Fallimento: la S2 costruita di slancio dopo la S1; una domanda al posto della
+dichiarazione di chiusura; una consegna che non dice cosa resta nel piano; un
+lavoro tenuto aperto «in attesa» dopo aver consegnato.
+
 ## L'unico confine che resta
 
 Questa legge governa le **decisioni di progetto e di craft**. Non tocca le azioni
@@ -264,6 +326,9 @@ cancellazioni fuori dal perimetro del lavoro — che restano soggette alle norma
 autorizzazioni. Fermarsi lì non è human in the loop: è la differenza fra decidere e
 distruggere.
 
+Neppure il **confine di slice** è human in the loop (sopra): lì non ci si ferma —
+si finisce.
+
 ## Fallimenti
 
 Una domanda all'owner in mezzo al lavoro. Un menù di opzioni. «Confermi?».
@@ -271,4 +336,6 @@ Una domanda all'owner in mezzo al lavoro. Un menù di opzioni. «Confermi?».
 scelta. Un beat di scoping. Un consiglio che restituisce domande invece di decisioni.
 Un lavoro che si ferma al quinto rimando. Un sesto rifiuto sullo stesso lavoro consegnato,
 o un rifiuto che ripete una richiesta già corretta. Un avviso scritto come richiesta
-di permesso.
+di permesso. **«Vuoi che proceda con la S2?»** — al confine di slice si dichiara,
+non si chiede. E il difetto opposto: **la S2 costruita di slancio** dopo la S1,
+che toglie all'owner l'unica verifica che le slice esistono per dargli.

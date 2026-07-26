@@ -7,7 +7,8 @@ craft. Non è una capability.
 
 **Dove sta cosa** — §1 pre-flight · §2 ricerca (dominio + marketing, scritte) ·
 §3 valutazione e G1 (+3.1 tetto rimandi) · **§4.0 i sei documenti** · **§4.0b la
-controllo dei documenti** · §4.1 slice_plan · §4.2 spec di slice · §5 implementazione · §6
+controllo dei documenti** · §4.1 slice_plan · §4.2 spec di slice · **§4.3 una slice
+per volta** · **§4.4 l'orchestratore** · §5 implementazione · §6
 approvazione (+6.1 tetto rifiuti) · §7 precedenza dei documenti (+7.1 quelli
 auto-scritti) · §8 sito del cliente · §9 testi · §10 due artefatti · §11 varianze ·
 §12 dove stanno le indicazioni · §13 canone · §14 mappa dei workflow.
@@ -20,13 +21,20 @@ auto-scritti) · §8 sito del cliente · §9 testi · §10 due artefatti · §11
 | 2 | **Ricerca** — dominio, marketing, servizi reali | Vesper | no |
 | 3 | **Valutazione degli input + G1** — richiesta, ricerca, documenti, ambiguità | consiglio | solo internamente, se la ricerca è insufficiente (max 5 giri) |
 | 4 | **G2 — i sei documenti + `slice_plan`** (§4.0), poi il **controllo dei documenti** (tre passate) (§4.0b) | consiglio | no: si dichiara, non si chiede |
-| 5 | **Implementazione** — pagina e codice | Vesper · Vera (`bmad-quick-dev` come modello, §4.2) | no |
-| 6 | **Approvazione (G3)** — contro i documenti | consiglio | solo internamente, se una richiesta non è soddisfatta (max 5 rifiuti) |
+| 5 | **Apertura della S1** — spec eseguibile della **prima slice sola** (§4.2) | John orchestra (§4.4) | no |
+| 6 | **Implementazione della S1** — pagina e codice | Vesper · Vera · **`bmad-quick-dev` invocato** (§4.2) | no |
+| 7 | **Approvazione (G3)** — contro i documenti | consiglio | solo internamente, se una richiesta non è soddisfatta (max 5 rifiuti) |
+| 8 | **Consegna della S1 — e qui il lavoro finisce** (§4.3) | Vesper | **sì, e non è una domanda:** le slice successive partono quando l'owner le chiede |
 
-**Nessun passo si ferma sull'owner.** Le uniche fermate sono interne — la ricerca che
-torna indietro, il lavoro consegnato che torna in lavorazione — e si risolvono senza uscire
+**Nessun passo si ferma sull'owner** — e il passo 8 non fa eccezione, perché non
+gli chiede niente: **consegna**. Le uniche fermate interne sono la ricerca che
+torna indietro e il lavoro consegnato che torna in lavorazione, e si risolvono senza uscire
 dal flusso. Una cosa sola arriva all'owner in apertura: **sa cosa sta per succedere**
 (§1.1), come dichiarazione, non come domanda. Legge completa: `references/autonomia.md`.
+
+**Il flusso copre una slice, non il progetto.** Dal passo 5 in poi si parla sempre
+della slice aperta: la S2 rifà i passi 5–8 quando l'owner la chiede, sugli stessi
+sei documenti (§4.3).
 
 ---
 
@@ -49,7 +57,9 @@ lavoro **non parte in silenzio**. Una battuta all'owner, prima, in voce:
 > ⚠️ **Nessun documento vincolante qui** — né PRD, né architettura, né page spec.
 > Procedo in autonomia: ricerca di dominio e marketing, casi limite, review
 > avversaria prima di consegnarti. **Profilo leggero:** sei documenti corti, una
-> passata di controllo ciascuno, poi la pagina. Perimetro, stack **e i testi** li
+> passata di controllo ciascuno, poi la pagina. **Ti consegno la S1 — la landing —
+> e mi fermo lì:** il back office è la S2, sta nel piano, e parte quando me lo
+> dici. Perimetro, stack **e i testi** li
 > decido io: il copy lo scrivo dal dominio, e contatti, prezzi e orari che
 > leggerai sono verosimili ma non veri — te lo dico qui perché nella pagina non
 > ci sarà scritto (l'elenco di cosa è inventato lo trovi nel `DESIGN.md`).
@@ -68,6 +78,12 @@ lavoro **non parte in silenzio**. Una battuta all'owner, prima, in voce:
   owner che legge «procedo in autonomia» senza sapere se il lavoro dura due
   minuti o due ore non è stato informato. È l'unica leva che gli resta, visto
   che non gli si chiede niente.
+- **Dice anche *fin dove*.** Quando il `slice_plan` ha più di una slice, l'avviso
+  nomina **quale arriva adesso e quali restano** (§4.3): «ti consegno la landing,
+  il back office è la S2 e parte quando me lo dici». Un owner che ha chiesto «una
+  landing con back office» e riceve solo la landing senza saperlo pensa che il
+  lavoro sia monco, non che sia una slice — ed è l'unico modo in cui la consegna
+  a slice si legge come un difetto invece che come il metodo.
 - **In voce, senza sconti.** Tono di Vesper; i tre nomi (ricerca, casi limite,
   review avversaria) restano riconoscibili; il macchinario non si nomina mai.
 
@@ -197,9 +213,9 @@ Sei artefatti, in `planning-artifacts/`, un file l'uno:
 | 6 | **Project context** — le regole non ovvie per chi implementa | **scritto dal consiglio** come `project-context.md`: il suo workflow avanza per step con approvazione dell'owner e pianterebbe il flusso |
 
 Tutto dentro **un solo obiettivo del consiglio, con tutto l'elenco di chi siede al tavolo convocato** — testo in
-`autonomia.md` → *G2 — I documenti*. Il party è il contenitore che tiene insieme la
+`autonomia.md` → *G2 — I sei documenti*. Il party è il contenitore che tiene insieme la
 seduta: dentro, i workflow headless si invocano davvero; quelli con checkpoint si
-usano come modello (`autonomia.md` → *I workflow che si fermano*). Nessuna domanda
+usano come modello (`autonomia.md` → *I procedimenti che si fermano*). Nessuna domanda
 all'owner in nessun passaggio.
 
 **Tre criteri attraversano ogni documento**, e si dichiarano voce per voce:
@@ -331,9 +347,14 @@ gli strati, invece di fare prima tutta l'impalcatura e poi tutto il resto.)*
 - **La landing genera il dato del back office:** le prenotazioni della S1 sono le
   righe della tabella della S2. Progetta la S1 sapendolo (campi, stati, formati),
   o la S2 nasce con un debito.
-- **Si apre una slice solo quando la precedente è consegnata e vista.** Niente
-  lavoro in parallelo su slice diverse dello stesso progetto.
+- **Si apre una slice solo quando la precedente è consegnata *e l'owner l'ha
+  chiesta*** (§4.3). Niente lavoro in parallelo su slice diverse dello stesso
+  progetto, e niente S2 attaccata in coda alla S1 nella stessa passata.
 - Ogni slice consegnata lascia il suo spec: è così che la S2 non contraddice la S1.
+- **Il `slice_plan` si scrive tutto in G2, ma si *esegue* una riga per volta.**
+  Pianificare tutte le slice costa una seduta e serve a progettare la S1 sapendo
+  cosa arriva dopo; costruirle tutte prima che l'owner ne abbia vista una è la
+  cosa che il vertical slice esiste per evitare.
 
 ### 4.2 Una slice = una spec eseguibile
 
@@ -343,7 +364,10 @@ eseguibile**, e il codice applicativo si scrive contro quella. Il taglio è quel
 stessa di slice verticale.
 
 1. **La spec si genera con `bmad-spec`, in headless** (chiamata da skill = nessuna
-   domanda, modalità express). Slug per slice — `<progetto>-s1-<nome>`,
+   domanda, modalità express), **solo per la slice che si sta aprendo** — mai per
+   tutto il piano in anticipo: una spec scritta oggi per una slice che parte fra
+   due settimane è già vecchia quando serve, perché la slice prima le ha insegnato
+   qualcosa (§4.3). Slug per slice — `<progetto>-s1-<nome>`,
    `<progetto>-s2-<nome>` — così ogni slice ha la sua cartella e riaprire lo stesso
    slug **aggiorna in place** preservando gli ID capability.
    **Headless non chiede, ma può rifiutare:** risponde con
@@ -380,24 +404,164 @@ stessa di slice verticale.
    si corregge. Se è un obiettivo solo che attraversa più strati, resta una spec:
    cross-layer non è multi-obiettivo.
 7. **Chi fa cosa dentro la slice:** craft della pagina → Vesper (AF → Vera);
-   endpoint, persistenza, auth di slice, logica di dominio → **Vesper, con la
-   disciplina di `bmad-quick-dev`** — il suo `spec-template.md` e il suo standard
-   *Ready for Development* — **senza invocarlo**: quel workflow si ferma a chiedere
-   in ogni ramo (`autonomia.md` → *I workflow che si fermano si usano come modello*).
-   Se è l'owner a lanciarlo, si esegue com'è: le fermate se le è scelte lui.
+   endpoint, persistenza, auth di slice, logica di dominio → **`bmad-quick-dev`,
+   invocato** sulla scheda eseguibile della slice (§4.2b). L'orchestrazione è di
+   John (§4.4). Se è l'owner a lanciare quick-dev di sua iniziativa, si esegue
+   com'è, dall'inizio: le fermate se le è scelte lui.
 8. **A consegna fatta la spec resta** in `implementation-artifacts/` e vincola la
    slice dopo. Nessuna spec si hand-edita: si ri-deriva con `bmad-spec` sullo
    stesso slug.
+
+### 4.2b Lo sviluppo si fa con `bmad-quick-dev` — invocato, entrando da `step-03`
+
+Il codice applicativo della slice **lo scrive `bmad-quick-dev`**, e si invoca
+davvero. Non è un'eccezione alla legge sui workflow che si fermano
+(`autonomia.md`): è che **le sue fermate stanno tutte prima del punto in cui
+entriamo**. Le sue porte sono in `step-01` (quale spec riprendere · chiarimento
+dell'intento · albero sporco · multi-goal) e in `step-02` (gap · split ·
+`[A] Approve | [E] Edit`); da `step-03` in poi l'unico `HALT` è su spec mancante
+— che è un errore di chiamata, non una domanda.
+
+Il ponte che ci porta lì è il **formato**, e va costruito o l'invocazione ricade
+in `step-01`:
+
+1. **La scheda eseguibile sta in `{implementation_artifacts}/spec-<progetto>-s<N>-<nome>.md`**
+   e usa il `spec-template.md` **di quick-dev** (non il kernel di `bmad-spec`, che
+   ha un altro formato e vive in `specs/spec-<slug>/`). Il kernel resta il
+   **contratto** della slice; la scheda è la sua forma eseguibile, e ne è derivata,
+   non un secondo contratto: dove divergono vince il kernel.
+2. **`status: ready-for-dev` nel frontmatter.** È il campo su cui `step-01` instrada:
+   con quel valore fa **EARLY EXIT diretto a `step-03-implement.md`**, e tutte le
+   fermate di `step-01` e `step-02` non vengono mai raggiunte. Con `draft` finisce
+   in `step-02` e si pianta sul `[A] Approve`.
+3. **`Ask First:` resta vuoto** — o meglio, dice `nessuna: le decisioni si chiudono
+   in consiglio`. Quel campo del template *genera* checkpoint («if any of these
+   trigger during execution, HALT and ask the user»): scriverci dentro una
+   decisione significa piazzare da soli, dentro la spec, la domanda all'owner che
+   tutto il resto del flusso esiste per evitare. Le stesse decisioni vanno in
+   **Always** (se sono invarianti) o in **Never** (se sono fuori perimetro).
+4. **`open_questions` chiuse, zero `TODO`, zero TBD** (punti 2 e 4 sopra): una scheda
+   che non è *Ready for Development* non regge l'ingresso da `step-03`, perché lì
+   nessuno le chiuderà più.
+5. **`step-04` fa la sua review** (Blind Hunter + Edge Case Hunter in subagent): è
+   lavoro in più, non in conflitto con G3 — quella guarda il contratto e la
+   richiesta dell'owner, questa guarda il codice. Se i subagent non fossero
+   disponibili quel passo si ferma: allora si eseguono i due ruoli **inline**, non
+   si gira il prompt all'owner.
+6. **`step-04` escala all'umano oltre il quinto `review_loop_iteration`.** Lì vale
+   il **tetto dei cinque** di questo skill (§6.1): non si escala — si prende ciò che
+   regge, si dichiara cosa resta scoperto, si scrive la varianza (§11), si consegna.
+7. **`step-05` offre push e PR.** L'offerta si lascia cadere: il push sta oltre
+   il confine (`autonomia.md` → *L'unico confine che resta*) e non si fa senza che
+   l'owner lo chieda. Non è una fermata — arriva a lavoro finito.
+
+**Se la scheda non si riesce a portare a *Ready for Development*** (il contratto
+non copre abbastanza), non si invoca quick-dev sperando che chieda: si torna a G2
+per il pezzo mancante, dentro il tetto dei cinque, e si richiama. La disciplina di
+quick-dev — `spec-template.md` e lo standard *Ready for Development* — vale
+**anche** quando per qualunque ragione il workflow non parte: era già obbligatoria
+quando era solo un modello.
+
+Fallimento: quick-dev invocato senza spec file, e quindi entrato da `step-01` con
+le sue domande; `status: draft` sulla scheda; una riga in `Ask First`; il prompt di
+review di `step-04` girato all'owner perché mancavano i subagent; escalation al
+sesto giro invece del tetto dei cinque; codice applicativo scritto a mano quando
+quick-dev era invocabile.
+
+### 4.3 Una slice per volta: si consegna la S1 e ci si ferma lì
+
+Un progetto con landing e back office non si consegna a fine costruzione. **Si
+apre la S1, si finisce, si consegna, e il lavoro finisce.** Le slice successive
+partono quando l'owner le chiede.
+
+Non è una deroga alla legge di autonomia: la legge vieta di **fermarsi in mezzo**
+a un lavoro per chiedere qualcosa. Qui non si chiede niente e non si è in mezzo a
+niente — la S1 è **finita**: documentata, implementata, approvata in G3, passata
+al `close_check`, online da sola. Il flusso non si è fermato: è arrivato in fondo
+a ciò che stava facendo. Quello che segue è un lavoro **nuovo**, e i lavori nuovi
+li apre l'owner.
+
+1. **Il piano è intero, l'esecuzione è di una riga.** G2 scrive tutto il
+   `slice_plan` (§4.1) — serve a progettare la S1 sapendo cosa arriva dopo. Poi si
+   apre **solo la S1**: una spec (§4.2), una implementazione, una approvazione, una
+   consegna.
+2. **La chiusura è una dichiarazione, mai una domanda.** Si dice cosa è consegnato,
+   cosa resta nel piano e come riparte — in una riga, in voce:
+
+   > Landing online in `apps/<slug>/`. Nel piano restano **S2 back office**
+   > (accesso minimo reale + la schermata delle richieste che questa landing
+   > genera) e **S3 <…>**. La S2 parte quando me lo dici.
+
+   Vietato: «vuoi che proceda con la S2?», «confermi il piano?», «fammi sapere e
+   continuo», un elenco di slice da spuntare. Quelle sono le domande di sempre con
+   un cappello nuovo. La forma giusta espone **uno stato**, non una scelta:
+   l'owner guarda la landing e decide da sé, che è il punto per cui esiste la
+   consegna a slice.
+3. **Come riparte.** Basta che l'owner nomini la slice, in qualunque forma («vai
+   con il back office», «fai la S2», «ora l'area riservata»). Allora:
+   - il `slice_plan` e i sei documenti **non si rifanno**: vincolano già (§7). Il
+     pre-flight li ritrova, e G1 rilegge per prime le righe marcate `assunzione`
+     (§7.1) e ciò che la S1 ha insegnato;
+   - **se la slice porta il back end, il peso si alza prima di aprirla** — i sei si
+     approfondiscono, non si duplicano (§4.0b → *Il peso si alza quando arriva il
+     back end*). È la S2 back office il caso tipico: non è un imprevisto, è scritto
+     nel piano;
+   - spec della slice (§4.2), scheda eseguibile, `bmad-quick-dev` (§4.2b), G3,
+     consegna, e **di nuovo stop**.
+4. **Una slice per volta vale anche se l'owner ne chiede due.** «Fai S2 e S3»
+   → si fa la S2, si consegna, si dichiara che la S3 è pronta a partire. La
+   verifica intermedia è il motivo per cui esistono le slice; saltarla su richiesta
+   generica le riduce a un modo di numerare i capitoli. Se l'owner insiste dopo
+   averlo letto, vince la sua parola e si tirano dritte.
+5. **Il tetto dei cinque non attraversa la consegna** (§6.1): la S2 è un contratto
+   diverso, quindi il contatore dei rifiuti riparte. Correggere la S1 dopo la
+   consegna, invece, eredita il conto — è lo stesso lavoro consegnato contro lo
+   stesso contratto.
+
+Fallimento: S2 costruita nella stessa passata della S1; landing consegnata senza
+dire cosa resta nel piano; una domanda («procedo?») al posto della dichiarazione;
+tutte le spec del piano generate in anticipo; la S2 aperta sui documenti della
+landing senza alzare il peso; il `slice_plan` rifatto da zero a ogni ripresa.
+
+### 4.4 L'orchestratore della slice è John
+
+Dentro la slice qualcuno deve tenere l'ordine: quale agente parte, con cosa, e
+quando la slice è chiusa. **Quel ruolo è di John (`bmad-agent-pm`), come
+giurisdizione dentro il consiglio** — la stessa con cui presidia il perimetro in
+G1. Non è una persona che prende la sessione: invocare `bmad-agent-pm` come skill
+sostituirebbe la persona attiva e saluterebbe l'owner come John. John orchestra
+**al tavolo**; la voce resta di Vesper, e le chiamate le esegue Vesper.
+
+Cosa tiene John:
+
+- **il `slice_plan`** — quale slice è aperta, quali sono chiuse, quali restano;
+- **la sequenza dentro la slice** — spec (`bmad-spec`) → scheda eseguibile →
+  craft (Vesper AF → Vera) e applicativo (`bmad-quick-dev`, §4.2b) → G3 → consegna;
+- **chi si convoca su questa slice** — dal roster (`council_roster.py`), con le
+  giurisdizioni che quella slice tocca davvero: un form porta Jane, un prezzo porta
+  Dan Arrow, un login porta Rex e Jane insieme;
+- **la chiusura** — è John a dire che la slice è finita, e la dichiarazione di
+  §4.3 esce da lì.
+
+Cosa **non** tiene John: **il craft non si vota** (`autonomia.md`), e non si
+orchestra nemmeno. Palette, tipografia, griglia, hero, superfici e motion restano
+di Vesper e Vera; John decide *l'ordine*, non *l'aspetto*. E non tiene il
+perimetro nuovo: se durante la slice emerge qualcosa che non era nei documenti,
+non lo aggiunge — è materiale per la slice dopo, o una varianza (§6).
+
+Fallimento: una slice aperta senza che nessuno tenga la sequenza; `bmad-agent-pm`
+invocato come skill dentro il flusso, con Vesper che sparisce dalla conversazione;
+John che decide un font; due slice orchestrate insieme.
 
 ---
 
 ## 5. Implementazione
 
-Vesper la pagina (AF → Vera) **e** la parte applicativa che non è craft frontend:
-endpoint, persistenza, auth della slice, logica di dominio, seguendo architettura e
-convenzioni del repo — con la **disciplina di `bmad-quick-dev`** (spec-template,
-Ready for Development) ma **senza invocarlo**, perché si ferma a chiedere in ogni
-ramo (§4.2 punto 7, `autonomia.md`). Il canone (§13) vale lì come qui.
+**Una slice sola, quella aperta** (§4.3). Vesper la pagina (AF → Vera); la parte
+applicativa che non è craft frontend — endpoint, persistenza, auth della slice,
+logica di dominio — la scrive **`bmad-quick-dev`, invocato** sulla scheda
+eseguibile `ready-for-dev` così da entrare da `step-03` (§4.2b), seguendo
+architettura e convenzioni del repo. Il canone (§13) vale lì come qui.
 
 **Casi limite, per iscritto** prima di chiudere: stati vuoti, errore, caricamento;
 testi lunghi/corti; molte/zero righe; mobile con tastiera aperta; offline se app.
@@ -757,12 +921,13 @@ Il canone applicato si dichiara nello spec: una riga sulle scelte non ovvie —
 perché quella slice, perché nessuna astrazione, quale rischio OWASP è chiuso e
 quale resta al backend.
 
-## 14. Sono i workflow BMAD — invocati dove non si fermano, copiati dove si fermano
+## 14. Sono i workflow BMAD — invocati dove il percorso non si ferma, copiati dove si ferma
 
 Il costo non è mai stato nei singoli workflow: è nella **sequenza completa applicata
-sempre**, e nelle **fermate** che ognuno può contenere. La tabella verificata di chi
-si ferma e chi no vive in `autonomia.md` → *I workflow che si fermano si usano come
-modello*; qui basta la mappa di chi fa cosa:
+sempre**, e nelle **fermate** che si incontrano **sul percorso che si usa** — non in
+quelle che il workflow contiene da qualche altra parte. La tabella verificata vive in
+`autonomia.md` → *I procedimenti che si fermano*; qui basta la mappa
+di chi fa cosa:
 
 | Passo | Chi |
 |---|---|
@@ -770,9 +935,10 @@ modello*; qui basta la mappa di chi fa cosa:
 | PRD · documento UX · architettura | `bmad-prd` · `bmad-ux` · `bmad-architecture`, **invocati in headless** dentro l'obiettivo G2 |
 | Project context | il consiglio, come `project-context.md` (§4.0) |
 | Controllo dei documenti | `bmad-review-edge-case-hunter` e `bmad-review-adversarial-general` **invocati**; `methods.csv` dell'elicitazione come modello (§4.0b) |
-| Spec di slice | **`bmad-spec`** headless, slug `<progetto>-s<N>-<nome>` (§4.2) |
-| Codice applicativo | Vesper, con **`bmad-quick-dev` come modello** — ha checkpoint in ogni ramo |
+| Spec di slice | **`bmad-spec`** headless, slug `<progetto>-s<N>-<nome>` (§4.2) — **solo la slice aperta** |
+| Codice applicativo | **`bmad-quick-dev` invocato**, entrando da `step-03` con la scheda `ready-for-dev` (§4.2b) |
 | Craft della pagina | Vesper AF → **`agent-web-animations`** |
+| Orchestrazione della slice | **John** (`bmad-agent-pm`) come giurisdizione al tavolo, mai come persona invocata (§4.4) |
 | Slice pesante (S2 con auth e dati) | **`bmad-create-story`** · **`bmad-code-review`** |
 | Progetto con un team che li legge | **`bmad-sprint-planning`** e i workflow BMAD interi |
 
@@ -799,8 +965,11 @@ l'owner; rifiuto in approvazione che non nomina la richiesta mancante; **sesto r
 sullo stesso lavoro consegnato**, o rifiuto che ripete tale e quale una richiesta già
 corretta — ma anche una **regressione** scambiata per ripetizione e quindi taciuta;
 due andate e ritorni fra richieste incompatibili senza scegliere quale cede; **un
-workflow con checkpoint invocato dentro il flusso**, o la sua disciplina saltata
-perché non lo si è invocato; una slice con back end aperta senza promuovere il ramo;
+workflow con checkpoint invocato dentro il flusso** — o **`bmad-quick-dev` invocato
+senza scheda `ready-for-dev`**, che è lo stesso difetto: entra da `step-01` e chiede
+—, o la sua disciplina saltata
+perché non lo si è invocato; `bmad-agent-pm` invocato come persona e Vesper che
+sparisce; una slice con back end aperta senza promuovere il ramo;
 `open_questions` lasciate in una spec dichiarata pronta; assunzioni dei documenti
 auto-generati mai più rilette; **una qualsiasi domanda all'owner in mezzo al flusso**
 (`references/autonomia.md`).
@@ -815,8 +984,11 @@ dati verosimili non segnalati in chat; assunzioni scritte come fatti; assunzione
 decisa in consiglio e mai finita in `docs/varianze/`; varianza lunga una pagina, o
 una varianza per ogni decisione ordinaria.
 
-**Slice:** slice che non sta in piedi da sola; auth completa come S1; S2 aperta
-prima che la S1 sia stata vista e consegnata.
+**Slice:** slice che non sta in piedi da sola; auth completa come S1; **S2
+costruita nella stessa passata della S1**, o aperta prima che l'owner l'abbia
+chiesta; consegna della S1 senza dichiarare cosa resta nel piano; «vuoi che
+proceda con la S2?» al posto di quella dichiarazione; tutte le spec del piano
+generate in anticipo.
 
 **Canone:** senza architettura né project context, logica di dominio nel template,
 `innerHTML` su dati non fidati, chiavi nel bundle, cartelle per strato tecnico

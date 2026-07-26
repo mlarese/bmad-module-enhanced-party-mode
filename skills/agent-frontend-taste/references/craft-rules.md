@@ -109,24 +109,34 @@ Il flusso implementativo vive in `implementation-handoff.md`; i testi dei obiett
    consiglio, esiti dentro il documento (`implementation-handoff.md` §4.0b).
 5. **`slice_plan` verticale** — ogni slice end-to-end e consegnabile da sola. Sito:
    S1 landing → S2 back office (accesso minimo reale) → S3+. App: S1 una schermata
-   che fa una cosa vera → S2 auth completa. Mai auth completa come S1; mai aprire una
-   slice prima che la precedente sia consegnata.
-6. **Una slice = una spec eseguibile** — `bmad-spec` headless, slug
-   `<progetto>-s<N>-<nome>`, Ready for Development, ~900–1600 token **sul contratto
-   applicativo**: le decisioni di craft stanno nel DESIGN e la spec li referenzia. Le
-   `open_questions` si chiudono nello stesso giro.
-7. **Implementazione** — tu la pagina (AF → Vera) e la parte applicativa, con la
-   **disciplina** di `bmad-quick-dev` ma senza invocarlo.
+   che fa una cosa vera → S2 auth completa. Mai auth completa come S1. **Il piano si
+   scrive intero, si esegue una riga per volta:** si apre la S1 e basta.
+6. **Una slice = una spec eseguibile** — `bmad-spec` headless **sulla sola slice
+   aperta**, slug `<progetto>-s<N>-<nome>`, Ready for Development, ~900–1600 token
+   **sul contratto applicativo**: le decisioni di craft stanno nel DESIGN e la spec li
+   referenzia. Le `open_questions` si chiudono nello stesso giro.
+7. **Implementazione** — tu la pagina (AF → Vera); la parte applicativa la scrive
+   **`bmad-quick-dev`, invocato** sulla scheda `{implementation_artifacts}/spec-<slug>.md`
+   con `status: ready-for-dev` e `Ask First` vuoto: con quel frontmatter entra da
+   `step-03` e nessuna delle sue porte viene raggiunta (`implementation-handoff.md`
+   §4.2b). L'ordine dentro la slice lo tiene **John** (§4.4); il craft resta tuo.
 8. **G3 — approvazione** contro documenti + craft-rules, **max cinque rifiuti**.
+9. **Consegna della slice, e il lavoro finisce lì.** Si dichiara cosa è consegnato e
+   cosa resta nel piano — «landing online; la S2 back office parte quando me lo dici»
+   — e non si chiede il permesso di continuare (§4.3, `autonomia.md` → *Il confine di
+   slice*). La S2 la apre l'owner.
 
 **Il craft non si vota.** Palette, tipografia, hero, griglia, superfici e motion
 restano tuoi: il consiglio decide *cosa* sta in pagina e *perché*, mai *come appare*.
 Hero archetype ed effetto motion li scegli da seed, con le esclusioni di MEMORY.
 
 **Prima di invocare un workflow BMAD, guarda se si ferma** (`HALT`, «ask the human»,
-«user must approve», un menu da scegliere): se ha un checkpoint sul percorso che
-useresti non si invoca — se ne prende il **formato** e il lavoro lo fa il consiglio o
-tu. Tabella verificata in `autonomia.md`.
+«user must approve», un menu da scegliere): se ha un checkpoint **sul percorso che
+useresti** non si invoca — se ne prende il **formato** e il lavoro lo fa il consiglio o
+tu. Ma «sul percorso che useresti» è la parola che conta: un workflow che instrada
+sul formato dell'input salta i propri cancelli se gli dai ciò che si aspetta — è il
+caso di `bmad-quick-dev` con una spec `ready-for-dev`. Tabella verificata in
+`autonomia.md`.
 
 **Le varianze si scrivono in `docs/varianze/YYYY-MM-DD-<slug>.md`** — cinque righe:
 atteso · deciso · perché · tipo (deviazione | assunzione da verificare | conflitto
