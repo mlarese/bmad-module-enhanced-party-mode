@@ -164,6 +164,28 @@ def main() -> int:
         print("FAIL: assets/effects-gallery.html manca — esegui --build")
         fails += 1
 
+    # --- i preferiti dell'owner: peso, non filtro -------------------------
+    # Nato misurato: la prima versione leggeva `--prefer` e non lo passava a
+    # `suggest()`, quindi la preferenza era attiva sempre e l'opzione era morta
+    # — con e senza uscivano shortlist identiche, e sembrava tutto a posto.
+    P = set(mod.PREFERRED)
+    check("ogni preferito esiste nel catalogo", P <= {e["id"] for e in effects}, True)
+
+    con = sen = 0
+    for i in range(12):
+        seed = f"20260726{i:02d}"
+        con += sum(1 for e in mod.suggest(effects, 4, seed, [], P) if e["id"] in P)
+        sen += sum(1 for e in mod.suggest(effects, 4, seed, [], set()) if e["id"] in P)
+    check("il peso morde: la shortlist esce tutta dai preferiti", con, 48)
+    check("senza peso si torna al tasso di base", sen < 24, True)
+
+    resto = mod.suggest(effects, 3, "2026072623", sorted(P), P)
+    check("esclusi tutti i preferiti, il catalogo resta raggiungibile", len(resto), 3)
+    check("e quella shortlist non ne contiene", all(e["id"] not in P for e in resto), True)
+    check("stesso seed → stessa shortlist",
+          [e["id"] for e in mod.suggest(effects, 4, "2026072623", [], P)],
+          [e["id"] for e in mod.suggest(effects, 4, "2026072623", [], P)])
+
     print()
     print("tutti i test passati" if not fails else f"{fails} test falliti")
     return 1 if fails else 0

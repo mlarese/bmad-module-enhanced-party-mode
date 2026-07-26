@@ -32,6 +32,7 @@ import argparse
 import html
 import json
 import random
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -146,17 +147,46 @@ def parse_filters(raw: list[str], catalog: dict | None = None) -> list[tuple[str
     return out
 
 
-def suggest(effects: list[dict], n: int, seed: str, last: list[str]) -> list[dict]:
+# Gli effetti che l'owner vuole vedere per primi. E un **peso**, non un filtro:
+# misurato sul catalogo, coprono 7 famiglie su 12 — `3d`, `feedback`, `loop`,
+# `page` e `svg` non ne hanno nessuno. Un elenco chiuso le renderebbe
+# irraggiungibili e romperebbe la passata che pretende una famiglia diversa per
+# ogni voce della shortlist. Preferiti significa che vincono a parita, non che
+# sono gli unici. Tutti e 19 sono `free` o `light`, quindi non litigano con la
+# passata "prima i leggeri".
+PREFERRED: tuple[str, ...] = (
+    "mask-reveal", "seq-section", "curtain", "split-chars", "marquee-scroll",
+    "underline-draw", "reveal-on-scroll", "hero-crossfade", "video-bg",
+    "split-screen-open", "btn-fill", "tilt-3d", "menu-fullscreen", "offcanvas",
+    "filter-flip", "masonry-in", "clip-wipe", "blur-in", "flip-3d",
+)
+
+
+def preferred_ids(override: str | None = None) -> set[str]:
+    """La lista si puo cambiare senza toccare il codice: `--prefer a,b,c`."""
+    if override is not None:
+        return {v.strip() for v in override.split(",") if v.strip()}
+    return set(PREFERRED)
+
+
+def suggest(effects: list[dict], n: int, seed: str, last: list[str],
+            prefer: set[str] | None = None) -> list[dict]:
     """Deterministic shortlist per seed: diverse on family, MEMORY-aware, cheap first.
 
     Mirrors hero_gallery.suggest so the two skills feel like one hand.
+
+    I preferiti passano davanti **a parita**, con un ordinamento stabile dopo il
+    mescolamento: il seed decide ancora l'ordine dentro i due gruppi, quindi
+    stessa ora = stessa shortlist, e chi non e preferito resta raggiungibile.
     """
+    prefer = preferred_ids() if prefer is None else prefer
     dropped = {v.strip() for v in last if v.strip()}
     pool = [e for e in effects if not dropped & {e["id"], e["cat"], str(e["n"])}]
     if not pool:
         pool = list(effects)
     rng = random.Random(f"{seed}|effects-gallery")
     rng.shuffle(pool)
+    pool.sort(key=lambda e: e["id"] not in prefer)   # stabile: preferiti davanti
     picked: list[dict] = []
     seen_cat: set[str] = set()
     # First pass: one per family and nothing heavy — the sane default kit.
@@ -1174,6 +1204,8 @@ def main() -> int:
     p.add_argument("--suggest", type=int, metavar="N")
     p.add_argument("--seed", default="", help="seed YYYYMMDDHH per una shortlist deterministica")
     p.add_argument("--last", nargs="*", default=[], help="id/famiglie da escludere (anti-ripetizione)")
+    p.add_argument("--prefer", metavar="ID,ID", default=None,
+                   help="sostituisce la lista dei preferiti; stringa vuota = nessuna preferenza")
     p.add_argument("--build", action="store_true", help="scrive assets/effects-gallery.html")
     p.add_argument("--check", action="store_true", help="verifica che la pagina sia in sync")
     p.add_argument("--format", choices=("md", "json"), default="md")
@@ -1219,7 +1251,12 @@ def main() -> int:
 
     entries = [e for e in effects if match_filters(e, parse_filters(args.filter, catalog))]
     if args.suggest:
-        entries = suggest(entries, args.suggest, args.seed or "no-seed", args.last)
+        prefer = preferred_ids(args.prefer)
+        entries = suggest(entries, args.suggest, args.seed or "no-seed", args.last, prefer)
+        quanti = sum(1 for e in entries if e["id"] in prefer)
+        print(f"shortlist: {quanti}/{len(entries)} dai preferiti "
+              f"({len(prefer)} in lista, il resto del catalogo resta raggiungibile)",
+              file=sys.stderr)
     print(json.dumps(entries, ensure_ascii=False, indent=2) if args.format == "json"
           else render_list(catalog, entries))
     return 0

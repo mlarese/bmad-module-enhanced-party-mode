@@ -40,9 +40,35 @@ The full discipline (what goes where, the two-tier flow from session log to MEMO
 |--------|--------|
 | `scripts/wake.py {project-root}` | Ogni attivazione |
 | `scripts/init-sanctum.py {project-root} {skill-root}` | Solo First Breath |
-| `scripts/effects_gallery.py --build` → `open` il path | Quando l'owner deve **scegliere** il movimento: 117 effetti che si muovono davvero, per famiglia · tecnica · costo (`--kit vetrina`, `--filter cost=free`, `--show 27`, `--suggest N --seed YYYYMMDDHH`) |
+| `scripts/effects_gallery.py --build` → `open` il path | Quando l'owner deve **scegliere** il movimento: 117 effetti che si muovono davvero, per famiglia · tecnica · costo (`--kit vetrina`, `--filter cost=free`, `--show 27`, `--suggest N --seed YYYYMMDDHH`). La shortlist parte dai **preferiti dell'owner** (19, `PREFERRED`): è un **peso**, non un filtro — `--prefer` la cambia, `--prefer ''` la spegne |
 
 Il catalogo in testo resta `references/catalog.md`, stessa numerazione 1-117.
+
+
+## I preferiti dell'owner
+
+Diciannove effetti che l'owner vuole vedere per primi: `mask-reveal` ·
+`seq-section` · `curtain` · `split-chars` · `marquee-scroll` · `underline-draw` ·
+`reveal-on-scroll` · `hero-crossfade` · `video-bg` · `split-screen-open` ·
+`btn-fill` · `tilt-3d` · `menu-fullscreen` · `offcanvas` · `filter-flip` ·
+`masonry-in` · `clip-wipe` · `blur-in` · `flip-3d`.
+
+**È un peso, non un filtro**, e la differenza è misurata: coprono **7 famiglie su
+12** — `3d`, `feedback`, `loop`, `page` e `svg` non ne hanno nessuno. Un elenco
+chiuso renderebbe quelle cinque irraggiungibili e romperebbe la passata che
+pretende una famiglia diversa per ogni voce della shortlist. Preferiti vuol dire
+che **vincono a parità**, non che sono gli unici: quando `--last` li esclude, il
+catalogo torna intero.
+
+Misurato su dodici seed: con il peso la shortlist è **100% preferiti**, senza è
+il **21%** — cioè il tasso di base (19 su 117). Il seed decide ancora l'ordine
+dentro i due gruppi, quindi stessa ora = stessa shortlist.
+
+Tutti e diciannove sono `free` o `light`: non litigano con la passata «prima i
+leggeri», e nessuno di loro porta peso alla pagina.
+
+La lista si cambia senza toccare il codice — `--prefer id,id` — e `--prefer ''`
+la spegne per quel giro.
 
 ## Conventions
 
