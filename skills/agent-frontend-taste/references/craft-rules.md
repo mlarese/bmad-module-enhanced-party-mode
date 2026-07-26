@@ -37,7 +37,7 @@ che consegni.
 
 | Decisione | In parole semplici | Dichiarare | MEMORY | Script / nota |
 |------|--------------------|------------|--------|----------------|
-| Palette + fonts | i colori e i caratteri, e da dove vengono | `locale` · **`register`** · `activity` · `palette_family` · **`hue_sector`** · **`ink_family`** · `fonts` | `last_palette_families` · `last_hue_sectors` · `last_ink_families` · `last_font_pairs` · `last_registers` | da luogo + **carattere** + business; verifica con `palette_guard.py --check … --ledger` |
+| Palette + fonts | i colori e i caratteri, e da dove vengono | `locale` · **`register`** · `activity` · `palette_family` · **`hue_sector`** · **`ink_family`** · `fonts` | `last_palette_families` · `last_hue_sectors` · `last_ink_families` · `last_font_pairs` · `last_registers` | da luogo + **carattere** + business; verifica con `repeat_guard.py --check … --ledger` |
 | Tipografia sistema | la legge dei testi: quali font, quanto grandi, quanto spaziati | `type_voices` (3 ruoli) · `type_scale` · tracking 2 poli · leading | `last_type_voices` | `craft_axes.py` per la legge di scala |
 | Composizione | come è impaginata la pagina: colonne, allineamenti, larghezza dei bordi | `grid_system` · `alignment_map` · `bleed_rhythm` · misura `ch` | `last_grid_systems` | `craft_axes.py` seed |
 | Superfici | come cambiano i fondi scendendo nella pagina, e che trama hanno | `surface_rhythm` · `surface_texture` · token materiali | `last_surface_textures` | `craft_axes.py` seed |
@@ -130,7 +130,7 @@ Il flusso implementativo vive in `implementation-handoff.md`; i testi dei obiett
 in `apps/<slug>/palette.html`, le combinazioni che reggevano — colore · carattere ·
 **forma e colore dei pulsanti** (raggio, pieno o contornato, respiro, maiuscoletto),
 con quella applicata marcata **in uso**. La genera `scripts/palette_page.py`, che
-**rifiuta** le combinazioni che `palette_guard` non approverebbe: non si mostra ciò
+**rifiuta** le combinazioni che `repeat_guard` non approverebbe: non si mostra ciò
 che non si potrebbe scegliere. Non è una domanda e non ferma niente — se poi l'owner
 ne chiede un'altra, vince la sua parola: si aggiorna il DESIGN, si rifà la pagina, si
 rigenera la palette (`implementation-handoff.md` §10.1).
@@ -232,9 +232,9 @@ Neutro = **croma ≤ 4** — sotto quella soglia non resta tinta da nominare (la
 
    In MEMORY vive `last_hue_sectors` accanto a `last_palette_families`: il nome serve a te, il settore serve all'occhio. **Ordine: il più recente per primo** — `--last` conta la serie dall'inizio della lista, e una lista in ordine cronologico inverte il controllo senza che nessuno se ne accorga.
 3. **Il controllo di chiusura è un comando solo:** `uv run scripts/close_check.py <pagina> --design <DESIGN.md> --ledger <ledger.json>` — colore, responsive, segnaposto e traccia insieme. **Si consegna solo su esito `0`**, e l'esito si scrive nel `DESIGN.md`. Quattro regole sparse le si salta una alla volta; un comando o lo esegui o no, e si vede.
-4. **Il motore del colore, se vuoi guardarci dentro:** `uv run scripts/palette_guard.py --check <file>` (o `--hex …`) stampa settori, saturazioni e violazioni. Su lavoro nuovo è parte del check di chiusura, come il responsive.
-   - **Tre esiti, non due:** `0` pulito · `1` violazioni da correggere · **`2` non misurabile**. Il 2 arriva quando la palette non è leggibile da quel file (utility class senza mappa di tema, colori in un altro modulo): allora si misura il file che dichiara i colori, o si passa `--hex`. **Un exit 2 non è un pass:** «palette_guard pulito» si dichiara solo su un exit 0.
-   - **Il ledger tiene il conto al posto tuo, e ora è condiviso di suo.** Serve perché `last_hue_sectors` vive nel sanctum **di quel progetto**: un'agenzia che fa un repo per cliente ha un job per sanctum, e la regola non avrebbe mai dati su cui scattare — misurato, l'unico ledger trovato aveva **una voce**. «Puntalo a un percorso condiviso» era una cosa da ricordare, e le cose da ricordare non si fanno: adesso il default è `~/.claude/agent-frontend-taste/hue-ledger.json`, fuori dai progetti, e `--ledger` serve solo per tenerne uno per cliente o per team (o `VESPER_HUE_LEDGER`). `--no-ledger` per non toccarlo. Se il ledger c'è, `--last` non serve.
+4. **Il motore del colore, se vuoi guardarci dentro:** `uv run scripts/repeat_guard.py --check <file>` (o `--hex …`) stampa settori, saturazioni e violazioni. Su lavoro nuovo è parte del check di chiusura, come il responsive.
+   - **Tre esiti, non due:** `0` pulito · `1` violazioni da correggere · **`2` non misurabile**. Il 2 arriva quando la palette non è leggibile da quel file (utility class senza mappa di tema, colori in un altro modulo): allora si misura il file che dichiara i colori, o si passa `--hex`. **Un exit 2 non è un pass:** «repeat_guard pulito» si dichiara solo su un exit 0.
+   - **Il ledger tiene il conto al posto tuo, e ora è condiviso di suo.** Serve perché `last_hue_sectors` vive nel sanctum **di quel progetto**: un'agenzia che fa un repo per cliente ha un job per sanctum, e la regola non avrebbe mai dati su cui scattare — misurato, l'unico ledger trovato aveva **una voce**. «Puntalo a un percorso condiviso» era una cosa da ricordare, e le cose da ricordare non si fanno: adesso il default è `~/.claude/agent-frontend-taste/craft-ledger.json`, fuori dai progetti, e `--ledger` serve solo per tenerne uno per cliente o per team (o `VESPER_CRAFT_LEDGER`). `--no-ledger` per non toccarlo. Se il ledger c'è, `--last` non serve.
    - **I tre hard-reject sono misurati adesso:** purple-indigo AI, cream+serif+terracotta, Inter/system come display escono come violazione dallo script, non più solo dal tuo occhio.
 
 ### Lo scuro è una decisione, non un residuo
@@ -258,7 +258,7 @@ ripetizione.
 
 1. **Le stesse due regole del colore, per ruolo** (`display` · `body` · `mono`):
    mai la stessa voce per **3 consegne di fila**, e mai una voce oltre **un terzo
-   delle ultime otto**. Le conta `palette_guard`, che ora registra i caratteri nel
+   delle ultime otto**. Le conta `repeat_guard`, che ora registra i caratteri nel
    ledger insieme ai settori.
 2. **Il mono è il punto cieco.** Display e body si scelgono con attenzione; la
    terza voce si mette «quella che va bene» e diventa sempre la stessa. È l'unico

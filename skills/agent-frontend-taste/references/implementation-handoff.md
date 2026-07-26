@@ -592,7 +592,7 @@ aveva sbagliato?». Il criterio è uno, e non è il gusto:
   condizione: la regola dev'essere **verificabile senza discutere di gusto** —
   un numero, una presenza, un esito di script. Rifiutabile: `viewport` assente ·
   overflow-x a 375 · più di 2 sezioni centrate · mono-allineamento · meno di 2
-  `grid-column` espliciti · `clamp` degenere · `TODO` nel file · `palette_guard`
+  `grid-column` espliciti · `clamp` degenere · `TODO` nel file · `repeat_guard`
   che esce ≠ 0 (**exit 2 compreso: non misurato ≠ approvato**) · `register` o
   `ink_family` non dichiarati · tre job di fila nello stesso settore · nessuna
   `surface_texture`. **Non** rifiutabile: «quella palette non mi convince per un
@@ -849,7 +849,7 @@ Accanto al lavoro consegnato va perciò una terza cosa: `apps/<slug>/palette.htm
 
 ```bash
 uv run scripts/palette_page.py combos.json --out apps/<slug>/palette.html \
-  --ledger {project-root}/_bmad/memory/agent-frontend-taste/hue-ledger.json
+  --ledger {project-root}/_bmad/memory/agent-frontend-taste/craft-ledger.json
 ```
 
 1. **Non è una domanda, e non ferma niente.** Si genera **insieme** alla consegna,
@@ -859,7 +859,7 @@ uv run scripts/palette_page.py combos.json --out apps/<slug>/palette.html \
    c'era**. Una pagina che arriva *prima* del lavoro, o che lo sostituisce in
    attesa di una preferenza, è esattamente il «catalogo aperto in attesa di una
    scelta» che `autonomia.md` elenca fra i fallimenti.
-2. **Ogni combinazione mostrata è già legale.** Ognuna passa da `palette_guard`
+2. **Ogni combinazione mostrata è già legale.** Ognuna passa da `repeat_guard`
    prima di comparire: croma dello scuro strutturale, settore dominante, serie
    del ledger, i tre hard-reject. Lo script **rifiuta di generare** la pagina se
    una non regge, e ha ragione — offrire ciò che il guard poi respinge è
@@ -901,7 +901,7 @@ uv run scripts/palette_page.py combos.json --out apps/<slug>/palette.html \
    `apps/<slug>/`, accanto a `index.html` e `DESIGN.md`.
 
 Fallimento: la pagina consegnata *al posto* del lavoro, o prima; una combinazione
-mostrata che `palette_guard` rifiuta; combinazioni senza provenienza, o inventate
+mostrata che `repeat_guard` rifiuta; combinazioni senza provenienza, o inventate
 fuori dal batch; una sola combinazione, o dieci; un provino visto in un carattere
 di ripiego senza che nessuno lo dica; `palette.html` linkata dal sito; la scelta
 dell'owner applicata alla pagina ma non al `DESIGN.md`, o viceversa.

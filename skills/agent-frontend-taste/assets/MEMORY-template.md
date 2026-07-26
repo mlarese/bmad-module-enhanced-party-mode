@@ -10,7 +10,7 @@ _Aim to stay under roughly 1500 tokens, a guardrail rather than a hard gate. If 
 
 - `last_registers:` _(es. luxury · famigliare · artigianale — il **carattere** del business; mai da seed. Stesso register due volte di fila → cambia comunque famiglia di palette)_
 - `last_palette_families:` _(es. coral-sea · pine-firn — non ripetere le ultime 2–3)_
-- `last_hue_sectors:` _(settore di tinta dominante per area — rosso · terra · giallo · verde · teal · blu · viola · magenta · neutro. **Mai lo stesso per 3 job di fila**: il nome della famiglia può cambiare mentre l'hue resta. Misura con `palette_guard.py`. **Ordine: il più recente per primo** — `--last` conta la serie dall'inizio della lista, e una lista cronologica inverte il controllo in silenzio. Fra progetti diversi la serie vera sta nel ledger: `palette_guard.py --ledger …/hue-ledger.json`)_
+- `last_hue_sectors:` _(settore di tinta dominante per area — rosso · terra · giallo · verde · teal · blu · viola · magenta · neutro. **Mai lo stesso per 3 job di fila**: il nome della famiglia può cambiare mentre l'hue resta. Misura con `repeat_guard.py`. **Ordine: il più recente per primo** — `--last` conta la serie dall'inizio della lista, e una lista cronologica inverte il controllo in silenzio. Fra progetti diversi la serie vera sta nel ledger: `repeat_guard.py --ledger …/craft-ledger.json`)_
 - `last_ink_families:` _(neutro · caldo · freddo · virato-accento — lo scuro riempie hero, fasce e footer: se è sempre lo stesso, le pagine si somigliano anche con accenti diversi)_
 - `last_font_pairs:` _(es. Fraunces+Figtree · Bodoni+Outfit — non ripetere)_
 - `last_hero_treatments:` _(es. split · inset · duotone — **mai** velo scuro full-bleed di default; non ripetere le ultime 2)_

@@ -1,28 +1,37 @@
 # /// script
 # requires-python = ">=3.10"
 # ///
-"""Unit tests for palette_guard.py — run: uv run scripts/tests/test-palette-guard.py"""
+"""Unit tests for repeat_guard.py — run: uv run scripts/tests/test-repeat-guard.py"""
 import importlib.util
 import json
+import os
 import subprocess
 import sys
 import tempfile
 from pathlib import Path
 
-SCRIPT = Path(__file__).resolve().parents[1] / "palette_guard.py"
+SCRIPT = Path(__file__).resolve().parents[1] / "repeat_guard.py"
+
+# I test non toccano il registro vero: il default e condiviso e sta in $HOME,
+# e senza questa riga una suite di unit test scrive 22 finte consegne nella
+# storia di craft dell'owner. E successo: le abbiamo tolte a mano.
+_ISO = tempfile.mkdtemp(prefix="guard-test-ledger-")
+_ENV = {**os.environ, "VESPER_CRAFT_LEDGER": str(Path(_ISO) / "ledger.json")}
+
 
 
 def load():
-    spec = importlib.util.spec_from_file_location("palette_guard", SCRIPT)
+    spec = importlib.util.spec_from_file_location("repeat_guard", SCRIPT)
     assert spec and spec.loader
     mod = importlib.util.module_from_spec(spec)
-    sys.modules["palette_guard"] = mod
+    sys.modules["repeat_guard"] = mod
     spec.loader.exec_module(mod)
     return mod
 
 
 def run(*args) -> subprocess.CompletedProcess:
-    return subprocess.run([sys.executable, str(SCRIPT), *args], capture_output=True, text=True)
+    return subprocess.run([sys.executable, str(SCRIPT), *args],
+                          capture_output=True, text=True, env=_ENV)
 
 
 PAGE = """
@@ -201,7 +210,7 @@ def main() -> int:
 
     # --- ledger: lo streak è un fatto registrato, non da ricordare -----------
     with tempfile.TemporaryDirectory() as td:
-        led = Path(td) / "hue-ledger.json"
+        led = Path(td) / "craft-ledger.json"
         for i in range(3):
             p = Path(td) / f"job{i}.html"
             p.write_text(off_dict, encoding="utf-8")

@@ -4,18 +4,26 @@
 """Unit tests for close_check.py — run: uv run scripts/tests/test-close-check.py
 
 Il check di chiusura esiste perché tre pagine su cinque, negli eval, uscivano
-con `palette_guard` a 1: la regola c'era, il comando no. Questi test tengono
+con `repeat_guard` a 1: la regola c'era, il comando no. Questi test tengono
 fermo il comportamento che rende il comando difficile da saltare — e i falsi
 positivi lontani, perché un controllo che grida al lupo viene spento.
 """
 import importlib.util
 import json
+import os
 import subprocess
 import sys
 import tempfile
 from pathlib import Path
 
 SCRIPT = Path(__file__).resolve().parents[1] / "close_check.py"
+
+# I test non toccano il registro vero: il default e condiviso e sta in $HOME,
+# e senza questa riga una suite di unit test scrive 22 finte consegne nella
+# storia di craft dell'owner. E successo: le abbiamo tolte a mano.
+_ISO = tempfile.mkdtemp(prefix="guard-test-ledger-")
+_ENV = {**os.environ, "VESPER_CRAFT_LEDGER": str(Path(_ISO) / "ledger.json")}
+
 
 CLEAN = """<!doctype html><meta name="viewport" content="width=device-width, initial-scale=1">
 <style>:root{--paper:#F5F3EF;--ink:#15171A;--brass:#B8895A;}
@@ -35,8 +43,26 @@ def load():
     return mod
 
 
+# Il registro del consiglio e diventato un controllo obbligatorio: senza, ogni
+# pagina esce 1 e i test sul colore misurerebbero un difetto che non c'e. Qui
+# se ne mette uno valido, cosi ogni asserzione continua a dire quello che dice.
+_COUNCIL = Path(_ISO) / "consiglio.md"
+_COUNCIL.write_text("# Consiglio — test\n\n- **2026-07-26 · G3** — Vesper → approvata.\n",
+                    encoding="utf-8")
+
+
 def run(*args) -> subprocess.CompletedProcess:
-    return subprocess.run([sys.executable, str(SCRIPT), *args], capture_output=True, text=True)
+    argv = list(args)
+    if "--council" not in argv:
+        argv += ["--council", str(_COUNCIL)]
+    # Un test sul segnaposto o sulla traccia non deve consultare nessuna storia:
+    # le fixture qui sono tutte della stessa forma, e la regola di ripetizione —
+    # che fa bene il suo lavoro — le boccerebbe per un motivo che non c'entra
+    # con quello che il test misura. Chi vuole il registro lo passa.
+    if "--ledger" not in argv:
+        argv += ["--no-ledger"]
+    return subprocess.run([sys.executable, str(SCRIPT), *argv],
+                          capture_output=True, text=True, env=_ENV)
 
 
 def page(td: Path, name: str, body: str) -> Path:
@@ -142,7 +168,7 @@ def main() -> int:
     with tempfile.TemporaryDirectory() as td:
         root = Path(td)
         p = page(root, "ok.html", CLEAN)
-        led = root / "hue-ledger.json"
+        led = root / "craft-ledger.json"
         r = run(str(p), "--ledger", str(led), "--format", "json")
         check("json valido", json.loads(r.stdout)["state"], 0)
         check("il ledger registra la misura", led.is_file() and

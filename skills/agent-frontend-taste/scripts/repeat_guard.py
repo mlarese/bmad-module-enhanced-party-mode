@@ -44,12 +44,12 @@ nothing can be measured honestly the script says so and exits 2 — it never
 prints a dominant sector it had to invent.
 
 Usage:
-    uv run scripts/palette_guard.py --check apps/<slug>/index.html
-    uv run scripts/palette_guard.py --hex '#141C18,#C96F3A,#F3F0EA'
-    uv run scripts/palette_guard.py --check pagina.html --last verde,teal
-    uv run scripts/palette_guard.py --check pagina.html          # ledger condiviso, in automatico
-    uv run scripts/palette_guard.py --check pagina.html --ledger <file>   # o uno tuo
-    uv run scripts/palette_guard.py --check pagina.html --format json
+    uv run scripts/repeat_guard.py --check apps/<slug>/index.html
+    uv run scripts/repeat_guard.py --hex '#141C18,#C96F3A,#F3F0EA'
+    uv run scripts/repeat_guard.py --check pagina.html --last verde,teal
+    uv run scripts/repeat_guard.py --check pagina.html          # ledger condiviso, in automatico
+    uv run scripts/repeat_guard.py --check pagina.html --ledger <file>   # o uno tuo
+    uv run scripts/repeat_guard.py --check pagina.html --format json
 
 Exit: 0 pulito · 1 violazioni · 2 non misurabile (non dichiarare "guard pulito").
 """
@@ -411,12 +411,18 @@ def layout_signature(text: str) -> dict:
     if fam:
         out["radius_family"] = fam
 
+    # La hero si dichiara **solo se c'è una hero**. Un input senza pagina — una
+    # palette passata con `--hex`, una fixture di due righe — non ha un primo
+    # schermo: dargli comunque `testo-auto` per difetto ha riempito il registro
+    # vero di 22 finte consegne e fatto scattare la regola su niente. Assenza di
+    # misura non è misura di un'assenza: è la stessa regola dell'exit 2.
     hero_css = " ".join(b for s, b in BLOCK_RE.findall(head) if HERO_SELECTOR_RE.search(s))
     m = re.search(r'<[^>]+class="[^"]*hero[^"]*"[\s\S]{0,2500}', text)
     chunk = m.group(0) if m else ""
-    media = ("video" if "<video" in chunk else "foto" if "<img" in chunk
-             else "sfondo" if "background-image" in hero_css else "testo")
-    out["hero_shape"] = media + "-" + ("piena" if FULL_HEIGHT_RE.search(hero_css) else "auto")
+    if chunk or hero_css:
+        media = ("video" if "<video" in chunk else "foto" if "<img" in chunk
+                 else "sfondo" if "background-image" in hero_css else "testo")
+        out["hero_shape"] = media + "-" + ("piena" if FULL_HEIGHT_RE.search(hero_css) else "auto")
     return out
 
 
@@ -774,12 +780,20 @@ def default_ledger() -> Path:
     cui scattare — l'unico ledger trovato in questo repo aveva **una** voce. Un
     registro che si azzera a ogni job non è un registro: è un file.
 
-    Override con `VESPER_HUE_LEDGER`, per tenerne uno per cliente o per team.
+    Override con `VESPER_CRAFT_LEDGER`, per tenerne uno per cliente o per team.
     """
-    env = os.environ.get("VESPER_HUE_LEDGER")
+    env = os.environ.get("VESPER_CRAFT_LEDGER")
     if env:
         return Path(env).expanduser()
-    return Path.home() / ".claude" / "agent-frontend-taste" / "hue-ledger.json"
+    home = Path.home() / ".claude" / "agent-frontend-taste"
+    new = home / "craft-ledger.json"
+    # Si chiamava `hue-ledger.json` quando registrava solo le tinte. Se esiste
+    # ancora e il nuovo non c'è, vince il vecchio: un rename non è un buon motivo
+    # per perdere la storia su cui l'anti-ripetizione si regge.
+    old = home / "hue-ledger.json"
+    if not new.exists() and old.exists():
+        return old
+    return new
 
 
 def ledger_load(path: Path) -> list[dict]:
@@ -862,14 +876,14 @@ def unmeasurable_note(text: str) -> str:
             "NON MISURABILE: la pagina usa utility class (`bg-…`) ma nessuna mappa di "
             "tema con hex è leggibile da qui. Misura il file che dichiara i colori "
             "(tailwind.config, tokens.css, theme.ts) oppure passa la palette con "
-            "`--hex`. **Non dichiarare «palette_guard pulito»**: qui non è stato "
+            "`--hex`. **Non dichiarare «repeat_guard pulito»**: qui non è stato "
             "misurato niente."
         )
     return (
         "NON MISURABILE: nessun background con colore leggibile in questo file "
         "(nessuna custom property dipinta, nessun hex su `background`). Misura il "
         "foglio di stile vero o passa la palette con `--hex`. **Non dichiarare "
-        "«palette_guard pulito»**."
+        "«repeat_guard pulito»**."
     )
 
 

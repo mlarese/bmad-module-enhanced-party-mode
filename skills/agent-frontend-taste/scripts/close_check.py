@@ -9,7 +9,7 @@ responsive provato, nessun segnaposto, `dati_verosimili` nel DESIGN. Erano
 quattro cose sparse, e l'ultima riga di `apply-frontend.md` le elencava tutte
 insieme — il punto del documento che si legge quando il contesto è più lungo e
 la pagina sembra finita. Su cinque pagine prodotte negli eval, **tre uscivano
-con `palette_guard` a 1**: `#395058` croma 12.2, `#273139` croma 7.1,
+con `repeat_guard` a 1**: `#395058` croma 12.2, `#273139` croma 7.1,
 `#1d5b62` croma 27.1, tutte su fasce a piena larghezza. Non perché la regola
 mancasse: perché nessuno aveva eseguito il controllo prima di consegnare.
 
@@ -18,7 +18,7 @@ resta in chat: `--design` lo scrive nel DESIGN.md, così «ho chiuso la pagina»
 una cosa che si può verificare dopo, invece di una cosa che si dichiara.
 
 Cosa controlla:
-  1. colore      — palette_guard: croma dello scuro, settore dominante, serie,
+  1. colore      — repeat_guard: croma dello scuro, settore dominante, serie,
                    quota della famiglia, i tre hard-reject
   1b. caratteri  — display/body/mono risolti anche attraverso le variabili, con
                    le stesse due regole del colore: di fila e di quota
@@ -35,7 +35,7 @@ Cosa controlla:
 
 Usage:
     uv run scripts/close_check.py apps/<slug>/index.html
-    uv run scripts/close_check.py apps/<slug>/index.html --ledger _bmad/memory/agent-frontend-taste/hue-ledger.json
+    uv run scripts/close_check.py apps/<slug>/index.html --ledger _bmad/memory/agent-frontend-taste/craft-ledger.json
     uv run scripts/close_check.py apps/<slug>/index.html --design apps/<slug>/DESIGN.md
     uv run scripts/close_check.py apps/<slug>/index.html --council docs/consiglio/<slug>.md
     uv run scripts/close_check.py apps/<slug>/*.html --surface dashboard --design apps/<slug>/DESIGN.md
@@ -56,13 +56,13 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 
 
-def _palette_guard():
+def _repeat_guard():
     """Il guard è il motore del colore: si importa, non si riscrive."""
-    spec = importlib.util.spec_from_file_location("palette_guard", HERE / "palette_guard.py")
+    spec = importlib.util.spec_from_file_location("repeat_guard", HERE / "repeat_guard.py")
     if not spec or not spec.loader:
-        raise SystemExit("palette_guard.py non trovato accanto a close_check.py")
+        raise SystemExit("repeat_guard.py non trovato accanto a close_check.py")
     mod = importlib.util.module_from_spec(spec)
-    sys.modules.setdefault("palette_guard", mod)
+    sys.modules.setdefault("repeat_guard", mod)
     spec.loader.exec_module(mod)
     return mod
 
@@ -250,7 +250,7 @@ def main() -> int:
     ap.add_argument("--format", choices=("md", "json"), default="md")
     args = ap.parse_args()
 
-    pg = _palette_guard()
+    pg = _repeat_guard()
     design = Path(args.design) if args.design else None
     council = Path(args.council) if args.council else None
     ledger = (Path(args.ledger) if args.ledger
@@ -344,7 +344,7 @@ def main() -> int:
               "Un difetto trovato adesso costa una riga; trovato dal cliente costa la pagina.")
     else:
         print("**Non è un pass:** la palette non è leggibile da questo file. Misura il file "
-              "che dichiara i colori, o passa la palette a `palette_guard.py --hex`. "
+              "che dichiara i colori, o passa la palette a `repeat_guard.py --hex`. "
               "Finché non è misurata, non si dichiara «pulita».")
     return worst
 

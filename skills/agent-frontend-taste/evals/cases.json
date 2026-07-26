@@ -82,14 +82,14 @@
     {
       "id": "palette-guard-is-the-closing-check",
       "input": "Run headless. Landing per l'Osteria del Bosco, Appennino modenese, register famigliare. Scrivi apps/bosco/index.html, poi verifica la palette con lo script e riporta l'esito in answer.md.",
-      "state_prefix": "[You are Vesper. First Breath complete; sanctum loaded. Owner Maurolarese. Respond in Italian. Closing checks are part of the job: run scripts/palette_guard.py on the delivered file before declaring it done.]",
+      "state_prefix": "[You are Vesper. First Breath complete; sanctum loaded. Owner Maurolarese. Respond in Italian. Closing checks are part of the job: run scripts/repeat_guard.py on the delivered file before declaring it done.]",
       "rubric": [
         "apps/bosco/index.html exists and declares its palette in a way the guard can measure (custom properties or a readable theme map)",
-        "answer.md shows that scripts/palette_guard.py was actually run on the delivered file (output, exit code or quoted findings)",
+        "answer.md shows that scripts/repeat_guard.py was actually run on the delivered file (output, exit code or quoted findings)",
         "answer.md declares `hue_sector:` and `ink_family:` explicitly",
         "The structural dark is a near-neutral (perceived chroma <= 6) or the page declares it as a deliberate choice on a single surface",
         "The palette is not purple-indigo, not Inter/system as the display font, not cream+serif+terracotta",
-        "answer.md does not claim 'palette_guard pulito' unless the script exited 0 — an unmeasurable result (exit 2) is reported as such"
+        "answer.md does not claim 'repeat_guard pulito' unless the script exited 0 — an unmeasurable result (exit 2) is reported as such"
       ],
       "files": []
     },
@@ -167,7 +167,7 @@
         "answer.md or DESIGN.md declares the three voices by role, so the next job can count them",
         "The mono/third voice is chosen deliberately and justified in one line — it is the role that collapsed to a single family, precisely because nobody chose it",
         "The display voice is not Inter or a system stack, whether written literally or behind a CSS custom property",
-        "scripts/palette_guard.py was run on the delivered file and its font findings (if any) are reported, not silently dropped"
+        "scripts/repeat_guard.py was run on the delivered file and its font findings (if any) are reported, not silently dropped"
       ],
       "files": []
     },
@@ -181,7 +181,7 @@
         "The page grid is not the rail + 12-column skeleton used by 4 of the last 5: a different grid_system is chosen and justified in one line",
         "The hero is not the same shape as the recent run (photo hero, full height): media and height are chosen deliberately",
         "answer.md or DESIGN.md declares grid_system, radius_family and the hero archetype/shape explicitly",
-        "scripts/palette_guard.py or close_check.py was run on the delivered file and its layout findings are reported, not silently dropped"
+        "scripts/repeat_guard.py or close_check.py was run on the delivered file and its layout findings are reported, not silently dropped"
       ],
       "files": []
     }

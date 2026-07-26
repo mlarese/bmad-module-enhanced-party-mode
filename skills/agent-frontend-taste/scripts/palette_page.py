@@ -17,7 +17,7 @@ l'owner poi dice «metti la B», è lui che interviene di sua iniziativa — e a
 la sua parola vince: si aggiorna il DESIGN, si rifà la pagina, si rigenera
 questa. Vedi `references/implementation-handoff.md` §10.1.
 
-**Ogni combinazione mostrata è già legale.** Ognuna passa da `palette_guard`
+**Ogni combinazione mostrata è già legale.** Ognuna passa da `repeat_guard`
 prima di comparire — croma dello scuro strutturale, settore dominante, serie del
 ledger, i tre hard-reject. Una combinazione che l'owner non potrebbe scegliere
 non si mostra: sarebbe un'offerta che si ritira dopo averla fatta.
@@ -51,7 +51,7 @@ paper e il fantasma il contorno dell'inchiostro.
 
 Usage:
     uv run scripts/palette_page.py combos.json --out apps/<slug>/palette.html
-    uv run scripts/palette_page.py combos.json --out … --ledger …/hue-ledger.json
+    uv run scripts/palette_page.py combos.json --out … --ledger …/craft-ledger.json
     uv run scripts/palette_page.py combos.json --out … --last verde,ambra
 
 Exit: 0 pagina scritta · 1 una combinazione non è legale (si corregge e si
@@ -71,12 +71,12 @@ HERE = Path(__file__).resolve().parent
 ROLES = ("ink", "paper", "accent")
 
 
-def _palette_guard():
-    spec = importlib.util.spec_from_file_location("palette_guard", HERE / "palette_guard.py")
+def _repeat_guard():
+    spec = importlib.util.spec_from_file_location("repeat_guard", HERE / "repeat_guard.py")
     if not spec or not spec.loader:
-        raise SystemExit("palette_guard.py non trovato accanto a palette_page.py")
+        raise SystemExit("repeat_guard.py non trovato accanto a palette_page.py")
     mod = importlib.util.module_from_spec(spec)
-    sys.modules.setdefault("palette_guard", mod)
+    sys.modules.setdefault("repeat_guard", mod)
     spec.loader.exec_module(mod)
     return mod
 
@@ -368,7 +368,7 @@ def main() -> int:
               file=sys.stderr)
         return 2
 
-    pg = _palette_guard()
+    pg = _repeat_guard()
     last = [s for s in args.last.split(",") if s.strip()]
     last_fonts: list[dict] = []
     if not args.no_ledger:
