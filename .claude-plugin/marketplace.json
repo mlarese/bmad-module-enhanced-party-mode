@@ -20,19 +20,19 @@
       "name": "epm",
       "source": "./",
       "description": "Consiglio di esperti craft/legal/infra/WP/fiscale per party mode e cantiere — Vesper, Vera, Jane, Elena, Rex, Niki, Dan Arrow.",
-      "version": "1.17.0",
+      "version": "1.18.0",
       "author": {
         "name": "Maurolarese"
       },
       "skills": [
-        "./epm-setup",
-        "./agent-frontend-taste",
-        "./agent-web-animations",
-        "./agent-gdpr-counsel",
-        "./agent-tech-law-counsel",
-        "./agent-it-infra-expert",
-        "./agent-wordpress-expert",
-        "./agent-world-cpa"
+        "./skills/epm-setup",
+        "./skills/agent-frontend-taste",
+        "./skills/agent-web-animations",
+        "./skills/agent-gdpr-counsel",
+        "./skills/agent-tech-law-counsel",
+        "./skills/agent-it-infra-expert",
+        "./skills/agent-wordpress-expert",
+        "./skills/agent-world-cpa"
       ]
     }
   ]

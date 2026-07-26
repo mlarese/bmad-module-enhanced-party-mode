@@ -1,7 +1,7 @@
 code: epm
 name: "Enhanced Party Mode"
 description: "Consiglio di esperti craft/legal/infra/WP/fiscale per party mode e cantiere — Vesper, Vera, Jane, Elena, Rex, Niki, Dan Arrow."
-module_version: 1.4.0
+module_version: 1.18.0
 default_selected: false
 module_greeting: >
   Enhanced Party Mode (epm) è pronto.
@@ -15,27 +15,27 @@ agents:
     name: Vesper
     title: Direttore Craft Frontend
     icon: "✦"
-    description: "Vesper — craft FE: locale+activity Envato; marketing|dashboard|mobile; hero_copy seed; sezioni auto; Envato ≥30; responsive; frontend-demos/; Vera repeat. Mai banale."
-  - code: agent-web-animations
-    name: Vera Motion
-    title: Craftsperson Web Animations
-    icon: "✨"
-    description: "Vera Motion — craftsperson del movimento web: apply motion, catalogo, demo, reverse engineer, audit perf/a11y."
+    description: "Vesper — craft FE: locale+activity Envato; marketing|dashboard|mobile; hero_copy seed; sezioni auto; Envato ≥30; responsive; output apps/<slug>/; Vera repeat. Mai banale."
   - code: agent-gdpr-counsel
     name: Jane Privacy
     title: Consigliere GDPR
     icon: "🛡️"
     description: "Jane Privacy — esperto GDPR Italia/UE: RoPA, DPIA, breach, transfer, cookie/ePrivacy e privacy-by-design; specializzazione sotto Elena."
-  - code: agent-tech-law-counsel
-    name: Elena Giuridis
-    title: Consulente Legale Tech
-    icon: "⚖️"
-    description: "Consulenza legale precisa su software, AI, AI Act e tech regulation, con fonti e limiti dichiarati."
   - code: agent-it-infra-expert
     name: Rex Wire
     title: Esperto IT Infra
     icon: "🔌"
     description: "Rex Wire — sysadmin/SRE: cloud multi-provider, SSH/tunneling, architetture di rete, Docker, hardening pratico."
+  - code: agent-tech-law-counsel
+    name: Elena Giuridis
+    title: Consulente Legale Tech
+    icon: "⚖️"
+    description: "Consulenza legale precisa su software, AI, AI Act e tech regulation, con fonti e limiti dichiarati."
+  - code: agent-web-animations
+    name: Vera Motion
+    title: Craftsperson Web Animations
+    icon: "✨"
+    description: "Vera Motion — craftsperson del movimento web: apply motion, catalogo, demo, reverse engineer, audit perf/a11y."
   - code: agent-wordpress-expert
     name: Niki Press
     title: Esperto WordPress
