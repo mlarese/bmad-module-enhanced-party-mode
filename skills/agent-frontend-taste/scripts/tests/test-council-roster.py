@@ -186,6 +186,25 @@ def main() -> int:
               d["convocazione"], "bmad-party-mode --non-interactive --party super-esperti")
         check("CLI: exit 0 sul gruppo appena generato", run(str(root)).returncode, 0)
 
+    # Il gruppo non può sedere meno gente del non averlo: senza gruppo
+    # party-mode convoca TUTTI gli agenti registrati dal progetto. Misurato su
+    # un progetto vero: default 14, gruppo generato 13 — il tech writer usciva
+    # dal tavolo senza che nessuno lo dicesse.
+    with tempfile.TemporaryDirectory() as td:
+        root = Path(td)
+        agent(root, "agent-frontend-taste", "Vesper — craft FE.", where=".claude/skills")
+        (root / "_bmad").mkdir(parents=True)
+        (root / "_bmad" / "config.toml").write_text(
+            "[agents.agent-frontend-taste]\nmodule = \"epm\"\n\n"
+            "[agents.bmad-agent-tech-writer]\nmodule = \"bmm\"\n\n"
+            "[agents.bmad-agent-pm]\nmodule = \"bmm\"\n", encoding="utf-8")
+        check("gli agenti registrati dal progetto sono letti",
+              mod.registered_agents(root),
+              ["agent-frontend-taste", "bmad-agent-tech-writer", "bmad-agent-pm"])
+        toml = mod.emit_party(root)
+        check("il gruppo generato non esclude nessun agente registrato",
+              [a for a in mod.registered_agents(root) if f'"{a}"' not in toml], [])
+
     # --emit-party genera un gruppo installabile che contiene tutti.
     with tempfile.TemporaryDirectory() as td:
         root = Path(td)

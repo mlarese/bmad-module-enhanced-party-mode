@@ -195,11 +195,31 @@ def build(root: Path) -> dict:
     }
 
 
+def registered_agents(root: Path) -> list[str]:
+    """Every agent code the project's own config registers, in order.
+
+    Without this the emitted group carried a hardcoded list of BMAD roles, and
+    installing it SHRANK the table: measured on a real project, the default
+    collective had 14 members and the generated group 13 — the tech writer
+    dropped out silently. A group that convenes fewer people than doing nothing
+    is worse than no group.
+    """
+    cfg = root / "_bmad" / "config.toml"
+    if not cfg.is_file():
+        return []
+    try:
+        text = cfg.read_text(encoding="utf-8")
+    except OSError:
+        return []
+    return re.findall(r"^\[agents\.([\w-]+)\]", text, re.M)
+
+
 def emit_party(root: Path) -> str:
     """A ready `super-esperti` group for a project where the module is installed.
 
     Configuring the group is optional — without it party-mode already convenes
-    the whole collective — but it is what carries the scene and the personas.
+    the whole collective — but it is what carries the scene. Whatever it
+    carries, it must never seat fewer people than the default.
     """
     agents = installed_agents(root)
     lines = [
@@ -214,7 +234,11 @@ def emit_party(root: Path) -> str:
         "memory = true",
         "members = [",
     ]
-    codes = [a["skill"] for a in agents] + list(BMAD_ROLES)
+    # Ogni agente che il progetto registra, più quelli installati che la config
+    # non conoscesse ancora: il gruppo non può essere più stretto del default.
+    codes = list(dict.fromkeys(
+        registered_agents(root) + [a["skill"] for a in agents] + list(BMAD_ROLES)
+    ))
     for c in codes:
         lines.append(f'  "{c}",')
     lines.append("]")
