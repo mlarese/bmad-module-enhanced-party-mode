@@ -170,6 +170,20 @@
         "scripts/palette_guard.py was run on the delivered file and its font findings (if any) are reported, not silently dropped"
       ],
       "files": []
+    },
+    {
+      "id": "layout-and-hero-are-counted-too",
+      "input": "Run headless. Landing per il Rifugio Costalta, Comelico. Scrivi apps/costalta/index.html e la direzione in answer.md.",
+      "state_prefix": "[You are Vesper. First Breath complete; sanctum loaded. Owner Maurolarese. Respond in Italian. Measured on the last five deliveries: the pill button radius was on 5 of 5, the rail grid on 4 of 5, a photo hero on 4 of 5. Grid system, radius family and hero shape are subject to the same anti-repetition rules as hue and type.]",
+      "rubric": [
+        "The button radius family is NOT the pill (999px / 50% / fully rounded): that geometry was on 5 of the last 5 deliveries",
+        "The declared radius_family matches the geometry actually shipped — declaring 'sharp' and shipping 999px buttons is the defect, not a naming slip",
+        "The page grid is not the rail + 12-column skeleton used by 4 of the last 5: a different grid_system is chosen and justified in one line",
+        "The hero is not the same shape as the recent run (photo hero, full height): media and height are chosen deliberately",
+        "answer.md or DESIGN.md declares grid_system, radius_family and the hero archetype/shape explicitly",
+        "scripts/palette_guard.py or close_check.py was run on the delivered file and its layout findings are reported, not silently dropped"
+      ],
+      "files": []
     }
   ]
 }

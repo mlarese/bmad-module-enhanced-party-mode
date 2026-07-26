@@ -4,6 +4,11 @@
 # ///
 """Measure a palette the way the eye sees it: by hue sector and by area.
 
+Nato sulla palette, oggi e il **guard delle ripetizioni**: colore, caratteri e
+impaginazione passano tutti dalle stesse due regole — di fila e di quota — e
+finiscono tutti nello stesso ledger. Il nome del file resta per non rompere i
+tre chiamanti; quello che misura e scritto qui.
+
 Why this exists — measured, not theorised. Across the delivered demos the
 accent colour was different every time (rame, zafferano, corallo, limone),
 yet the pages read as "all green": `--ink`, the structural dark that fills the
@@ -342,6 +347,113 @@ def font_violations(faces: dict, last_fonts: list[dict]) -> list[str]:
     return out
 
 
+# --- impaginazione e hero ----------------------------------------------------
+# Misurato il 2026-07-26 sulle cinque pagine consegnate: `--r-btn: 999px` su
+# **5 su 5**, rail + 12 colonne su 4, eyebrow/kicker su 5, hero con foto su 4,
+# sei sezioni su 4. `last_radius_families` in MEMORY mostrava varieta - pill,
+# soft, micro, sharp, mixed - ma quella e l'**etichetta**: la geometria
+# consegnata era sempre la pillola. Stessa forma del difetto del colore, dove il
+# nome della famiglia cambiava e l'hue no.
+RAIL_RE = re.compile(r"--rail\s*:", re.I)
+GRID_COLS_RE = re.compile(r"grid-template-columns\s*:\s*([^;{}]+)", re.I)
+REPEAT_N_RE = re.compile(r"repeat\(\s*(\d+)\s*,", re.I)
+BTN_SELECTOR_RE = re.compile(r"(?:^|[^a-z0-9])(btn|button|cta|pill-link)(?:[^a-z0-9]|$)", re.I)
+RADIUS_DECL_RE = re.compile(r"border-radius\s*:\s*([^;{}]+)", re.I)
+VAR_R_RE = re.compile(r"(--r-[\w-]+)\s*:\s*([^;{}]+)", re.I)
+HERO_SELECTOR_RE = re.compile(r"(?:^|[^a-z0-9])hero(?:[^a-z0-9]|$)", re.I)
+FULL_HEIGHT_RE = re.compile(r"min-height\s*:\s*(?:calc\()?\s*1?00(?:s|d|l)?vh", re.I)
+
+
+def _radius_family(value: str) -> str:
+    """La famiglia dal **numero**, non dall'etichetta che le si e data."""
+    v = value.strip().lower()
+    if "%" in v or re.search(r"\b(999|9999)px\b|\b50em\b|100vmax", v):
+        return "pill"
+    m = re.search(r"([\d.]+)\s*(px|rem)", v)
+    if not m:
+        return ""
+    n = float(m.group(1)) * (16 if m.group(2) == "rem" else 1)
+    return ("sharp" if n < 1 else "micro" if n <= 3 else "soft" if n <= 8
+            else "rounded" if n <= 24 else "pill")
+
+
+def layout_signature(text: str) -> dict:
+    """Gli assi di impaginazione che si possono **contare**, non giudicare."""
+    head = text.split("</style>")[0] if "</style>" in text else text
+    out = {}
+
+    cols = GRID_COLS_RE.findall(head)
+    ns = [int(n) for c in cols for n in REPEAT_N_RE.findall(c)]
+    if RAIL_RE.search(head) and any("var(--rail)" in c for c in cols):
+        out["grid_system"] = "rail"
+    elif any(n >= 20 for n in ns):
+        out["grid_system"] = "fine"
+    elif 12 in ns:
+        out["grid_system"] = "12-col"
+    elif cols:
+        out["grid_system"] = "flow"
+
+    fam = ""
+    for var, value in VAR_R_RE.findall(head):
+        if "btn" in var or "button" in var:
+            fam = _radius_family(value)
+            break
+    if not fam:
+        for selector, body in BLOCK_RE.findall(head):
+            if BTN_SELECTOR_RE.search(selector):
+                for value in RADIUS_DECL_RE.findall(body):
+                    if not value.strip().startswith("var("):
+                        fam = _radius_family(value)
+                    if fam:
+                        break
+            if fam:
+                break
+    if fam:
+        out["radius_family"] = fam
+
+    hero_css = " ".join(b for s, b in BLOCK_RE.findall(head) if HERO_SELECTOR_RE.search(s))
+    m = re.search(r'<[^>]+class="[^"]*hero[^"]*"[\s\S]{0,2500}', text)
+    chunk = m.group(0) if m else ""
+    media = ("video" if "<video" in chunk else "foto" if "<img" in chunk
+             else "sfondo" if "background-image" in hero_css else "testo")
+    out["hero_shape"] = media + "-" + ("piena" if FULL_HEIGHT_RE.search(hero_css) else "auto")
+    return out
+
+
+def layout_violations(sig: dict, last: list) -> list:
+    """Di fila e di quota, come per colore e caratteri."""
+    out = []
+    if not sig or not last:
+        return out
+    etichetta = {"grid_system": "impaginazione", "radius_family": "famiglia di raggio",
+                 "hero_shape": "forma della hero"}
+    for axis, label in etichetta.items():
+        here = sig.get(axis)
+        if not here:
+            continue
+        prev = [(e.get(axis) or "") for e in last]
+        streak = 0
+        for s in prev:
+            if s == here:
+                streak += 1
+            else:
+                break
+        if streak >= 2:
+            out.append(label + " ripetuta: '" + here + "' dopo " + str(streak) +
+                       " consegne consecutive (max 2).")
+        window = [s for s in prev[:RECENT_WINDOW - 1] if s]
+        if len(window) >= 3:
+            n = sum(1 for s in window if s == here) + 1
+            tot = len(window) + 1
+            if n / tot > MAX_SHARE:
+                out.append(
+                    label + " predominante: '" + here + "' su " + str(n) +
+                    " delle ultime " + str(tot) + " consegne (" +
+                    f"{n / tot * 100:.0f}%, max {MAX_SHARE * 100:.0f}%). " +
+                    "L'etichetta cambia, la geometria no.")
+    return out
+
+
 def is_small_component(selector: str) -> bool:
     """Whether a selector names a small component rather than a surface."""
     return bool(SMALL_COMPONENT_RE.search(selector))
@@ -643,6 +755,7 @@ def violations(report: dict, last_sectors: list[str],
                     "predominanza, e si vede solo contando. Cambia famiglia."
                 )
     out += font_violations(report.get("typefaces") or {}, last_fonts or [])
+    out += layout_violations(report.get("layout") or {}, last_fonts or [])
     return out
 
 
@@ -686,7 +799,8 @@ def ledger_sectors(entries: list[dict]) -> list[str]:
 
 def ledger_fonts(entries: list[dict]) -> list[dict]:
     """I caratteri dei job passati, più recente per primo — come i settori."""
-    return [{k: e.get(k) for k in ("display", "body", "mono")} for e in reversed(entries)]
+    keys = ("display", "body", "mono", "grid_system", "radius_family", "hero_shape")
+    return [{k: e.get(k) for k in keys} for e in reversed(entries)]
 
 
 def ledger_record(path: Path, entries: list[dict], key: str, report: dict) -> None:
@@ -699,6 +813,7 @@ def ledger_record(path: Path, entries: list[dict], key: str, report: dict) -> No
         "ink_family": report["ink_family"],
         "ink_hex": (report["ink"] or {}).get("hex"),
         **{k: v for k, v in (report.get("typefaces") or {}).items()},
+        **{k: v for k, v in (report.get("layout") or {}).items()},
     })
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(entries[-50:], ensure_ascii=False, indent=1),
@@ -802,6 +917,7 @@ def main() -> int:
 
     report = analyse(pairs, painted, small)
     report["typefaces"] = typefaces(text)
+    report["layout"] = layout_signature(text)
     rejects = hard_rejects(text, palette_colours(text, report["colours"])) if text else []
 
     last = [s for s in args.last.split(",")]

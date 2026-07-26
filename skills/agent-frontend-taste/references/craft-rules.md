@@ -271,6 +271,28 @@ ripetizione.
 4. Fallimento: la stessa voce mono su tre consegne di fila; una famiglia oltre un
    terzo delle ultime otto; `last_font_pairs` aggiornato ma mai controllato.
 
+### Anche l'impaginazione e la hero si contano
+
+Misurato il 2026-07-26 sulle stesse cinque pagine: **`--r-btn: 999px` su 5 su 5**
+— la pillola ovunque — impaginazione a **rail su 4 su 5** (80%), hero con foto su
+4, `eyebrow`/`kicker` su tutte, sei sezioni su quattro. `last_radius_families` in
+MEMORY mostrava varietà (pill · soft · micro · sharp · mixed): quella però è
+l'**etichetta**, e la geometria consegnata era sempre la stessa. È la ripetizione
+del colore, un piano più su.
+
+1. **Tre assi contati, e sono quelli che si misurano senza discutere di gusto:**
+   `grid_system` (rail · fine · 12-col · flow, letto dalle `grid-template-columns`
+   vere), `radius_family` (letta dal **numero** sul bottone, non dal nome che le si
+   è dato), `hero_shape` (media × altezza: `foto-piena`, `testo-auto`…).
+2. **Le solite due regole:** mai lo stesso valore per 3 consegne di fila, mai oltre
+   un terzo delle ultime otto. Stesso ledger di colori e caratteri.
+3. **Il raggio si legge sul bottone**, perché è lì che la famiglia si vede. Un
+   `--r-box: 22px` non salva una pagina che ha il bottone a pillola come le quattro
+   prima.
+4. Fallimento: `radius_family` dichiarata diversa dalla geometria consegnata; rail
+   + 12 colonne come impaginazione predefinita; la stessa forma di hero oltre un
+   terzo delle ultime otto.
+
 6. Fallimento: `ink_family` non dichiarato; scuro strutturale sopra S 15% non dichiarato; footer e hero della stessa tinta dell'accento; tre job di fila nella stessa famiglia; **una famiglia oltre un terzo degli ultimi otto lavori**; `verde` e `teal` alternati e contati come due cose diverse; ledger puntato dentro il progetto, dove riparte da zero a ogni cliente.
 
 8. Dichiara in direzione: `locale: …` · `register: …` · `activity: …` · `palette_family: …` · **`hue_sector: …`** · **`ink_family: …`** · `fonts: Display + Body (+ terza voce)` · `radius_family: …` · perché — una riga che leghi i tre segnali all'esito, non etichette scollegate.

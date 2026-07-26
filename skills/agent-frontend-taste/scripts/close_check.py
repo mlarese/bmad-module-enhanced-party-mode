@@ -209,6 +209,7 @@ def check_colour(pg, text: str, last: list[str], ledger: Path | None,
         return 2, {}, [pg.unmeasurable_note(text)]
     report = pg.analyse(pairs, painted, small)
     report["typefaces"] = pg.typefaces(text)
+    report["layout"] = pg.layout_signature(text)
     rejects = pg.hard_rejects(text, pg.palette_colours(text, report["colours"]))
     entries, last_fonts = [], []
     if ledger:
@@ -301,6 +302,10 @@ def main() -> int:
         faces = (report or {}).get("typefaces") or {}
         if faces:
             lines.append("- caratteri: " + " · ".join(f"{k} **{v}**" for k, v in faces.items()))
+        lay = (report or {}).get("layout") or {}
+        if lay:
+            lines.append("- impaginazione: " + " · ".join(f"{k.split('_')[0]} **{v}**"
+                                                          for k, v in lay.items()))
         lines.append(f"- responsive: {'ok' if resp_ok else 'da correggere'}")
         lines.append(f"- finito: {'nessun segnaposto' if fin_ok else 'da correggere'}")
         lines.append(f"- traccia: {'ok' if des_ok else 'da correggere'}")
