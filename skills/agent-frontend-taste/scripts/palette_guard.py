@@ -42,7 +42,8 @@ Usage:
     uv run scripts/palette_guard.py --check apps/<slug>/index.html
     uv run scripts/palette_guard.py --hex '#141C18,#C96F3A,#F3F0EA'
     uv run scripts/palette_guard.py --check pagina.html --last verde,teal
-    uv run scripts/palette_guard.py --check pagina.html --ledger _bmad/memory/agent-frontend-taste/hue-ledger.json
+    uv run scripts/palette_guard.py --check pagina.html          # ledger condiviso, in automatico
+    uv run scripts/palette_guard.py --check pagina.html --ledger <file>   # o uno tuo
     uv run scripts/palette_guard.py --check pagina.html --format json
 
 Exit: 0 pulito · 1 violazioni · 2 non misurabile (non dichiarare "guard pulito").
@@ -53,6 +54,7 @@ from __future__ import annotations
 import argparse
 import colorsys
 import json
+import os
 import re
 import sys
 from datetime import datetime
@@ -69,6 +71,22 @@ SECTORS: list[tuple[str, float, float]] = [
     ("viola", 260, 300),
     ("magenta", 300, 345),
 ]
+
+# Settori che l'occhio legge come **la stessa cosa**. Il guard diceva già «il
+# nome della famiglia cambia, l'occhio no»: vale un piano più su, perché
+# `verde` e `teal` sono due voci in tabella e una sola impressione a schermo —
+# MEMORY registra «teal+verde 5 demo su 11» proprio così, contate separate e
+# quindi mai in violazione. Si fondono solo le coppie per cui c'è la misura:
+# aggiungerne altre a intuito rifarebbe l'errore al contrario.
+SECTOR_FAMILY: dict[str, str] = {"verde": "verde", "teal": "verde"}
+
+# Quanti job indietro guarda la regola di frequenza, e quale quota è troppa.
+# `verde`+`teal` occupano 130° dei 360 della ruota: una palette che non eviti
+# apposta quella zona ci finisce **una volta su tre per geometria**. Una regola
+# che vieta solo due job di fila non vede una predominanza al 50%: la vede solo
+# una regola sulla quota.
+RECENT_WINDOW = 8
+MAX_SHARE = 1 / 3
 
 DARK_L = 30.0        # at or below this lightness it is a structural dark
 
@@ -179,6 +197,12 @@ def sector_of(hue: float, sat: float, light: float = 50.0) -> str:
         elif start <= hue < end:
             return name
     return "neutro"
+
+
+def family_of(sector: str) -> str:
+    """La famiglia percettiva di un settore: quello che l'occhio ricorda."""
+    s = (sector or "").strip().lower()
+    return SECTOR_FAMILY.get(s, s)
 
 
 def ink_family(hue: float, sat: float, light: float) -> str:
@@ -452,19 +476,37 @@ def violations(report: dict, last_sectors: list[str]) -> list[str]:
                 f"{ink['sector']} — la pagina ha un colore solo in due luminosità."
             )
     recent = [s.strip().lower() for s in last_sectors if s.strip()]
-    if recent and report["dominant_sector"] != "neutro":
+    here = report["dominant_sector"]
+    if recent and here != "neutro":
+        fam = family_of(here)
+
+        # (a) di fila — ora contate per famiglia: verde→teal→verde erano tre
+        # sequenze da uno, e a schermo erano tre pagine verdi.
         streak = 0
         for s in recent:
-            if s == report["dominant_sector"]:
+            if family_of(s) == fam:
                 streak += 1
             else:
                 break
         if streak >= 2:
             out.append(
-                f"settore ripetuto: '{report['dominant_sector']}' arriva dopo {streak} "
-                "job consecutivi nello stesso settore (max 2). Il nome della famiglia "
-                "cambia, l'occhio no — cambia settore."
+                f"settore ripetuto: '{here}' arriva dopo {streak} job consecutivi "
+                f"nella famiglia '{fam}' (max 2). Il nome della famiglia cambia, "
+                "l'occhio no — cambia settore."
             )
+
+        # (b) quota — il difetto che la regola di fila non poteva vedere.
+        window = recent[:RECENT_WINDOW - 1]
+        if len(window) >= 3:
+            fams = [family_of(s) for s in window] + [fam]
+            n = fams.count(fam)
+            if n / len(fams) > MAX_SHARE:
+                out.append(
+                    f"famiglia predominante: con questo job '{fam}' sta su {n} degli "
+                    f"ultimi {len(fams)} lavori ({n / len(fams) * 100:.0f}%, max "
+                    f"{MAX_SHARE * 100:.0f}%). Non è una ripetizione di fila — è una "
+                    "predominanza, e si vede solo contando. Cambia famiglia."
+                )
     return out
 
 
@@ -474,6 +516,22 @@ def violations(report: dict, last_sectors: list[str]) -> list[str]:
 # only ever covers jobs done in the same project — while the sanctum is
 # per-project and an agency does one job per repo. A ledger makes the streak a
 # recorded fact instead of something to remember correctly.
+
+def default_ledger() -> Path:
+    """Il registro **fra progetti**, perché è lì che l'anti-ripetizione serve.
+
+    Misurato: il sanctum è per progetto e una landing *è* un progetto, quindi il
+    ledger di ogni lavoro nasce vuoto e la regola dei settori non ha mai dati su
+    cui scattare — l'unico ledger trovato in questo repo aveva **una** voce. Un
+    registro che si azzera a ogni job non è un registro: è un file.
+
+    Override con `VESPER_HUE_LEDGER`, per tenerne uno per cliente o per team.
+    """
+    env = os.environ.get("VESPER_HUE_LEDGER")
+    if env:
+        return Path(env).expanduser()
+    return Path.home() / ".claude" / "agent-frontend-taste" / "hue-ledger.json"
+
 
 def ledger_load(path: Path) -> list[dict]:
     if not path.is_file():
@@ -564,6 +622,8 @@ def main() -> int:
     src.add_argument("--check", metavar="FILE", help="HTML/CSS file to measure")
     src.add_argument("--hex", metavar="LIST", help="comma-separated hex colours")
     ap.add_argument("--last", default="", help="recent dominant sectors, most recent first")
+    ap.add_argument("--no-ledger", action="store_true",
+                    help="non leggere né scrivere il registro condiviso")
     ap.add_argument("--ledger", metavar="FILE",
                     help="JSON ledger of past measurements: reads the streak and records this one")
     ap.add_argument("--format", choices=("md", "json"), default="md")
@@ -602,7 +662,8 @@ def main() -> int:
     rejects = hard_rejects(text, palette_colours(text, report["colours"])) if text else []
 
     last = [s for s in args.last.split(",")]
-    ledger_path = Path(args.ledger) if args.ledger else None
+    ledger_path = (Path(args.ledger) if args.ledger
+                   else (None if args.no_ledger else default_ledger()))
     entries: list[dict] = []
     if ledger_path:
         entries = ledger_load(ledger_path)

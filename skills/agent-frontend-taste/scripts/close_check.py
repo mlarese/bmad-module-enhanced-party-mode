@@ -237,7 +237,10 @@ def main() -> int:
     ap.add_argument("--council", help="registro del consiglio, docs/consiglio/<slug>.md")
     ap.add_argument("--surface", choices=("marketing", "dashboard", "mobile"),
                     help="dashboard → controlla anche paginazione e filtro delle tabelle")
-    ap.add_argument("--ledger", help="registro dei settori di tinta")
+    ap.add_argument("--ledger", help="registro dei settori di tinta "
+                    "(default: quello condiviso fra progetti)")
+    ap.add_argument("--no-ledger", action="store_true",
+                    help="non leggere né scrivere il registro condiviso")
     ap.add_argument("--last", default="", help="settori recenti, il più recente per primo")
     ap.add_argument("--format", choices=("md", "json"), default="md")
     args = ap.parse_args()
@@ -245,7 +248,8 @@ def main() -> int:
     pg = _palette_guard()
     design = Path(args.design) if args.design else None
     council = Path(args.council) if args.council else None
-    ledger = Path(args.ledger) if args.ledger else None
+    ledger = (Path(args.ledger) if args.ledger
+              else (None if args.no_ledger else pg.default_ledger()))
     last = args.last.split(",")
 
     worst, out, blocks, reports = 0, [], [], []

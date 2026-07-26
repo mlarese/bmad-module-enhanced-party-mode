@@ -343,7 +343,9 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="Pagina delle combinazioni colore/carattere")
     ap.add_argument("combos", help="JSON con le combinazioni (- per stdin)")
     ap.add_argument("--out", required=True, help="apps/<slug>/palette.html")
-    ap.add_argument("--ledger", help="registro dei settori di tinta")
+    ap.add_argument("--ledger", help="registro dei settori di tinta "
+                    "(default: quello condiviso fra progetti)")
+    ap.add_argument("--no-ledger", action="store_true", help="ignora il registro")
     ap.add_argument("--last", default="", help="settori recenti, il più recente per primo")
     args = ap.parse_args()
 
@@ -361,8 +363,9 @@ def main() -> int:
 
     pg = _palette_guard()
     last = [s for s in args.last.split(",") if s.strip()]
-    if args.ledger and not last:
-        last = pg.ledger_sectors(pg.ledger_load(Path(args.ledger)))
+    if not last and not args.no_ledger:
+        ledger = Path(args.ledger) if args.ledger else pg.default_ledger()
+        last = pg.ledger_sectors(pg.ledger_load(ledger))
 
     reports, bad = {}, []
     for c in combos:
