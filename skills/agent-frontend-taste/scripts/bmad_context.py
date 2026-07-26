@@ -9,8 +9,10 @@ an architecture document, a UX/page spec, a project context? If yes, they are
 not inspiration — they are constraints. The architecture's tech stack is
 mandatory; the PRD bounds the scope; a page spec drives the structure and the
 seeded axes only fill what it leaves open. If no document exists, the verdict
-says so, and the autonomous path (domain+marketing research, edge cases,
-adversarial review) must be declared in the accompanying spec, never inside the artifact.
+says so — and the missing documents get written before any code: the full
+council produces domain research, marketing research, PRD, UX spec, architecture
+and project context, then tempers them (edge cases, elicitation, adversarial
+review). Never a question to the owner, and never a note inside the artifact.
 
 Paths come from `_bmad/config.toml` when present (planning_artifacts,
 implementation_artifacts), with the standard BMAD layout as fallback — the
@@ -353,16 +355,22 @@ def render_md(d: dict) -> str:
             )
     else:
         lines.append(
-            "**NESSUN DOCUMENTO VINCOLANTE.** Analisi autonoma obbligatoria: "
-            "(1) ricerca di dominio e marketing (batch `hero_sample.py`, corpora, "
-            "scout) — **da cui si derivano anche i testi**, se non forniti: "
-            "headline, CTA con verbi del dominio, copy di sezione, FAQ, microcopy, "
-            "`alt` e meta; mai lorem ipsum né gergo da landing generica. Il "
-            "deliverable è **finito**: nessun `TODO`, nessun «da sostituire», "
-            "nessun elenco di dati fittizi nel file — prezzi, orari e contatti si "
-            "scrivono verosimili e si segnala **all'owner in chat** che non sono "
-            "veri — (2) elenco esplicito dei casi limite della pagina, "
-            "(3) review avversaria del risultato prima della consegna. "
+            "**NESSUN DOCUMENTO VINCOLANTE — SI SCRIVONO.** Prima di una riga di codice il "
+            "consiglio al completo produce i sei artefatti in `planning-artifacts/`: "
+            "(1) **ricerca di dominio** · (2) **ricerca di marketing** · (3) PRD · "
+            "(4) documento UX / page spec · (5) architettura · (6) `project-context.md`, "
+            "più la `slice_plan`. Tre criteri trasversali, dichiarati voce per voce: "
+            "**architettura dell'app**, **sicurezza** (OWASP dal primo giorno, con i "
+            "requisiti che il front end non può garantire scritti per il backend), "
+            "**vertical slice**. Poi la **tempra**, nessun documento passa com'è uscito: "
+            "**casi limite** · elicitazione con tutti i metodi applicabili · review "
+            "**avversaria** — esiti dentro il documento, non a margine. "
+            "**Dalla ricerca si derivano anche i testi** se non forniti: headline, CTA "
+            "con i verbi del dominio, copy di sezione, FAQ, microcopy, `alt` e meta; "
+            "mai **lorem ipsum**, mai gergo da landing generica. Il deliverable è "
+            "**finito**: nessun `TODO`, nessun «da sostituire», nessun elenco di dati "
+            "fittizi nel file — prezzi, orari e contatti si scrivono verosimili e che "
+            "non siano veri si dice **all'owner in chat**, non nell'artefatto. "
             "Il project context, se esiste, resta applicato."
         )
         lines.append("")
@@ -373,7 +381,7 @@ def render_md(d: dict) -> str:
             "**documenti chiarificatori** elencati sopra (`docs/`, README) prima "
             "di dedurre lo stack dai soli file del repo. Se restano ambigui, "
             "**decide G1** (consiglio non interattivo) sullo stack che il repo rende "
-            "più praticabile: si dichiara nel kernel con una riga di motivo e si "
+            "più praticabile: si dichiara nei documenti con una riga di motivo e si "
             "lascia una varianza. Nessuna domanda all'owner."
         )
         lines.append("")

@@ -39,9 +39,9 @@ una domanda ha fallito il goal — si rilancia il goal, non si gira la domanda.
 > cliente›. Per ogni voce: decisione + una riga di motivo + `fatto | assunzione`.
 > Nessuna domanda all'owner.
 
-### G2 — I documenti (tutto il consiglio, prima del codice)
+### G2 — I sei documenti (tutto il consiglio, prima del codice)
 
-**Quando il pre-flight non trova i documenti, il consiglio li produce.** Non è una
+**Quando il pre-flight non trova i sei documenti, il consiglio li produce.** Non è una
 scelta di peso del lavoro: è la condizione per scrivere codice sapendo cosa si sta
 scrivendo. Nessuna domanda all'owner in nessun passaggio.
 

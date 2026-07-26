@@ -191,7 +191,7 @@ all'owner in nessun passaggio.
 
 - **Architettura dell'app** — confini, responsabilità, cosa sta dove. Non «useremo
   Next»: dove vive la logica di dominio, cosa tocca il database, cosa è pubblico.
-- **Sicurezza** — OWASP dal primo giorno (§13.5): superficie d'attacco della slice,
+- **Sicurezza** — OWASP dal primo giorno (§13, punto 5): superficie d'attacco della slice,
   dati personali raccolti *davvero*, autenticazione proporzionata, e ciò che il front
   end non può garantire scritto come **requisito per il back end**. Un form di
   contatto è già raccolta di dati personali: Jane parla lì, non alla slice dopo.
@@ -264,7 +264,7 @@ primo giro; casi limite trovati e archiviati fuori dal documento.
 I sei artefatti esistono dalla prima riga di codice, ma su una landing sono corti: il
 perimetro è piccolo, non assente. Quando una slice introduce **il dietro** — auth
 reale, dati che persistono, un'API, un ruolo, un pagamento — quei documenti non
-bastano più nella forma in cui sono, e la via breve prescrive proprio **S2 back
+bastano più nella forma in cui sono, e il piano a slice prescrive proprio **S2 back
 office con accesso minimo reale** (§4.1): il salto è previsto dal piano, non è un
 imprevisto.
 
@@ -357,7 +357,7 @@ Vesper la pagina (AF → Vera) **e** la parte applicativa che non è craft front
 endpoint, persistenza, auth della slice, logica di dominio, seguendo architettura e
 convenzioni del repo — con la **disciplina di `bmad-quick-dev`** (spec-template,
 Ready for Development) ma **senza invocarlo**, perché si ferma a chiedere in ogni
-ramo (§4.2.7, `autonomia.md`). Il canone (§13) vale lì come qui.
+ramo (§4.2 punto 7, `autonomia.md`). Il canone (§13) vale lì come qui.
 
 **Casi limite, per iscritto** prima di chiudere: stati vuoti, errore, caricamento;
 testi lunghi/corti; molte/zero righe; mobile con tastiera aperta; offline se app.
@@ -463,7 +463,7 @@ Se il job non produce spec, la catena si dichiara in chat.
 
 ### 7.1 I documenti che ti sei scritta da sola
 
-Quelli prodotti dal consiglio nel ramo B (§4.0) **vincolano come gli altri**: lo stack
+Quelli prodotti dal consiglio in G2 (§4.0) **vincolano come gli altri**: lo stack
 è obbligatorio anche se l'hai deciso tu ieri. Ma sono nati pieni di **assunzioni
 marcate**, e un'assunzione promossa a legge senza che nessuno la guardi più è peggio
 dell'assenza del documento.
