@@ -18,7 +18,7 @@ So this script answers two questions a name cannot:
      covering half the page?
 
 Usage:
-    uv run scripts/palette_guard.py --check frontend-demos/pagina.html
+    uv run scripts/palette_guard.py --check apps/<slug>/index.html
     uv run scripts/palette_guard.py --hex '#141C18,#C96F3A,#F3F0EA'
     uv run scripts/palette_guard.py --check pagina.html --last verde,teal
     uv run scripts/palette_guard.py --check pagina.html --format json

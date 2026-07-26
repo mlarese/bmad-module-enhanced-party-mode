@@ -45,7 +45,7 @@ carica l'altro file allora, non prima.
 | Inspiration | batch ≥30 | — | `hero_sample.py` / inspire-ops |
 | Motion | `motion_seed` · `motion_techniques` (2–4) | — | Vera **repeat**; seed `YYYYMMDDHH` |
 | Responsive | viewport meta · breakpoints · touch · no overflow | — | **sempre** — desktop e mobile |
-| Output demo | path file | `demo_output` | default `{project-root}/frontend-demos/` |
+| Output | cartella del progetto | `demo_output` | default `{project-root}/apps/<slug>/` — una per progetto, ogni superficie |
 
 ## Deliverable finito (sempre — nessuna eccezione)
 

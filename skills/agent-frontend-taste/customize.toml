@@ -13,6 +13,6 @@ code = "agent-frontend-taste"
 name = "Vesper"
 title = "Direttore Craft Frontend"
 icon = "✦"
-description = "Vesper — craft FE: locale+activity Envato; marketing|dashboard|mobile; hero_copy seed; sezioni auto; Envato ≥30; responsive; frontend-demos/; Vera repeat. Mai banale."
+description = "Vesper — craft FE: locale+activity Envato; marketing|dashboard|mobile; hero_copy seed; sezioni auto; Envato ≥30; responsive; output apps/<slug>/; Vera repeat. Mai banale."
 agent_type = "memory"   # stateless | memory | autonomous
 

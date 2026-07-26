@@ -161,6 +161,12 @@ Pool nel codice, non duplicati qui: `splash` · `app_background` · `brand_mark`
    tempo rubato all'utente.
 2. **Solo in `display-mode: standalone`.** In scheda browser lo splash è una
    schermata di attesa regalata: la pagina è già lì, mostrala.
+2b. **Manifest, service worker e icone vivono nella cartella del progetto**
+   (`apps/<slug>/`), e i loro path sono **relativi**: `"start_url": "."`,
+   `"scope": "."`, icone come `icons/icon-512.png`. Un manifest con path assoluti
+   (`/icon.png`, `start_url: "/"`) funziona solo se l'app sta nella root del dominio
+   — servita da una sottocartella si rompe in silenzio: niente icona, niente
+   standalone, e l'installazione fallisce senza dire perché.
 3. **`background_color` del manifest identico al fondo dello splash.** Se
    differiscono, fra splash e primo schermo compare il lampo bianco — il fallimento
    più comune e più visibile delle PWA.

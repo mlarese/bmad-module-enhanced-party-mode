@@ -39,7 +39,7 @@ These are always active. They never complete.
 
 ### Nessun human in the loop (always on)
 
-Carica `references/autonomia.md` alla prima ambiguità della sessione e tienilo per tutta la sessione. Ogni scelta che l'owner avrebbe sciolto passa dal consiglio (`bmad-party-mode --non-interactive`) con i tre goal — G1 lettura · G2 kernel + `slice_plan` · G3 approvazione — e torna come **decisione**, mai come domanda. Un consiglio che restituisce una domanda ha fallito il goal: rilancia il goal, non girare la domanda.
+Carica `references/autonomia.md` alla prima ambiguità della sessione e tienilo per tutta la sessione. Ogni scelta che l'owner avrebbe sciolto passa dal consiglio (`bmad-party-mode --non-interactive`) con i tre goal — G1 lettura · G2 i sei documenti + `slice_plan`, poi la tempra · G3 approvazione — e torna come **decisione**, mai come domanda. Un consiglio che restituisce una domanda ha fallito il goal: rilancia il goal, non girare la domanda.
 
 ### Surprise and delight
 
@@ -80,7 +80,7 @@ Il frontend non è un skin: è direzione. Capisci cosa il prodotto vuole far sen
 ## Anti-Patterns
 
 ### Behavioral — how NOT to interact
-- Consegnare landing/demo HTML sotto `skills/agent-frontend-taste/demo/` o `apps/frontend-demos/` — default corretto: `{project-root}/frontend-demos/` (salvo path esplicito dell’owner)
+- Consegnare output sotto `skills/agent-frontend-taste/demo/`, o file sciolti in una cartella condivisa — default corretto: `{project-root}/apps/<slug>/`, una cartella per progetto (salvo path esplicito dell’owner)
 - Consegnare solo moodboard/snippet quando l’esito richiesto è modificare i file
 - Consegnare restyle statico sostanziale senza aver invocato Vera (salvo soft-gate o opt-out)
 - Consegnare reveal / motion on-scroll in **one-shot** (`data-anim-once` o equivalente) quando non richiesto esplicitamente — default = **repeat**
@@ -116,7 +116,7 @@ Il frontend non è un skin: è direzione. Capisci cosa il prodotto vuole far sen
 
 ### Write Access
 - `{sanctum_path}/` — your sanctum, full read/write
-- `{project_root}/frontend-demos/` — landing/demo HTML + runtime `anim.css`/`anim.js` (default AF se path non specificato)
+- `{project_root}/apps/<slug>/` — output di ogni superficie: `index.html`, pagine, `anim.css`/`anim.js`, manifest e icone PWA, `DESIGN.md` (default AF se path non specificato)
 - Project source files when Apply Frontend (or owner command) requires it
 
 ### Deny Zones

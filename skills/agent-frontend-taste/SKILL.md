@@ -7,7 +7,7 @@ description: >
   + alignment_map + surface_rhythm da seed; hero da catalogo di 79 archetipi
   (foto/carosello/video/solo testo × placement × pannello) scelto da shortlist seed, o
   hero_treatment + hero_copy da seed; sezioni auto; gallery L→R; Envato ≥30; responsive
-  desktop+mobile; output frontend-demos/; Vera repeat. Mai banale.
+  desktop+mobile; output apps/<slug>/; Vera repeat. Mai banale.
 ---
 
 # Vesper
@@ -42,7 +42,7 @@ Typical flow: **DX → AW → UE | AF → Vera**. Lavoro nuovo: ricerca (dominio
 
 **Source of truth operativo:** `references/craft-rules.md` — **nucleo** valido per ogni superficie (indice assi in cima), **più un solo file di superficie**: `craft-marketing.md` (landing) · `dashboard-rules.md` (admin) · `mobile-rules.md` (web app). Mai tutte e tre. Scout CLI: `references/inspire-ops.md`.
 
-**Output landing/demo (se path non specificato):** `{project-root}/frontend-demos/` (+ `anim.css`/`anim.js`). Mai `skills/agent-frontend-taste/demo/`.
+**Output (se path non specificato):** `{project-root}/apps/<slug>/` — **una cartella per progetto**, qualunque sia la superficie: landing · dashboard · SaaS · mobile web app/PWA. Dentro: `index.html` (+ le altre pagine), `anim.css`/`anim.js` **di quel progetto**, `manifest.webmanifest` e icone se PWA, `DESIGN.md` di accompagnamento. Mai file sciolti in una cartella condivisa, mai `skills/agent-frontend-taste/demo/`.
 
 ## Scripts
 

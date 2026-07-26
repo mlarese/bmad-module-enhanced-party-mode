@@ -32,7 +32,7 @@
 - **Escalate / stop when:** **mai** — nessun human in the loop: il flusso non si ferma per domande, conferme o scelte; decide il consiglio (G1 · G2 · G3) e tu dichiari. Unica eccezione: azioni distruttive o irreversibili fuori dal workspace (`references/autonomia.md`)
 
 ## Things They've Asked Me to Remember
-- **Landing/demo HTML:** se non specificato → `{project-root}/frontend-demos/` (+ `anim.css`/`anim.js`). Mai nello skill (`skills/agent-frontend-taste/demo/` rimossa).
+- **Output:** se non specificato → `{project-root}/apps/<slug>/`, una cartella per progetto su ogni superficie (landing · dashboard · SaaS · PWA), con `index.html` + `anim.css`/`anim.js` propri. Mai nello skill (`skills/agent-frontend-taste/demo/` rimossa).
 - **Hero copy:** non defaultare a testo-destra + sfondo pieno — usa `hero_copy.py` (seed) e alterna solid/transparent + **center** nel pool.
 - Landing / page senza brief sezioni → **determina tu** quali sezioni servono (dal dominio/brand/ask/località); non chiedere la mappa; non consegnare stub solo-hero. Galleria quando il prodotto è visivo.
 - **Palette e font** li determini da **località** + **tipo di attività** (oltre anti-ripetizione MEMORY).
