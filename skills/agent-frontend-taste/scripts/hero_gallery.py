@@ -615,18 +615,6 @@ def render_card(entry: dict, catalog: dict, index: int) -> str:
         <div class="body">
           <p class="eyebrow"><code>{e(entry['id'])}</code></p>
           <h3>{e(entry['name'])}</h3>
-          <p class="desc">{e(entry['desc'])}</p>
-          <ul class="tokens">
-            <li>{e(axes['media'][entry['media']]['label'])}</li>
-            <li>{e(axes['placement'][entry['placement']]['label'])}</li>
-            <li>{e(axes['panel'][entry['panel']]['label'])}</li>
-            <li><code>{e(entry['treatment'])}</code></li>
-            <li>{('<code>' + e(entry['hero_copy']) + '</code>') if entry.get('hero_copy') else 'placement extra'}</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>{e(entry['use'])}</dd>
-            <dt>Attenzione</dt><dd>{e(entry['watch'])}</dd>
-          </dl>
         </div>
       </article>
 """
@@ -663,9 +651,8 @@ def _legend(axes: dict) -> str:
 def _credits(catalog: dict) -> str:
     sources = sorted({m["credit"] for m in catalog["media_pool"].values()})
     return (
-        '<footer class="credits"><p>Foto e testi delle miniature sono campioni di lavoro: '
-        f'{html.escape(" · ".join(sources))}. Marchi e copy sono inventati per far leggere lo schema — '
-        "colore, font e palette del progetto reale restano derivati da località + carattere + business.</p></footer>"
+        '<footer class="credits"><p>Foto e marchi delle miniature sono campioni: '
+        f'{html.escape(" · ".join(sources))}.</p></footer>'
     )
 
 
@@ -673,15 +660,10 @@ def render_html(catalog: dict) -> str:
     axes = catalog["axes"]
     archetypes = catalog["archetypes"]
     cards = "".join(render_card(a, catalog, i) for i, a in enumerate(archetypes))
-    filters = "".join(
-        [
-            _chip_group("media", "Media", axes["media"], {a["media"] for a in archetypes}),
-            _chip_group(
-                "placement", "Testo", axes["placement"], {a["placement"] for a in archetypes}
-            ),
-            _chip_group("panel", "Pannello", axes["panel"], {a["panel"] for a in archetypes}),
-        ]
-    )
+    # Un filtro solo. Con tre gruppi erano ventitré pulsanti sopra le miniature:
+    # più tempo a leggere i filtri che a guardare gli esempi. Dove sta il testo e
+    # se c'è un pannello si vedono a colpo d'occhio; il tipo di media no.
+    filters = _chip_group("media", "Media", axes["media"], {a["media"] for a in archetypes})
     return f"""<!DOCTYPE html>
 <html lang="it" data-generated-by="hero_gallery.py">
 <head>
@@ -731,11 +713,11 @@ h1 {{ font-family: var(--serif); font-weight: 500; font-size: clamp(2rem, 5.5vw,
 
 /* ----------------------------------------------------------------- grid */
 main {{ padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }}
-.grid {{ display: grid; gap: 1px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 25rem), 1fr)); background: var(--rule); border: 1px solid var(--rule); }}
-.card {{ background: var(--paper); padding: 1rem; display: flex; flex-direction: column; gap: .75rem; cursor: pointer; }}
+.grid {{ display: grid; gap: 1px; grid-template-columns: repeat(4, minmax(0, 1fr)); background: var(--rule); border: 1px solid var(--rule); }}
+.card {{ background: var(--paper); padding: .7rem; display: flex; flex-direction: column; gap: .5rem; cursor: pointer; }}
 .card[aria-pressed="true"] {{ background: var(--paper-2); box-shadow: inset 3px 0 0 var(--accent); }}
 .card .eyebrow {{ margin: 0; font-family: var(--mono); font-size: .68rem; letter-spacing: .06em; color: var(--ink-2); }}
-.card h3 {{ font-family: var(--serif); font-weight: 500; font-size: 1.18rem; line-height: 1.15; letter-spacing: -.02em; margin: 0; }}
+.card h3 {{ font-family: var(--serif); font-weight: 500; font-size: 1rem; line-height: 1.15; letter-spacing: -.02em; margin: 0; }}
 .card .desc {{ margin: 0; font-size: .88rem; color: var(--ink-2); max-width: 52ch; text-wrap: pretty; }}
 .tokens {{ list-style: none; display: flex; flex-wrap: wrap; gap: .25rem; margin: 0; padding: 0; }}
 .tokens li {{ font-family: var(--mono); font-size: .64rem; letter-spacing: .04em; text-transform: uppercase; padding: .15rem .38rem; border: 1px dashed var(--rule); color: var(--ink-2); }}
@@ -975,6 +957,9 @@ main {{ padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }}
 .empty {{ font-family: var(--mono); font-size: .8rem; color: var(--ink-2); padding: 2rem 0; }}
 .empty[hidden] {{ display: none; }}
 
+@media (max-width: 1180px) {{ .grid {{ grid-template-columns: repeat(3, minmax(0, 1fr)); }} }}
+@media (max-width: 860px) {{ .grid {{ grid-template-columns: repeat(2, minmax(0, 1fr)); }} }}
+@media (max-width: 560px) {{ .grid {{ grid-template-columns: 1fr; }} }}
 @media (max-width: 720px) {{
   .toolbar {{ position: static; }}
   .notes {{ grid-template-columns: 1fr; }}
@@ -984,23 +969,13 @@ main {{ padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }}
 </head>
 <body>
 <header class="masthead">
-  <p class="kicker">agent-frontend-taste · hero archetypes</p>
-  <h1>Scegli la hero guardandola.</h1>
-  <p class="lede">Ogni miniatura è una hero vera in piccolo: foto, titolo, sottotitolo e pulsante
-  al loro posto. Cambia solo lo <strong>schema</strong> — che media occupa il primo viewport, dove
-  va il blocco di testo, se sta su un pannello pieno o su niente. {len(archetypes)} archetipi:
-  foto singola, carosello, video, nessun media, collage, sequenza a scroll, UI di prodotto, mappa,
-  prima/dopo.</p>
-  <p class="lede">Dimmi l'<code>id</code> (o selezionane più di uno e copia la lista): da lì fisso
-  <code>hero_treatment</code>, <code>hero_copy</code>, placement e pannello, e la scelta a vista batte
-  il sorteggio da seed. Foto e marchi qui sono campioni: nel progetto vero palette, font e immagini
-  restano derivati da località + carattere + business.</p>
+  <h1>Hero — {len(archetypes)} esempi</h1>
 </header>
 
 <div class="toolbar">
   {filters}
   <label class="search">
-    <input type="search" id="q" placeholder="Cerca: video, centrato, plate, mappa…" aria-label="Cerca archetipo">
+    <input type="search" id="q" placeholder="Cerca" aria-label="Cerca archetipo">
   </label>
   <button type="button" class="btn" id="reset">Azzera</button>
   <span class="count" id="count"></span>
@@ -1010,7 +985,6 @@ main {{ padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }}
   <div class="grid" id="grid">
 {cards}  </div>
   <p class="empty" hidden id="empty">Nessun archetipo con questi filtri.</p>
-  {_legend(axes)}
   {_credits(catalog)}
 </main>
 
@@ -1029,7 +1003,7 @@ main {{ padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }}
   var empty = document.getElementById('empty');
   var tray = document.getElementById('tray');
   var picked = document.getElementById('picked');
-  var active = {{ media: [], placement: [], panel: [] }};
+  var active = {{ media: [] }};
 
   function apply() {{
     var needle = q.value.trim().toLowerCase();

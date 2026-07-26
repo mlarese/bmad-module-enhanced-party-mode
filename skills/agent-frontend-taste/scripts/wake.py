@@ -56,6 +56,17 @@ def main() -> int:
         print("NOTE: --pulse ignored (this agent has no Pulse Mode).", file=sys.stderr)
 
     project_root = Path(positional[0]).resolve()
+    # A root that does not exist is a typo or a wrong cwd, never a birth. The
+    # old code resolved it happily and answered FIRST_BREATH — so a mistyped
+    # path made the agent "born again" with an empty MEMORY: last_hue_sectors,
+    # last_registers, last_font_pairs all gone, anti-repetition restarted from
+    # zero, and nothing on screen to say so. You were born once.
+    if not project_root.is_dir():
+        print(f"ERRORE: project-root inesistente: {project_root}", file=sys.stderr)
+        print("Non è una nascita: è un path sbagliato. Correggi il path e riprova.",
+              file=sys.stderr)
+        return 2
+
     sanctum = project_root / "_bmad" / "memory" / SKILL_NAME
 
     core_ok = (

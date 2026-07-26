@@ -22,11 +22,11 @@ uv run scripts/hero_sample.py --list-activities
 
 **Misurato 2026-07-26:** Dribbble `?q=` ignora il termine (stesso set). Non usare DRB search per l’attività. Envato category paths sì.
 
-Seed `YYYYMMDDHH` → a different set each hour. Soft-gate micro-edit → no batch.
+Seed `YYYYMMDDHH` → a different set each hour. Scorciatoia correzione piccola → no batch.
 
 Extract **structure** only — never hex/assets. Invented URLs or cloning one Envato template = failure.
 
-**DESIGN.md stampi:** `references/design-md-landing.md` · `design-md-dashboard.md` · `design-md-saas.md` · `design-md-mobile-web-app.md`.
+**DESIGN.md modelli:** `references/design-md-landing.md` · `design-md-dashboard.md` · `design-md-saas.md` · `design-md-mobile-web-app.md`.
 
 Dopo il batch ≥30 annota anche la **chrome geometry** (angoli): conta sharp / soft / rounded / pill sui migliori 8–12 e dichiara `radius_family` coerente col mix **e** con activity (vedi `craft-rules.md` → Chrome geometry). Non defaultare a box quadrati.
 
@@ -52,7 +52,7 @@ uv run scripts/envato_admin_scout.py --sample 30
 uv run scripts/envato_admin_scout.py --list --limit 40
 ```
 
-**Ampiezza vera (centinaia, non 30):** i tag path `/web-templates/admin-templates/{tag}` rendono 48 item ciascuno e sono largamente disgiunti — 22 tag = 560 unici, e il tag è anche un tratto. `dashboard_corpus.py` li raccoglie insieme alla GitHub search API e salva `assets/dashboard-corpus.json`; `dashboard_recipe.py` ci pesa sopra gli assi. Dettagli e leve morte (`all-items?terms=` ignora il termine, ThemeForest 403): `references/dashboard-rules.md`.
+**Ampiezza vera (centinaia, non 30):** i tag path `/web-templates/admin-templates/{tag}` rendono 48 item ciascuno e sono largamente disgiunti — 22 tag = 560 unici, e il tag è anche un tratto. `dashboard_corpus.py` li raccoglie insieme alla GitHub search API e salva `assets/dashboard-corpus.json`; `dashboard_recipe.py` ci pesa sopra le decisioni. Dettagli e leve morte (`all-items?terms=` ignora il termine, ThemeForest 403): `references/dashboard-rules.md`.
 
 ---
 

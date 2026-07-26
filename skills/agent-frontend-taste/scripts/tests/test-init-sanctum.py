@@ -139,6 +139,22 @@ def main() -> int:
         else:
             print("PASS: refresh senza sanctum rifiutato")
 
+    # --- project-root inesistente: mai una seconda nascita ------------------
+    # `mkdir(parents=True)` costruiva l'intero sanctum dentro una directory che
+    # un istante prima non esisteva: identità nuova, MEMORY vuota, e nessun
+    # segnale. Creare il project root non è compito di questo script.
+    with tempfile.TemporaryDirectory() as td:
+        ghost = Path(td) / "progetto-mai-esistito"
+        r7 = subprocess.run(
+            [sys.executable, str(INIT), str(ghost), str(SKILL)],
+            capture_output=True, text=True,
+        )
+        if r7.returncode == 0 or ghost.exists():
+            print("FAIL: root inesistente ha prodotto un sanctum fantasma")
+            fails += 1
+        else:
+            print("PASS: project-root inesistente rifiutato, nessun sanctum fantasma")
+
     return 1 if fails else 0
 
 

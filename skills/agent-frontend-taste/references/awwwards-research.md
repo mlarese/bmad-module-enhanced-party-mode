@@ -8,7 +8,7 @@ type: prompt
 
 # Inspiration Research
 
-## What Success Looks Like
+## Com'è fatto un lavoro riuscito
 Set **≥30** (seed data+ora) → **2–5 principi strutturali** (mix, non clone). Inventare URL o clonare un template Envato = fallimento.
 
 | Superficie | Fonti |
@@ -18,8 +18,8 @@ Set **≥30** (seed data+ora) → **2–5 principi strutturali** (mix, non clone
 | mobile web app | **Envato mobile / mobile-app / PWA** (+ activity cats se tipizzato) |
 | dashboard / admin | **Envato admin-templates** primario + Dribbble/Awwwards |
 
-## Non-inferables
-- Load `references/inspire-ops.md` (CLI, URL, ethics). Soft-gate micro-edit → no batch.
+## Le cose che non si indovinano: si applicano
+- Load `references/inspire-ops.md` (CLI, URL, ethics). Scorciatoia correzione piccola → no batch.
 - Prefer `hero_sample.py --surface marketing|dashboard|mobile [--activity …]`; Envato-only admin via `envato_admin_scout.py --sample 30`.
 - Se l’owner dice **mobile** (web app / PWA / task app): `--surface mobile` obbligatorio nel batch — non bastare “landing responsive”.
 - Estrai struttura; non hex/asset. Gap → dichiara e prosegui.

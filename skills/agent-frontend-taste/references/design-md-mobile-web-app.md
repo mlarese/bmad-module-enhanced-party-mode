@@ -1,14 +1,14 @@
 ---
 name: design-md-mobile-web-app
-description: Stampo DESIGN.md per web app mobile / PWA (browser, non native)
+description: Modello di DESIGN.md per web app mobile / PWA (browser, non native)
 type: template
 ---
 
-# DESIGN.md — Mobile web app (stampo)
+# DESIGN.md — Mobile web app (modello)
 
 **Non è una landing.** Task-first, e la prima cosa che si vede non è il contenuto:
 è lo **splash** e il **fondo di marca**. Batch: `--surface mobile` (+ `--activity`
-se vertical). Assi da seed: `mobile_recipe.py`. Regole: `references/mobile-rules.md`.
+se vertical). Decisioni da seed: `mobile_recipe.py`. Regole: `references/mobile-rules.md`.
 
 ```yaml
 ---
@@ -92,6 +92,26 @@ attraversa tutta l'app: se ogni schermata ha il suo, è decorazione.
 - Grana anti-banding sopra (noise data-URI o `feTurbulence`), o su mobile si vedono le fasce
 - Animato solo su `transform`/`opacity`; `prefers-reduced-motion` lo ferma
 - Fondo a gradiente **e** texture di superficie insieme = rumore: scegline uno
+
+## Dati verosimili (obbligatorio quando i contenuti non erano forniti)
+
+Elenca **cosa è inventato e dove** — telefono, email, indirizzo, P.IVA, prezzi,
+orari, recensioni. Non è la nota di sostituzione vietata nella pagina: lì
+sporcherebbe il lavoro consegnato, qui documenta. La riga di onestà all'owner in chat
+si dà comunque: questa risponde fra sei mesi a «ma questo numero è vero?».
+
+```yaml
+dati_verosimili:
+  - campo: telefono
+    valore: '{quello scritto in pagina}'
+    nota: 'inventato — prefisso non assegnato'
+  - campo: prezzi
+    valore: '{range esposto}'
+    nota: 'plausibili per {activity} a {locale}, non confermati dal cliente'
+```
+
+Se i contenuti li ha forniti l'owner o il sito del cliente, scrivi
+`dati_verosimili: nessuno — contenuti dal cliente`.
 
 ## Do's and Don'ts
 

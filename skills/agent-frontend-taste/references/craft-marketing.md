@@ -12,11 +12,11 @@ gallerie. Tutto il resto vale per ogni superficie e sta nel nucleo.
 
 Hero = impact zone: media plan (carousel | layered | still), depth, display fonts ≥2 candidates (poi scegli con regola locale+attività).
 
-**Il testo è contenuto, non riempitivo.** Se il owner non fornisce il copy, lo si **deriva dalla ricerca di dominio e marketing** (headline, CTA col verbo del business, sezioni, FAQ, microcopy, `alt`, meta) — mai lorem ipsum, mai gergo da landing generica; prezzi/orari/contatti verosimili si scrivono per intero e la loro natura si dice all'owner in chat (`craft-rules.md` → *Deliverable finito*). Disciplina: `references/implementation-handoff.md`. Attenzione a non confondere: `hero_copy` qui sotto è **dove** sta il testo, non cosa dice.
+**Il testo è contenuto, non riempitivo.** Se l'owner non fornisce il copy, lo si **deriva dalla ricerca di dominio e marketing** (headline, CTA col verbo del business, sezioni, FAQ, microcopy, `alt`, meta) — mai lorem ipsum, mai gergo da landing generica; prezzi/orari/contatti verosimili si scrivono per intero e la loro natura si dice all'owner in chat (`craft-rules.md` → *Il lavoro consegnato è finito*). Disciplina: `references/implementation-handoff.md`. Attenzione a non confondere: `hero_copy` qui sotto è **dove** sta il testo, non cosa dice.
 
 ### Catalogo visivo (offrilo prima di sorteggiare)
 
-Descrivere una hero a parole («split con plate a sinistra») costa due giri di fraintendimenti; guardarla costa uno sguardo. Il catalogo è una pagina di miniature — una per archetipo, con nome, descrizione, quando usarlo e cosa sorvegliare — così il owner **indica** la hero invece di immaginarla. Ogni miniatura è una hero vera in piccolo: **foto reale** da `assets/hero-media/` e **testo reale** (occhiello, titolo, sottotitolo, CTA), perché uno schema a barre grigie non si legge e fa scegliere a caso.
+Descrivere una hero a parole («split con plate a sinistra») costa due giri di fraintendimenti; guardarla costa uno sguardo. Il catalogo è una pagina di miniature — una per archetipo, con nome, descrizione, quando usarlo e cosa sorvegliare — così l'owner **indica** la hero invece di immaginarla. Ogni miniatura è una hero vera in piccolo: **foto reale** da `assets/hero-media/` e **testo reale** (occhiello, titolo, sottotitolo, CTA), perché uno schema a barre grigie non si legge e fa scegliere a caso.
 
 ```bash
 uv run scripts/hero_gallery.py --build            # scrive assets/hero-gallery.html → poi `open <path>`
@@ -27,7 +27,7 @@ uv run scripts/hero_gallery.py --filter media=video    # o placement=center, pan
 
 1. **Copertura:** media (foto singola · carosello · video · nessun media · collage · sequenza a scroll · UI di prodotto · mappa · prima/dopo) × placement (sinistra · destra · centro · basso · basso-sinistra · sopra il media · due poli · rail laterale) × pannello (plate pieno · nessuno · velo chiaro · vetro · fascia · gradiente di un bordo). Sorgente: `assets/hero-catalog.json`.
 2. **L'archetipo lo scegli tu, non lo chiedi.** `--suggest N` dà una shortlist deterministica dal seed, diversa su media e placement, con le esclusioni da MEMORY (`--last` accetta id, `hero_treatment` o etichette `hero_copy`): prendi il primo che regge dominio e `register`, verificalo con `--show <id>`, e vai. Nessuna fermata, nessun catalogo aperto in attesa (legge dello skill: `references/autonomia.md`).
-3. **L'`id` scelto fissa gli assi.** Che venga dalla shortlist o dall'owner di sua iniziativa, quello **fissa** `hero_treatment`, placement e panel: non rilanciare `hero_copy.py` per contraddirlo. Dichiara `hero_archetype: <id>` accanto agli altri assi. Il catalogo a vista (`--build` + `open`) si costruisce solo su richiesta esplicita dell'owner.
+3. **L'`id` scelto fissa le decisioni.** Che venga dalla shortlist o dall'owner di sua iniziativa, quello **fissa** `hero_treatment`, placement e panel: non rilanciare `hero_copy.py` per contraddirlo. Dichiara `hero_archetype: <id>` accanto alle altre decisioni. Il catalogo a vista (`--build` + `open`) si costruisce solo su richiesta esplicita dell'owner.
 4. **Il campo «attenzione» è un vincolo di consegna**, non una nota di colore: video → `poster` + `muted` + `playsinline` + `prefers-reduced-motion`; carosello → ≥6s per slide, pausa su hover/focus, controlli raggiungibili da tastiera; mappa → non interattiva nella hero; vetro → fallback tinta piena.
 5. **Foto e marchi delle miniature sono campioni, non proposte:** servono a far leggere lo schema. Palette, font e immagini del progetto vero restano derivati da località + carattere + business (Envato per le foto). Un archetipo scelto porta con sé il **layout**, non i colori né il brand del riquadro.
 6. **Il catalogo è estendibile:** aggiungi l'archetipo a `assets/hero-catalog.json` (con `photo:` dal `media_pool` e, se serve, un `copy:` dedicato), rigenera con `--build`, e `scripts/tests/test-hero-gallery.py` verifica copertura, vocabolario, testo reale, media presenti e sync della pagina — filtro incluso, cliccato nel browser quando playwright c'è. Un archetipo mai messo in catalogo è un archetipo che dimenticherai.
@@ -61,9 +61,9 @@ I media oltre la foto ferma — `carousel` · `collage` · `sequence` · `ui-sho
 5. Se serve davvero uno scrim: **sagomato e locale** (dietro il testo, o un bordo), tarato sui toni di quella foto — non lo stesso 0.35→0.9 su ogni progetto.
 6. **Test:** affianca la hero a quella dell’ultimo progetto. Se leggono come la stessa foto sporcata di scuro → fallimento, cambia trattamento.
 
-### Copy layout (placement × panel) — obbligatorio su new craft
+### Copy layout (placement × panel) — obbligatorio su lavoro nuovo
 
-Bias da uccidere: ripetere sempre **testo a destra + plate/sfondo pieno** (Aster-style). Placement e opacità del blocco testo sono un asse **separato** da `hero_treatment` (immagine), e vanno **dichiarati** ogni volta.
+Bias da uccidere: ripetere sempre **testo a destra + plate/sfondo pieno** (Aster-style). Placement e opacità del blocco testo sono una decisione **separato** da `hero_treatment` (immagine), e vanno **dichiarati** ogni volta.
 
 1. Dichiara: `hero_copy:` · `hero_copy_placement:` (`left` | `right` | `center`) · `hero_copy_panel:` (`solid` | `transparent`).
 2. Pool a 6 ipotesi **equiprobabili** (nessun default a destra-pieno):
@@ -101,7 +101,7 @@ Come decidere (giudizio, non checklist fissa):
 
 Esempi di blocchi tipici (aperti, non obbligatori tutti): hero · intro/storia · offerta/menu/camere/servizi · galleria · team/chef · trust/recensioni · location/orari · CTA/prenota · footer.
 
-Fallimento: stub solo-hero; oppure chiedere “quali sezioni vuoi?” quando puoi inferirle. Soft-gate micro-edit → non espandere.
+Fallimento: stub solo-hero; oppure chiedere “quali sezioni vuoi?” quando puoi inferirle. Scorciatoia correzione piccola → non espandere.
 
 ## Gallerie — ordine L→R + motion + forme (sempre)
 1. Includi una galleria (grid / masonry / strip / bento) quando il prodotto è visivo. **Le foto sono quelle del cliente** se un sito esiste e le ha usabili (sono il suo posto, i suoi piatti); stock mirato solo in mancanza. Mai celle vuote o rettangoli grigi.

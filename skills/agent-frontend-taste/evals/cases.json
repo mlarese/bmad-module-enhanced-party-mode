@@ -37,6 +37,59 @@
         "answer.md does not invent fake site names without URLs"
       ],
       "files": []
+    },
+    {
+      "id": "no-questions-ambiguous-brief",
+      "input": "Run headless. Fammi il sito per Da Nino a Cortina. Scrivi la pagina in apps/da-nino/index.html e la direzione in answer.md.",
+      "state_prefix": "[You are Vesper. First Breath complete; sanctum loaded. Owner Maurolarese. Respond in Italian. The brief is deliberately ambiguous (trattoria familiare or five-star restaurant? landing or booking app?). Law of the skill: never stop to ask the owner — decide, declare in one line, deliver in the same pass.]",
+      "rubric": [
+        "apps/da-nino/index.html exists and is a complete page, not a stub or an outline",
+        "The final chat reply to the owner asks nothing: no request to choose, confirm, or supply information ('confermi?', 'preferisci A o B?', 'fammi sapere', a numbered menu of options). Questions inside the delivered page (FAQ copy, headline) do not count",
+        "answer.md declares the reading it chose in one line, in the form 'l'ho letta come X, non Y' (surface and register), with a reason",
+        "answer.md declares `register:` explicitly and it is a business fact (famigliare/luxury/…), not a seeded pick",
+        "The work is finished in this single pass — it does not defer any part to a later turn pending owner input"
+      ],
+      "files": []
+    },
+    {
+      "id": "finished-deliverable-no-placeholders",
+      "input": "Run headless. Landing per la Pasticceria Marè, Camogli: nessun contenuto fornito, nessun contatto, nessun prezzo. Scrivi apps/mare/index.html e apps/mare/DESIGN.md.",
+      "state_prefix": "[You are Vesper. First Breath complete; sanctum loaded. Owner Maurolarese. Respond in Italian. No content was supplied: derive the copy from the domain. The delivered file must read as a real, finished page.]",
+      "rubric": [
+        "apps/mare/index.html contains NO 'TODO', 'XXX', '[INSERIRE', 'lorem ipsum', 'da sostituire', 'testo di esempio' — in markup, text or comments",
+        "apps/mare/index.html has no trailing section or comment block listing the invented data",
+        "Prices, opening hours and contacts are written in full and plausibly: a reader would take them for real (a specific phone number, a street address, actual hours and euro amounts), not obvious filler such as repeated digits or a generic 'info@example.com'",
+        "apps/mare/DESIGN.md carries a `dati_verosimili:` entry listing what was invented and where",
+        "The chat reply states in one line that contacts/prices/hours are plausible but not real",
+        "No invented certification, award, named partner or attributed review appears in the page"
+      ],
+      "files": []
+    },
+    {
+      "id": "responsive-is-not-soft-gateable",
+      "input": "Run headless. Una landing veloce per uno studio legale a Bologna, solo desktop che il cliente la guarda dal computer. apps/lex/index.html + answer.md.",
+      "state_prefix": "[You are Vesper. First Breath complete; sanctum loaded. Owner Maurolarese. Respond in Italian. Responsive is a criterion of done and the soft-gate never suspends it, whatever the brief says.]",
+      "rubric": [
+        "apps/lex/index.html contains <meta name=\"viewport\" content=\"width=device-width",
+        "The CSS collapses its grids under a breakpoint (at least one @media query, or an intrinsically fluid grid such as minmax/auto-fit)",
+        "No fixed pixel page width and no layout that would overflow horizontally at 375px",
+        "answer.md states that the page was delivered responsive anyway, and why (responsive is not soft-gateable) — without turning it into a question to the owner"
+      ],
+      "files": []
+    },
+    {
+      "id": "palette-guard-is-the-closing-check",
+      "input": "Run headless. Landing per l'Osteria del Bosco, Appennino modenese, register famigliare. Scrivi apps/bosco/index.html, poi verifica la palette con lo script e riporta l'esito in answer.md.",
+      "state_prefix": "[You are Vesper. First Breath complete; sanctum loaded. Owner Maurolarese. Respond in Italian. Closing checks are part of the job: run scripts/palette_guard.py on the delivered file before declaring it done.]",
+      "rubric": [
+        "apps/bosco/index.html exists and declares its palette in a way the guard can measure (custom properties or a readable theme map)",
+        "answer.md shows that scripts/palette_guard.py was actually run on the delivered file (output, exit code or quoted findings)",
+        "answer.md declares `hue_sector:` and `ink_family:` explicitly",
+        "The structural dark is a near-neutral (perceived chroma <= 6) or the page declares it as a deliberate choice on a single surface",
+        "The palette is not purple-indigo, not Inter/system as the display font, not cream+serif+terracotta",
+        "answer.md does not claim 'palette_guard pulito' unless the script exited 0 — an unmeasurable result (exit 2) is reported as such"
+      ],
+      "files": []
     }
   ]
 }

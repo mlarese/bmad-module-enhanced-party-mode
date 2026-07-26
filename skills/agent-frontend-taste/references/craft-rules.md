@@ -1,16 +1,16 @@
 # Craft Rules — nucleo (vale per ogni superficie)
 
-Shared non-inferables for DX / UE / AF. Load on invoke. Not a capability.
+Shared non-inferables for DX / UE / AF. Da caricare quando serve. Not a capability.
 
-Qui vive ciò che vale **sempre**: assi, deliverable, soft-gate, responsive,
+Qui vive ciò che vale **sempre**: decisioni, lavoro consegnato, scorciatoia per i lavori piccoli, responsive,
 palette e font, tipografia, composizione, superfici, chrome, batch, motion.
 
 > **Legge dello skill — nessun human in the loop** (`references/autonomia.md`).
 > Il flusso **non si ferma mai** per interpellare l'owner:
 > niente domande, conferme, menù, scelte «a vista», beat di scoping, attese. Ogni
 > ambiguità si chiude con una **decisione dichiarata** in una riga («l'ho letta come X,
-> non Y»). Le scelte che un umano avrebbe sciolto passano dal consiglio con i **tre goal**
-> (§ *Il consiglio decide — tre goal*). Se qui sotto una regola dicesse «chiedi», vale
+> non Y»). Le scelte che un umano avrebbe sciolto passano dal consiglio con i **tre obiettivi**
+> (§ *Il consiglio decide — tre obiettivi*). Se qui sotto una regola dicesse «chiedi», vale
 > questa: si decide, si dichiara, si va avanti. L'owner corregge di sua iniziativa, e
 > allora la sua parola vince.
 
@@ -19,35 +19,43 @@ palette e font, tipografia, composizione, superfici, chrome, batch, motion.
 | Superficie | File | Cosa aggiunge |
 |---|---|---|
 | marketing / landing / home | `references/craft-marketing.md` | hero (catalogo · trattamento · copy layout), sezioni dal dominio, gallerie |
-| dashboard / admin / product | `references/dashboard-rules.md` | minimo non negoziabile (temi light+dark, chrome) + corpus, 14 assi di ricetta, firma |
-| mobile web app / PWA | `references/mobile-rules.md` | minimo non negoziabile (6 assi grafici, manifest, shell) + corpus, 16 assi, craft grafico |
+| dashboard / admin / product | `references/dashboard-rules.md` | minimo non negoziabile (temi light+dark, chrome) + corpus, 14 decisioni di ricetta, firma |
+| mobile web app / PWA | `references/mobile-rules.md` | minimo non negoziabile (6 decisioni grafiche, manifest, shell) + corpus, 16 decisioni, craft grafico |
 
 Nucleo + una superficie: mai tutte e tre. Se il job cambia superficie a metà,
 carica l'altro file allora, non prima.
 
-## Craft Axes Index
+## Le decisioni da dichiarare — indice
 
-| Asse | Dichiarare | MEMORY | Script / nota |
-|------|------------|--------|----------------|
-| Palette + fonts | `locale` · **`register`** · `activity` · `palette_family` · **`hue_sector`** · **`ink_family`** · `fonts` | `last_palette_families` · `last_hue_sectors` · `last_ink_families` · `last_font_pairs` · `last_registers` | da luogo + **carattere** + business; verifica con `palette_guard.py` |
-| Tipografia sistema | `type_voices` (3 ruoli) · `type_scale` · tracking 2 poli · leading | `last_type_voices` | `craft_axes.py` per la legge di scala |
-| Composizione | `grid_system` · `alignment_map` · `bleed_rhythm` · misura `ch` | `last_grid_systems` | `craft_axes.py` seed |
-| Superfici | `surface_rhythm` · `surface_texture` · token materiali | `last_surface_textures` | `craft_axes.py` seed |
-| Chrome geometry | `radius_family` + `--r-btn/box/chip` | `last_radius_families` | + batch ≥30 corner language |
-| Hero archetipo | `hero_archetype` (id del catalogo) | `last_hero_archetypes` | `hero_gallery.py --suggest` — shortlist da seed, scelta tua |
-| Hero immagine | `hero_treatment` | `last_hero_treatments` | mai velo scuro full-bleed default |
-| Hero copy | `hero_copy` · placement · panel | `last_hero_copy` | `hero_copy.py` seed |
-| Sezioni | elenco + perché (1 riga) | — | auto se non istruite |
-| Galleria | L→R · gapless · forme · reveal univoci | — | blow-up scroll obbligatorio nel mix |
-| Dashboard | light+dark · chrome · 14 assi di ricetta + firma | `dashboard_themes` · `dashboard_shells` | `dashboard_recipe.py` su corpus (`dashboard-rules.md`) |
-| Mobile web app | 6 assi grafici (`splash` · `app_background` · `brand_mark` · `onboarding` · `illustration` · `depth`) + 10 di shell · barra sempre visibile | `last_splashes` · `last_app_backgrounds` | `mobile_recipe.py` su corpus (`mobile-rules.md`) |
-| Fase implementativa | PRD · architettura (stack **obbligatorio**) · page spec · project context — o analisi autonoma dichiarata | — | `bmad_context.py` (`implementation-handoff.md`) |
-| Inspiration | batch ≥30 | — | `hero_sample.py` / inspire-ops |
-| Motion | `motion_seed` · `motion_techniques` (2–4) | — | Vera **repeat**; seed `YYYYMMDDHH` |
-| Responsive | viewport meta · breakpoints · touch · no overflow | — | **sempre** — desktop e mobile |
-| Output | cartella del progetto | `demo_output` | default `{project-root}/apps/<slug>/` — una per progetto, ogni superficie |
+Qui sotto ci sono **le decisioni che ogni pagina deve dichiarare per iscritto** —
+un tempo si chiamavano «assi», e nessuno fuori da questo skill sapeva cosa
+fossero. La colonna *In parole semplici* c'è perché una decisione capita a metà
+viene applicata a caso. Il vocabolario completo sta in `references/glossario.md`,
+che è anche la regola su **come si scrive qui**: un termine tecnico o interno
+porta la sua spiegazione fra parentesi al primo uso — nei reference come in ciò
+che consegni.
 
-## Deliverable finito (sempre — nessuna eccezione)
+| Decisione | In parole semplici | Dichiarare | MEMORY | Script / nota |
+|------|--------------------|------------|--------|----------------|
+| Palette + fonts | i colori e i caratteri, e da dove vengono | `locale` · **`register`** · `activity` · `palette_family` · **`hue_sector`** · **`ink_family`** · `fonts` | `last_palette_families` · `last_hue_sectors` · `last_ink_families` · `last_font_pairs` · `last_registers` | da luogo + **carattere** + business; verifica con `palette_guard.py --check … --ledger` |
+| Tipografia sistema | la legge dei testi: quali font, quanto grandi, quanto spaziati | `type_voices` (3 ruoli) · `type_scale` · tracking 2 poli · leading | `last_type_voices` | `craft_axes.py` per la legge di scala |
+| Composizione | come è impaginata la pagina: colonne, allineamenti, larghezza dei bordi | `grid_system` · `alignment_map` · `bleed_rhythm` · misura `ch` | `last_grid_systems` | `craft_axes.py` seed |
+| Superfici | come cambiano i fondi scendendo nella pagina, e che trama hanno | `surface_rhythm` · `surface_texture` · token materiali | `last_surface_textures` | `craft_axes.py` seed |
+| Chrome geometry | quanto sono arrotondati bottoni, schede e campi | `radius_family` + `--r-btn/box/chip` | `last_radius_families` | + batch ≥30 corner language |
+| Hero archetipo | lo schema del primo schermo, scelto dal catalogo | `hero_archetype` (id del catalogo) | `last_hero_archetypes` | `hero_gallery.py --suggest` — shortlist da seed, scelta tua |
+| Hero immagine | come è trattata l'immagine del primo schermo | `hero_treatment` | `last_hero_treatments` | mai velo scuro full-bleed default |
+| Hero copy | dove sta scritto il testo nel primo schermo | `hero_copy` · placement · panel | `last_hero_copy` | `hero_copy.py` seed |
+| Sezioni | quali blocchi ha la pagina e perché | elenco + perché (1 riga) | — | auto se non istruite |
+| Galleria | come entrano e si dispongono le immagini | L→R · gapless · forme · reveal univoci | — | blow-up scroll obbligatorio nel mix |
+| Dashboard | il pannello di controllo: temi, cornice, ricetta | light+dark · chrome · 14 decisioni di ricetta + firma | `dashboard_themes` · `dashboard_shells` | `dashboard_recipe.py` su corpus (`dashboard-rules.md`) |
+| Mobile web app | l'app che gira nel browser del telefono | 6 decisioni grafiche (`splash` · `app_background` · `brand_mark` · `onboarding` · `illustration` · `depth`) + 10 di shell · barra sempre visibile | `last_splashes` · `last_app_backgrounds` | `mobile_recipe.py` su corpus (`mobile-rules.md`) |
+| Fase implementativa | i documenti che vincolano il codice | PRD · architettura (stack **obbligatorio**) · page spec · project context — o analisi autonoma dichiarata | — | `bmad_context.py` (`implementation-handoff.md`) |
+| Inspiration | quanti riferimenti veri hai guardato prima di decidere | batch ≥30 | — | `hero_sample.py` / inspire-ops |
+| Motion | il movimento: quali effetti e con che numero di sorteggio | `motion_seed` · `motion_techniques` (2–4) | — | Vera **repeat**; seed `YYYYMMDDHH` |
+| Responsive | la pagina si adatta allo schermo, telefono compreso | viewport meta · breakpoints · touch · no overflow | — | **sempre** — desktop e mobile |
+| Output | dove finisce quello che consegni | cartella del progetto | `demo_output` | default `{project-root}/apps/<slug>/` — una per progetto, ogni superficie; **se lo slug esiste non si sovrascrive** (§ *L'output non si sovrascrive*) |
+
+## Il lavoro consegnato è finito (sempre — nessuna eccezione)
 
 Ciò che consegni si legge come una pagina **vera**, non come una bozza da completare. Nel file consegnato **non compare mai** una nota di sostituzione: niente `[INSERIRE …]` · `TODO` · `XXX` · `lorem ipsum` · «testo di esempio» · «sostituire con i dati reali» · commenti HTML/CSS che avvisano · sezione finale con l'elenco dei dati fittizi. Vale per HTML, CSS, JS, spec e README: se una demo dichiara di essere incompleta, non dimostra niente — ed è il primo dettaglio che un cliente finale nota.
 
@@ -55,13 +63,34 @@ I contenuti mancanti si **derivano** (vedi `implementation-handoff.md` §9 *I te
 
 Restano fuori dal riempimento i **fatti che fanno danno se creduti**: certificazioni, premi, partner o clienti reali, riferimenti di legge, dati sanitari, recensioni attribuite a persone esistenti. Lì non si inventa e non si scrive un segnaposto: si progetta la sezione in modo che non richieda quel dato, e lo si dice a voce.
 
-**Lo spec di accompagnamento è un'altra cosa** e non viola questa regola: lì vivono documenti usati, assi dichiarati, casi limite, canone applicato, requisiti lasciati al backend. Quello che non vive **da nessuna parte** è l'elenco dei dati fittizi — sta nella conversazione. Confine completo in `implementation-handoff.md` §10 *Due artefatti, due regole*.
+**Lo spec di accompagnamento è un'altra cosa** e non viola questa regola: lì vivono documenti usati, decisioni dichiarate, casi limite, canone applicato, requisiti lasciati al backend — **e la voce `dati_verosimili:`**, l'elenco di cosa è inventato e dove. Nel lavoro consegnato non compare, in chat si dice comunque: la chat sparisce e il sito resta, quindi la catena di responsabilità ha bisogno di un anello scritto. Confine completo in `implementation-handoff.md` §10 *Due artefatti, due regole*.
 
 Fallimento: `TODO` nel file consegnato; blocco «dati da sostituire» in coda alla pagina o allo spec; `lorem ipsum`; una certificazione inventata.
 
+## L'output non si sovrascrive
+
+`{project-root}/apps/<slug>/` è il default, e il default vale per una cartella
+che **non esiste ancora**. La legge di autonomia copre le decisioni di progetto,
+non il diritto di cancellare lavoro: dentro il workspace non si chiede il
+permesso di *scrivere*, ma non si distrugge ciò che c'era.
+
+1. **Slug libero** → si scrive lì.
+2. **Slug occupato da un lavoro tuo, e l'ask è ripresa o correzione** → si
+   modifica in place. È lo stesso lavoro consegnato: il conto dei rifiuti (§6.1 di
+   `implementation-handoff.md`) prosegue, non riparte.
+3. **Slug occupato da qualcosa che non hai scritto tu, o da una consegna
+   diversa** → **non si sovrascrive**: si scrive in `apps/<slug>-<data>/` (o
+   `-v2`), lo si dice in una riga alla consegna, e la scelta è una varianza se
+   qualcuno domani si chiederà perché ci sono due cartelle.
+4. **Mai** un `rm -rf` sulla cartella per «ripartire pulito»: si scrive accanto.
+
+Fallimento: una consegna precedente sparita senza che nessuno l'abbia chiesto;
+due progetti che si sovrascrivono l'`anim.css`; un `apps/<slug>/` rigenerato da
+zero che porta via le modifiche a mano dell'owner.
+
 ## Prima del codice: i documenti, poi le slice
 
-Il flusso implementativo vive in `implementation-handoff.md`; i testi dei goal in
+Il flusso implementativo vive in `implementation-handoff.md`; i testi dei obiettivo in
 `autonomia.md`. Qui sta solo ciò che serve sapere mentre fai craft:
 
 1. **Ricerca** — dominio e marketing, entrambe **scritte** (§2). È il tuo mestiere e
@@ -75,7 +104,7 @@ Il flusso implementativo vive in `implementation-handoff.md`; i testi dei goal i
    criteri attraversano tutto — **architettura dell'app · sicurezza (OWASP) ·
    vertical slice**. Il peso cambia col lavoro (una landing li ha corti), l'esistenza
    no.
-4. **Tempra** — nessun documento passa com'è uscito: **casi limite** ·
+4. **Controllo dei documenti** — nessuno passa com'è uscito: **casi limite** ·
    **elicitazione con tutti i metodi applicabili** · **review adversarial**, in
    consiglio, esiti dentro il documento (`implementation-handoff.md` §4.0b).
 5. **`slice_plan` verticale** — ogni slice end-to-end e consegnabile da sola. Sito:
@@ -84,7 +113,7 @@ Il flusso implementativo vive in `implementation-handoff.md`; i testi dei goal i
    slice prima che la precedente sia consegnata.
 6. **Una slice = una spec eseguibile** — `bmad-spec` headless, slug
    `<progetto>-s<N>-<nome>`, Ready for Development, ~900–1600 token **sul contratto
-   applicativo**: gli assi di craft stanno nel DESIGN e la spec li referenzia. Le
+   applicativo**: le decisioni di craft stanno nel DESIGN e la spec li referenzia. Le
    `open_questions` si chiudono nello stesso giro.
 7. **Implementazione** — tu la pagina (AF → Vera) e la parte applicativa, con la
    **disciplina** di `bmad-quick-dev` ma senza invocarlo.
@@ -102,7 +131,7 @@ tu. Tabella verificata in `autonomia.md`.
 **Le varianze si scrivono in `docs/varianze/YYYY-MM-DD-<slug>.md`** — cinque righe:
 atteso · deciso · perché · tipo (deviazione | assunzione da verificare | conflitto
 risolto) · scadenza. Solo dove tra sei mesi qualcuno chiederebbe «perché qui è così?».
-Mai dentro il deliverable. Il pre-flight le rilegge per prime.
+Mai dentro il lavoro consegnato. Il pre-flight le rilegge per prime.
 
 **Le indicazioni del progetto si leggono, non si gestiscono:** `CLAUDE.md` /
 `AGENTS.md` sono la prima fonte da consultare — li mantiene il progetto, non tu.
@@ -117,13 +146,13 @@ Fonte di **contenuto**, mai di **design**. Le due cose non si toccano:
 
 Disciplina completa (immagini, diritti, servizi obsoleti, precedenza delle fonti): `implementation-handoff.md` §8 *Il sito esistente del cliente*.
 
-## Soft-gate (canonico)
+## La scorciatoia per i lavori piccoli
 
-**Micro-edit** = copy, un colore, un bug, un componente isolato su UI già craftata. Su micro-edit: **skip** AW batch ≥30, `hero_copy.py`, `craft_axes.py`, rifacimento griglia / ritmo di superficie, espansione sezioni, dual-theme completo, Vera (salvo l’ask sia motion). **New craft / restyle sostanziale / nuova landing / nuova shell dashboard** → regole complete sotto. Owner «niente animazioni» → skip Vera. Soft-gate non autorizza stub solo-hero né palette generica. **Responsive non è soft-gateable:** ogni sito/pagina consegnata deve funzionare su desktop e mobile.
+**Correzione piccola** = copy, un colore, un bug, un componente isolato su UI già craftata. Su correzione piccola: **skip** AW batch ≥30, `hero_copy.py`, `craft_axes.py`, rifacimento griglia / ritmo di superficie, espansione sezioni, dual-theme completo, Vera (salvo l’ask sia motion). **Lavoro nuovo / restyle sostanziale / nuova landing / nuova shell dashboard** → regole complete sotto. Owner «niente animazioni» → skip Vera. La scorciatoia non autorizza stub solo-hero né palette generica. **Responsive non ammette scorciatoie:** ogni sito/pagina consegnata deve funzionare su desktop e mobile.
 
 ## Responsive (sempre — desktop e mobile)
 
-Ogni landing, page o shell che AF consegna **deve** essere responsive. Non è un’opzione né un “poi”: è criterio di done. Soft-gate non lo sospende.
+Ogni landing, page o shell che AF consegna **deve** essere responsive. Non è un’opzione né un “poi”: è criterio di done. La scorciatoia non lo sospende.
 
 1. **Viewport:** `<meta name="viewport" content="width=device-width, initial-scale=1">` obbligatorio su ogni HTML.
 2. **Layout fluido:** griglie (`asym-rail`, `fine`, `12-col`, hero split, gallery) **collassano** sotto breakpoint — tipicamente ≤820–900px → una colonna / stack. Rail verticale → orizzontale. Niente layout a due colonne “schiacciate” su telefono.
@@ -134,7 +163,7 @@ Ogni landing, page o shell che AF consegna **deve** essere responsive. Non è un
 7. **Verifica prima di chiudere AF:** ridimensiona / pensa mobile (~375) e desktop (~1280). Se il brand-test passa solo su desktop → fallimento.
 8. Fallimento: sito solo-desktop; testo tagliato; griglia a N colonne senza media query; mappa o gallery che sforano; viewport meta assente.
 
-## Palette + fonts (always — da luogo + carattere + business)
+## Colori e caratteri (sempre — da luogo + carattere + tipo di attività)
 
 **Tre segnali, non due.** Il luogo da solo non basta: Cortina è un hotel a cinque stelle *e* un rifugio dove si mangia in dieci al tavolo, e le due cose non possono uscire con la stessa palette e lo stesso font. Il segnale che decide il **registro** è il carattere.
 
@@ -165,12 +194,15 @@ Misurato sulle demo consegnate: `laguna-pino` · `abete-rame` · `euganeo-zaffer
 | giallo/ocra | 45–70 | | viola | 260–300 |
 | verde | 70–165 | | magenta/rosa | 300–345 |
 
-Neutro = **croma ≤ 4** — sotto quella soglia non resta tinta da nominare (la saturazione da sola inganna sugli scuri: vedi *Lo scuro è un asse*). Il **settore dominante** è quello dei due colori che coprono più area (fondo e scuro strutturale), non quello dell'accento.
+Neutro = **croma ≤ 4** — sotto quella soglia non resta tinta da nominare (la saturazione da sola inganna sugli scuri: vedi *Lo scuro è una decisione*). Il **settore dominante** è quello dei due colori che coprono più area (fondo e scuro strutturale), non quello dell'accento.
 
-2. **Vietato ripetere il settore dominante per 3 job consecutivi.** In MEMORY vive `last_hue_sectors` accanto a `last_palette_families`: il nome serve a te, il settore serve all'occhio.
-3. **Verificalo, non fidarti del nome che gli hai dato:** `uv run scripts/palette_guard.py --check <file>` (o `--hex …`) stampa settori, saturazioni e violazioni. Su new craft è parte del check di chiusura, come il responsive.
+2. **Vietato ripetere il settore dominante per 3 job consecutivi.** In MEMORY vive `last_hue_sectors` accanto a `last_palette_families`: il nome serve a te, il settore serve all'occhio. **Ordine: il più recente per primo** — `--last` conta la serie dall'inizio della lista, e una lista in ordine cronologico inverte il controllo senza che nessuno se ne accorga.
+3. **Verificalo, non fidarti del nome che gli hai dato:** `uv run scripts/palette_guard.py --check <file>` (o `--hex …`) stampa settori, saturazioni e violazioni. Su lavoro nuovo è parte del check di chiusura, come il responsive.
+   - **Tre esiti, non due:** `0` pulito · `1` violazioni da correggere · **`2` non misurabile**. Il 2 arriva quando la palette non è leggibile da quel file (utility class senza mappa di tema, colori in un altro modulo): allora si misura il file che dichiara i colori, o si passa `--hex`. **Un exit 2 non è un pass:** «palette_guard pulito» si dichiara solo su un exit 0.
+   - **Il ledger tiene il conto al posto tuo:** `--ledger {project-root}/_bmad/memory/agent-frontend-taste/hue-ledger.json` legge la serie dei settori dai job già misurati e vi registra questo. Serve perché `last_hue_sectors` vive nel sanctum **di quel progetto**: un'agenzia che fa un repo per cliente ha un job per sanctum, e la regola dei tre non si applicherebbe mai. Punta il ledger a un percorso condiviso fra i progetti e la serie diventa vera. Se il ledger c'è, `--last` non serve.
+   - **I tre hard-reject sono misurati adesso:** purple-indigo AI, cream+serif+terracotta, Inter/system come display escono come violazione dallo script, non più solo dal tuo occhio.
 
-### Lo scuro è un asse, non un residuo
+### Lo scuro è una decisione, non un residuo
 
 Il difetto misurato non era l'accento — quelli erano diversi ogni volta — ma `--ink`: **verde o teal in 6 demo su 9**, con saturazioni fino al 66%. Conta perché lo scuro riempie le superfici **grandi** (hero scura, fasce `dark` del `surface_rhythm`, footer): l'accento vive su pochi pixel, lo scuro su mezza pagina. Una palette «euganeo-zafferano» con l'ink verde **legge come sito verde**.
 
@@ -203,7 +235,7 @@ La coppia display+body è il minimo, non il sistema: due nomi di font non fanno 
 8. **Vietato `clamp(x, …, x)`** con estremi uguali (fluidità finta, token dump da design tool): se non scala, scrivi il valore fisso.
 9. Fallimento: due famiglie e solo pesi 400/700; stesso tracking su titolo ed eyebrow; `line-height: 1.5` globale; numerali proporzionali in tabella.
 
-## Composizione — griglia, allineamenti, misura (sempre su new craft)
+## Composizione — griglia, allineamenti, misura (sempre su lavoro nuovo)
 
 Il problema misurato: due landing con palette, font, `radius_family` e hero **diversi** possono avere la stessa impaginazione — stesso container centrato, stesso `text-align: left` su tutto, stesso ritmo verticale. È il modo più probabile in cui i progetti si somigliano, perché la silhouette pesa più del colore.
 
@@ -226,7 +258,7 @@ Il problema misurato: due landing con palette, font, `radius_family` e hero **di
 6. **`subgrid`** su liste di card con testo di lunghezza variabile: titoli e footer si allineano davvero, non a occhio.
 7. **`aspect-ratio` scelto**, non solo `16/9` e `1/1`: rapporti come `4/5`, `1/1.2`, `9/16`, `351/442` sono parte della composizione.
 8. Rail verticale: `writing-mode: vertical-rl` su label/numero di sezione giustifica un margine largo — usalo se il rail esiste, non come decorazione.
-9. Soft-gate: micro-edit → non rifare la griglia. Fallimento: container centrato + 12-col mai usata davvero + tutto left; oppure hero, header di sezione e CTA tutti centrati.
+9. Scorciatoia (lavoro piccolo): correzione piccola → non rifare la griglia. Fallimento: container centrato + 12-col mai usata davvero + tutto left; oppure hero, header di sezione e CTA tutti centrati.
 
 ## Superfici — ritmo, texture, luce (dalla sezione 2 in poi)
 
@@ -248,7 +280,7 @@ Il problema misurato: due landing con palette, font, `radius_family` e hero **di
 6. Testo che scorre sopra fondi che cambiano → `mix-blend-mode: difference` invece di duplicare le regole di colore. `clip-path` / `mask-image` per superfici non rettangolari.
 7. Fallimento: alternare `#ffffff` / `#f8f9fa` (alternanza invisibile, costa come una vera e non produce ritmo); pagina di tinta piatta + card bianche con shadow morbida; hero curatissima e sezioni successive senza nessuna decisione di superficie.
 
-## Chrome geometry — forma di box e pulsanti (sempre)
+## La forma di bottoni, schede e campi (sempre)
 
 Il problema: senza una scelta esplicita, ogni landing finisce con **angoli a 0** (box e CTA “tutti quadrati”). È lo stesso riflesso del velo scuro: un default invisibile che rende i progetti uguali anche quando palette e font cambiano.
 
@@ -266,9 +298,9 @@ Il problema: senza una scelta esplicita, ogni landing finisce con **angoli a 0**
 
 3. **Due input obbligatori per scegliere:**
    - **Tipologia / activity** (tabella sopra = priorità).
-   - **Batch ≥30** (`hero_sample.py` / inspire-ops): mentre studi i riferimenti, annota la **lingua degli angoli** (quanti sharp vs soft vs pill). La famiglia scelta deve essere **coerente con il mix dominante dei migliori**, non col primo Dribbble soft-rounded a caso — e **diversa** da `last_radius_families` in MEMORY.
+   - **Batch ≥30** (`hero_sample.py` / inspire-ops): mentre studi i riferimenti, annota la **lingua degli angoli** (quanti sharp vs soft vs pill). La famiglia scelta deve essere **coerente con il mix dominante dei migliori**, non col primo Dribbble soft-rounded a caso — e **diversa** da `last_radius_families` in MEMORY. **Senza batch** (rete assente) comanda la tipologia + l'esclusione di MEMORY, e il buco si dichiara: § *Prima i riferimenti, poi la struttura* → *Quando il batch non c'è*.
 4. Procedura: (a) leggi MEMORY → (b) activity → shortlist 1–2 famiglie → (c) conferma/altera col batch ≥30 → (d) dichiara token → (e) applica a **btn, card, input, chip, modal** in modo coerente.
-5. Soft-gate: micro-edit su UI già radius-ata → non rifare tutto; **new craft / new landing** → regola completa.
+5. Scorciatoia (lavoro piccolo): correzione piccola su UI già radius-ata → non rifare tutto; **lavoro nuovo / new landing** → regola completa.
 6. Fallimento: ogni demo con gli stessi angoli a 0; oppure pill ovunque su un brand luxury sharp; oppure ignorare il batch e defaultare sempre a soft “perché SaaS”.
 
 Token minimi da mettere in `:root` (esempio):
@@ -281,21 +313,41 @@ Token minimi da mettere in `:root` (esempio):
 ```
 Poi `border-radius: var(--r-btn)` su `.btn`, `var(--r-box)` su card/panel/input.
 
-## Inspiration before structure
+## Prima si guardano i riferimenti, poi si decide la struttura
 
-Run AW batch (`hero_sample.py --surface marketing|dashboard|mobile`) before locking structure. Soft-gate micro-edit → skip. Ops: `references/inspire-ops.md`.
+Run AW batch (`hero_sample.py --surface marketing|dashboard|mobile`) before locking structure. Scorciatoia correzione piccola → skip. Ops: `references/inspire-ops.md`.
 
-## Motion (Vera)
+**Quando il batch non c'è** (rete assente, sorgente cambiata, `hero_sample.py`
+esce 1 con meno card del target): il lavoro **non si ferma** — la legge di
+autonomia non prevede attese — ma non si finge nemmeno di aver misurato.
 
-After substantial static craft (AF on page/layout/hero/**dashboard**), invoke **Vera Motion** (`agent-web-animations`). Marketing → cinematic; dashboard → micro-motion, verify in both themes. Soft-gate / «niente animazioni» → skip. Pure motion → Vera without AF. No invented GSAP timelines.
+1. **Si dichiara il buco** in una riga, con il numero vero: «batch 12/30, fetch
+   fallito su Envato». Un batch citato a memoria è il fallimento che §3 di
+   `implementation-handoff.md` fa rifare.
+2. **Le decisioni che dipendevano dal batch si decidono sull'altro input e lo si
+   dice.** `radius_family` ne ha due (tipologia/`activity` **e** batch): senza
+   il secondo comanda la tabella per tipologia, con l'esclusione di
+   `last_radius_families` — non il default `soft` «perché SaaS».
+3. **Corpus locale prima della rete:** `dashboard_corpus.py --stats` e
+   `mobile_corpus.py --stats` leggono un corpus già costruito, che non dipende
+   dalla rete di adesso. Se c'è, quello è il batch.
+4. **Varianza** quando il buco ha deciso una decisione: cinque righe, così la pagina
+   dopo sa che quella scelta non era misurata.
+
+Fallimento: «batch ≥30 fatto» senza le card; una rete assente che diventa una
+fermata; una decisione deciso dal default e dichiarato come se venisse dai riferimenti.
+
+## Il movimento — lo cura Vera
+
+After substantial static craft (AF on page/layout/hero/**dashboard**), invoke **Vera Motion** (`agent-web-animations`). Marketing → cinematic; dashboard → micro-motion, verify in both themes. Scorciatoia / «niente animazioni» → skip. Pure motion → Vera without AF. No invented GSAP timelines.
 
 **Repeat obbligatorio (sempre):**
 1. Tutti i reveal / curtain / counter / motion on-scroll **ripetono** a ogni ingresso nel viewport (enter → play, leave → reset). Default Vera: niente `data-anim-once`.
 2. **Non** usare `data-anim-once` né one-shot equivalenti, salvo richiesta esplicita del owner in quel job.
 3. Brief a Vera e Motion intent in UE devono dichiarare: `repeat: always`.
-4. Soft-gate: se il progetto ha già one-shot e l’ask è micro-edit → non forzare un refactor globale; su **new craft / restyle motion** → converti a repeat.
+4. Scorciatoia (lavoro piccolo): se il progetto ha già one-shot e l’ask è correzione piccola → non forzare un refactor globale; su **lavoro nuovo / restyle motion** → converti a repeat.
 
-**Motion diversificato — direzioni + seed ora/giorno (sempre su new craft):**
+**Motion diversificato — direzioni + seed ora/giorno (sempre su lavoro nuovo):**
 1. I reveal devono **mescolare direzioni**: da **destra**, da **sinistra**, da **alto** (e varianti). Non solo `up` / non solo una direzione.
 2. Pool direzionale base (Vera):
    - destra → `slide` · `right`
@@ -304,7 +356,7 @@ After substantial static craft (AF on page/layout/hero/**dashboard**), invoke **
    - accenti: `zoom` · `zoom-out` · `blur` · `wipe` · `flip` (max ~1/3, non maggioranza)
 3. **Seed = giorno + ora** `YYYYMMDDHH`. Dichiara `motion_seed: …` in DX/AF.
 4. Procedura: `n = int(seed)`; `n % 3` = direzione dominante (0 destra, 1 sinistra, 2 alto) senza monopolio; ruota il pool con `n % pool_len`; gallery ≥4 → ≥1 per direzione.
-5. Fallimento: tutta la pagina mono-`up` / mono-direzione; seed assente su new craft.
+5. Fallimento: tutta la pagina mono-`up` / mono-direzione; seed assente su lavoro nuovo.
 
 **Palette di tecniche motion (opzionali — scegli, non ripetere sempre le stesse):**
 Non applicare mai lo stesso pacchetto su ogni landing. Il seed + locale + register + activity + densità desiderata decidono **quali** tecniche usare (di solito 2–4 per job, non tutte). Espandi il repertorio oltre lo slide IO:

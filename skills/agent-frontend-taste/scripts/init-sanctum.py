@@ -277,6 +277,13 @@ def refresh_sanctum(sanctum_path: Path, skill_path: Path) -> int:
     for label, orphans in (("reference", orphan_refs), ("script", orphan_scripts)):
         for n in orphans:
             print(f"  ! {label} nel sanctum ma non più nello skill: {n} (non rimosso)")
+    if orphan_refs or orphan_scripts:
+        # Leaving the file is right (it might be hand-written); leaving the RULE
+        # in force is not. A reference the skill has dropped keeps being
+        # loadable from the sanctum, and an abrogated rule that still applies is
+        # worse than a missing one.
+        print("    → un file orfano resta sul disco ma NON è più una regola: "
+              "non caricarlo, e se serviva davvero rimettilo nello skill.")
 
     # Built-in capabilities are discovered from frontmatter; a mismatch means
     # CAPABILITIES.md is stale, but rewriting it could drop learned entries.
@@ -305,6 +312,16 @@ def main():
     project_root = Path(sys.argv[1]).resolve()
     skill_path = Path(sys.argv[2]).resolve()
     do_refresh = "--refresh" in sys.argv[3:]
+
+    # `assert_is_this_skill` refuses the wrong skill; nothing refused the wrong
+    # PROJECT. With `mkdir(parents=True)` downstream, a typo silently built a
+    # whole sanctum inside a directory that did not exist a second earlier —
+    # a second birth, with a blank MEMORY, while the real sanctum sat untouched
+    # elsewhere. Creating the project root is never this script's job.
+    if not project_root.is_dir():
+        print(f"Rifiuto: project-root inesistente: {project_root}")
+        print("Un sanctum si scrive in un progetto che esiste — questo è un path sbagliato.")
+        sys.exit(1)
 
     # Paths
     bmad_dir = project_root / "_bmad"

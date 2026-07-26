@@ -159,7 +159,12 @@ def alignment_map(seed: int, sections: int) -> list[str]:
     if sections >= 4:
         # Statement somewhere mid-page (seeded jitter), closing CTA centered
         # most of the time — never adjacent to the statement.
-        lo, hi = 2, max(2, sections - 3)
+        # The old window was `2 … max(2, sections-3)`: on a 4-section page that
+        # collapses to a single slot, so the "jitter" had zero amplitude and the
+        # statement sat in the same place for every seed. Short pages get the
+        # earlier slot too; long ones still start mid-page.
+        lo = 1 if sections <= 4 else 2
+        hi = max(lo, sections - 2)
         statement = rng.randint(lo, hi)
         out[statement] = "center"
         closing = sections - 1
@@ -217,12 +222,15 @@ def main() -> None:
 
     # Was `max(3, args.sections)`: safe but mute — asking for 0 quietly returned 3,
     # and 999 produced two thousand lines nobody reads. Say what is out of range.
-    if not 1 <= args.sections <= 40:
+    # The floor is 3, not 1: with 1-40 the clamp survived below the range and
+    # `--sections 2` still returned three, silently — the exact defect this
+    # comment claims to have fixed. The message already said the minimum is 3.
+    if not 3 <= args.sections <= 40:
         raise SystemExit(
-            f"--sections {args.sections}: fuori intervallo (1-40). "
+            f"--sections {args.sections}: fuori intervallo (3-40). "
             "Una pagina con meno di 3 sezioni non ha un ritmo di superficie da dichiarare."
         )
-    sections = max(3, args.sections)
+    sections = args.sections
     pool = grid_pool(args.activity, args.surface)
     grid = _pick(pool, args.seed, 1, args.last_grid)
     bleed = _pick(list(BLEED_RHYTHMS), args.seed, 2)

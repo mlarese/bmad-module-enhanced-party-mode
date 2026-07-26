@@ -47,11 +47,11 @@ h1 { font-family: var(--serif); font-weight: 500; font-size: clamp(2rem, 5.5vw, 
 
 /* ----------------------------------------------------------------- grid */
 main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
-.grid { display: grid; gap: 1px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 25rem), 1fr)); background: var(--rule); border: 1px solid var(--rule); }
-.card { background: var(--paper); padding: 1rem; display: flex; flex-direction: column; gap: .75rem; cursor: pointer; }
+.grid { display: grid; gap: 1px; grid-template-columns: repeat(4, minmax(0, 1fr)); background: var(--rule); border: 1px solid var(--rule); }
+.card { background: var(--paper); padding: .7rem; display: flex; flex-direction: column; gap: .5rem; cursor: pointer; }
 .card[aria-pressed="true"] { background: var(--paper-2); box-shadow: inset 3px 0 0 var(--accent); }
 .card .eyebrow { margin: 0; font-family: var(--mono); font-size: .68rem; letter-spacing: .06em; color: var(--ink-2); }
-.card h3 { font-family: var(--serif); font-weight: 500; font-size: 1.18rem; line-height: 1.15; letter-spacing: -.02em; margin: 0; }
+.card h3 { font-family: var(--serif); font-weight: 500; font-size: 1rem; line-height: 1.15; letter-spacing: -.02em; margin: 0; }
 .card .desc { margin: 0; font-size: .88rem; color: var(--ink-2); max-width: 52ch; text-wrap: pretty; }
 .tokens { list-style: none; display: flex; flex-wrap: wrap; gap: .25rem; margin: 0; padding: 0; }
 .tokens li { font-family: var(--mono); font-size: .64rem; letter-spacing: .04em; text-transform: uppercase; padding: .15rem .38rem; border: 1px dashed var(--rule); color: var(--ink-2); }
@@ -291,6 +291,9 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
 .empty { font-family: var(--mono); font-size: .8rem; color: var(--ink-2); padding: 2rem 0; }
 .empty[hidden] { display: none; }
 
+@media (max-width: 1180px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 860px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
 @media (max-width: 720px) {
   .toolbar { position: static; }
   .notes { grid-template-columns: 1fr; }
@@ -300,23 +303,13 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
 </head>
 <body>
 <header class="masthead">
-  <p class="kicker">agent-frontend-taste · hero archetypes</p>
-  <h1>Scegli la hero guardandola.</h1>
-  <p class="lede">Ogni miniatura è una hero vera in piccolo: foto, titolo, sottotitolo e pulsante
-  al loro posto. Cambia solo lo <strong>schema</strong> — che media occupa il primo viewport, dove
-  va il blocco di testo, se sta su un pannello pieno o su niente. 79 archetipi:
-  foto singola, carosello, video, nessun media, collage, sequenza a scroll, UI di prodotto, mappa,
-  prima/dopo.</p>
-  <p class="lede">Dimmi l'<code>id</code> (o selezionane più di uno e copia la lista): da lì fisso
-  <code>hero_treatment</code>, <code>hero_copy</code>, placement e pannello, e la scelta a vista batte
-  il sorteggio da seed. Foto e marchi qui sono campioni: nel progetto vero palette, font e immagini
-  restano derivati da località + carattere + business.</p>
+  <h1>Hero — 79 esempi</h1>
 </header>
 
 <div class="toolbar">
-  <div class="chips" role="group" aria-label="Media"><span class="chips__label">Media</span><button type="button" class="chip" data-group="media" data-value="still" title="una sola immagine ferma nel primo viewport" aria-pressed="false">Foto singola</button><button type="button" class="chip" data-group="media" data-value="carousel" title="più slide che si avvicendano (crossfade, slide, deck, verticale)" aria-pressed="false">Carosello</button><button type="button" class="chip" data-group="media" data-value="video" title="loop muto o filmato: `poster`, `muted`, `playsinline`, reduced-motion" aria-pressed="false">Video</button><button type="button" class="chip" data-group="media" data-value="none" title="la hero è tipografia o grafica: nessuna foto, nessun filmato" aria-pressed="false">Nessun media</button><button type="button" class="chip" data-group="media" data-value="collage" title="più immagini insieme, formati misti, mosaico senza buchi" aria-pressed="false">Collage</button><button type="button" class="chip" data-group="media" data-value="sequence" title="pochi frame che avanzano col progress dello scroll" aria-pressed="false">Sequenza a scroll</button><button type="button" class="chip" data-group="media" data-value="ui" title="screenshot dell&#x27;app come fotografia del prodotto" aria-pressed="false">UI di prodotto</button><button type="button" class="chip" data-group="media" data-value="map" title="il luogo come media, nei colori della palette, non interattivo" aria-pressed="false">Mappa</button><button type="button" class="chip" data-group="media" data-value="compare" title="due immagini divise da una maniglia trascinabile" aria-pressed="false">Prima / dopo</button></div><div class="chips" role="group" aria-label="Testo"><span class="chips__label">Testo</span><button type="button" class="chip" data-group="placement" data-value="left" title="blocco copy sul terzo sinistro" aria-pressed="false">Testo a sinistra</button><button type="button" class="chip" data-group="placement" data-value="right" title="blocco copy sul terzo destro" aria-pressed="false">Testo a destra</button><button type="button" class="chip" data-group="placement" data-value="center" title="blocco copy al centro — massimo 2 sezioni centrate in pagina" aria-pressed="false">Testo centrato</button><button type="button" class="chip" data-group="placement" data-value="bottom-left" title="angolo basso, come i crediti di un manifesto" aria-pressed="false">Testo in basso a sinistra</button><button type="button" class="chip" data-group="placement" data-value="bottom" title="ancorato al bordo inferiore, centrato" aria-pressed="false">Testo in basso</button><button type="button" class="chip" data-group="placement" data-value="top" title="copy fuori dall&#x27;immagine, sulla carta" aria-pressed="false">Testo sopra il media</button><button type="button" class="chip" data-group="placement" data-value="split" title="titolo su un polo, metadati o CTA sull&#x27;altro" aria-pressed="false">Testo su due poli</button><button type="button" class="chip" data-group="placement" data-value="rail" title="colonna stretta, label anche in `writing-mode: vertical-rl`" aria-pressed="false">Testo su rail laterale</button></div><div class="chips" role="group" aria-label="Pannello"><span class="chips__label">Pannello</span><button type="button" class="chip" data-group="panel" data-value="solid" title="pannello tinta piena locale dietro il testo, ≤40% dell&#x27;area" aria-pressed="false">Plate pieno</button><button type="button" class="chip" data-group="panel" data-value="transparent" title="leggibilità dal crop, dal negative space o dal blend" aria-pressed="false">Nessun pannello</button><button type="button" class="chip" data-group="panel" data-value="wash" title="wash col chiaro del brand su tutta la hero, testo scuro" aria-pressed="false">Velo chiaro</button><button type="button" class="chip" data-group="panel" data-value="glass" title="traslucido con blur locale — una volta per progetto, con fallback" aria-pressed="false">Pannello vetro</button><button type="button" class="chip" data-group="panel" data-value="band" title="fascia a tutta larghezza che taglia l&#x27;immagine" aria-pressed="false">Fascia opaca</button><button type="button" class="chip" data-group="panel" data-value="gradient-edge" title="un solo lato sfumato, ≤40% dell&#x27;area" aria-pressed="false">Gradiente di un bordo</button></div>
+  <div class="chips" role="group" aria-label="Media"><span class="chips__label">Media</span><button type="button" class="chip" data-group="media" data-value="still" title="una sola immagine ferma nel primo viewport" aria-pressed="false">Foto singola</button><button type="button" class="chip" data-group="media" data-value="carousel" title="più slide che si avvicendano (crossfade, slide, deck, verticale)" aria-pressed="false">Carosello</button><button type="button" class="chip" data-group="media" data-value="video" title="loop muto o filmato: `poster`, `muted`, `playsinline`, reduced-motion" aria-pressed="false">Video</button><button type="button" class="chip" data-group="media" data-value="none" title="la hero è tipografia o grafica: nessuna foto, nessun filmato" aria-pressed="false">Nessun media</button><button type="button" class="chip" data-group="media" data-value="collage" title="più immagini insieme, formati misti, mosaico senza buchi" aria-pressed="false">Collage</button><button type="button" class="chip" data-group="media" data-value="sequence" title="pochi frame che avanzano col progress dello scroll" aria-pressed="false">Sequenza a scroll</button><button type="button" class="chip" data-group="media" data-value="ui" title="screenshot dell&#x27;app come fotografia del prodotto" aria-pressed="false">UI di prodotto</button><button type="button" class="chip" data-group="media" data-value="map" title="il luogo come media, nei colori della palette, non interattivo" aria-pressed="false">Mappa</button><button type="button" class="chip" data-group="media" data-value="compare" title="due immagini divise da una maniglia trascinabile" aria-pressed="false">Prima / dopo</button></div>
   <label class="search">
-    <input type="search" id="q" placeholder="Cerca: video, centrato, plate, mappa…" aria-label="Cerca archetipo">
+    <input type="search" id="q" placeholder="Cerca" aria-label="Cerca archetipo">
   </label>
   <button type="button" class="btn" id="reset">Azzera</button>
   <span class="count" id="count"></span>
@@ -332,18 +325,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>still-split-plate-left</code></p>
           <h3>Split — plate a sinistra</h3>
-          <p class="desc">Hero divisa in due piani: pannello tinta piena a sinistra col blocco testo, foto a destra intatta senza un grammo di overlay.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo a sinistra</li>
-            <li>Plate pieno</li>
-            <li><code>split</code></li>
-            <li><code>left-solid</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Quando la foto ha luce propria da difendere e il messaggio è lungo (claim + due righe + CTA).</dd>
-            <dt>Attenzione</dt><dd>Il taglio deve cadere fuori dal centro (55/45, 60/40): metà e metà legge come template.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -354,18 +335,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>still-split-plate-right</code></p>
           <h3>Split — plate a destra</h3>
-          <p class="desc">Simmetrico dello split: foto a sinistra a piena altezza, pannello pieno a destra con eyebrow, titolo e azione.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo a destra</li>
-            <li>Plate pieno</li>
-            <li><code>split</code></li>
-            <li><code>right-solid</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Quando il soggetto della foto guarda o si apre verso destra e il testo chiude la composizione.</dd>
-            <dt>Attenzione</dt><dd>È la combinazione più abusata: usala solo se non è nelle ultime consegne (MEMORY `last_hero_copy`).</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -376,18 +345,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>still-editorial-above</code></p>
           <h3>Editorial — titolo sopra la foto</h3>
-          <p class="desc">Headline e riga di contesto vivono sulla carta, sopra l&#x27;immagine: zero overlay, la foto entra come secondo movimento.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo sopra il media</li>
-            <li>Nessun pannello</li>
-            <li><code>editorial</code></li>
-            <li>placement extra</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Brand editoriale, culturale, studi e portfolio: la tipografia annuncia, l&#x27;immagine conferma.</dd>
-            <dt>Attenzione</dt><dd>Serve una misura corta (10–20ch) e tracking negativo: il titolo su carta non ha la foto che lo sostiene.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -398,18 +355,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>still-editorial-caption</code></p>
           <h3>Editorial — didascalia sotto</h3>
-          <p class="desc">Immagine in alto a pieno taglio, sotto due poli: titolo a sinistra, didascalia o dato a destra allineato al bordo.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo su due poli</li>
-            <li>Nessun pannello</li>
-            <li><code>editorial</code></li>
-            <li>placement extra</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Quando la terza voce tipografica (mono, italic) porta un&#x27;informazione vera: anno, luogo, coperti, indirizzo.</dd>
-            <dt>Attenzione</dt><dd>Il polo destro è per metadati, mai per il corpo del testo.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -420,18 +365,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>still-inset-frame</code></p>
           <h3>Inset su carta</h3>
-          <p class="desc">Foto rientrata dai bordi come una stampa incorniciata dal fondo pagina; il blocco testo sta sulla carta, sotto.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo in basso</li>
-            <li>Nessun pannello</li>
-            <li><code>inset</code></li>
-            <li>placement extra</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Hospitality calda, food, artigianato: il margine di carta dà quiete e fa respirare l&#x27;immagine.</dd>
-            <dt>Attenzione</dt><dd>Il rientro deve derivare dai token di griglia, non da un `padding: 40px` a occhio.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -442,18 +375,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>still-negative-left</code></p>
           <h3>Negative space a sinistra</h3>
-          <p class="desc">Foto full-bleed scelta per il suo vuoto (cielo, neve, muro, acqua) e testo appoggiato lì dentro, senza plate né velo.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo a sinistra</li>
-            <li>Nessun pannello</li>
-            <li><code>negative-space</code></li>
-            <li><code>left-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Quando puoi scegliere il crop: è la hero più luminosa possibile su immagine piena.</dd>
-            <dt>Attenzione</dt><dd>Se il vuoto non c&#x27;è, l&#x27;archetipo cade: verifica il contrasto sul crop reale, non sulla mockup.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -464,18 +385,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>still-negative-right</code></p>
           <h3>Negative space a destra</h3>
-          <p class="desc">Stesso principio speculare: il soggetto occupa la sinistra, il testo entra nell&#x27;area calma di destra a fondo nudo.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo a destra</li>
-            <li>Nessun pannello</li>
-            <li><code>negative-space</code></li>
-            <li><code>right-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Ritratti e still life che guardano a sinistra; interni con una parete libera sul lato destro.</dd>
-            <dt>Attenzione</dt><dd>Su mobile il crop cambia: definisci `object-position` per il ritaglio verticale.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -486,18 +395,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>still-wash-center</code></p>
           <h3>Velo chiaro centrato</h3>
-          <p class="desc">Wash col chiaro del brand sopra la foto e testo scuro al centro: la hero diventa luminosa invece di annerirsi.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo centrato</li>
-            <li>Velo chiaro</li>
-            <li><code>velo-chiaro</code></li>
-            <li><code>center-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Località di luce alta — neve, mare, giorno, spa — e brand che devono leggere puliti.</dd>
-            <dt>Attenzione</dt><dd>È l&#x27;antidoto al velo scuro, non il suo gemello: resta sul chiaro del brand, non sul bianco generico.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -508,18 +405,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>still-band-center</code></p>
           <h3>Fascia locale</h3>
-          <p class="desc">Una sola fascia opaca a tutta larghezza taglia la foto e ospita il titolo; sopra e sotto l&#x27;immagine resta intatta.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo centrato</li>
-            <li>Fascia opaca</li>
-            <li><code>plate</code></li>
-            <li><code>center-solid</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Insegne e statement brevi: funziona quando il claim è di tre parole.</dd>
-            <dt>Attenzione</dt><dd>La fascia è una decisione grafica: dichiara altezza e posizione (terzo alto o basso), non centrala per default.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -530,18 +415,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>still-plate-bottom-left</code></p>
           <h3>Plate d&#x27;angolo (poster)</h3>
-          <p class="desc">Plate opaco ancorato all&#x27;angolo in basso a sinistra, come il blocco crediti di un manifesto: copre poco, pesa molto.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo in basso a sinistra</li>
-            <li>Plate pieno</li>
-            <li><code>plate</code></li>
-            <li>placement extra</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Foto forti e piene dove nessuna zona è calma: l&#x27;angolo è il compromesso onesto.</dd>
-            <dt>Attenzione</dt><dd>Massimo ~35% dell&#x27;area; se cresce diventa un velo travestito.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -552,18 +425,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>still-duotone-knockout</code></p>
           <h3>Duotone + knockout</h3>
-          <p class="desc">Foto virata nei due toni della palette e tipografia in `mix-blend-mode`: il contrasto nasce dal grading, non dallo scurimento.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo centrato</li>
-            <li>Nessun pannello</li>
-            <li><code>duotone</code></li>
-            <li><code>center-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Brand grafici, eventi, sport, notte urbana: quando la foto può diventare materia di marca.</dd>
-            <dt>Attenzione</dt><dd>Il blend va verificato sui punti chiari e scuri della foto vera, o una parola sparisce.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -574,18 +435,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>still-gradient-edge</code></p>
           <h3>Gradiente di un solo bordo</h3>
-          <p class="desc">Un gradiente entra da un solo lato (≤40% dell&#x27;area) e regge il testo; il resto della foto rimane pulito.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo a sinistra</li>
-            <li>Gradiente di un bordo</li>
-            <li><code>gradiente-bordo</code></li>
-            <li><code>left-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Immagini uniformi senza vuoti, quando serve leggibilità garantita senza pannello.</dd>
-            <dt>Attenzione</dt><dd>Un bordo solo. Due gradienti opposti sono il velo scuro rimontato in due pezzi.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -596,18 +445,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>still-glass-right</code></p>
           <h3>Pannello vetro a destra</h3>
-          <p class="desc">Pannello traslucido con blur locale sopra la foto: si intravede il colore sotto, il testo resta scuro e leggibile.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo a destra</li>
-            <li>Pannello vetro</li>
-            <li><code>plate</code></li>
-            <li><code>right-solid</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Interni luminosi, wellness, retail premium; una volta per progetto, non come risposta a ogni pannello.</dd>
-            <dt>Attenzione</dt><dd>`backdrop-filter` costa e su Android vecchio cade: prevedi il fallback tinta piena.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -618,18 +455,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>still-mask-arc</code></p>
           <h3>Foto mascherata (arco)</h3>
-          <p class="desc">L&#x27;immagine vive dentro una forma — arco, cerchio, `clip-path` — e il testo le sta accanto sulla carta.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo a sinistra</li>
-            <li>Nessun pannello</li>
-            <li><code>inset</code></li>
-            <li><code>left-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Architettura, ospitalità storica, brand con un&#x27;identità di forma (portale, volta, bottiglia).</dd>
-            <dt>Attenzione</dt><dd>La forma deve tornare altrove nella pagina (bottone, gallery, footer), sennò è un vezzo isolato.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -640,18 +465,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>still-offset-overlap</code></p>
           <h3>Blocco che scavalca la foto</h3>
-          <p class="desc">Il pannello testo è spostato in sovrapposizione sul bordo dell&#x27;immagine: due piani che si accavallano, con ombra netta o nessuna.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo a destra</li>
-            <li>Plate pieno</li>
-            <li><code>split</code></li>
-            <li><code>right-solid</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Quando vuoi profondità senza parallax e la griglia fine ti dà l&#x27;off-center per farlo.</dd>
-            <dt>Attenzione</dt><dd>La sovrapposizione va dichiarata nella griglia (`grid-column` esplicito), non ottenuta con `margin-left: -60px`.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -662,18 +475,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>still-bottom-anchor</code></p>
           <h3>Full-bleed ancorata in basso</h3>
-          <p class="desc">Immagine a pieno viewport e blocco testo ancorato al bordo inferiore, sostenuto solo dal gradiente di quel bordo.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo in basso</li>
-            <li>Gradiente di un bordo</li>
-            <li><code>gradiente-bordo</code></li>
-            <li>placement extra</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Hero cinematografiche dove la parte alta della foto è il soggetto e va lasciata libera.</dd>
-            <dt>Attenzione</dt><dd>Su mobile usa `min-height` in `svh`: il 100vh bloccato taglia il testo sotto la barra del browser.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -684,18 +485,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>still-rail-vertical</code></p>
           <h3>Rail verticale + foto</h3>
-          <p class="desc">Colonna laterale stretta con label in `writing-mode: vertical-rl` (luogo, anno, numero di sezione) e foto che occupa il resto.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo su rail laterale</li>
-            <li>Nessun pannello</li>
-            <li><code>editorial</code></li>
-            <li>placement extra</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Direzioni con `grid_system: asym-rail`: il rail nasce dalla griglia e torna in tutte le sezioni.</dd>
-            <dt>Attenzione</dt><dd>Il rail deve portare informazione, non una parola decorativa girata di 90°.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -706,18 +495,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>carousel-crossfade-plate</code></p>
           <h3>Carosello crossfade — testo fermo</h3>
-          <p class="desc">Le slide si dissolvono una nell&#x27;altra dietro un blocco testo che non si muove: cambia il mondo, resta il messaggio.</p>
-          <ul class="tokens">
-            <li>Carosello</li>
-            <li>Testo a sinistra</li>
-            <li>Plate pieno</li>
-            <li><code>carousel</code></li>
-            <li><code>left-solid</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Hospitality e ristorazione con 3–5 immagini di pari valore e un solo claim.</dd>
-            <dt>Attenzione</dt><dd>Il plate deve reggere su tutte le slide: verifica il contrasto sulla più chiara e sulla più scura.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -728,18 +505,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>carousel-hard-slide</code></p>
           <h3>Carosello hard-slide — testo per slide</h3>
-          <p class="desc">Slide che traslano di taglio, ognuna col proprio titolo che entra in ritardo sul movimento dell&#x27;immagine.</p>
-          <ul class="tokens">
-            <li>Carosello</li>
-            <li>Testo in basso a sinistra</li>
-            <li>Nessun pannello</li>
-            <li><code>carousel</code></li>
-            <li>placement extra</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Quando le slide raccontano cose diverse (camere, portate, servizi) e ognuna merita una riga sua.</dd>
-            <dt>Attenzione</dt><dd>Tre claim diversi in cinque secondi non si leggono: dai ≥6s per slide e una pausa su hover/focus.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -750,18 +515,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>carousel-split-static</code></p>
           <h3>Carosello solo sul lato foto</h3>
-          <p class="desc">Il pannello di testo è fisso a sinistra, il carosello gira solo nella metà destra: movimento contenuto in un riquadro.</p>
-          <ul class="tokens">
-            <li>Carosello</li>
-            <li>Testo a sinistra</li>
-            <li>Plate pieno</li>
-            <li><code>carousel</code></li>
-            <li><code>left-solid</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Quando servono più immagini ma la pagina non deve sembrare uno slideshow.</dd>
-            <dt>Attenzione</dt><dd>Le slide devono avere lo stesso crop: dentro un riquadro ogni salto di inquadratura si vede.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -772,18 +525,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>carousel-peek</code></p>
           <h3>Carosello con peek</h3>
-          <p class="desc">La slide corrente non arriva al bordo: si vede la fetta della successiva, che dichiara che c&#x27;è un seguito.</p>
-          <ul class="tokens">
-            <li>Carosello</li>
-            <li>Testo a sinistra</li>
-            <li>Nessun pannello</li>
-            <li><code>carousel</code></li>
-            <li><code>left-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Cataloghi visivi — piatti, camere, prodotti — dove scorrere è parte del messaggio.</dd>
-            <dt>Attenzione</dt><dd>Il peek va replicato su mobile (una fetta più stretta), non eliminato: è la firma dell&#x27;archetipo.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -794,18 +535,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>carousel-thumbs</code></p>
           <h3>Carosello con rail di miniature</h3>
-          <p class="desc">Slide grande più una fila di miniature cliccabili e un contatore 01/04: navigazione esplicita, niente dots ciechi.</p>
-          <ul class="tokens">
-            <li>Carosello</li>
-            <li>Testo a destra</li>
-            <li>Plate pieno</li>
-            <li><code>carousel</code></li>
-            <li><code>right-solid</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Quando le immagini sono contenuti scelti (camere, sale, itinerari) e l&#x27;utente deve poterle scegliere.</dd>
-            <dt>Attenzione</dt><dd>Le miniature sono controlli: focus visibile, `aria-current`, target ≥44px al tocco.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -816,18 +545,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>carousel-deck</code></p>
           <h3>Deck di card che avanza</h3>
-          <p class="desc">Le immagini sono card impilate con leggero offset: la prima esce, la seconda sale al suo posto, come un mazzo che si sfoglia.</p>
-          <ul class="tokens">
-            <li>Carosello</li>
-            <li>Testo a destra</li>
-            <li>Nessun pannello</li>
-            <li><code>carousel</code></li>
-            <li><code>right-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Portfolio, studi creativi, brand di prodotto: il gesto è tattile e ricorda una collezione.</dd>
-            <dt>Attenzione</dt><dd>Serve profondità coerente (una sola scala di ombra/offset) e reduced-motion che ferma l&#x27;auto-avanzamento.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -838,18 +555,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>carousel-vertical</code></p>
           <h3>Carosello verticale</h3>
-          <p class="desc">Le slide scorrono in verticale con paginazione a lato: movimento inatteso che rompe l&#x27;abitudine dello slider orizzontale.</p>
-          <ul class="tokens">
-            <li>Carosello</li>
-            <li>Testo centrato</li>
-            <li>Nessun pannello</li>
-            <li><code>carousel</code></li>
-            <li><code>center-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Brand cinematici e pagine con scroll narrativo, dove il verticale è già la lingua della pagina.</dd>
-            <dt>Attenzione</dt><dd>Non deve rubare lo scroll: il carosello è auto o a click, mai un hijack della rotellina.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -860,18 +565,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>carousel-marquee</code></p>
           <h3>Striscia continua invece di slide</h3>
-          <p class="desc">Nessuna slide discreta: una striscia di immagini che scorre in loop sotto una headline grande e ferma.</p>
-          <ul class="tokens">
-            <li>Carosello</li>
-            <li>Testo sopra il media</li>
-            <li>Nessun pannello</li>
-            <li><code>marquee</code></li>
-            <li>placement extra</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Quando le immagini sono tante e nessuna è protagonista: atmosfera invece di catalogo.</dd>
-            <dt>Attenzione</dt><dd>Loop senza salto (duplica il set) e stop su `prefers-reduced-motion` e su hover.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -882,18 +575,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>video-ambient-plate</code></p>
           <h3>Video ambient + plate</h3>
-          <p class="desc">Loop muto a colori pieni con il testo su un plate opaco laterale: il filmato non viene annerito per far leggere due righe.</p>
-          <ul class="tokens">
-            <li>Video</li>
-            <li>Testo a destra</li>
-            <li>Plate pieno</li>
-            <li><code>video-plate</code></li>
-            <li><code>right-solid</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Cucina, laboratorio, cantiere, mare: dove il movimento è la prova che il posto è vivo.</dd>
-            <dt>Attenzione</dt><dd>`poster`, `muted`, `playsinline`, ≤6s, e su `prefers-reduced-motion` resta il poster fermo.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -904,18 +585,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>video-inset-window</code></p>
           <h3>Video in finestra rientrata</h3>
-          <p class="desc">Il video sta in una finestra rientrata o mascherata a destra; il testo vive sulla carta a sinistra, senza overlay.</p>
-          <ul class="tokens">
-            <li>Video</li>
-            <li>Testo a sinistra</li>
-            <li>Nessun pannello</li>
-            <li><code>inset</code></li>
-            <li><code>left-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Quando il filmato è breve e prezioso e la pagina deve restare chiara e leggibile.</dd>
-            <dt>Attenzione</dt><dd>Il rapporto della finestra è una scelta (`4/5`, `1/1.2`), non `16/9` per inerzia.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -926,18 +595,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>video-split</code></p>
           <h3>Video su metà schermo</h3>
-          <p class="desc">Metà pannello tinta piena col messaggio, metà loop a piena altezza: lo split classico con il movimento su un lato solo.</p>
-          <ul class="tokens">
-            <li>Video</li>
-            <li>Testo a sinistra</li>
-            <li>Plate pieno</li>
-            <li><code>split</code></li>
-            <li><code>left-solid</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Servizi e prodotti che si spiegano in una frase, con un gesto da mostrare accanto.</dd>
-            <dt>Attenzione</dt><dd>Il video verticale su mobile va sopra o sotto il testo, non compresso in una fascia da 120px.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -948,18 +605,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>video-type-mask</code></p>
           <h3>Video dentro la tipografia</h3>
-          <p class="desc">Il filmato si vede solo dentro le lettere del titolo (mask o `background-clip`): la parola diventa la finestra sul mondo.</p>
-          <ul class="tokens">
-            <li>Video</li>
-            <li>Testo centrato</li>
-            <li>Nessun pannello</li>
-            <li><code>type-first</code></li>
-            <li><code>center-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Statement di brand con una parola sola, in cui il nome deve restare in testa.</dd>
-            <dt>Attenzione</dt><dd>Fallback obbligatorio a testo pieno; serve un font molto pesante o la maschera non si legge.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -970,18 +615,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>video-micro-loops</code></p>
           <h3>Tre micro-loop invece di un film</h3>
-          <p class="desc">Due o tre loop piccoli in griglia accanto alla headline, ognuno su un dettaglio: mani, fuoco, acqua.</p>
-          <ul class="tokens">
-            <li>Video</li>
-            <li>Testo a sinistra</li>
-            <li>Nessun pannello</li>
-            <li><code>collage</code></li>
-            <li><code>left-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Quando non hai un filmato d&#x27;insieme buono ma hai frammenti belli — e pesa meno di un full-bleed.</dd>
-            <dt>Attenzione</dt><dd>Tre loop = tre decodifiche: file corti, `preload=&quot;metadata&quot;`, uno solo in play su mobile.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -992,18 +625,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>video-cover-cta</code></p>
           <h3>Video full-bleed + CTA</h3>
-          <p class="desc">Filmato a pieno viewport, controllo di play e audio minimale, titolo e CTA raccolti nell&#x27;angolo basso.</p>
-          <ul class="tokens">
-            <li>Video</li>
-            <li>Testo in basso a sinistra</li>
-            <li>Nessun pannello</li>
-            <li><code>video-plate</code></li>
-            <li>placement extra</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Brand e location dove il video è il prodotto (hotel, resort, evento, showreel).</dd>
-            <dt>Attenzione</dt><dd>Il controllo audio deve esserci ed essere raggiungibile da tastiera; niente autoplay con suono.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1014,18 +635,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>type-first-vw</code></p>
           <h3>Type-first in vw nudi</h3>
-          <p class="desc">Il display occupa il viewport in unità viewport nude (8–24vw); le immagini, se ci sono, entrano come inserti piccoli.</p>
-          <ul class="tokens">
-            <li>Nessun media</li>
-            <li>Testo sopra il media</li>
-            <li>Nessun pannello</li>
-            <li><code>type-first</code></li>
-            <li>placement extra</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Brand con un nome forte, studi, cultura, manifesti: la tipografia è la superficie.</dd>
-            <dt>Attenzione</dt><dd>Il `vw` non è `clamp`: verifica il taglio a 375px e la sillabazione delle parole lunghe.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1036,18 +645,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>text-solid-brand</code></p>
           <h3>Solo testo su tinta di brand</h3>
-          <p class="desc">Nessun media: la hero è una campitura piena del colore di marca con titolo, sottotitolo e azione, più un rail di metadati.</p>
-          <ul class="tokens">
-            <li>Nessun media</li>
-            <li>Testo a sinistra</li>
-            <li>Nessun pannello</li>
-            <li><code>type-first</code></li>
-            <li><code>left-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Quando le foto disponibili sono brutte o assenti; SaaS, servizi professionali, annunci.</dd>
-            <dt>Attenzione</dt><dd>Senza foto tutto il peso è su tipografia e ritmo: serve la terza voce e almeno un dettaglio di superficie.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1058,18 +655,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>text-rule-paper</code></p>
           <h3>Solo testo su carta rigata</h3>
-          <p class="desc">La `surface_texture` fa da media: righe hairline o pattern SVG col passo della griglia, testo centrato sopra.</p>
-          <ul class="tokens">
-            <li>Nessun media</li>
-            <li>Testo centrato</li>
-            <li>Nessun pannello</li>
-            <li><code>type-first</code></li>
-            <li><code>center-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Editoriale, archivi, studi legali o tecnici: sobrio senza essere vuoto, peso zero.</dd>
-            <dt>Attenzione</dt><dd>Il passo del pattern deve agganciarsi al modulo di griglia o alla riga di base, non essere un valore casuale.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1080,18 +665,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>text-mesh-light</code></p>
           <h3>Luce radiale come sfondo</h3>
-          <p class="desc">Due o tre luci radiali di palette, con raggio dichiarato, dietro un blocco di testo centrato: profondità senza immagini.</p>
-          <ul class="tokens">
-            <li>Nessun media</li>
-            <li>Testo centrato</li>
-            <li>Nessun pannello</li>
-            <li><code>type-first</code></li>
-            <li><code>center-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Prodotto digitale, tech, eventi: quando serve atmosfera e non hai materiale fotografico.</dd>
-            <dt>Attenzione</dt><dd>Luci con raggio (`transparent 8–15rem`), non un gradiente lineare a tutta pagina.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1102,18 +675,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>text-diptych</code></p>
           <h3>Dittico di testo</h3>
-          <p class="desc">Due poli tipografici sulla stessa riga d&#x27;oro: titolo grande a sinistra, paragrafo e CTA a destra, hairline che li separa.</p>
-          <ul class="tokens">
-            <li>Nessun media</li>
-            <li>Testo su due poli</li>
-            <li>Nessun pannello</li>
-            <li><code>editorial</code></li>
-            <li>placement extra</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Manifesti, studi, agenzie: dichiara subito posizione e servizio senza immagini.</dd>
-            <dt>Attenzione</dt><dd>I due poli devono avere misure diverse (10–20ch e 55–68ch), sennò sono due colonne uguali.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1124,18 +685,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>ui-product-right</code></p>
           <h3>Hero prodotto — UI a destra</h3>
-          <p class="desc">Claim e prova a sinistra su carta, schermata di prodotto a destra ritagliata dal bordo: l&#x27;interfaccia è la fotografia.</p>
-          <ul class="tokens">
-            <li>UI di prodotto</li>
-            <li>Testo a sinistra</li>
-            <li>Nessun pannello</li>
-            <li><code>ui-shot</code></li>
-            <li><code>left-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>SaaS, dashboard, tool B2B: mostrare la cosa vale più di descriverla.</dd>
-            <dt>Attenzione</dt><dd>Lo screenshot deve essere reale e leggibile a 375px (ritaglia un pannello, non l&#x27;intera app).</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1146,18 +695,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>ui-product-bleed</code></p>
           <h3>Hero prodotto — UI che sborda</h3>
-          <p class="desc">Testo centrato in alto e schermata che entra dal basso tagliata dal viewport: invita a scorrere per vedere il resto.</p>
-          <ul class="tokens">
-            <li>UI di prodotto</li>
-            <li>Testo centrato</li>
-            <li>Nessun pannello</li>
-            <li><code>ui-shot</code></li>
-            <li><code>center-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Lanci di prodotto e pagine feature, con la UI come oggetto di scena.</dd>
-            <dt>Attenzione</dt><dd>Solo qui la centratura è concessa: conta come una delle due sezioni centrate della pagina.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1168,18 +705,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>collage-mosaic</code></p>
           <h3>Mosaico di più foto</h3>
-          <p class="desc">Tre a cinque immagini di formato diverso tessono il primo viewport e un plate centrale opaco tiene il titolo.</p>
-          <ul class="tokens">
-            <li>Collage</li>
-            <li>Testo centrato</li>
-            <li>Plate pieno</li>
-            <li><code>collage</code></li>
-            <li><code>center-solid</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Quando la varietà è il messaggio: menu, collezioni, festival, portfolio.</dd>
-            <dt>Attenzione</dt><dd>Vale la regola della gallery: mosaico senza buchi, ordine L→R, formati misti dichiarati.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1190,18 +715,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>sequence-scroll</code></p>
           <h3>Sequenza legata allo scroll</h3>
-          <p class="desc">Pochi frame che avanzano col progress dello scroll mentre il titolo resta agganciato: il movimento è guidato dalla mano.</p>
-          <ul class="tokens">
-            <li>Sequenza a scroll</li>
-            <li>Testo centrato</li>
-            <li>Nessun pannello</li>
-            <li><code>sequence</code></li>
-            <li><code>center-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Prodotti che si trasformano, ricette, cantieri, prima-durante-dopo cinematico.</dd>
-            <dt>Attenzione</dt><dd>Frame pochi e leggeri (6–12, preload), reversibile, e su reduced-motion si ferma al primo.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1212,18 +725,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>map-place-plate</code></p>
           <h3>Mappa del luogo come media</h3>
-          <p class="desc">La mappa stilizzata del posto occupa la hero e il plate porta nome, indirizzo e azione: il luogo è la prima informazione.</p>
-          <ul class="tokens">
-            <li>Mappa</li>
-            <li>Testo a destra</li>
-            <li>Plate pieno</li>
-            <li><code>map</code></li>
-            <li><code>right-solid</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Attività dove la posizione decide (rifugio, bistrot di quartiere, stabilimento, noleggio).</dd>
-            <dt>Attenzione</dt><dd>Mappa nei colori della palette e non interattiva nella hero: l&#x27;iframe che cattura lo scroll è un fallimento.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1234,18 +735,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>compare-before-after</code></p>
           <h3>Prima / dopo</h3>
-          <p class="desc">Due immagini divise da una maniglia trascinabile, titolo sopra sulla carta: la trasformazione si prova, non si racconta.</p>
-          <ul class="tokens">
-            <li>Prima / dopo</li>
-            <li>Testo sopra il media</li>
-            <li>Nessun pannello</li>
-            <li><code>compare</code></li>
-            <li>placement extra</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Restauro, ristrutturazione, estetica, pulizie tecniche, riqualificazione.</dd>
-            <dt>Attenzione</dt><dd>Le due foto devono avere stesso punto di vista e stessa luce, e la maniglia va manovrabile da tastiera.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1256,18 +745,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>fullbleed-header-reveal</code></p>
           <h3>Full-bleed senza nav (header reveal)</h3>
-          <p class="desc">Primo viewport senza chrome: solo immagine e una riga in basso; la nav compare quando lo scroll supera la soglia.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo in basso</li>
-            <li>Nessun pannello</li>
-            <li><code>negative-space</code></li>
-            <li>placement extra</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Hero d&#x27;impatto dove ogni elemento in più rovina il silenzio: brand, resort, fotografia.</dd>
-            <dt>Attenzione</dt><dd>Serve un accesso al menu comunque raggiungibile (tasto o skip-link): l&#x27;impatto non giustifica un vicolo cieco.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1278,18 +755,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>search-center-plate</code></p>
           <h3>Barra di ricerca al centro</h3>
-          <p class="desc">Foto del luogo, claim breve su fascia, e sotto la barra che fa la sola cosa che l&#x27;utente è venuto a fare: cercare.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo centrato</li>
-            <li>Fascia opaca</li>
-            <li><code>search-first</code></li>
-            <li><code>center-solid</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Portali, travel, immobiliare, marketplace: quando l&#x27;intento è già formato e la hero deve solo non intralciarlo.</dd>
-            <dt>Attenzione</dt><dd>La barra è il vero CTA — togli il bottone dal blocco copy o litigano. Su mobile diventa un campo solo che apre il pannello.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1300,18 +765,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>booking-bar-hotel</code></p>
           <h3>Barra di prenotazione (date + ospiti)</h3>
-          <p class="desc">Arrivo, partenza, ospiti e verifica disponibilità dentro il primo viewport: la hero è il motore di prenotazione.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo centrato</li>
-            <li>Nessun pannello</li>
-            <li><code>search-first</code></li>
-            <li><code>center-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Hotel, B&amp;B, rifugi, case vacanza — dove ogni click in più verso il booking engine è margine perso.</dd>
-            <dt>Attenzione</dt><dd>Tre campi al massimo. Se il gestionale non risponde in tempo reale, la barra promette una cosa che il sito non mantiene.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1322,18 +775,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>stat-trio-photo</code></p>
           <h3>Tre numeri come protagonisti</h3>
-          <p class="desc">Il claim resta corto e il peso lo portano tre cifre in fila sul bordo basso: anni, stanze, punteggio.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo a sinistra</li>
-            <li>Nessun pannello</li>
-            <li><code>stat-first</code></li>
-            <li><code>left-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Quando la credibilità è numerica e verificabile — storicità, capienza, recensioni, capitale gestito.</dd>
-            <dt>Attenzione</dt><dd>Numeri veri o niente. Tre è il tetto: al quarto diventa un cruscotto e nessuno ne legge uno.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1344,18 +785,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>logo-wall-claim</code></p>
           <h3>Claim + muro di loghi</h3>
-          <p class="desc">Nessuna foto: una frase che promette e la fila di chi ci ha già creduto, su carta rigata.</p>
-          <ul class="tokens">
-            <li>Nessun media</li>
-            <li>Testo centrato</li>
-            <li>Nessun pannello</li>
-            <li><code>type-first</code></li>
-            <li><code>center-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>B2B, agenzie, SaaS con clienti riconoscibili: la prova sociale vale più di uno stock photo.</dd>
-            <dt>Attenzione</dt><dd>Loghi in grigio uniforme e stessa altezza ottica. Se i marchi non li conosce nessuno, la fila lavora contro di te.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1366,18 +795,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>quote-review-full</code></p>
           <h3>Citazione come hero</h3>
-          <p class="desc">Foto piena e, su un pannello di carta, il giudizio di qualcuno che conta più di quanto puoi dire tu di te.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo a sinistra</li>
-            <li>Nessun pannello</li>
-            <li><code>editorial</code></li>
-            <li><code>left-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Ristoranti recensiti, hotel premiati, servizi con testimonianze forti e attribuibili.</dd>
-            <dt>Attenzione</dt><dd>Firma e testata sempre visibili: una citazione anonima è un claim travestito. Massimo due righe.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1388,18 +805,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>price-list-menu</code></p>
           <h3>Listino dentro la hero</h3>
-          <p class="desc">Il menu del giorno, tre voci e i prezzi, accanto alla foto: risponde subito alla domanda vera.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo a sinistra</li>
-            <li>Nessun pannello</li>
-            <li><code>editorial</code></li>
-            <li><code>left-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Ristoranti, bistrot, servizi a listino semplice — quando il prezzo è un argomento e non un imbarazzo.</dd>
-            <dt>Attenzione</dt><dd>Va tenuto aggiornato o diventa un danno. Se il listino cambia ogni giorno, serve un campo editabile, non HTML statico.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1410,18 +815,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>form-lead-wash</code></p>
           <h3>Velo chiaro + form di contatto</h3>
-          <p class="desc">Un velo chiaro calma la foto e lascia leggere il titolo; sotto, un solo campo e un bottone.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo centrato</li>
-            <li>Velo chiaro</li>
-            <li><code>velo-chiaro</code></li>
-            <li><code>center-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Lead magnet, liste d&#x27;attesa, newsletter di prodotto: quando l&#x27;obiettivo unico è l&#x27;indirizzo email.</dd>
-            <dt>Attenzione</dt><dd>Un campo solo. Ogni campo aggiunto costa conversione, e la privacy va linkata sotto, non nascosta.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1432,18 +825,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>countdown-event</code></p>
           <h3>Conto alla rovescia</h3>
-          <p class="desc">Data e ore che scendono sotto il titolo: la hero dichiara che esiste una scadenza reale.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo centrato</li>
-            <li>Nessun pannello</li>
-            <li><code>plate</code></li>
-            <li><code>center-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Eventi, aperture, festival, drop a tiratura: urgenza vera, con una data che esiste in calendario.</dd>
-            <dt>Attenzione</dt><dd>Countdown finto = credibilità bruciata. Serve lo stato dopo lo zero, e il fuso orario dichiarato.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1454,18 +835,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>index-hover-list</code></p>
           <h3>Indice numerato che rivela</h3>
-          <p class="desc">Una lista numerata delle sezioni: al passaggio del mouse la foto dietro cambia sulla voce puntata.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo a destra</li>
-            <li>Nessun pannello</li>
-            <li><code>editorial</code></li>
-            <li><code>right-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Portfolio, studi, strutture con poche aree forti da annunciare: la navigazione è il contenuto.</dd>
-            <dt>Attenzione</dt><dd>Su touch l&#x27;hover non esiste — servono foto già assegnate o autoplay lento. Massimo cinque voci.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1476,18 +845,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>badge-award-corner</code></p>
           <h3>Sigillo di riconoscimento</h3>
-          <p class="desc">Foto piena, copy ancorato in basso e un sigillo tondo nell&#x27;angolo alto: il premio non chiede permesso.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo in basso a sinistra</li>
-            <li>Gradiente di un bordo</li>
-            <li><code>plate</code></li>
-            <li>placement extra</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Guide, stelle, certificazioni, rating: quando il riconoscimento è il primo motivo per fidarsi.</dd>
-            <dt>Attenzione</dt><dd>Uno solo. Tre sigilli in fila leggono come banner pubblicitari e li salta l&#x27;occhio.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1498,18 +855,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>avatars-proof</code></p>
           <h3>Prova sociale con volti</h3>
-          <p class="desc">Titolo appoggiato in alto e, sul fondo, una piccola fila di volti sovrapposti col conteggio di chi è già passato.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo sopra il media</li>
-            <li>Nessun pannello</li>
-            <li><code>editorial</code></li>
-            <li>placement extra</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Community, corsi, prenotazioni ricorrenti: il numero di persone è la leva, non la feature.</dd>
-            <dt>Attenzione</dt><dd>Volti veri e liberatoria firmata. Con avatar stock la prova sociale si sente falsa a colpo d&#x27;occhio.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1520,18 +865,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>bento-grid</code></p>
           <h3>Bento — griglia di riquadri</h3>
-          <p class="desc">Cinque riquadri di dimensione diversa che si incastrano pieni, col testo appoggiato sopra il più grande.</p>
-          <ul class="tokens">
-            <li>Collage</li>
-            <li>Testo a sinistra</li>
-            <li>Nessun pannello</li>
-            <li><code>collage</code></li>
-            <li><code>left-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Quando le cose da mostrare sono più d&#x27;una e nessuna vince: strutture con ambienti, studi multiservizio.</dd>
-            <dt>Attenzione</dt><dd>Riquadri di peso diverso, mai cinque uguali. Sotto i 900px si smonta in due colonne o diventa illeggibile.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1542,18 +875,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>columns-parallax</code></p>
           <h3>Colonne a velocità diverse</h3>
-          <p class="desc">Tre colonne verticali sfalsate che allo scroll si muovono a velocità diverse: profondità senza 3D.</p>
-          <ul class="tokens">
-            <li>Collage</li>
-            <li>Testo centrato</li>
-            <li>Nessun pannello</li>
-            <li><code>collage</code></li>
-            <li><code>center-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Brand visivi con molto materiale fotografico — moda, viaggi, architettura.</dd>
-            <dt>Attenzione</dt><dd>Lo sfalsamento è la firma: allineate diventa una griglia qualsiasi. Su reduced-motion resta ferma e regge lo stesso.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1564,18 +885,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>angled-split</code></p>
           <h3>Taglio diagonale</h3>
-          <p class="desc">La foto non finisce dritta: un taglio obliquo la consegna al pannello di testo, e la pagina prende velocità.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo a destra</li>
-            <li>Plate pieno</li>
-            <li><code>split</code></li>
-            <li><code>right-solid</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Sport, montagna, automotive, servizi che vogliono dire movimento senza animare niente.</dd>
-            <dt>Attenzione</dt><dd>Un angolo solo, ripetuto altrove nella pagina, o sembra un incidente. Verifica il taglio su 4:3 e su mobile.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1586,18 +895,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>frame-passepartout</code></p>
           <h3>Passepartout</h3>
-          <p class="desc">La foto sta dentro una cornice di carta con doppio filo: guardi un&#x27;immagine appesa, non un banner.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo centrato</li>
-            <li>Nessun pannello</li>
-            <li><code>inset</code></li>
-            <li><code>center-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Gallerie, artigianato, hotel di carattere, archivi: dà valore d&#x27;oggetto a una foto sola.</dd>
-            <dt>Attenzione</dt><dd>Il passepartout deve essere generoso e uguale sui quattro lati; stretto sembra un bordo sbagliato.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1608,18 +905,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>stack-polaroid</code></p>
           <h3>Foto impilate</h3>
-          <p class="desc">Tre stampe con bordo bianco buttate una sull&#x27;altra, ruotate di poco: il mucchio sul tavolo, non l&#x27;archivio.</p>
-          <ul class="tokens">
-            <li>Collage</li>
-            <li>Testo a sinistra</li>
-            <li>Nessun pannello</li>
-            <li><code>collage</code></li>
-            <li><code>left-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Racconti personali, ristoranti di famiglia, studi con storia, anniversari.</dd>
-            <dt>Attenzione</dt><dd>Rotazioni piccole e diverse tra loro (2-7°). Uguali sembra un errore di CSS, grandi sembra clipart.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1630,18 +915,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>scatter-desk</code></p>
           <h3>Foto sparse sul piano</h3>
-          <p class="desc">Quattro immagini sparse agli angoli e il blocco testo al centro su plate: il tavolo di lavoro visto dall&#x27;alto.</p>
-          <ul class="tokens">
-            <li>Collage</li>
-            <li>Testo centrato</li>
-            <li>Plate pieno</li>
-            <li><code>collage</code></li>
-            <li><code>center-solid</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Studi creativi, moodboard, servizi che mostrano il processo invece del risultato.</dd>
-            <dt>Attenzione</dt><dd>Le foto non devono toccarsi né uscire storte dal bordo: sparso non è casuale, è composto.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1652,18 +925,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>half-fold-duo</code></p>
           <h3>Due mondi, metà esatta</h3>
-          <p class="desc">Metà foto, metà tinta, taglio esattamente al centro: due offerte che si guardano invece di gerarchizzarsi.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo su due poli</li>
-            <li>Nessun pannello</li>
-            <li><code>split</code></li>
-            <li>placement extra</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Doppio pubblico dichiarato — privati e aziende, pranzo e cena, corsi e consulenza.</dd>
-            <dt>Attenzione</dt><dd>È l&#x27;unico caso in cui il 50/50 è giusto: qui la simmetria è il messaggio. Se un lato conta di più, usa lo split asimmetrico.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1674,18 +935,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>circle-portrait</code></p>
           <h3>Tondo</h3>
-          <p class="desc">La foto ritagliata in cerchio su carta: la forma ammorbidisce tutto e il testo respira a sinistra.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo a sinistra</li>
-            <li>Nessun pannello</li>
-            <li><code>negative-space</code></li>
-            <li><code>left-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Persone, professionisti, brand caldi e artigianali; ottimo dove il rettangolo pieno sarebbe aggressivo.</dd>
-            <dt>Attenzione</dt><dd>Il tondo taglia molto: serve una foto con il soggetto centrato e aria intorno, non un panorama.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1696,18 +945,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>arc-bottom-mask</code></p>
           <h3>Arco che sale dal fondo</h3>
-          <p class="desc">Il titolo sta sulla carta in alto e la foto entra dal basso con la testa arrotondata, come una volta.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo sopra il media</li>
-            <li>Nessun pannello</li>
-            <li><code>inset</code></li>
-            <li>placement extra</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Terme, benessere, hospitality morbida, cosmetica: la curva vale più di mille parole di tono.</dd>
-            <dt>Attenzione</dt><dd>Il raggio va tenuto ampio e coerente col resto della pagina; stretto diventa una bolla da app.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1718,18 +955,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>corner-type-xl</code></p>
           <h3>Tipografia enorme + foto d&#x27;angolo</h3>
-          <p class="desc">Il titolo occupa quasi tutto e la foto si riduce a un riquadro nell&#x27;angolo basso: la parola comanda.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo centrato</li>
-            <li>Nessun pannello</li>
-            <li><code>type-first</code></li>
-            <li><code>center-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Brand con un claim forte e una sola cosa da dire; manifesti, studi, campagne.</dd>
-            <dt>Attenzione</dt><dd>Regge solo con poche parole e un font display che tiene i corpi grandi. Il tracking va stretto a mano.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1740,18 +965,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>magazine-cover-xl</code></p>
           <h3>Copertina — titolo che scavalca</h3>
-          <p class="desc">Foto rientrata e titolo gigante che le passa sopra, come la testata di una rivista sopra il soggetto.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo centrato</li>
-            <li>Nessun pannello</li>
-            <li><code>editorial</code></li>
-            <li><code>center-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Editoriale, moda, food, turismo di carattere: quando vuoi che la pagina sembri stampata.</dd>
-            <dt>Attenzione</dt><dd>La sovrapposizione va dove la foto è calma, mai sulle facce. Serve un contrasto verificato, non sperato.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1762,18 +975,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>strip-top-editorial</code></p>
           <h3>Striscia di foto in alto</h3>
-          <p class="desc">Una fascia di cinque immagini piccole in cima e sotto, sulla carta, il titolo con tutta la sua aria.</p>
-          <ul class="tokens">
-            <li>Collage</li>
-            <li>Testo in basso</li>
-            <li>Nessun pannello</li>
-            <li><code>editorial</code></li>
-            <li>placement extra</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Archivi, rassegne, cataloghi, festival: annuncia varietà prima ancora di scendere.</dd>
-            <dt>Attenzione</dt><dd>Le miniature vanno tagliate sullo stesso formato e sullo stesso soggetto-tipo, o la striscia sembra sporca.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1784,18 +985,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>arc-type-seal</code></p>
           <h3>Testo su tracciato curvo</h3>
-          <p class="desc">Nessuna foto: una scritta che segue un arco sopra il titolo, come il timbro di una bottega.</p>
-          <ul class="tokens">
-            <li>Nessun media</li>
-            <li>Testo centrato</li>
-            <li>Nessun pannello</li>
-            <li><code>type-first</code></li>
-            <li><code>center-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Marchi artigianali, birrifici, panetterie, brand con vocazione di insegna.</dd>
-            <dt>Attenzione</dt><dd>Poche parole sull&#x27;arco e in maiuscoletto spaziato. Se ci metti una frase, il tracciato la rende illeggibile.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1806,18 +995,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>ui-tilt-perspective</code></p>
           <h3>UI in prospettiva</h3>
-          <p class="desc">Lo screenshot inclinato che entra dal bordo destro: si legge come prodotto, non come figura incollata.</p>
-          <ul class="tokens">
-            <li>UI di prodotto</li>
-            <li>Testo a sinistra</li>
-            <li>Nessun pannello</li>
-            <li><code>ui-shot</code></li>
-            <li><code>left-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>SaaS e app dove l&#x27;interfaccia è bella ma nessun dettaglio singolo è decisivo.</dd>
-            <dt>Attenzione</dt><dd>L&#x27;inclinazione rende illeggibili i testi dell&#x27;app: se un numero deve leggersi, va dritto e ingrandito.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1828,18 +1005,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>ui-device-duo</code></p>
           <h3>Desktop + mobile</h3>
-          <p class="desc">Due dispositivi accostati, il telefono davanti allo schermo grande: dichiara che il prodotto sta su entrambi.</p>
-          <ul class="tokens">
-            <li>UI di prodotto</li>
-            <li>Testo a sinistra</li>
-            <li>Plate pieno</li>
-            <li><code>ui-shot</code></li>
-            <li><code>left-solid</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Prodotti con uso misto reale — gestionali con app di campo, servizi che si consultano in mobilità.</dd>
-            <dt>Attenzione</dt><dd>Le due schermate devono mostrare lo stesso momento del flusso, altrimenti raccontano due prodotti.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1850,18 +1015,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>ui-window-glass</code></p>
           <h3>Finestra flottante su vetro</h3>
-          <p class="desc">La UI in una finestra con la sua barra, e il testo su un pannello di vetro smerigliato che la sfiora.</p>
-          <ul class="tokens">
-            <li>UI di prodotto</li>
-            <li>Testo a destra</li>
-            <li>Pannello vetro</li>
-            <li><code>ui-shot</code></li>
-            <li><code>right-solid</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Prodotti desktop, tool professionali, strumenti che si aprono in finestra e non in tab.</dd>
-            <dt>Attenzione</dt><dd>Il vetro chiede contrasto dietro: sopra un&#x27;area piatta smette di leggersi come vetro e sembra un box grigio.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1872,18 +1025,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>map-fullbleed-pins</code></p>
           <h3>Mappa piena con più punti</h3>
-          <p class="desc">La mappa occupa tutto e i punti dichiarano la copertura; il testo sta in basso su una sfumatura di un lato solo.</p>
-          <ul class="tokens">
-            <li>Mappa</li>
-            <li>Testo in basso a sinistra</li>
-            <li>Gradiente di un bordo</li>
-            <li><code>map</code></li>
-            <li>placement extra</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Reti di sedi, servizi a domicilio, itinerari: quando la domanda vera è «arrivate anche da me?».</dd>
-            <dt>Attenzione</dt><dd>Colori della mappa dentro la palette, mai il verde-azzurro di default. Non interattiva nella hero: si trascina per sbaglio.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1894,18 +1035,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>compare-vertical</code></p>
           <h3>Prima / dopo verticale</h3>
-          <p class="desc">Le due immagini stanno una sopra l&#x27;altra con la maniglia orizzontale: il confronto sta sul lato destro, il discorso a sinistra.</p>
-          <ul class="tokens">
-            <li>Prima / dopo</li>
-            <li>Testo a sinistra</li>
-            <li>Plate pieno</li>
-            <li><code>compare</code></li>
-            <li><code>left-solid</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Restauri, prima-dopo di cantiere, trattamenti: quando il taglio verticale spezzerebbe il soggetto.</dd>
-            <dt>Attenzione</dt><dd>Stesso punto di ripresa e stessa luce, o il confronto è propaganda. Serve stato iniziale visibile, non a metà.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1916,18 +1045,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>sequence-horizontal</code></p>
           <h3>Sequenza in striscia</h3>
-          <p class="desc">I frame avanzano in orizzontale in cima con una barra di progresso: il tempo si legge da sinistra a destra.</p>
-          <ul class="tokens">
-            <li>Sequenza a scroll</li>
-            <li>Testo in basso</li>
-            <li>Nessun pannello</li>
-            <li><code>sequence</code></li>
-            <li>placement extra</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Processi in tappe, ricette, lavorazioni, storia di un prodotto in cinque momenti.</dd>
-            <dt>Attenzione</dt><dd>Cinque frame al massimo e leggeri. Va anche senza JavaScript: senza scrub deve restare una striscia sensata.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1938,18 +1055,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>video-portrait-reel</code></p>
           <h3>Video verticale</h3>
-          <p class="desc">Un 9:16 sulla destra, come un reel appoggiato sulla pagina, e il testo che gli parla accanto sulla carta.</p>
-          <ul class="tokens">
-            <li>Video</li>
-            <li>Testo a sinistra</li>
-            <li>Nessun pannello</li>
-            <li><code>video-plate</code></li>
-            <li><code>left-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Brand nati sui social, ristorazione, moda: riusa il girato verticale che esiste già invece di rifarlo.</dd>
-            <dt>Attenzione</dt><dd>Muto, in loop, con poster; il verticale pesa in alto sul mobile — lì va sotto il titolo, non sopra.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1960,18 +1065,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>video-grain-type</code></p>
           <h3>Video + grana + titolo grande</h3>
-          <p class="desc">Filmato pieno con una grana leggera sopra e il titolo enorme al centro: pellicola, non stock footage.</p>
-          <ul class="tokens">
-            <li>Video</li>
-            <li>Testo centrato</li>
-            <li>Nessun pannello</li>
-            <li><code>type-first</code></li>
-            <li><code>center-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Locali notturni, musica, eventi, brand con attitudine ruvida.</dd>
-            <dt>Attenzione</dt><dd>La grana costa in compressione e in accessibilità: tienila sotto il 6% e verifica il contrasto sul frame peggiore.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1982,18 +1075,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>carousel-steps-counter</code></p>
           <h3>Carosello a tappe numerate</h3>
-          <p class="desc">Le slide sono tappe numerate su un rail a sinistra, col contatore in alto: si sa sempre dove si è.</p>
-          <ul class="tokens">
-            <li>Carosello</li>
-            <li>Testo a destra</li>
-            <li>Nessun pannello</li>
-            <li><code>carousel</code></li>
-            <li><code>right-transparent</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Percorsi, itinerari, stagioni, fasi di servizio: quando l&#x27;ordine delle slide significa qualcosa.</dd>
-            <dt>Attenzione</dt><dd>Se l&#x27;ordine conta, l&#x27;autoplay va tolto o rallentato molto: l&#x27;utente deve poter restare su una tappa.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2004,18 +1085,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>carousel-fullbleed-quiet</code></p>
           <h3>Carosello pieno, comandi discreti</h3>
-          <p class="desc">Foto a tutto schermo che si alternano in dissolvenza, copy ancorato in basso, pallini e contatore appena accennati.</p>
-          <ul class="tokens">
-            <li>Carosello</li>
-            <li>Testo in basso</li>
-            <li>Nessun pannello</li>
-            <li><code>carousel</code></li>
-            <li>placement extra</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Quando le immagini sono tutte forti e nessuna merita di essere la prima per sempre.</dd>
-            <dt>Attenzione</dt><dd>Solo la prima slide è LCP: le altre vanno in lazy. Dissolvenze lente (1.2s+) o la hero diventa nervosa.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2026,18 +1095,6 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>wash-editorial-top</code></p>
           <h3>Velo chiaro + titolo in alto</h3>
-          <p class="desc">Un velo chiaro su tutta la foto e il titolo scuro appoggiato in alto: schiarisce invece di scurire.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo sopra il media</li>
-            <li>Velo chiaro</li>
-            <li><code>velo-chiaro</code></li>
-            <li>placement extra</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Foto molto contrastate o confuse, dove il testo scuro non si appoggerebbe da nessuna parte.</dd>
-            <dt>Attenzione</dt><dd>È l&#x27;alternativa buona al velo nero, ma resta un velo: se serve oltre il 45% di opacità, la foto è sbagliata.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2048,24 +1105,11 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
         <div class="body">
           <p class="eyebrow"><code>glass-panel-left</code></p>
           <h3>Pannello vetro a sinistra</h3>
-          <p class="desc">Il blocco testo sta su vetro smerigliato appoggiato sulla foto: la immagine continua a vivere sotto.</p>
-          <ul class="tokens">
-            <li>Foto singola</li>
-            <li>Testo a sinistra</li>
-            <li>Pannello vetro</li>
-            <li><code>plate</code></li>
-            <li><code>left-solid</code></li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Paesaggi e interni con texture ricca che un plate pieno spegnerebbe del tutto.</dd>
-            <dt>Attenzione</dt><dd>`backdrop-filter` costa e su alcuni Android non c&#x27;è: serve un fondo semitrasparente di riserva già leggibile.</dd>
-          </dl>
         </div>
       </article>
   </div>
   <p class="empty" hidden id="empty">Nessun archetipo con questi filtri.</p>
-  <section class="legend"><h2>I tre assi</h2><div class="legend__cols"><div><h3>Media</h3><dl><dt><code>still</code> Foto singola</dt><dd>una sola immagine ferma nel primo viewport</dd><dt><code>carousel</code> Carosello</dt><dd>più slide che si avvicendano (crossfade, slide, deck, verticale)</dd><dt><code>video</code> Video</dt><dd>loop muto o filmato: `poster`, `muted`, `playsinline`, reduced-motion</dd><dt><code>none</code> Nessun media</dt><dd>la hero è tipografia o grafica: nessuna foto, nessun filmato</dd><dt><code>collage</code> Collage</dt><dd>più immagini insieme, formati misti, mosaico senza buchi</dd><dt><code>sequence</code> Sequenza a scroll</dt><dd>pochi frame che avanzano col progress dello scroll</dd><dt><code>ui</code> UI di prodotto</dt><dd>screenshot dell&#x27;app come fotografia del prodotto</dd><dt><code>map</code> Mappa</dt><dd>il luogo come media, nei colori della palette, non interattivo</dd><dt><code>compare</code> Prima / dopo</dt><dd>due immagini divise da una maniglia trascinabile</dd></dl></div><div><h3>Testo</h3><dl><dt><code>left</code> Testo a sinistra</dt><dd>blocco copy sul terzo sinistro</dd><dt><code>right</code> Testo a destra</dt><dd>blocco copy sul terzo destro</dd><dt><code>center</code> Testo centrato</dt><dd>blocco copy al centro — massimo 2 sezioni centrate in pagina</dd><dt><code>bottom-left</code> Testo in basso a sinistra</dt><dd>angolo basso, come i crediti di un manifesto</dd><dt><code>bottom</code> Testo in basso</dt><dd>ancorato al bordo inferiore, centrato</dd><dt><code>top</code> Testo sopra il media</dt><dd>copy fuori dall&#x27;immagine, sulla carta</dd><dt><code>split</code> Testo su due poli</dt><dd>titolo su un polo, metadati o CTA sull&#x27;altro</dd><dt><code>rail</code> Testo su rail laterale</dt><dd>colonna stretta, label anche in `writing-mode: vertical-rl`</dd></dl></div><div><h3>Pannello</h3><dl><dt><code>solid</code> Plate pieno</dt><dd>pannello tinta piena locale dietro il testo, ≤40% dell&#x27;area</dd><dt><code>transparent</code> Nessun pannello</dt><dd>leggibilità dal crop, dal negative space o dal blend</dd><dt><code>wash</code> Velo chiaro</dt><dd>wash col chiaro del brand su tutta la hero, testo scuro</dd><dt><code>glass</code> Pannello vetro</dt><dd>traslucido con blur locale — una volta per progetto, con fallback</dd><dt><code>band</code> Fascia opaca</dt><dd>fascia a tutta larghezza che taglia l&#x27;immagine</dd><dt><code>gradient-edge</code> Gradiente di un bordo</dt><dd>un solo lato sfumato, ≤40% dell&#x27;area</dd></dl></div></div></section>
-  <footer class="credits"><p>Foto e testi delle miniature sono campioni di lavoro: Unsplash (Lorem Picsum) · screenshot di apps/adozioni-dashboard di questo progetto · © OpenStreetMap contributors (ODbL). Marchi e copy sono inventati per far leggere lo schema — colore, font e palette del progetto reale restano derivati da località + carattere + business.</p></footer>
+  <footer class="credits"><p>Foto e marchi delle miniature sono campioni: Unsplash (Lorem Picsum) · screenshot di apps/adozioni-dashboard di questo progetto · © OpenStreetMap contributors (ODbL).</p></footer>
 </main>
 
 <div class="tray" hidden id="tray">
@@ -2083,7 +1127,7 @@ main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
   var empty = document.getElementById('empty');
   var tray = document.getElementById('tray');
   var picked = document.getElementById('picked');
-  var active = { media: [], placement: [], panel: [] };
+  var active = { media: [] };
 
   function apply() {
     var needle = q.value.trim().toLowerCase();

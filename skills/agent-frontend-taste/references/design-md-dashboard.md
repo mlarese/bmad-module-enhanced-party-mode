@@ -1,10 +1,10 @@
 ---
 name: design-md-dashboard
-description: Stampo DESIGN.md per dashboard / admin product
+description: Modello di DESIGN.md per dashboard / admin product
 type: template
 ---
 
-# DESIGN.md — Dashboard (stampo)
+# DESIGN.md — Dashboard (modello)
 
 Usa con `dashboard_recipe.py` + batch `--surface dashboard`. Light **e** dark della stessa famiglia.
 
@@ -40,7 +40,27 @@ Chiarezza e densità controllata. Firma da ricetta (`signature`). No hero market
 
 ## Layout & Spacing
 
-Assi da ricetta: `shell` · `header_bar` · `kpi_style` · `table_pattern` · …
+Decisioni da ricetta: `shell` · `header_bar` · `kpi_style` · `table_pattern` · …
+
+## Dati verosimili (obbligatorio quando i contenuti non erano forniti)
+
+Elenca **cosa è inventato e dove** — telefono, email, indirizzo, P.IVA, prezzi,
+orari, recensioni. Non è la nota di sostituzione vietata nella pagina: lì
+sporcherebbe il lavoro consegnato, qui documenta. La riga di onestà all'owner in chat
+si dà comunque: questa risponde fra sei mesi a «ma questo numero è vero?».
+
+```yaml
+dati_verosimili:
+  - campo: telefono
+    valore: '{quello scritto in pagina}'
+    nota: 'inventato — prefisso non assegnato'
+  - campo: prezzi
+    valore: '{range esposto}'
+    nota: 'plausibili per {activity} a {locale}, non confermati dal cliente'
+```
+
+Se i contenuti li ha forniti l'owner o il sito del cliente, scrivi
+`dati_verosimili: nessuno — contenuti dal cliente`.
 
 ## Do's and Don'ts
 

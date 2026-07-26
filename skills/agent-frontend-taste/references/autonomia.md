@@ -1,8 +1,14 @@
 # Autonomia — nessun human in the loop
 
-Legge dello skill. Vale sempre, su ogni capability (DX · AW · UE · AF), e **batte
-ogni altra regola di questi reference** che dicesse «chiedi», «conferma», «offri»,
-«a vista». Non dipende da nulla fuori dallo skill.
+*(«human in the loop» = un umano nel mezzo del processo, che a un certo punto
+deve rispondere perché il lavoro prosegua. Qui non c'è: si decide e si va
+avanti.)*
+
+Legge dello skill. Vale sempre, su ogni capability (DX · AW · UE · AF — le
+quattro cose che Vesper sa fare: dare la direzione di design, cercare
+riferimenti, scrivere il brief, applicare il codice), e **batte ogni altra regola
+di questi reference** che dicesse «chiedi», «conferma», «offri», «a vista». Non
+dipende da nulla fuori dallo skill.
 
 ## La regola
 
@@ -19,33 +25,34 @@ costa un giro **sempre**, anche quando la risposta era ovvia.
 Se l'owner interviene di sua iniziativa, la sua parola vince e si corregge subito.
 Ma non gli si chiede di intervenire.
 
-## Chi decide: il consiglio, tre goal
+## Chi decide: il consiglio, tre obiettivi
 
 Tutte le scelte che un umano avrebbe sciolto passano dal consiglio
-(`bmad-party-mode --non-interactive`), con goal espliciti. Il consiglio **decide e
+(`bmad-party-mode --non-interactive`), con obiettivi espliciti. Il consiglio **decide e
 dichiara**: non produce domande da girare all'owner. Un consiglio che restituisce
-una domanda ha fallito il goal — si rilancia il goal, non si gira la domanda.
+una domanda ha fallito l'obiettivo — si rilancia l'obiettivo, non si gira la domanda.
 
-### G1 — Lettura (scioglie le ambiguità)
+### G1 — Lettura *(primo giro del consiglio: si legge la richiesta e si scioglie ogni ambiguità, decidendo invece di chiedere)*
 
-> **Goal:** sciogli ogni ambiguità di questo lavoro e chiudila con una decisione,
+> **Obiettivo:** sciogli ogni ambiguità di questo lavoro e chiudila con una decisione,
 > non con una domanda. Decidi: superficie (landing · dashboard · mobile web app),
 > `activity`, `register` (il carattere del business), perimetro reale della
 > richiesta, stack quando nessuna fonte lo dichiara, precedenza fra fonti in
 > conflitto, **il peso dei documenti** (una landing li ha corti, un progetto con back
-> end pieni — ma esistono sempre), e la lettura da dare a ogni punto ambiguo.
+> end pieni — ma esistono sempre), **il profilo di giri** (`leggero` | `pieno`,
+> § *I tetti non si sommano*), e la lettura da dare a ogni punto ambiguo.
 > Contesto:
 > ‹richiesta · dominio · luogo · esito del pre-flight · documenti trovati · sito del
 > cliente›. Per ogni voce: decisione + una riga di motivo + `fatto | assunzione`.
 > Nessuna domanda all'owner.
 
-### G2 — I sei documenti (tutto il consiglio, prima del codice)
+### G2 — I sei documenti *(secondo giro: si scrive ciò che vincola il codice, prima di scriverne una riga)*
 
 **Quando il pre-flight non trova i sei documenti, il consiglio li produce.** Non è una
 scelta di peso del lavoro: è la condizione per scrivere codice sapendo cosa si sta
 scrivendo. Nessuna domanda all'owner in nessun passaggio.
 
-> **Goal:** prima che venga scritta una riga di codice, e senza una sola domanda
+> **Obiettivo:** prima che venga scritta una riga di codice, e senza una sola domanda
 > all'owner, produci ciò che manca fra: **ricerca di dominio** · **ricerca di
 > marketing** · **PRD** (perimetro, requisiti, non-obiettivi) · **documento UX /
 > page spec** (superfici, flussi, stati) · **architettura** (stack, confini, regole
@@ -59,17 +66,46 @@ scrivendo. Nessuna domanda all'owner in nessun passaggio.
 > back end) · **vertical slice** (ogni pezzo end-to-end e consegnabile da solo).
 >
 > **Usa i workflow BMAD**: `bmad-prd`, `bmad-ux`, `bmad-architecture`, `bmad-spec`
-> si **invocano in headless**; quelli con checkpoint si usano come **stampo** —
+> si **invocano in headless**; quelli con checkpoint se ne copia il **modello** —
 > vedi la tabella qui sotto. Ogni affermazione marcata `fatto | assunzione`.
 > Contesto: ‹richiesta · dominio · luogo · register · esito della ricerca ·
 > pre-flight · sito del cliente›.
 
-**Convoca tutto il consiglio, non tre voci.** Il roster intero: chi non ha
+**Convoca tutto il consiglio, non tre voci.** Ci sono tutti: chi non ha
 giurisdizione su un punto tace su quel punto, ma c'è — perché il valore è l'attrito,
-e un tavolo scelto da te contiene solo le obiezioni che ti aspettavi. Parla chi sa
-(evidenza → Mary · deployabilità → Rex · WordPress → Niki · dati personali → Jane ·
-claim → Elena · prezzi → commercialista · buchi → Murat · flusso → Sally · coerenza
-tecnica → Winston · craft → Vesper e Vera).
+e un tavolo scelto da te contiene solo le obiezioni che ti aspettavi.
+
+**L'elenco di chi siede al tavolo è ciò che è installato, e si legge — non si ricorda.**
+`uv run scripts/council_roster.py {project-root}` lo deriva: **ogni agente
+`skills/agent-*` di questo progetto è membro di diritto**, e lo script dice chi
+di loro il gruppo `super-esperti` non ha seduto. Vale perché la lista scritta a
+mano era in tre posti — il file di party, questo paragrafo,
+`implementation-handoff.md` §3 — e i tre erano **già divergenti**: il party
+portava tredici membri mentre i reference ne nominavano undici, e il PM e la dev
+erano nella stanza ma in nessun elenco dei convocati che Vesper leggesse. Una voce che manca
+non dà errore: semplicemente non parla mai, e nessuno se ne accorge.
+
+- **Un agente nuovo in `skills/` entra senza che nessuno lo aggiunga qui.** Se
+  domani compare un agente di sicurezza, di accessibilità o di contenuti, quello
+  è consiglio dal primo lavoro: lo script lo trova, e la riga mancante nel TOML
+  è un difetto di configurazione, **non** un permesso a decidere senza di lui —
+  si convoca per nome in quella seduta e il gruppo si corregge.
+- **Chi siede al tavolo oggi** (istantanea, non la fonte — la fonte è lo script):
+  **agenti** Vesper (craft FE) · Vera Motion (movimento) · Jane Privacy (dati
+  personali) · Elena Giuridis (claim e legale tech) · Rex Wire (infra, hosting,
+  DNS) · Niki Press (WordPress) · Commercialista Mondiale (prezzi, IVA, fiscale);
+  **ruoli BMAD** John (perimetro) · Sally (flusso) · Winston (coerenza tecnica) ·
+  Mary (evidenza) · Amelia (fattibilità implementativa) · Murat (ciò che nessuno
+  ha verificato).
+
+Parla chi sa: evidenza → Mary · perimetro → John · deployabilità → Rex ·
+WordPress → Niki · dati personali → Jane · claim → Elena · prezzi →
+commercialista · buchi → Murat · flusso → Sally · coerenza tecnica → Winston ·
+fattibilità → Amelia · craft → Vesper e Vera.
+
+Fallimento: un elenco di convocati ricopiato a memoria invece che derivato; un agente
+installato che non è mai stato convocato; un gruppo di party incompleto preso
+come il perimetro del consiglio.
 
 **Il peso cambia, l'esistenza no.** Una landing ha un PRD di mezza pagina e
 un'architettura di dieci righe; un progetto con back end, auth e back office li ha
@@ -80,22 +116,28 @@ minuti di consiglio, non tre workflow interattivi.
 **Il `slice_plan` esce da qui**, e la `spec` di ogni slice da lì (§4.2 di
 `implementation-handoff.md`).
 
-**Un goal solo, non sei catene separate.** Il consiglio è il contenitore: dentro, i
-workflow headless si invocano davvero, quelli con checkpoint si usano come stampo
+**Un obiettivo solo, non sei catene separate.** Il consiglio è il contenitore: dentro, i
+workflow headless si invocano davvero, quelli con checkpoint si usano come modello
 (sotto). I documenti che il consiglio si scrive **vincolano come quelli dell'owner**,
 ma ciò che nessuno ha verificato resta assunzione marcata, correggibile in consiglio
 con una varianza — mai con una domanda.
 
-### G3 — Approvazione (decide se si consegna)
+### G3 — Approvazione *(terzo giro: si guarda il lavoro finito e si decide se consegnarlo)*
 
-> **Goal:** approva o rifiuta il deliverable contro i documenti vincolanti (§4.0) e
-> i craft-rules. Approvabile se soddisfa **tutte** le richieste dei
-> documenti, anche se qualcuno l'avrebbe fatto diversamente: il gusto non è un veto.
+> **Obiettivo:** approva o rifiuta il lavoro consegnato contro i documenti vincolanti (§4.0),
+> i craft-rules **e la richiesta originale dell'owner riletta testuale**
+> (`implementation-handoff.md` §6.0: quando i documenti li ha scritti il consiglio,
+> approvarli contro sé stessi non verifica niente — se i due metri divergono vince
+> la richiesta e il documento si emenda). Approvabile se soddisfa **tutte** le
+> richieste dei documenti, anche se qualcuno l'avrebbe fatto diversamente: il gusto
+> non è un veto. Sul craft è rifiutabile **solo ciò che si conta** — un numero, una
+> presenza, un esito di script (§6) — mai una preferenza.
 > Ogni rifiuto nomina la richiesta mancante, e la stessa richiesta non può motivare
-> due rifiuti. **Massimo cinque rifiuti**: al quinto si consegna dichiarando cosa
-> resta scoperto. Parla chi ha giurisdizione. Nessuna domanda all'owner.
+> due rifiuti. **Massimo cinque rifiuti** (tre sul profilo `leggero`): all'ultimo si
+> consegna dichiarando cosa resta scoperto. Parla chi ha giurisdizione. Nessuna
+> domanda all'owner.
 
-Su lavori piccoli i tre goal stanno in una chiamata sola; l'ordine logico resta:
+Su lavori piccoli i tre obiettivi stanno in una chiamata sola; l'ordine logico resta:
 prima si legge, poi si decide, poi si approva.
 
 **Il craft non si vota.** Palette, tipografia, hero, griglia, superfici e motion
@@ -104,7 +146,11 @@ Le scelte di craft che un tempo erano «a vista dell'owner» — hero archetype 
 catalogo, effetto motion dalla gallery — le prendi tu da seed deterministico con le
 esclusioni di MEMORY, e le dichiari.
 
-## I workflow che si fermano si usano come stampo, non come flusso
+## I procedimenti che si fermano: se ne copia il modello, non si fanno partire
+
+*(«workflow» = un procedimento BMAD già scritto, fatto di passi. «Si ferma» = a
+un certo punto chiede qualcosa a un umano e aspetta. «Copiarne il modello» = si
+prendono i suoi schemi, i suoi criteri e la sua disciplina, senza farlo partire.)*
 
 Un workflow BMAD invocato è una **porta**: se dentro ha un checkpoint, il lavoro esce
 di lì e si ferma ad aspettare l'owner — e la legge è saltata, non perché qualcuno
@@ -118,20 +164,20 @@ consiglio o Vesper, dentro il flusso.
 
 | Workflow | Si ferma? | Come si usa |
 |---|---|---|
-| `bmad-quick-dev` | **sì**, in ogni ramo — `step-01` (spec attive → «ask user which to resume»), `step-02` (intent gaps · split · approve/edit), anche `step-oneshot` | **stampo**: `spec-template.md` e lo standard *Ready for Development*. Il codice applicativo lo scrive Vesper con quella disciplina |
-| `bmad-generate-project-context` | **sì**, per costruzione (avanza per step, ognuno con approvazione) | **stampo**: il consiglio scrive `project-context.md` |
-| `bmad-prd` · `bmad-ux` · `bmad-architecture` | **no**: hanno `references/headless.md` | **si invocano** in headless, dentro il goal G2 |
+| `bmad-quick-dev` | **sì**, in ogni ramo — `step-01` (spec attive → «ask user which to resume»), `step-02` (intent gaps · split · approve/edit), anche `step-oneshot` | **modello**: `spec-template.md` e lo standard *Ready for Development*. Il codice applicativo lo scrive Vesper con quella disciplina |
+| `bmad-generate-project-context` | **sì**, per costruzione (avanza per step, ognuno con approvazione) | **modello**: il consiglio scrive `project-context.md` |
+| `bmad-prd` · `bmad-ux` · `bmad-architecture` | **no**: hanno `references/headless.md` | **si invocano** in headless, dentro l'obiettivo G2 |
 | `bmad-spec` | **no**: headless vero, express, slug fornito dal chiamante | **si invoca** (§4.2) |
-| `bmad-review-edge-case-hunter` | **no**: si ferma solo su input vuoto (errore, non domanda) | **si invoca** su ogni documento (tempra, §4.0b) |
+| `bmad-review-edge-case-hunter` | **no**: si ferma solo su input vuoto (errore, non domanda) | **si invoca** su ogni documento (controllo dei documenti, §4.0b) |
 | `bmad-review-adversarial-general` | quasi: «zero findings → re-analyze **or ask for guidance**» | **si invoca**, con la clausola: zero findings → **si ri-analizza**, mai si chiede |
-| `bmad-advanced-elicitation` | **sì**: *è* un menu — «Choose a number (1-5), [r] Reshuffle, [a] List All» | **stampo**: si prende `methods.csv` (71 metodi) e si applicano **tutti quelli applicabili**, senza presentare niente |
+| `bmad-advanced-elicitation` | **sì**: *è* un menu — «Choose a number (1-5), [r] Reshuffle, [a] List All» | **modello**: si prende `methods.csv` (71 metodi) e si applicano **tutti quelli applicabili**, senza presentare niente |
 | `bmad-check-implementation-readiness` | — | **checklist**, riletta dal consiglio |
 
 **L'owner può sempre invocarli lui.** Se è lui a lanciare `bmad-quick-dev`, le
 fermate se le è scelte: si esegue il workflow com'è. La regola vincola te, non lui.
 
 Fallimento: un workflow con checkpoint invocato dentro il flusso; la disciplina di
-quel workflow **saltata** perché non lo si è invocato (lo stampo è obbligatorio quanto
+quel workflow **saltata** perché non lo si è invocato (lo modello è obbligatorio quanto
 lo era il flusso); una porta scoperta dopo, perché nessuno ha guardato prima.
 
 ## Cosa non si chiede mai — e cosa si fa al suo posto
@@ -176,9 +222,39 @@ d'uscita: **si decide e si consegna, dichiarando cosa resta aperto.**
   è rimasta scoperta e perché, come varianza, e portandola nella slice successiva.
   Non si chiede all'owner il permesso di consegnare.
 
-Il tetto è **per lavoro e per deliverable**, non per sessione: non si azzera
+Il tetto è **per lavoro e per lavoro consegnato**, non per sessione: non si azzera
 rinominando il job o rigenerando la pagina. Il conto finisce nello spec — zero
 significa che nessuno guarda davvero, cinque che il problema sta a monte.
+
+### I tetti non si sommano: c'è anche un tetto sul totale
+
+Cinque rimandi di ricerca, più tre passate di controllo dei documenti che possono girare cinque
+volte **su ognuno dei sei documenti**, più cinque giri di readiness, più cinque
+rifiuti in approvazione: ogni ciclo termina, ma **il loro prodotto no**. Nel
+caso peggiore sono un centinaio di sedute per una landing, e siccome nessuna di
+esse interpella l'owner, l'owner non ha modo di accorgersene né di fermarle. Un
+flusso che non si ferma mai deve sapere quanto costa.
+
+1. **Il peso del lavoro fissa i giri, prima di cominciare.** G1 dichiara il
+   **profilo**: `leggero` (landing, pagina singola, restyle) → controllo dei documenti **una
+   passata per documento**, readiness una sola volta, rimandi max 2, rifiuti
+   max 3. `pieno` (back end, auth, dati, ruoli) → i tetti pieni di §3.1 e §6.1.
+   Il profilo si scrive nei documenti in una riga, come tutto il resto.
+2. **Il secondo giro su un documento si guadagna:** si riapre solo se la
+   passata precedente ha prodotto una modifica **sostanziale**. Tre passate che
+   confermano non sono rigore, sono un ciclo che gira.
+3. **Un tetto complessivo per lavoro**, e quando lo si tocca si consegna: al
+   raggiungimento si prende ciò che regge, si dichiara cosa resta scoperto e si
+   scrive la varianza — la stessa via d'uscita di ogni altro tetto.
+4. **L'avviso di apertura dice anche questo** (`implementation-handoff.md`
+   §1.1): non solo *cosa* sta per succedere, ma **quanto** — «profilo leggero:
+   sei documenti corti, una passata di controllo, poi la pagina». Un owner che
+   legge «procedo in autonomia» e non sa se tornerà fra due minuti o fra due ore
+   non è stato informato, è stato avvisato.
+
+Fallimento: tetti pieni applicati a una landing perché «la regola dice cinque»;
+un documento riaperto per la terza volta senza che la seconda abbia cambiato
+niente; un profilo mai dichiarato; un avviso che dice cosa ma non quanto.
 
 ## L'unico confine che resta
 
@@ -193,6 +269,6 @@ distruggere.
 Una domanda all'owner in mezzo al lavoro. Un menù di opzioni. «Confermi?».
 «Preferisci A o B?». «Fammi sapere e procedo». Un catalogo aperto in attesa di una
 scelta. Un beat di scoping. Un consiglio che restituisce domande invece di decisioni.
-Un lavoro che si ferma al quinto rimando. Un sesto rifiuto sullo stesso deliverable,
+Un lavoro che si ferma al quinto rimando. Un sesto rifiuto sullo stesso lavoro consegnato,
 o un rifiuto che ripete una richiesta già corretta. Un avviso scritto come richiesta
 di permesso.

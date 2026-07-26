@@ -125,7 +125,10 @@ def main() -> int:
           [])
 
     # --- craft_axes: the range guard (a silent max(3, n) used to hide this) ---
-    for n in ("0", "-5", "999"):
+    # 1 e 2 stavano dentro il range ma restavano clampati a 3 da un
+    # `max(3, …)` sopravvissuto sotto il guard: il difetto che il commento del
+    # guard dichiarava già corretto. Il minimo vero è 3, e ora lo dice.
+    for n in ("0", "-5", "1", "2", "999"):
         r = run(AXES, "--seed", "2026072609", "--sections", n)
         if r.returncode == 0:
             print(f"FAIL: --sections {n} accettato in silenzio")
@@ -135,8 +138,19 @@ def main() -> int:
             fails += 1
         else:
             print(f"PASS: --sections {n} rifiutato e spiegato")
-    for n in ("1", "7", "40"):
+    for n in ("3", "7", "40"):
         check(f"--sections {n} accettato", run(AXES, "--sections", n).returncode, 0)
+    # Quante sezioni chiedi, tante ne escono: nessun clamp silenzioso.
+    for n in (3, 5, 12):
+        check(f"--sections {n} → {n} righe di alignment_map",
+              len(a.alignment_map(2026072609, n)), n)
+
+    # Su una pagina corta il jitter dello statement non deve collassare a una
+    # sola posizione (era `2 … max(2, n-3)`: con 4 sezioni, sempre la stessa).
+    pos4 = {i for s in range(2026072600, 2026072700)
+            for i, v in enumerate(a.alignment_map(s, 4)) if v == "center"}
+    check("con 4 sezioni lo statement non è inchiodato a un solo slot",
+          len(pos4) > 1, True)
 
     # The third voice tunes to the texture: P(mono | rule-lines) must beat
     # P(mono | baseline-rule) by a wide margin over fixed seeds.

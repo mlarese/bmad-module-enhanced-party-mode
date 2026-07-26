@@ -55,6 +55,17 @@ def main() -> int:
         else:
             print("PASS: PARTIAL_SANCTUM when identity files missing")
 
+    # A mistyped root used to resolve happily and answer FIRST_BREATH: the
+    # agent was "born again" with an empty MEMORY while its real sanctum sat
+    # untouched somewhere else. A path that does not exist is an error.
+    r = subprocess.run([sys.executable, str(WAKE), "/tmp/vesper-non-esiste-xyz"],
+                       capture_output=True, text=True)
+    if r.returncode == 0 or "FIRST_BREATH" in r.stdout:
+        print("FAIL: project-root inesistente trattato come nascita", r.stdout)
+        fails += 1
+    else:
+        print("PASS: project-root inesistente rifiutato, non è una nascita")
+
     return 1 if fails else 0
 
 

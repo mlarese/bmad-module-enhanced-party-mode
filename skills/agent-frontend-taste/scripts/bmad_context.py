@@ -34,9 +34,15 @@ from pathlib import Path
 DEFAULT_PLANNING = "_bmad-output/planning-artifacts"
 DEFAULT_IMPLEMENTATION = "_bmad-output/implementation-artifacts"
 
-PRD_PAT = re.compile(r"prd", re.I)
+PRD_PAT = re.compile(r"(?:^|[^a-z])prd(?:[^a-z]|$)", re.I)
 ARCH_PAT = re.compile(r"architect|architett", re.I)
-UX_PAT = re.compile(r"ux|wireframe|page-?spec", re.I)
+# `ux` bare matched inside `luxury` — and `register: luxury` is a core axis of
+# this skill, so `ricerca-hotel-luxury.md` (a domain research note the council
+# writes itself) came back classified as a BINDING page spec. That flipped
+# `binding` to true, which skipped both the opening warning and the whole
+# "write the six documents" branch: the single most expensive false positive in
+# the pre-flight. Same trap for `deluxe`, `flux`, `auxiliary`.
+UX_PAT = re.compile(r"(?:^|[^a-z])ux(?:[^a-z]|$)|wireframe|page-?spec", re.I)
 
 # Headings inside the architecture doc that carry the binding stack.
 STACK_HEADING = re.compile(r"stack|tecnolog|tech\b|framework", re.I)
@@ -370,8 +376,9 @@ def render_md(d: dict) -> str:
             "mai **lorem ipsum**, mai gergo da landing generica. Il deliverable è "
             "**finito**: nessun `TODO`, nessun «da sostituire», nessun elenco di dati "
             "fittizi nel file — prezzi, orari e contatti si scrivono verosimili e che "
-            "non siano veri si dice **all'owner in chat**, non nell'artefatto. "
-            "Il project context, se esiste, resta applicato."
+            "non siano veri si dice **all'owner in chat** e si elenca nel `DESIGN.md` "
+            "(voce `dati_verosimili:`), mai nell'artefatto: la chat sparisce, il sito "
+            "resta. Il project context, se esiste, resta applicato."
         )
         lines.append("")
         lines.append(
@@ -391,7 +398,10 @@ def render_md(d: dict) -> str:
             "qui: procedo in autonomia (ricerca di dominio e marketing, casi limite, "
             "review avversaria); perimetro, stack e testi li scelgo io — il copy "
             "dal dominio, e contatti/prezzi/orari saranno verosimili ma non veri, "
-            "te lo dico qui perché nella pagina non ci sarà scritto». È una "
+            "te lo dico qui perché nella pagina non ci sarà scritto». Dice anche "
+            "**quanto**, non solo cosa: il profilo di giri deciso da G1 (`leggero` "
+            "su una landing → sei documenti corti e una passata di tempra; `pieno` "
+            "quando c'è back end) sta nell'avviso in mezza riga. È una "
             "dichiarazione, non una domanda: detto, si procede nella stessa "
             "risposta — niente «fermami se…», niente attesa. "
             "Non sostituisce la dichiarazione nello spec (o in chat se non c'è spec): "

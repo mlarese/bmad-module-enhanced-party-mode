@@ -44,12 +44,12 @@ h1 { font-family: var(--serif); font-weight: 500; font-size: clamp(2rem, 5.5vw, 
 .count { font-family: var(--mono); font-size: .72rem; color: var(--ink-2); white-space: nowrap; }
 
 main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
-.grid { display: grid; gap: 1px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 23rem), 1fr)); background: var(--rule); border: 1px solid var(--rule); }
-.card { background: var(--paper); padding: 1rem; display: flex; flex-direction: column; gap: .75rem; cursor: pointer; }
+.grid { display: grid; gap: 1px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 11.5rem), 1fr)); background: var(--rule); border: 1px solid var(--rule); }
+.card { background: var(--paper); padding: .6rem; display: flex; flex-direction: column; gap: .45rem; cursor: pointer; }
 .card[aria-pressed="true"] { background: var(--paper-2); box-shadow: inset 3px 0 0 var(--hot); }
-.card .eyebrow { margin: 0; font-family: var(--mono); font-size: .68rem; letter-spacing: .06em; color: var(--ink-2); display: flex; gap: .5rem; align-items: baseline; }
+.card .eyebrow { margin: 0; font-family: var(--mono); font-size: .6rem; letter-spacing: .06em; color: var(--ink-2); display: flex; gap: .5rem; align-items: baseline; }
 .card .eyebrow b { color: var(--hot); font-weight: 600; }
-.card h3 { font-family: var(--serif); font-weight: 500; font-size: 1.16rem; line-height: 1.15; letter-spacing: -.02em; margin: 0; }
+.card h3 { font-family: var(--serif); font-weight: 500; font-size: .95rem; line-height: 1.15; letter-spacing: -.02em; margin: 0; }
 .card .desc { margin: 0; font-size: .87rem; color: var(--ink-2); max-width: 52ch; text-wrap: pretty; }
 .flag { display: inline-block; margin-left: .4rem; font-family: var(--mono); font-size: .58rem; letter-spacing: .1em; text-transform: uppercase; color: var(--hot); border: 1px dashed currentColor; border-radius: 999px; padding: .1rem .45rem; vertical-align: middle; }
 .flag--inline { margin: 0; }
@@ -590,21 +590,13 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
 </head>
 <body>
 <header class="masthead">
-  <p class="kicker">agent-web-animations · catalogo effetti</p>
-  <h1>Scegli il movimento guardandolo.</h1>
-  <p class="lede">Ogni riquadro <strong>esegue</strong> il suo effetto: non è uno schema, è
-  l'animazione. 117 effetti in 12 famiglie, con la tecnica vera che
-  servirebbe in produzione e quanto costa portarsela in pagina.</p>
-  <p class="lede">Dimmi il numero o l'<code>id</code> (o selezionane più d'uno e copia la lista).
-  Tredici effetti hanno bisogno di una libreria vera — WebGL, canvas, Lottie, Rive: lì la
-  miniatura è marcata <span class="flag flag--inline">resa approssimata</span>, perché un
-  catalogo che finge i propri campioni è peggio di una tabella.</p>
+  <h1>Movimento — 117 esempi</h1>
 </header>
 
 <div class="toolbar">
-  <div class="chips" role="group" aria-label="Famiglia"><span class="chips__label">Famiglia</span><button type="button" class="chip" data-group="cat" data-value="reveal" title="L&#x27;elemento entra in scena quando arriva nel viewport." aria-pressed="false">Reveal / entrata</button><button type="button" class="chip" data-group="cat" data-value="text" title="La parola è il soggetto: lettere, righe, numeri, scritte in movimento." aria-pressed="false">Testo</button><button type="button" class="chip" data-group="cat" data-value="scroll" title="Il movimento è guidato dalla posizione o dalla progressione dello scroll." aria-pressed="false">Scroll</button><button type="button" class="chip" data-group="cat" data-value="hero" title="Primo viewport e piani di fondo: quello che si muove dietro al contenuto." aria-pressed="false">Hero e sfondi</button><button type="button" class="chip" data-group="cat" data-value="hover" title="Risposte al puntatore e al click: il feedback che fa sentire viva l&#x27;interfaccia." aria-pressed="false">Hover e micro-interazioni</button><button type="button" class="chip" data-group="cat" data-value="nav" title="Menu, header, indicatori: il movimento che orienta." aria-pressed="false">Navigazione</button><button type="button" class="chip" data-group="cat" data-value="layout" title="Griglie, filtri, caroselli, accordion: elementi che si riordinano." aria-pressed="false">Layout e liste</button><button type="button" class="chip" data-group="cat" data-value="page" title="Il passaggio tra due viste, incluso il caricamento iniziale." aria-pressed="false">Transizioni di pagina</button><button type="button" class="chip" data-group="cat" data-value="feedback" title="Attesa, esito, errore: il movimento che comunica cosa sta succedendo." aria-pressed="false">Feedback e stato</button><button type="button" class="chip" data-group="cat" data-value="loop" title="Movimento continuo e discreto che tiene viva la pagina senza chiedere attenzione." aria-pressed="false">Loop ambientali</button><button type="button" class="chip" data-group="cat" data-value="svg" title="Tracciati, forme, icone e animazioni importate." aria-pressed="false">SVG e vettoriali</button><button type="button" class="chip" data-group="cat" data-value="3d" title="Profondità vera, shader e scene: la fascia più costosa." aria-pressed="false">3D e WebGL</button></div><div class="chips" role="group" aria-label="Costo"><span class="chips__label">Costo</span><button type="button" class="chip" data-group="cost" data-value="free" title="Solo CSS: nessun peso aggiunto, nessun rischio." aria-pressed="false">Gratis</button><button type="button" class="chip" data-group="cost" data-value="light" title="Poco JavaScript o un observer: peso trascurabile, attenzione al reflow." aria-pressed="false">Leggero</button><button type="button" class="chip" data-group="cost" data-value="heavy" title="Libreria, canvas o GPU: si giustifica solo se è il messaggio, e va misurato." aria-pressed="false">Pesante</button></div><div class="chips" role="group" aria-label="Tecnica"><span class="chips__label">Tecnica</span><button type="button" class="chip" data-group="tech" data-value="CSS" title="Keyframes o transition: nessun JavaScript." aria-pressed="false">CSS</button><button type="button" class="chip" data-group="tech" data-value="IO" title="IntersectionObserver: fa scattare l&#x27;animazione all&#x27;ingresso in viewport." aria-pressed="false">IO</button><button type="button" class="chip" data-group="tech" data-value="GSAP" title="GSAP e ScrollTrigger: timeline e scrub precisi." aria-pressed="false">GSAP</button><button type="button" class="chip" data-group="tech" data-value="WA" title="Web Animations API: animazioni da JavaScript senza libreria." aria-pressed="false">WA</button><button type="button" class="chip" data-group="tech" data-value="SVG" title="SMIL, stroke-dasharray o mask su vettoriale." aria-pressed="false">SVG</button><button type="button" class="chip" data-group="tech" data-value="CANVAS" title="Disegno su canvas 2D, frame per frame." aria-pressed="false">CANVAS</button><button type="button" class="chip" data-group="tech" data-value="WEBGL" title="three.js, OGL o shader: GPU." aria-pressed="false">WEBGL</button><button type="button" class="chip" data-group="tech" data-value="LIB" title="Libreria dedicata (Swiper, Lenis, Lottie, Rive, Barba...)." aria-pressed="false">LIB</button><button type="button" class="chip" data-group="tech" data-value="NATIVE" title="API del browser: View Transitions, scroll-driven animations, scroll-snap." aria-pressed="false">NATIVE</button></div>
+  <div class="chips" role="group" aria-label="Famiglia"><span class="chips__label">Famiglia</span><button type="button" class="chip" data-group="cat" data-value="reveal" title="L&#x27;elemento entra in scena quando arriva nel viewport." aria-pressed="false">Reveal / entrata</button><button type="button" class="chip" data-group="cat" data-value="text" title="La parola è il soggetto: lettere, righe, numeri, scritte in movimento." aria-pressed="false">Testo</button><button type="button" class="chip" data-group="cat" data-value="scroll" title="Il movimento è guidato dalla posizione o dalla progressione dello scroll." aria-pressed="false">Scroll</button><button type="button" class="chip" data-group="cat" data-value="hero" title="Primo viewport e piani di fondo: quello che si muove dietro al contenuto." aria-pressed="false">Hero e sfondi</button><button type="button" class="chip" data-group="cat" data-value="hover" title="Risposte al puntatore e al click: il feedback che fa sentire viva l&#x27;interfaccia." aria-pressed="false">Hover e micro-interazioni</button><button type="button" class="chip" data-group="cat" data-value="nav" title="Menu, header, indicatori: il movimento che orienta." aria-pressed="false">Navigazione</button><button type="button" class="chip" data-group="cat" data-value="layout" title="Griglie, filtri, caroselli, accordion: elementi che si riordinano." aria-pressed="false">Layout e liste</button><button type="button" class="chip" data-group="cat" data-value="page" title="Il passaggio tra due viste, incluso il caricamento iniziale." aria-pressed="false">Transizioni di pagina</button><button type="button" class="chip" data-group="cat" data-value="feedback" title="Attesa, esito, errore: il movimento che comunica cosa sta succedendo." aria-pressed="false">Feedback e stato</button><button type="button" class="chip" data-group="cat" data-value="loop" title="Movimento continuo e discreto che tiene viva la pagina senza chiedere attenzione." aria-pressed="false">Loop ambientali</button><button type="button" class="chip" data-group="cat" data-value="svg" title="Tracciati, forme, icone e animazioni importate." aria-pressed="false">SVG e vettoriali</button><button type="button" class="chip" data-group="cat" data-value="3d" title="Profondità vera, shader e scene: la fascia più costosa." aria-pressed="false">3D e WebGL</button></div>
   <label class="search"><span class="sr">Cerca</span>
-    <input type="search" id="q" placeholder="Cerca: scroll, hover, testo, gratis…"></label>
+    <input type="search" id="q" placeholder="Cerca"></label>
   <button type="button" class="btn" id="motion">Metti in pausa</button>
   <button type="button" class="btn" id="reset">Azzera</button>
   <span class="count" id="count"></span>
@@ -620,16 +612,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>1</b> <code>fade-in</code></p>
           <h3>Fade in</h3>
-          <p class="desc">L&#x27;elemento passa da trasparente a pieno, senza spostarsi.</p>
-          <ul class="tokens">
-            <li>Reveal / entrata</li>
-            <li><code>CSS</code></li><li><code>IO</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Il default onesto: quando vuoi solo ammorbidire l&#x27;ingresso senza dichiarare una direzione.</dd>
-            <dt>Attenzione</dt><dd>Sotto i 250ms non si percepisce, sopra i 700ms si aspetta. Mai sul contenuto sopra la piega.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -640,16 +622,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>2</b> <code>fade-up</code></p>
           <h3>Fade up / down / left / right</h3>
-          <p class="desc">Comparsa con una piccola traslazione: l&#x27;elemento arriva da una direzione.</p>
-          <ul class="tokens">
-            <li>Reveal / entrata</li>
-            <li><code>CSS</code></li><li><code>IO</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Reveal di sezione standard; la direzione racconta da dove viene il contenuto.</dd>
-            <dt>Attenzione</dt><dd>Traslazioni da 16 a 40px. Se tutta la pagina entra da sotto, nessuna sezione ha più carattere.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -660,16 +632,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>3</b> <code>zoom-in</code></p>
           <h3>Zoom in / zoom out</h3>
-          <p class="desc">L&#x27;elemento cresce (o cala) fino alla sua scala finale mentre appare.</p>
-          <ul class="tokens">
-            <li>Reveal / entrata</li>
-            <li><code>CSS</code></li><li><code>IO</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Immagini e card che devono sembrare avvicinarsi; buono per gallerie.</dd>
-            <dt>Attenzione</dt><dd>Partire sotto 0.94 fa sobbalzare il layout; su testo rende sfocata la resa in transizione.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -680,16 +642,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>4</b> <code>blur-in</code></p>
           <h3>Blur in</h3>
-          <p class="desc">Da sfocato a nitido: la messa a fuoco come metafora dell&#x27;arrivo.</p>
-          <ul class="tokens">
-            <li>Reveal / entrata</li>
-            <li><code>CSS</code></li><li><code>IO</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Hero editoriali, immagini di apertura, brand che vogliono un ingresso morbido.</dd>
-            <dt>Attenzione</dt><dd>`filter: blur` costa in composizione: pochi elementi per volta, mai su liste lunghe.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -700,16 +652,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>5</b> <code>clip-wipe</code></p>
           <h3>Clip-path wipe (tendina)</h3>
-          <p class="desc">Una tendina scopre l&#x27;elemento da un lato, senza che l&#x27;elemento si muova.</p>
-          <ul class="tokens">
-            <li>Reveal / entrata</li>
-            <li><code>CSS</code></li><li><code>IO</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Titoli e immagini in pagine editoriali: più netto e meno molle del fade.</dd>
-            <dt>Attenzione</dt><dd>La direzione della tendina deve seguire la lettura, non contraddirla.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -720,16 +662,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>6</b> <code>mask-reveal</code></p>
           <h3>Mask reveal immagine</h3>
-          <p class="desc">Un pannello scorre via e lascia l&#x27;immagine, che intanto si assesta di poco.</p>
-          <ul class="tokens">
-            <li>Reveal / entrata</li>
-            <li><code>CSS</code></li><li><code>GSAP</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Foto d&#x27;apertura e portfolio: la più elegante delle entrate su media.</dd>
-            <dt>Attenzione</dt><dd>Serve un contrasto tra pannello e sfondo, o non si legge il gesto.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -740,16 +672,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>7</b> <code>flip-3d</code></p>
           <h3>Flip 3D su X o Y</h3>
-          <p class="desc">L&#x27;elemento ruota su un asse mostrando la faccia frontale.</p>
-          <ul class="tokens">
-            <li>Reveal / entrata</li>
-            <li><code>CSS</code></li><li><code>IO</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Card di gioco, statistiche, elementi che vogliono un tono giocoso.</dd>
-            <dt>Attenzione</dt><dd>Con `perspective` sbagliata sembra un errore. Su testo lungo è illeggibile a metà rotazione.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -760,16 +682,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>8</b> <code>rotate-in</code></p>
           <h3>Rotate in / swing</h3>
-          <p class="desc">Piccola rotazione che si annulla arrivando a zero.</p>
-          <ul class="tokens">
-            <li>Reveal / entrata</li>
-            <li><code>CSS</code></li><li><code>IO</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Elementi sparsi, polaroid, badge: dove la geometria è già informale.</dd>
-            <dt>Attenzione</dt><dd>Oltre i 6-8 gradi diventa cartoon. Mai su blocchi di testo.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -780,16 +692,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>9</b> <code>stagger-grid</code></p>
           <h3>Stagger di griglia</h3>
-          <p class="desc">Le celle entrano a cascata con un ritardo crescente invece che tutte insieme.</p>
-          <ul class="tokens">
-            <li>Reveal / entrata</li>
-            <li><code>CSS</code></li><li><code>GSAP</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Griglie di card, gallerie, listati: dà ritmo a un blocco altrimenti piatto.</dd>
-            <dt>Attenzione</dt><dd>Il ritardo totale non deve superare ~600ms: oltre, l&#x27;ultima card arriva quando l&#x27;utente è già oltre.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -800,16 +702,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>10</b> <code>seq-section</code></p>
           <h3>Reveal sequenziale di sezione</h3>
-          <p class="desc">Occhiello, titolo, testo e pulsante entrano in ordine, non in blocco.</p>
-          <ul class="tokens">
-            <li>Reveal / entrata</li>
-            <li><code>GSAP</code></li><li><code>CSS</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Hero e sezioni chiave: costruisce la gerarchia nel tempo oltre che nello spazio.</dd>
-            <dt>Attenzione</dt><dd>L&#x27;ordine deve essere quello di lettura. Il CTA per ultimo, ma non troppo dopo.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -820,16 +712,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>11</b> <code>curtain</code></p>
           <h3>Curtain reveal (due metà)</h3>
-          <p class="desc">Due metà si aprono e scoprono il contenuto al centro.</p>
-          <ul class="tokens">
-            <li>Reveal / entrata</li>
-            <li><code>CSS</code></li><li><code>GSAP</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Aperture di pagina, sipari, lanci: un gesto teatrale, da usare una volta sola.</dd>
-            <dt>Attenzione</dt><dd>È vistoso: uno per pagina. Ritarda il contenuto, quindi mai su pagine di servizio.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -840,16 +722,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>12</b> <code>split-chars</code></p>
           <h3>Split per lettera</h3>
-          <p class="desc">Le lettere entrano una dopo l&#x27;altra con un ritardo minimo.</p>
-          <ul class="tokens">
-            <li>Testo</li>
-            <li><code>LIB</code></li><li><code>GSAP</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Titoli brevi e memorabili; brand che vogliono firmare la parola.</dd>
-            <dt>Attenzione</dt><dd>Spezza il testo per gli screen reader: serve `aria-label` sull&#x27;intero titolo. Solo poche parole.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -860,16 +732,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>13</b> <code>split-words</code></p>
           <h3>Split per parola</h3>
-          <p class="desc">Le parole entrano in sequenza, mantenendo leggibile l&#x27;unità di senso.</p>
-          <ul class="tokens">
-            <li>Testo</li>
-            <li><code>LIB</code></li><li><code>GSAP</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>L&#x27;alternativa sensata al split per lettera su titoli di più parole.</dd>
-            <dt>Attenzione</dt><dd>Stesso problema di accessibilità del per-lettera, ma meno grave. Ritardi sotto i 60ms.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -880,16 +742,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>14</b> <code>split-lines</code></p>
           <h3>Split per riga con mask</h3>
-          <p class="desc">Le righe salgono da sotto una maschera, come uscissero da una fessura.</p>
-          <ul class="tokens">
-            <li>Testo</li>
-            <li><code>LIB</code></li><li><code>GSAP</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Il reveal tipografico più raffinato: editoriale, moda, studi di design.</dd>
-            <dt>Attenzione</dt><dd>Va ricalcolato al resize, o le righe si rompono e la maschera taglia male.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -900,16 +752,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>15</b> <code>typewriter</code></p>
           <h3>Typewriter</h3>
-          <p class="desc">Il testo si scrive carattere per carattere con un cursore lampeggiante.</p>
-          <ul class="tokens">
-            <li>Testo</li>
-            <li><code>LIB</code></li><li><code>WA</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Terminali, prodotti per sviluppatori, tono conversazionale.</dd>
-            <dt>Attenzione</dt><dd>Lento da leggere e fastidioso se ripetuto. Mai su contenuto che serve subito.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -920,16 +762,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>16</b> <code>scramble</code></p>
           <h3>Scramble / decrypt</h3>
-          <p class="desc">I caratteri si mescolano e poi si risolvono nella parola giusta.</p>
-          <ul class="tokens">
-            <li>Testo</li>
-            <li><code>GSAP</code></li><li><code>WA</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Tecnologia, sicurezza, dati: dice «calcolo» senza scriverlo.</dd>
-            <dt>Attenzione</dt><dd>Illeggibile durante l&#x27;effetto: mai su informazioni che l&#x27;utente sta cercando.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -940,16 +772,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>17</b> <code>counter</code></p>
           <h3>Counter numerico</h3>
-          <p class="desc">Il numero sale da zero al valore finale quando entra in viewport.</p>
-          <ul class="tokens">
-            <li>Testo</li>
-            <li><code>WA</code></li><li><code>IO</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Statistiche, risultati, prove di scala: dà peso alla cifra.</dd>
-            <dt>Attenzione</dt><dd>`tabular-nums` obbligatorio o la cifra balla. Il valore finale deve stare nell&#x27;HTML per SEO e screen reader.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -960,16 +782,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>18</b> <code>odometer</code></p>
           <h3>Odometer a rullo</h3>
-          <p class="desc">Le cifre scorrono verticalmente come i rulli di un contatore.</p>
-          <ul class="tokens">
-            <li>Testo</li>
-            <li><code>LIB</code></li><li><code>CSS</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Prezzi che cambiano, contatori live, dashboard con valori in aggiornamento.</dd>
-            <dt>Attenzione</dt><dd>Bello ma pesante da fare bene: se il valore cambia spesso, il rullo diventa rumore.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -980,16 +792,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>19</b> <code>marquee</code></p>
           <h3>Marquee orizzontale infinito</h3>
-          <p class="desc">Una striscia di testo scorre in continuo senza inizio né fine.</p>
-          <ul class="tokens">
-            <li>Testo</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Annunci, liste di servizi, brand con attitudine grafica forte.</dd>
-            <dt>Attenzione</dt><dd>Va duplicato il contenuto per il loop senza salto. Fermalo all&#x27;hover e su reduced-motion.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1000,16 +802,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>20</b> <code>marquee-scroll</code></p>
           <h3>Marquee legato allo scroll</h3>
-          <p class="desc">La striscia accelera, rallenta e inverte seguendo lo scroll dell&#x27;utente.</p>
-          <ul class="tokens">
-            <li>Testo</li>
-            <li><code>GSAP</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Pagine lunghe con carattere: lega il movimento alla mano invece che al tempo.</dd>
-            <dt>Attenzione</dt><dd>Se non torna mai ferma, disturba. Serve un&#x27;inerzia, non un aggancio rigido.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1020,16 +812,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>21</b> <code>circular-text</code></p>
           <h3>Testo su tracciato circolare</h3>
-          <p class="desc">Una scritta segue un cerchio e ruota lentamente su sé stessa.</p>
-          <ul class="tokens">
-            <li>Testo</li>
-            <li><code>SVG</code></li><li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Sigilli, badge «scorri», marchi artigianali.</dd>
-            <dt>Attenzione</dt><dd>Poche parole in maiuscoletto spaziato: una frase sul cerchio non si legge.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1040,16 +822,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>22</b> <code>gradient-text</code></p>
           <h3>Gradient text animato</h3>
-          <p class="desc">Un gradiente scorre dentro le lettere tramite `background-clip: text`.</p>
-          <ul class="tokens">
-            <li>Testo</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Titoli di prodotti tech, momenti di enfasi isolati.</dd>
-            <dt>Attenzione</dt><dd>È il cliché AI per eccellenza: usato su viola-indaco è squalificante. Serve contrasto verificato.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1060,16 +832,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>23</b> <code>underline-draw</code></p>
           <h3>Highlight che si disegna</h3>
-          <p class="desc">Una linea o un evidenziatore si estende sotto la parola.</p>
-          <ul class="tokens">
-            <li>Testo</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Evidenziare un concetto nel corpo del testo senza grassetti.</dd>
-            <dt>Attenzione</dt><dd>Va ancorata alla baseline e non deve tagliare i discendenti (g, p, q).</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1080,16 +842,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>24</b> <code>reveal-on-scroll</code></p>
           <h3>Reveal on scroll</h3>
-          <p class="desc">Gli elementi si animano quando entrano nel viewport, non al caricamento.</p>
-          <ul class="tokens">
-            <li>Scroll</li>
-            <li><code>IO</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Il meccanismo base di quasi tutte le pagine lunghe.</dd>
-            <dt>Attenzione</dt><dd>Reversibile (repeat), non one-shot. Soglia al 15-20%: al 50% l&#x27;utente ha già visto l&#x27;elemento fermo.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1100,16 +852,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>25</b> <code>parallax-layers</code></p>
           <h3>Parallasse multi livello</h3>
-          <p class="desc">Piani diversi scorrono a velocità diverse creando profondità.</p>
-          <ul class="tokens">
-            <li>Scroll</li>
-            <li><code>GSAP</code></li><li><code>WA</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Hero e sezioni immersive dove la foto è protagonista.</dd>
-            <dt>Attenzione</dt><dd>Massimo tre piani e differenze piccole (0.1-0.3): oltre, viene il mal di mare.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1120,16 +862,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>26</b> <code>parallax-bg</code></p>
           <h3>Parallasse su immagine di sfondo</h3>
-          <p class="desc">Lo sfondo si muove più lentamente del contenuto che ci scorre sopra.</p>
-          <ul class="tokens">
-            <li>Scroll</li>
-            <li><code>CSS</code></li><li><code>GSAP</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Fasce di stacco tra sezioni: costa poco e dà respiro.</dd>
-            <dt>Attenzione</dt><dd>`background-attachment: fixed` è rotto su iOS e costa in repaint: meglio transform.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1140,16 +872,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>27</b> <code>scrub</code></p>
           <h3>Scrub timeline</h3>
-          <p class="desc">L&#x27;animazione avanza e torna indietro seguendo la progressione dello scroll.</p>
-          <ul class="tokens">
-            <li>Scroll</li>
-            <li><code>GSAP</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Racconti in cui il tempo lo decide l&#x27;utente: prodotti che si smontano, processi.</dd>
-            <dt>Attenzione</dt><dd>Va sempre reversibile e senza inerzia infinita. Su mobile ricalcola dopo il cambio di viewport.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1160,16 +882,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>28</b> <code>pin</code></p>
           <h3>Pin di sezione</h3>
-          <p class="desc">La sezione resta ferma mentre il contenuto interno avanza.</p>
-          <ul class="tokens">
-            <li>Scroll</li>
-            <li><code>GSAP</code></li><li><code>CSS</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Passaggi chiave che meritano di essere raccontati in più battute.</dd>
-            <dt>Attenzione</dt><dd>Ruba scroll: se non succede niente mentre è agganciata, l&#x27;utente si sente bloccato.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1180,16 +892,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>29</b> <code>hscroll</code></p>
           <h3>Scroll orizzontale</h3>
-          <p class="desc">Una galleria scorre in orizzontale mentre la pagina scorre in verticale.</p>
-          <ul class="tokens">
-            <li>Scroll</li>
-            <li><code>GSAP</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Portfolio, timeline, cataloghi: rompe il ritmo verticale una volta sola.</dd>
-            <dt>Attenzione</dt><dd>Serve un&#x27;uscita evidente e la tastiera deve poterlo attraversare. Su mobile spesso va disattivato.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1200,16 +902,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>30</b> <code>progress-bar</code></p>
           <h3>Progress bar di lettura</h3>
-          <p class="desc">Una barra sottile indica quanto manca alla fine della pagina.</p>
-          <ul class="tokens">
-            <li>Scroll</li>
-            <li><code>NATIVE</code></li><li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Articoli lunghi, documentazione, guide.</dd>
-            <dt>Attenzione</dt><dd>Solo su contenuti davvero lunghi. Su una landing di tre schermate è decorazione.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1220,16 +912,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>31</b> <code>header-shrink</code></p>
           <h3>Header che si rimpicciolisce</h3>
-          <p class="desc">L&#x27;header perde altezza e guadagna densità dopo i primi pixel di scroll.</p>
-          <ul class="tokens">
-            <li>Scroll</li>
-            <li><code>CSS</code></li><li><code>IO</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Siti con navigazione ricca che devono restituire spazio al contenuto.</dd>
-            <dt>Attenzione</dt><dd>Il salto va animato, non istantaneo, e l&#x27;altezza finale deve reggere il logo senza deformarlo.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1240,16 +922,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>32</b> <code>header-hide</code></p>
           <h3>Header che si nasconde e riappare</h3>
-          <p class="desc">Scompare scorrendo verso il basso, torna appena si risale.</p>
-          <ul class="tokens">
-            <li>Scroll</li>
-            <li><code>IO</code></li><li><code>WA</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Pagine lunghe da leggere dove la barra ruba spazio prezioso.</dd>
-            <dt>Attenzione</dt><dd>Serve una soglia (60-80px) o l&#x27;header sfarfalla a ogni micro-movimento.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1260,16 +932,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>33</b> <code>scroll-snap</code></p>
           <h3>Scroll snap tra sezioni</h3>
-          <p class="desc">Lo scroll si aggancia a schermate intere invece di fermarsi a metà.</p>
-          <ul class="tokens">
-            <li>Scroll</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Presentazioni, storie a capitoli, siti a schermate piene.</dd>
-            <dt>Attenzione</dt><dd>Odiato quando è forzato: usa `proximity`, mai `mandatory`, se le sezioni sono più alte del viewport.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1280,16 +942,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>34</b> <code>image-sequence</code></p>
           <h3>Image sequence su canvas<span class="flag" title="L'effetto vero richiede una libreria: qui è una resa approssimata, dichiarata.">resa approssimata</span></h3>
-          <p class="desc">Decine di frame disegnati su canvas che avanzano con lo scroll.</p>
-          <ul class="tokens">
-            <li>Scroll</li>
-            <li><code>CANVAS</code></li><li><code>GSAP</code></li>
-            <li class="cost cost--heavy">Pesante</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Prodotti fisici che ruotano, il trucco delle pagine Apple.</dd>
-            <dt>Attenzione</dt><dd>Costa megabyte: senza preload e senza versione ridotta per mobile è un disastro di performance.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1300,16 +952,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>35</b> <code>scroll-driven</code></p>
           <h3>Scroll-driven animations native</h3>
-          <p class="desc">`animation-timeline: view()` lega l&#x27;animazione allo scroll senza JavaScript.</p>
-          <ul class="tokens">
-            <li>Scroll</li>
-            <li><code>NATIVE</code></li><li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Da preferire a GSAP quando basta: gira sul compositor, costa quasi nulla.</dd>
-            <dt>Attenzione</dt><dd>Supporto ancora parziale: serve che senza la feature l&#x27;elemento resti visibile e fermo.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1320,16 +962,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>36</b> <code>smooth-scroll</code></p>
           <h3>Smooth scroll / inerzia</h3>
-          <p class="desc">Lo scroll acquista inerzia e si ferma con dolcezza (Lenis, Locomotive).</p>
-          <ul class="tokens">
-            <li>Scroll</li>
-            <li><code>LIB</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Siti da premio dove tutto il resto del movimento è già curato.</dd>
-            <dt>Attenzione</dt><dd>Toglie il controllo all&#x27;utente e rompe `Ctrl+F` e l&#x27;ancoraggio: va disattivato su reduced-motion.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1340,16 +972,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>37</b> <code>section-color</code></p>
           <h3>Cambio colore allo scroll</h3>
-          <p class="desc">Il fondo della pagina cambia tinta passando da una sezione all&#x27;altra.</p>
-          <ul class="tokens">
-            <li>Scroll</li>
-            <li><code>IO</code></li><li><code>CSS</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Pagine a capitoli: dà identità a ogni blocco senza cambiare layout.</dd>
-            <dt>Attenzione</dt><dd>La transizione deve essere lenta (600ms+) e il testo deve restare leggibile in ogni fase.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1360,16 +982,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>38</b> <code>ken-burns</code></p>
           <h3>Ken Burns</h3>
-          <p class="desc">Zoom lentissimo e continuo su una foto ferma.</p>
-          <ul class="tokens">
-            <li>Hero e sfondi</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Hero fotografiche che devono respirare senza un video.</dd>
-            <dt>Attenzione</dt><dd>Molto lento (15-25s) e con scala minima: sopra 1.12 si vede la foto perdere definizione.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1380,16 +992,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>39</b> <code>hero-crossfade</code></p>
           <h3>Slider hero con crossfade</h3>
-          <p class="desc">Le immagini si sostituiscono in dissolvenza incrociata.</p>
-          <ul class="tokens">
-            <li>Hero e sfondi</li>
-            <li><code>CSS</code></li><li><code>LIB</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Strutture e locali con più ambienti da mostrare senza gerarchia.</dd>
-            <dt>Attenzione</dt><dd>Solo la prima immagine è LCP: le altre in lazy. Dissolvenze da 1.2s in su.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1400,16 +1002,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>40</b> <code>video-bg</code></p>
           <h3>Video di sfondo con fade</h3>
-          <p class="desc">Un filmato muto in loop dietro il contenuto, con un velo che ne calma il contrasto.</p>
-          <ul class="tokens">
-            <li>Hero e sfondi</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Locali, eventi, brand con girato buono già disponibile.</dd>
-            <dt>Attenzione</dt><dd>Muto, `playsinline`, poster obbligatorio e stop su reduced-motion e su rete lenta.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1420,16 +1012,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>41</b> <code>text-video-mask</code></p>
           <h3>Testo con maschera video</h3>
-          <p class="desc">Il filmato si vede solo dentro le lettere del titolo.</p>
-          <ul class="tokens">
-            <li>Hero e sfondi</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Un colpo solo, molto forte: brand con una parola sola da dire.</dd>
-            <dt>Attenzione</dt><dd>Serve un font molto grasso e un fallback a tinta piena: se la maschera non regge, resta un titolo invisibile.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1440,16 +1022,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>42</b> <code>gradient-mesh</code></p>
           <h3>Gradient mesh animato</h3>
-          <p class="desc">Macchie di colore che si spostano lentamente creando un fondo vivo.</p>
-          <ul class="tokens">
-            <li>Hero e sfondi</li>
-            <li><code>CSS</code></li><li><code>WEBGL</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Prodotti digitali senza materiale fotografico.</dd>
-            <dt>Attenzione</dt><dd>È il fondale AI per definizione: fuori dal viola-indaco e con tinte prese dal brand, o è banale.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1460,16 +1032,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>43</b> <code>aurora-blob</code></p>
           <h3>Aurora / blob morphing</h3>
-          <p class="desc">Forme sfocate che si deformano e si attraversano piano.</p>
-          <ul class="tokens">
-            <li>Hero e sfondi</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Fondali morbidi per pagine di prodotto e sezioni di stacco.</dd>
-            <dt>Attenzione</dt><dd>`filter: blur` su superfici grandi costa: limita l&#x27;area e il numero di blob.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1480,16 +1042,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>44</b> <code>particles</code></p>
           <h3>Particelle<span class="flag" title="L'effetto vero richiede una libreria: qui è una resa approssimata, dichiarata.">resa approssimata</span></h3>
-          <p class="desc">Punti che fluttuano e reagiscono al puntatore.</p>
-          <ul class="tokens">
-            <li>Hero e sfondi</li>
-            <li><code>CANVAS</code></li><li><code>LIB</code></li>
-            <li class="cost cost--heavy">Pesante</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Tema tecnico o scientifico, quando il fondo deve suggerire un sistema.</dd>
-            <dt>Attenzione</dt><dd>Mangia CPU e batteria: limita il numero, ferma fuori viewport, disattiva su mobile.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1500,16 +1052,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>45</b> <code>starfield</code></p>
           <h3>Campo di stelle o rete di punti<span class="flag" title="L'effetto vero richiede una libreria: qui è una resa approssimata, dichiarata.">resa approssimata</span></h3>
-          <p class="desc">Punti collegati da linee che si formano e si sciolgono.</p>
-          <ul class="tokens">
-            <li>Hero e sfondi</li>
-            <li><code>CANVAS</code></li><li><code>WEBGL</code></li>
-            <li class="cost cost--heavy">Pesante</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Reti, connessioni, dati: la metafora visiva del collegamento.</dd>
-            <dt>Attenzione</dt><dd>Vista mille volte. Se non è il messaggio del prodotto, è solo peso.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1520,16 +1062,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>46</b> <code>shader-distort</code></p>
           <h3>Distorsione shader su immagine<span class="flag" title="L'effetto vero richiede una libreria: qui è una resa approssimata, dichiarata.">resa approssimata</span></h3>
-          <p class="desc">L&#x27;immagine si deforma con un&#x27;onda calcolata sulla GPU.</p>
-          <ul class="tokens">
-            <li>Hero e sfondi</li>
-            <li><code>WEBGL</code></li>
-            <li class="cost cost--heavy">Pesante</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Portfolio e agenzie che competono su Awwwards.</dd>
-            <dt>Attenzione</dt><dd>Serve una libreria 3D e un fallback statico completo: senza WebGL la hero non deve sparire.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1540,16 +1072,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>47</b> <code>ripple-water</code></p>
           <h3>Ripple d&#x27;acqua al mouse<span class="flag" title="L'effetto vero richiede una libreria: qui è una resa approssimata, dichiarata.">resa approssimata</span></h3>
-          <p class="desc">Il puntatore increspa la superficie dell&#x27;immagine come acqua.</p>
-          <ul class="tokens">
-            <li>Hero e sfondi</li>
-            <li><code>WEBGL</code></li>
-            <li class="cost cost--heavy">Pesante</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Brand legati all&#x27;acqua, al benessere, al movimento naturale.</dd>
-            <dt>Attenzione</dt><dd>Inesistente su touch: serve un comportamento alternativo, non solo l&#x27;assenza.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1560,16 +1082,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>48</b> <code>noise</code></p>
           <h3>Grana / noise animata</h3>
-          <p class="desc">Una texture di grana finissima vibra sopra l&#x27;immagine.</p>
-          <ul class="tokens">
-            <li>Hero e sfondi</li>
-            <li><code>CSS</code></li><li><code>SVG</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Tono analogico e pellicola: riscalda un digitale troppo pulito.</dd>
-            <dt>Attenzione</dt><dd>Sotto il 6% di opacità e con grana fine: sopra diventa un pattern e sporca la compressione.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1580,16 +1092,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>49</b> <code>split-screen-open</code></p>
           <h3>Split screen che si apre</h3>
-          <p class="desc">Due metà si separano rivelando il contenuto sotto.</p>
-          <ul class="tokens">
-            <li>Hero e sfondi</li>
-            <li><code>GSAP</code></li><li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Ingresso di pagina memorabile per siti-manifesto.</dd>
-            <dt>Attenzione</dt><dd>Ritarda il primo contenuto utile: giustificabile solo in home, mai in una pagina di conversione.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1600,16 +1102,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>50</b> <code>img-zoom</code></p>
           <h3>Zoom immagine nel contenitore</h3>
-          <p class="desc">La foto cresce dentro un riquadro che la ritaglia.</p>
-          <ul class="tokens">
-            <li>Hover e micro-interazioni</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Card, gallerie, liste di articoli: il feedback hover più usato e più sicuro.</dd>
-            <dt>Attenzione</dt><dd>Il contenitore deve avere `overflow: hidden` e la scala restare sotto 1.08.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1620,16 +1112,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>51</b> <code>caption-rise</code></p>
           <h3>Overlay con caption che sale</h3>
-          <p class="desc">Una didascalia entra dal basso su un velo che compare.</p>
-          <ul class="tokens">
-            <li>Hover e micro-interazioni</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Portfolio e gallerie dove il titolo non deve stare sempre in vista.</dd>
-            <dt>Attenzione</dt><dd>L&#x27;informazione nascosta è invisibile su touch: il titolo essenziale deve stare fuori.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1640,16 +1122,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>52</b> <code>card-lift</code></p>
           <h3>Card lift</h3>
-          <p class="desc">La card si solleva di poco e l&#x27;ombra si allarga.</p>
-          <ul class="tokens">
-            <li>Hover e micro-interazioni</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Griglie cliccabili: dichiara che l&#x27;intera card è un bersaglio.</dd>
-            <dt>Attenzione</dt><dd>Sollevamenti di 2-6px. Se anche l&#x27;ombra non cambia, sembra un errore di rendering.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1660,16 +1132,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>53</b> <code>tilt-3d</code></p>
           <h3>Tilt 3D con il mouse</h3>
-          <p class="desc">La card si inclina seguendo la posizione del puntatore.</p>
-          <ul class="tokens">
-            <li>Hover e micro-interazioni</li>
-            <li><code>LIB</code></li><li><code>CSS</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Card di prodotto isolate, elementi da mettere in mostra.</dd>
-            <dt>Attenzione</dt><dd>Su una griglia intera è nausea. Serve `will-change` e un ritorno morbido all&#x27;uscita.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1680,16 +1142,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>54</b> <code>btn-fill</code></p>
           <h3>Bottone con riempimento</h3>
-          <p class="desc">Il colore invade il bottone da un lato fino a riempirlo.</p>
-          <ul class="tokens">
-            <li>Hover e micro-interazioni</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>CTA principali: dà peso al gesto senza aggiungere elementi.</dd>
-            <dt>Attenzione</dt><dd>Il contrasto del testo deve reggere sia sul fondo iniziale sia su quello finale.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1700,16 +1152,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>55</b> <code>btn-magnetic</code></p>
           <h3>Bottone magnetico</h3>
-          <p class="desc">Il bottone si sposta verso il puntatore quando gli passi vicino.</p>
-          <ul class="tokens">
-            <li>Hover e micro-interazioni</li>
-            <li><code>GSAP</code></li><li><code>WA</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Siti di agenzia e portfolio dove il puntatore è già protagonista.</dd>
-            <dt>Attenzione</dt><dd>Spostare il bersaglio peggiora l&#x27;usabilità: raggio piccolo e mai su form o menu.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1720,16 +1162,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>56</b> <code>link-underline</code></p>
           <h3>Underline animato su link</h3>
-          <p class="desc">La sottolineatura si estende da un lato all&#x27;altro.</p>
-          <ul class="tokens">
-            <li>Hover e micro-interazioni</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Link di testo e voci di menu: il micro-dettaglio che si nota senza accorgersene.</dd>
-            <dt>Attenzione</dt><dd>Deve comparire anche su `:focus-visible`, o chi naviga da tastiera non vede dove si trova.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1740,16 +1172,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>57</b> <code>text-roll</code></p>
           <h3>Testo che ruota sul duplicato</h3>
-          <p class="desc">L&#x27;etichetta scorre in su e viene sostituita da una copia identica.</p>
-          <ul class="tokens">
-            <li>Hover e micro-interazioni</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Bottoni e voci di menu in siti curati: gesto piccolo, resa alta.</dd>
-            <dt>Attenzione</dt><dd>Il duplicato va nascosto agli screen reader con `aria-hidden`.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1760,16 +1182,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>58</b> <code>ripple-click</code></p>
           <h3>Ripple al click</h3>
-          <p class="desc">Un&#x27;onda parte dal punto esatto del click.</p>
-          <ul class="tokens">
-            <li>Hover e micro-interazioni</li>
-            <li><code>CSS</code></li><li><code>WA</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Interfacce di stampo Material o app con molti tocchi.</dd>
-            <dt>Attenzione</dt><dd>Fortemente connotato Material: su un brand con altra grammatica stona.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1780,16 +1192,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>59</b> <code>cursor-follower</code></p>
           <h3>Cursore custom follower</h3>
-          <p class="desc">Un cerchio insegue il puntatore con un ritardo elastico.</p>
-          <ul class="tokens">
-            <li>Hover e micro-interazioni</li>
-            <li><code>WA</code></li><li><code>GSAP</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Portfolio e agenzie: firma di categoria.</dd>
-            <dt>Attenzione</dt><dd>Non toccare mai il cursore di sistema su elementi di form. Inutile su touch: va spento.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1800,16 +1202,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>60</b> <code>cursor-expand</code></p>
           <h3>Cursore che si espande</h3>
-          <p class="desc">Il cursore cresce e cambia forma sugli elementi interattivi.</p>
-          <ul class="tokens">
-            <li>Hover e micro-interazioni</li>
-            <li><code>WA</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Completa il follower: segnala cosa è cliccabile senza cambiare la pagina.</dd>
-            <dt>Attenzione</dt><dd>Se sostituisce l&#x27;unico segnale di interattività, chi non muove il mouse non capisce niente.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1820,16 +1212,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>61</b> <code>image-trail</code></p>
           <h3>Scia di immagini al movimento</h3>
-          <p class="desc">Muovendo il mouse restano dietro immagini che svaniscono.</p>
-          <ul class="tokens">
-            <li>Hover e micro-interazioni</li>
-            <li><code>WA</code></li><li><code>GSAP</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Home di studi creativi: mostra il lavoro senza una griglia.</dd>
-            <dt>Attenzione</dt><dd>Molto pesante in DOM: riusa un pool fisso di nodi, non crearne uno per movimento.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1840,16 +1222,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>62</b> <code>hover-preview</code></p>
           <h3>Preview su lista link</h3>
-          <p class="desc">Passando su una voce di elenco compare l&#x27;immagine relativa.</p>
-          <ul class="tokens">
-            <li>Hover e micro-interazioni</li>
-            <li><code>WA</code></li><li><code>GSAP</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Indici di progetti, menu di navigazione ricchi: elegante e denso.</dd>
-            <dt>Attenzione</dt><dd>Su touch non esiste: serve una versione con miniature già visibili.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1860,16 +1232,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>63</b> <code>icon-morph</code></p>
           <h3>Icona che si trasforma</h3>
-          <p class="desc">Play diventa pausa, menu diventa croce: la forma cambia stato.</p>
-          <ul class="tokens">
-            <li>Hover e micro-interazioni</li>
-            <li><code>CSS</code></li><li><code>SVG</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Controlli che hanno due stati: comunica il risultato del click prima del click.</dd>
-            <dt>Attenzione</dt><dd>La transizione deve essere sotto i 200ms: un controllo lento sembra rotto.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1880,16 +1242,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>64</b> <code>glow-border</code></p>
           <h3>Glow o bordo animato</h3>
-          <p class="desc">Una luce corre lungo il perimetro dell&#x27;elemento.</p>
-          <ul class="tokens">
-            <li>Hover e micro-interazioni</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Card in evidenza, piani a pagamento, elementi premium.</dd>
-            <dt>Attenzione</dt><dd>`conic-gradient` in loop costa: solo su pochi elementi e fermo quando non serve.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1900,16 +1252,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>65</b> <code>shake-error</code></p>
           <h3>Shake su errore</h3>
-          <p class="desc">L&#x27;elemento vibra lateralmente per segnalare un rifiuto.</p>
-          <ul class="tokens">
-            <li>Hover e micro-interazioni</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Login sbagliato, campo non valido: la reazione più comprensibile che esista.</dd>
-            <dt>Attenzione</dt><dd>Breve (300ms) e accompagnato da un messaggio testuale: il movimento da solo non è accessibile.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1920,16 +1262,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>66</b> <code>hamburger</code></p>
           <h3>Hamburger che diventa X</h3>
-          <p class="desc">Le tre righe si trasformano nella croce di chiusura.</p>
-          <ul class="tokens">
-            <li>Navigazione</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Standard assoluto del menu mobile.</dd>
-            <dt>Attenzione</dt><dd>Serve `aria-expanded` sul bottone: senza, per uno screen reader non è successo niente.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1940,16 +1272,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>67</b> <code>menu-fullscreen</code></p>
           <h3>Menu fullscreen con voci in stagger</h3>
-          <p class="desc">Il pannello copre lo schermo e le voci entrano una dopo l&#x27;altra.</p>
-          <ul class="tokens">
-            <li>Navigazione</li>
-            <li><code>CSS</code></li><li><code>GSAP</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Siti con poche voci forti, dove il menu è un momento e non un accessorio.</dd>
-            <dt>Attenzione</dt><dd>Il focus va spostato dentro e intrappolato, e `Esc` deve chiudere.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1960,16 +1282,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>68</b> <code>offcanvas</code></p>
           <h3>Off canvas laterale</h3>
-          <p class="desc">Il pannello entra da un lato spingendo o coprendo la pagina.</p>
-          <ul class="tokens">
-            <li>Navigazione</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Navigazioni lunghe, filtri, carrelli.</dd>
-            <dt>Attenzione</dt><dd>Il fondo non deve scorrere sotto il pannello aperto: blocca lo scroll del body.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -1980,16 +1292,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>69</b> <code>megamenu</code></p>
           <h3>Mega menu con fade e slide</h3>
-          <p class="desc">Il pannello scende sotto la voce con una discesa breve.</p>
-          <ul class="tokens">
-            <li>Navigazione</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Cataloghi e siti con molte sezioni.</dd>
-            <dt>Attenzione</dt><dd>Ritardo in chiusura (150-250ms) o il menu sparisce mentre ci si sta muovendo dentro.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2000,16 +1302,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>70</b> <code>active-indicator</code></p>
           <h3>Indicatore attivo che scorre</h3>
-          <p class="desc">Una barretta scivola dalla voce precedente a quella nuova.</p>
-          <ul class="tokens">
-            <li>Navigazione</li>
-            <li><code>WA</code></li><li><code>LIB</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Tab e navigazioni orizzontali: rende continuo il cambio di stato.</dd>
-            <dt>Attenzione</dt><dd>Con la tecnica FLIP resta fluido anche al resize. Va nascosto agli screen reader.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2020,16 +1312,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>71</b> <code>dock-magnify</code></p>
           <h3>Dock con magnificazione</h3>
-          <p class="desc">Le icone crescono avvicinandosi al puntatore, come nel dock macOS.</p>
-          <ul class="tokens">
-            <li>Navigazione</li>
-            <li><code>WA</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Barre di strumenti giocose, prodotti con personalità.</dd>
-            <dt>Attenzione</dt><dd>Fortemente citazionista: se il prodotto non c&#x27;entra con Apple, sembra un vezzo.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2040,16 +1322,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>72</b> <code>step-progress</code></p>
           <h3>Breadcrumb / step animato</h3>
-          <p class="desc">Il passo completato si riempie e la linea avanza al successivo.</p>
-          <ul class="tokens">
-            <li>Navigazione</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Checkout, onboarding, moduli lunghi: dice quanto manca.</dd>
-            <dt>Attenzione</dt><dd>Il numero di passi deve essere vero e stabile: se cresce in corsa, l&#x27;utente si sente ingannato.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2060,16 +1332,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>73</b> <code>filter-flip</code></p>
           <h3>Filtro con riordino fluido</h3>
-          <p class="desc">Le card si spostano nelle nuove posizioni invece di saltarci.</p>
-          <ul class="tokens">
-            <li>Layout e liste</li>
-            <li><code>LIB</code></li><li><code>GSAP</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Portfolio filtrabili, cataloghi con categorie.</dd>
-            <dt>Attenzione</dt><dd>Con molte card il riordino diventa lento: sopra i 40 elementi conviene paginare.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2080,16 +1342,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>74</b> <code>masonry-in</code></p>
           <h3>Masonry con inserimento animato</h3>
-          <p class="desc">I nuovi elementi si inseriscono nel mosaico trovando il loro posto.</p>
-          <ul class="tokens">
-            <li>Layout e liste</li>
-            <li><code>LIB</code></li><li><code>CSS</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Gallerie con formati misti e caricamento progressivo.</dd>
-            <dt>Attenzione</dt><dd>Il layout va ricalcolato a immagini caricate, o il mosaico si assesta a scatti sotto gli occhi.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2100,16 +1352,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>75</b> <code>accordion</code></p>
           <h3>Accordion con altezza fluida</h3>
-          <p class="desc">Il pannello si apre con un&#x27;altezza che cresce senza salti.</p>
-          <ul class="tokens">
-            <li>Layout e liste</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>FAQ, schede tecniche, filtri: il pattern più utile della lista.</dd>
-            <dt>Attenzione</dt><dd>`grid-template-rows: 0fr → 1fr` anima l&#x27;altezza automatica senza JavaScript.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2120,16 +1362,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>76</b> <code>tabs-crossfade</code></p>
           <h3>Tabs con crossfade</h3>
-          <p class="desc">Il contenuto si sostituisce in dissolvenza mentre l&#x27;indicatore si sposta.</p>
-          <ul class="tokens">
-            <li>Layout e liste</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Schede di prodotto, contenuti alternativi nello stesso spazio.</dd>
-            <dt>Attenzione</dt><dd>L&#x27;altezza deve essere gestita o la pagina sobbalza cambiando scheda.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2140,16 +1372,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>77</b> <code>carousel-loop</code></p>
           <h3>Carousel con autoplay e loop</h3>
-          <p class="desc">Le slide avanzano da sole e ricominciano senza stacco.</p>
-          <ul class="tokens">
-            <li>Layout e liste</li>
-            <li><code>LIB</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Testimonianze, loghi, gallerie secondarie.</dd>
-            <dt>Attenzione</dt><dd>Serve pausa all&#x27;hover e al focus, e comandi raggiungibili da tastiera. Autoplay lento.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2160,16 +1382,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>78</b> <code>coverflow</code></p>
           <h3>Coverflow / carousel 3D</h3>
-          <p class="desc">Le slide laterali arretrano e ruotano in prospettiva.</p>
-          <ul class="tokens">
-            <li>Layout e liste</li>
-            <li><code>LIB</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Cataloghi visivi dove la slide centrale deve dominare.</dd>
-            <dt>Attenzione</dt><dd>Costa in leggibilità: i titoli sulle slide laterali sono deformati e illeggibili.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2180,16 +1392,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>79</b> <code>before-after</code></p>
           <h3>Before / after comparativo</h3>
-          <p class="desc">Una maniglia scopre progressivamente la seconda immagine.</p>
-          <ul class="tokens">
-            <li>Layout e liste</li>
-            <li><code>WA</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Restauri, ritocchi, prima e dopo di ogni genere.</dd>
-            <dt>Attenzione</dt><dd>Le due immagini devono coincidere per inquadratura e luce, o il confronto mente.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2200,16 +1402,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>80</b> <code>lightbox-zoom</code></p>
           <h3>Lightbox con zoom dall&#x27;origine</h3>
-          <p class="desc">L&#x27;immagine cresce dalla miniatura fino alla vista piena.</p>
-          <ul class="tokens">
-            <li>Layout e liste</li>
-            <li><code>LIB</code></li><li><code>NATIVE</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Gallerie: mantiene il filo tra dove si era e cosa si sta guardando.</dd>
-            <dt>Attenzione</dt><dd>Il focus va portato nel lightbox e restituito alla miniatura in chiusura.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2220,16 +1412,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>81</b> <code>drag-drop</code></p>
           <h3>Drag and drop con transizioni</h3>
-          <p class="desc">L&#x27;elemento trascinato si stacca e gli altri fanno spazio.</p>
-          <ul class="tokens">
-            <li>Layout e liste</li>
-            <li><code>LIB</code></li><li><code>GSAP</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Bacheche, ordinamenti, configuratori.</dd>
-            <dt>Attenzione</dt><dd>Serve sempre un&#x27;alternativa da tastiera: il drag puro è inaccessibile.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2240,16 +1422,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>82</b> <code>skeleton-list</code></p>
           <h3>Lista infinita con skeleton</h3>
-          <p class="desc">Segnaposto luminosi occupano il posto dei contenuti in arrivo.</p>
-          <ul class="tokens">
-            <li>Layout e liste</li>
-            <li><code>CSS</code></li><li><code>IO</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Liste lunghe e feed: riduce la sensazione di attesa.</dd>
-            <dt>Attenzione</dt><dd>Lo scheletro deve avere la forma del contenuto vero, o il salto al caricamento è peggio dell&#x27;attesa.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2260,16 +1432,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>83</b> <code>view-transitions</code></p>
           <h3>View Transitions API</h3>
-          <p class="desc">Il browser interpola da solo tra due stati o due pagine.</p>
-          <ul class="tokens">
-            <li>Transizioni di pagina</li>
-            <li><code>NATIVE</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Da preferire sempre quando basta: nessuna libreria, nessun router custom.</dd>
-            <dt>Attenzione</dt><dd>Ancora non ovunque: la navigazione deve restare perfetta senza la transizione.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2280,16 +1442,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>84</b> <code>shared-element</code></p>
           <h3>Shared element transition</h3>
-          <p class="desc">Un elemento sopravvive al cambio pagina spostandosi al nuovo posto.</p>
-          <ul class="tokens">
-            <li>Transizioni di pagina</li>
-            <li><code>NATIVE</code></li><li><code>LIB</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Da griglia a dettaglio: la transizione più utile che esista, non solo la più bella.</dd>
-            <dt>Attenzione</dt><dd>Richiede lo stesso identificativo sui due lati: se non combacia, l&#x27;elemento sparisce e ricompare.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2300,16 +1452,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>85</b> <code>curtain-page</code></p>
           <h3>Curtain wipe tra pagine</h3>
-          <p class="desc">Un pannello copre, la pagina cambia sotto, il pannello se ne va.</p>
-          <ul class="tokens">
-            <li>Transizioni di pagina</li>
-            <li><code>LIB</code></li><li><code>GSAP</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Siti-portfolio dove la navigazione fa parte dello spettacolo.</dd>
-            <dt>Attenzione</dt><dd>Aggiunge attesa reale a ogni click: sopra i 400ms diventa un pedaggio.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2320,16 +1462,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>86</b> <code>route-fade</code></p>
           <h3>Fade e slide su cambio route</h3>
-          <p class="desc">Le viste si sostituiscono con una breve dissolvenza in una SPA.</p>
-          <ul class="tokens">
-            <li>Transizioni di pagina</li>
-            <li><code>LIB</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>App a pagina singola: dà continuità dove il browser non la dà più.</dd>
-            <dt>Attenzione</dt><dd>Il focus e il titolo della pagina vanno aggiornati a mano, o la navigazione è muta per gli screen reader.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2340,16 +1472,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>87</b> <code>preloader-pct</code></p>
           <h3>Preloader con percentuale</h3>
-          <p class="desc">Una cifra sale fino a cento mentre il sito carica.</p>
-          <ul class="tokens">
-            <li>Transizioni di pagina</li>
-            <li><code>WA</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Siti pesanti dove l&#x27;attesa esiste davvero.</dd>
-            <dt>Attenzione</dt><dd>Se la percentuale è finta, è una bugia che costa secondi. Meglio nessun preloader che uno inventato.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2360,16 +1482,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>88</b> <code>preloader-logo</code></p>
           <h3>Preloader con logo che si disegna</h3>
-          <p class="desc">Il marchio si traccia da solo mentre le risorse arrivano.</p>
-          <ul class="tokens">
-            <li>Transizioni di pagina</li>
-            <li><code>SVG</code></li><li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Brand con un logo lineare: trasforma l&#x27;attesa in firma.</dd>
-            <dt>Attenzione</dt><dd>Deve avere un tetto massimo e sparire comunque: mai legato solo all&#x27;evento `load`.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2380,16 +1492,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>89</b> <code>skeleton</code></p>
           <h3>Skeleton shimmer</h3>
-          <p class="desc">Un riflesso attraversa i segnaposto del contenuto in arrivo.</p>
-          <ul class="tokens">
-            <li>Feedback e stato</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Qualunque attesa sopra i 300ms in interfacce dense.</dd>
-            <dt>Attenzione</dt><dd>Il riflesso lento e a basso contrasto: se lampeggia, l&#x27;attesa sembra più lunga.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2400,16 +1502,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>90</b> <code>spinner</code></p>
           <h3>Spinner</h3>
-          <p class="desc">Un cerchio che gira: attesa di durata ignota.</p>
-          <ul class="tokens">
-            <li>Feedback e stato</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Azioni brevi e puntuali, dentro un bottone o un pannello.</dd>
-            <dt>Attenzione</dt><dd>Per attese sopra i due secondi non basta: serve un testo che dica cosa sta succedendo.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2420,16 +1512,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>91</b> <code>progress-det</code></p>
           <h3>Progress bar determinata</h3>
-          <p class="desc">La barra avanza in proporzione al lavoro davvero svolto.</p>
-          <ul class="tokens">
-            <li>Feedback e stato</li>
-            <li><code>CSS</code></li><li><code>WA</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Upload, elaborazioni, esportazioni: quando la percentuale è nota.</dd>
-            <dt>Attenzione</dt><dd>Non deve mai tornare indietro né fermarsi al 99%: è la rovina della fiducia.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2440,16 +1522,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>92</b> <code>toast</code></p>
           <h3>Toast in entrata e uscita</h3>
-          <p class="desc">Un messaggio entra da un bordo, resta qualche secondo e se ne va.</p>
-          <ul class="tokens">
-            <li>Feedback e stato</li>
-            <li><code>CSS</code></li><li><code>WA</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Conferme e notifiche non bloccanti.</dd>
-            <dt>Attenzione</dt><dd>Serve `role=&quot;status&quot;` e una durata sufficiente a leggere: sotto i 4 secondi è inutile.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2460,16 +1532,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>93</b> <code>modal</code></p>
           <h3>Modale con scale e backdrop blur</h3>
-          <p class="desc">Il pannello cresce di poco mentre il fondo si sfoca.</p>
-          <ul class="tokens">
-            <li>Feedback e stato</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Conferme, moduli brevi, dettagli che richiedono attenzione piena.</dd>
-            <dt>Attenzione</dt><dd>Focus intrappolato, `Esc` che chiude e scroll del fondo bloccato: senza, è un difetto di accessibilità.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2480,16 +1542,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>94</b> <code>checkmark</code></p>
           <h3>Checkmark disegnato</h3>
-          <p class="desc">La spunta si traccia da sola alla conferma.</p>
-          <ul class="tokens">
-            <li>Feedback e stato</li>
-            <li><code>SVG</code></li><li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Fine di un flusso: pagamento riuscito, modulo inviato.</dd>
-            <dt>Attenzione</dt><dd>Va accompagnata da testo: un segno grafico da solo non comunica l&#x27;esito a chi non lo vede.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2500,16 +1552,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>95</b> <code>error-shake</code></p>
           <h3>Errore con shake e colore</h3>
-          <p class="desc">Il campo vibra e passa al colore di errore.</p>
-          <ul class="tokens">
-            <li>Feedback e stato</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Validazione di moduli, in tempo reale o all&#x27;invio.</dd>
-            <dt>Attenzione</dt><dd>Il colore da solo non basta: serve icona e testo, per il daltonismo e per lo screen reader.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2520,16 +1562,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>96</b> <code>confetti</code></p>
           <h3>Confetti<span class="flag" title="L'effetto vero richiede una libreria: qui è una resa approssimata, dichiarata.">resa approssimata</span></h3>
-          <p class="desc">Coriandoli esplodono dal punto della conferma.</p>
-          <ul class="tokens">
-            <li>Feedback e stato</li>
-            <li><code>CANVAS</code></li><li><code>LIB</code></li>
-            <li class="cost cost--heavy">Pesante</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Traguardi rari e veri: fine corso, obiettivo raggiunto.</dd>
-            <dt>Attenzione</dt><dd>Se scatta a ogni salvataggio, diventa rumore. Una volta, e con reduced-motion disattivato.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2540,16 +1572,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>97</b> <code>pull-refresh</code></p>
           <h3>Pull to refresh</h3>
-          <p class="desc">Trascinando in giù compare l&#x27;indicatore e la lista si ricarica.</p>
-          <ul class="tokens">
-            <li>Feedback e stato</li>
-            <li><code>WA</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Liste mobile che si aggiornano spesso.</dd>
-            <dt>Attenzione</dt><dd>Va oltre una soglia netta, o si attiva per sbaglio durante lo scroll normale.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2560,16 +1582,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>98</b> <code>float</code></p>
           <h3>Float / levitazione</h3>
-          <p class="desc">L&#x27;elemento sale e scende di pochi pixel, in continuo.</p>
-          <ul class="tokens">
-            <li>Loop ambientali</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Illustrazioni e mockup in hero: vivo senza chiedere attenzione.</dd>
-            <dt>Attenzione</dt><dd>Ampiezza piccola (4-10px) e durata lunga: oltre, diventa un elemento che disturba la lettura accanto.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2580,16 +1592,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>99</b> <code>pulse</code></p>
           <h3>Pulse / breathe</h3>
-          <p class="desc">Un respiro lento di scala o di opacità.</p>
-          <ul class="tokens">
-            <li>Loop ambientali</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Indicatori di stato live, punti su mappa, elementi in ascolto.</dd>
-            <dt>Attenzione</dt><dd>Su un CTA diventa un banner lampeggiante: usalo su segnali, non su bottoni.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2600,16 +1602,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>100</b> <code>spin-slow</code></p>
           <h3>Rotazione lenta continua</h3>
-          <p class="desc">Un elemento gira su sé stesso senza fermarsi.</p>
-          <ul class="tokens">
-            <li>Loop ambientali</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Sigilli, badge, elementi decorativi circolari.</dd>
-            <dt>Attenzione</dt><dd>Va fermato all&#x27;hover se è cliccabile: un bersaglio che ruota è difficile da centrare.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2620,16 +1612,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>101</b> <code>wave</code></p>
           <h3>Wave SVG</h3>
-          <p class="desc">Un&#x27;onda scorre sul bordo tra due sezioni.</p>
-          <ul class="tokens">
-            <li>Loop ambientali</li>
-            <li><code>SVG</code></li><li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Separatori tra fasce di colore, temi legati ad acqua e natura.</dd>
-            <dt>Attenzione</dt><dd>Due onde sfasate sembrano acqua; una sola sembra una decorazione da template.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2640,16 +1622,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>102</b> <code>blob-morph</code></p>
           <h3>Blob che cambia forma</h3>
-          <p class="desc">Una forma morbida si deforma lentamente cambiando i raggi.</p>
-          <ul class="tokens">
-            <li>Loop ambientali</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Maschere per immagini, fondi di sezione, brand morbidi.</dd>
-            <dt>Attenzione</dt><dd>Con `border-radius` animato resta economico: con path morphing serve una libreria.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2660,16 +1632,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>103</b> <code>gradient-shift</code></p>
           <h3>Gradient shift</h3>
-          <p class="desc">Il gradiente si sposta lentamente cambiando l&#x27;umore del fondo.</p>
-          <ul class="tokens">
-            <li>Loop ambientali</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Fasce di stacco, footer, sezioni di attesa.</dd>
-            <dt>Attenzione</dt><dd>Molto lento (20s+) e a bassa saturazione, o diventa un fondale da presentazione.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2680,16 +1642,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>104</b> <code>scroll-hint</code></p>
           <h3>Scroll hint</h3>
-          <p class="desc">Una freccia o una linea rimbalza in fondo alla hero.</p>
-          <ul class="tokens">
-            <li>Loop ambientali</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Hero a schermo pieno dove non è ovvio che sotto ci sia altro.</dd>
-            <dt>Attenzione</dt><dd>Se la piega mostra già l&#x27;inizio della sezione dopo, è inutile: togli il segnale e alza il contenuto.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2700,16 +1652,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>105</b> <code>rotating-badge</code></p>
           <h3>Badge circolare rotante</h3>
-          <p class="desc">Un sigillo con testo circolare gira in continuo.</p>
-          <ul class="tokens">
-            <li>Loop ambientali</li>
-            <li><code>CSS</code></li><li><code>SVG</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Etichette «disponibile ora», «scorri», premi.</dd>
-            <dt>Attenzione</dt><dd>Testo corto e rotazione molto lenta (12-20s), o è illeggibile e nervoso.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2720,16 +1662,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>106</b> <code>line-drawing</code></p>
           <h3>Line drawing</h3>
-          <p class="desc">Il tracciato si disegna da solo tramite `stroke-dasharray`.</p>
-          <ul class="tokens">
-            <li>SVG e vettoriali</li>
-            <li><code>SVG</code></li><li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Loghi lineari, mappe, illustrazioni tecniche, firme.</dd>
-            <dt>Attenzione</dt><dd>Funziona solo su tracciati aperti e sottili: su forme piene non si legge il gesto.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2740,16 +1672,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>107</b> <code>path-morph</code></p>
           <h3>Path morphing</h3>
-          <p class="desc">Una forma si trasforma in un&#x27;altra senza tagli.</p>
-          <ul class="tokens">
-            <li>SVG e vettoriali</li>
-            <li><code>LIB</code></li><li><code>GSAP</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Icone che cambiano significato, illustrazioni narrative.</dd>
-            <dt>Attenzione</dt><dd>Richiede path con lo stesso numero di punti: serve una libreria per interpolarli davvero.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2760,16 +1682,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>108</b> <code>fill-progress</code></p>
           <h3>Riempimento progressivo</h3>
-          <p class="desc">Il colore sale dentro la forma come un liquido in un contenitore.</p>
-          <ul class="tokens">
-            <li>SVG e vettoriali</li>
-            <li><code>SVG</code></li><li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Indicatori di completamento con una forma di brand.</dd>
-            <dt>Attenzione</dt><dd>Serve un valore testuale accanto: la forma piena non dice la percentuale.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2780,16 +1692,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>109</b> <code>lottie</code></p>
           <h3>Animazione Lottie<span class="flag" title="L'effetto vero richiede una libreria: qui è una resa approssimata, dichiarata.">resa approssimata</span></h3>
-          <p class="desc">Un&#x27;animazione fatta in After Effects e riprodotta come vettoriale.</p>
-          <ul class="tokens">
-            <li>SVG e vettoriali</li>
-            <li><code>LIB</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Illustrazioni complesse che nessuno rifarebbe in CSS.</dd>
-            <dt>Attenzione</dt><dd>Il file JSON pesa: controlla il peso, riproduci al viewport e ferma quando esce.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2800,16 +1702,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>110</b> <code>rive</code></p>
           <h3>Animazione Rive interattiva<span class="flag" title="L'effetto vero richiede una libreria: qui è una resa approssimata, dichiarata.">resa approssimata</span></h3>
-          <p class="desc">Animazione a stati che reagisce a input e a hover.</p>
-          <ul class="tokens">
-            <li>SVG e vettoriali</li>
-            <li><code>LIB</code></li>
-            <li class="cost cost--light">Leggero</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Personaggi, mascotte, controlli con più stati.</dd>
-            <dt>Attenzione</dt><dd>Introduce un runtime e un formato in più nel progetto: si giustifica se gli stati sono tanti.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2820,16 +1712,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>111</b> <code>icon-hover</code></p>
           <h3>Icone animate al hover</h3>
-          <p class="desc">Il tracciato dell&#x27;icona si muove al passaggio: la freccia scorre, la busta si apre.</p>
-          <ul class="tokens">
-            <li>SVG e vettoriali</li>
-            <li><code>SVG</code></li><li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Liste di servizi, menu, bottoni secondari: dettaglio a costo quasi zero.</dd>
-            <dt>Attenzione</dt><dd>Deve restare comprensibile da ferma: l&#x27;icona si legge anche senza il movimento.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2840,16 +1722,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>112</b> <code>three-model</code></p>
           <h3>Scena three.js con modello<span class="flag" title="L'effetto vero richiede una libreria: qui è una resa approssimata, dichiarata.">resa approssimata</span></h3>
-          <p class="desc">Un oggetto tridimensionale ruota nello spazio della pagina.</p>
-          <ul class="tokens">
-            <li>3D e WebGL</li>
-            <li><code>WEBGL</code></li>
-            <li class="cost cost--heavy">Pesante</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Prodotti fisici da esaminare, configuratori.</dd>
-            <dt>Attenzione</dt><dd>Pesa in megabyte e in batteria: serve poster statico, lazy init e stop fuori viewport.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2860,16 +1732,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>113</b> <code>camera-scroll</code></p>
           <h3>Camera guidata dallo scroll<span class="flag" title="L'effetto vero richiede una libreria: qui è una resa approssimata, dichiarata.">resa approssimata</span></h3>
-          <p class="desc">La telecamera attraversa la scena mentre l&#x27;utente scorre.</p>
-          <ul class="tokens">
-            <li>3D e WebGL</li>
-            <li><code>WEBGL</code></li><li><code>GSAP</code></li>
-            <li class="cost cost--heavy">Pesante</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Racconti di prodotto immersivi, siti da premio.</dd>
-            <dt>Attenzione</dt><dd>Costosissimo da produrre e da mantenere: la versione senza WebGL deve raccontare la stessa storia.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2880,16 +1742,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>114</b> <code>hover-distort</code></p>
           <h3>Distorsione immagine al hover<span class="flag" title="L'effetto vero richiede una libreria: qui è una resa approssimata, dichiarata.">resa approssimata</span></h3>
-          <p class="desc">L&#x27;immagine si deforma dove passa il puntatore.</p>
-          <ul class="tokens">
-            <li>3D e WebGL</li>
-            <li><code>WEBGL</code></li>
-            <li class="cost cost--heavy">Pesante</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Griglie di progetti in portfolio di alto livello.</dd>
-            <dt>Attenzione</dt><dd>Un canvas per immagine è insostenibile: serve una scena unica condivisa.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2900,16 +1752,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>115</b> <code>displacement</code></p>
           <h3>Transizione con displacement map<span class="flag" title="L'effetto vero richiede una libreria: qui è una resa approssimata, dichiarata.">resa approssimata</span></h3>
-          <p class="desc">Due immagini si sostituiscono attraverso una mappa di distorsione.</p>
-          <ul class="tokens">
-            <li>3D e WebGL</li>
-            <li><code>WEBGL</code></li>
-            <li class="cost cost--heavy">Pesante</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Slider hero di siti-vetrina di fascia alta.</dd>
-            <dt>Attenzione</dt><dd>Bellissimo e fragilissimo: senza fallback il carosello resta bloccato sulla prima immagine.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2920,16 +1762,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>116</b> <code>text-3d</code></p>
           <h3>Testo 3D estruso<span class="flag" title="L'effetto vero richiede una libreria: qui è una resa approssimata, dichiarata.">resa approssimata</span></h3>
-          <p class="desc">Il titolo ha spessore e reagisce alla luce e al puntatore.</p>
-          <ul class="tokens">
-            <li>3D e WebGL</li>
-            <li><code>WEBGL</code></li>
-            <li class="cost cost--heavy">Pesante</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>Manifesti digitali, brand grafici, pagine di lancio.</dd>
-            <dt>Attenzione</dt><dd>Il testo vero deve esistere comunque nel DOM per SEO e accessibilità.</dd>
-          </dl>
         </div>
       </article>
       <article class="card" tabindex="0" role="button" aria-pressed="false"
@@ -2940,25 +1772,12 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>117</b> <code>card-depth</code></p>
           <h3>Card con profondità a strati</h3>
-          <p class="desc">Gli strati della card si separano in profondità muovendo il puntatore.</p>
-          <ul class="tokens">
-            <li>3D e WebGL</li>
-            <li><code>CSS</code></li>
-            <li class="cost cost--free">Gratis</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>L&#x27;effetto 3D più economico che esista: nessuna libreria, solo transform.</dd>
-            <dt>Attenzione</dt><dd>Serve `transform-style: preserve-3d` e una prospettiva sul contenitore, o gli strati restano piatti.</dd>
-          </dl>
         </div>
       </article>
   </div>
   <p class="empty" id="empty" hidden>Nessun effetto con questi filtri.</p>
-<section class="kits"><h2>Kit di partenza</h2><p class="lede">Combinazioni che reggono insieme. Sono un punto di partenza da tagliare, non una lista da applicare tutta.</p><div class="kits__cols"><div class="kit"><h3>Vetrina, ristorante, hotel</h3><p>Movimento discreto che non ruba niente alla prenotazione.</p><p class="kit__ids"><code>fade-in</code> · <code>fade-up</code> · <code>reveal-on-scroll</code> · <code>ken-burns</code> · <code>header-shrink</code> · <code>img-zoom</code> · <code>hero-crossfade</code> · <code>menu-fullscreen</code> · <code>accordion</code></p><button type="button" class="btn" data-kit="1,2,24,38,31,50,39,67,75">Seleziona questo kit</button></div><div class="kit"><h3>Landing marketing</h3><p>Costruire fiducia e portare al CTA senza rallentare la pagina.</p><p class="kit__ids"><code>seq-section</code> · <code>counter</code> · <code>scrub</code> · <code>pin</code> · <code>btn-fill</code> · <code>skeleton</code> · <code>progress-bar</code> · <code>toast</code></p><button type="button" class="btn" data-kit="10,17,27,28,54,89,30,92">Seleziona questo kit</button></div><div class="kit"><h3>Portfolio o agenzia</h3><p>Qui il movimento è il portfolio: si può osare, ma con dei fallback.</p><p class="kit__ids"><code>split-lines</code> · <code>hscroll</code> · <code>shader-distort</code> · <code>cursor-follower</code> · <code>hover-preview</code> · <code>curtain-page</code> · <code>camera-scroll</code> · <code>mask-reveal</code></p><button type="button" class="btn" data-kit="14,29,46,59,62,85,113,6">Seleziona questo kit</button></div><div class="kit"><h3>Dashboard o app</h3><p>Solo movimento che comunica stato: nessuna decorazione.</p><p class="kit__ids"><code>accordion</code> · <code>tabs-crossfade</code> · <code>skeleton-list</code> · <code>skeleton</code> · <code>toast</code> · <code>modal</code> · <code>checkmark</code> · <code>active-indicator</code></p><button type="button" class="btn" data-kit="75,76,82,89,92,93,94,70">Seleziona questo kit</button></div><div class="kit"><h3>Editoriale e long form</h3><p>Accompagnare una lettura lunga senza mai interromperla.</p><p class="kit__ids"><code>progress-bar</code> · <code>reveal-on-scroll</code> · <code>clip-wipe</code> · <code>section-color</code> · <code>underline-draw</code> · <code>header-hide</code></p><button type="button" class="btn" data-kit="30,24,5,37,23,32">Seleziona questo kit</button></div></div></section>
-<section class="legend"><h2>Come è organizzato</h2><div class="legend__cols"><div><h3>Famiglie</h3><dl><dt><code>reveal</code> Reveal / entrata</dt><dd>L&#x27;elemento entra in scena quando arriva nel viewport.</dd><dt><code>text</code> Testo</dt><dd>La parola è il soggetto: lettere, righe, numeri, scritte in movimento.</dd><dt><code>scroll</code> Scroll</dt><dd>Il movimento è guidato dalla posizione o dalla progressione dello scroll.</dd><dt><code>hero</code> Hero e sfondi</dt><dd>Primo viewport e piani di fondo: quello che si muove dietro al contenuto.</dd><dt><code>hover</code> Hover e micro-interazioni</dt><dd>Risposte al puntatore e al click: il feedback che fa sentire viva l&#x27;interfaccia.</dd><dt><code>nav</code> Navigazione</dt><dd>Menu, header, indicatori: il movimento che orienta.</dd><dt><code>layout</code> Layout e liste</dt><dd>Griglie, filtri, caroselli, accordion: elementi che si riordinano.</dd><dt><code>page</code> Transizioni di pagina</dt><dd>Il passaggio tra due viste, incluso il caricamento iniziale.</dd><dt><code>feedback</code> Feedback e stato</dt><dd>Attesa, esito, errore: il movimento che comunica cosa sta succedendo.</dd><dt><code>loop</code> Loop ambientali</dt><dd>Movimento continuo e discreto che tiene viva la pagina senza chiedere attenzione.</dd><dt><code>svg</code> SVG e vettoriali</dt><dd>Tracciati, forme, icone e animazioni importate.</dd><dt><code>3d</code> 3D e WebGL</dt><dd>Profondità vera, shader e scene: la fascia più costosa.</dd></dl></div><div><h3>Tecniche</h3><dl><dt><code>CSS</code> CSS</dt><dd>Keyframes o transition: nessun JavaScript.</dd><dt><code>IO</code> IO</dt><dd>IntersectionObserver: fa scattare l&#x27;animazione all&#x27;ingresso in viewport.</dd><dt><code>GSAP</code> GSAP</dt><dd>GSAP e ScrollTrigger: timeline e scrub precisi.</dd><dt><code>WA</code> WA</dt><dd>Web Animations API: animazioni da JavaScript senza libreria.</dd><dt><code>SVG</code> SVG</dt><dd>SMIL, stroke-dasharray o mask su vettoriale.</dd><dt><code>CANVAS</code> CANVAS</dt><dd>Disegno su canvas 2D, frame per frame.</dd><dt><code>WEBGL</code> WEBGL</dt><dd>three.js, OGL o shader: GPU.</dd><dt><code>LIB</code> LIB</dt><dd>Libreria dedicata (Swiper, Lenis, Lottie, Rive, Barba...).</dd><dt><code>NATIVE</code> NATIVE</dt><dd>API del browser: View Transitions, scroll-driven animations, scroll-snap.</dd></dl></div><div><h3>Costo</h3><dl><dt><code>free</code> Gratis</dt><dd>Solo CSS: nessun peso aggiunto, nessun rischio.</dd><dt><code>light</code> Leggero</dt><dd>Poco JavaScript o un observer: peso trascurabile, attenzione al reflow.</dd><dt><code>heavy</code> Pesante</dt><dd>Libreria, canvas o GPU: si giustifica solo se è il messaggio, e va misurato.</dd></dl></div></div></section>
-  <footer class="credits"><p>Le miniature sono CSS puro: nessuna libreria, nessuna rete, nessun
-  font remoto. In produzione la tecnica è quella dichiarata su ogni scheda — e ogni effetto va
-  comunque messo sotto <code>prefers-reduced-motion</code>.</p></footer>
+  <footer class="credits"><p>Miniature in CSS puro. In produzione ogni effetto va sotto
+  <code>prefers-reduced-motion</code>.</p></footer>
 </main>
 
 <div class="tray" id="tray" hidden>
@@ -2977,7 +1796,7 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
   var empty = document.getElementById('empty');
   var tray = document.getElementById('tray');
   var picked = document.getElementById('picked');
-  var active = { cat: null, cost: null, tech: null };
+  var active = { cat: null };
   var chosen = [];
 
   function apply() {
@@ -2986,8 +1805,6 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
     cards.forEach(function (c) {
       var ok = true;
       if (active.cat && c.dataset.cat !== active.cat) ok = false;
-      if (active.cost && c.dataset.cost !== active.cost) ok = false;
-      if (active.tech && c.dataset.tech.split(' ').indexOf(active.tech) === -1) ok = false;
       if (ok && term && c.dataset.search.indexOf(term) === -1) ok = false;
       c.hidden = !ok;
       if (ok) shown++;
@@ -3010,7 +1827,7 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
   q.addEventListener('input', apply);
 
   document.getElementById('reset').addEventListener('click', function () {
-    active = { cat: null, cost: null, tech: null };
+    active = { cat: null };
     chips.forEach(function (o) { o.setAttribute('aria-pressed', 'false'); });
     q.value = '';
     apply();

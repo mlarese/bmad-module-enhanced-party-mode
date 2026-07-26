@@ -346,16 +346,6 @@ def render_card(entry: dict, catalog: dict) -> str:
         <div class="body">
           <p class="eyebrow"><b>{entry['n']}</b> <code>{e(entry['id'])}</code></p>
           <h3>{e(entry['name'])}{approx}</h3>
-          <p class="desc">{e(entry['desc'])}</p>
-          <ul class="tokens">
-            <li>{e(axes['cat'][entry['cat']]['label'])}</li>
-            {techs}
-            <li class="cost cost--{e(entry['cost'])}">{e(axes['cost'][entry['cost']]['label'])}</li>
-          </ul>
-          <dl class="notes">
-            <dt>Quando</dt><dd>{e(entry['use'])}</dd>
-            <dt>Attenzione</dt><dd>{e(entry['watch'])}</dd>
-          </dl>
         </div>
       </article>
 """
@@ -416,13 +406,7 @@ def render_html(catalog: dict) -> str:
     effects = catalog["effects"]
     cards = "".join(render_card(e, catalog) for e in effects)
     used_tech = {t for e in effects for t in e["tech"]}
-    filters = "".join(
-        [
-            _chip_group("cat", "Famiglia", axes["cat"], {e["cat"] for e in effects}),
-            _chip_group("cost", "Costo", axes["cost"], {e["cost"] for e in effects}),
-            _chip_group("tech", "Tecnica", axes["tech"], used_tech),
-        ]
-    )
+    filters = _chip_group("cat", "Famiglia", axes["cat"], {e["cat"] for e in effects})
     return f"""<!DOCTYPE html>
 <html lang="it" data-generated-by="effects_gallery.py">
 <head>
@@ -435,21 +419,13 @@ def render_html(catalog: dict) -> str:
 </head>
 <body>
 <header class="masthead">
-  <p class="kicker">agent-web-animations · catalogo effetti</p>
-  <h1>Scegli il movimento guardandolo.</h1>
-  <p class="lede">Ogni riquadro <strong>esegue</strong> il suo effetto: non è uno schema, è
-  l'animazione. {len(effects)} effetti in {len(axes['cat'])} famiglie, con la tecnica vera che
-  servirebbe in produzione e quanto costa portarsela in pagina.</p>
-  <p class="lede">Dimmi il numero o l'<code>id</code> (o selezionane più d'uno e copia la lista).
-  Tredici effetti hanno bisogno di una libreria vera — WebGL, canvas, Lottie, Rive: lì la
-  miniatura è marcata <span class="flag flag--inline">resa approssimata</span>, perché un
-  catalogo che finge i propri campioni è peggio di una tabella.</p>
+  <h1>Movimento — {len(effects)} esempi</h1>
 </header>
 
 <div class="toolbar">
   {filters}
   <label class="search"><span class="sr">Cerca</span>
-    <input type="search" id="q" placeholder="Cerca: scroll, hover, testo, gratis…"></label>
+    <input type="search" id="q" placeholder="Cerca"></label>
   <button type="button" class="btn" id="motion">Metti in pausa</button>
   <button type="button" class="btn" id="reset">Azzera</button>
   <span class="count" id="count"></span>
@@ -459,11 +435,8 @@ def render_html(catalog: dict) -> str:
   <div class="grid" id="grid">
 {cards}  </div>
   <p class="empty" id="empty" hidden>Nessun effetto con questi filtri.</p>
-{_kits_html(catalog)}
-{_legend(catalog)}
-  <footer class="credits"><p>Le miniature sono CSS puro: nessuna libreria, nessuna rete, nessun
-  font remoto. In produzione la tecnica è quella dichiarata su ogni scheda — e ogni effetto va
-  comunque messo sotto <code>prefers-reduced-motion</code>.</p></footer>
+  <footer class="credits"><p>Miniature in CSS puro. In produzione ogni effetto va sotto
+  <code>prefers-reduced-motion</code>.</p></footer>
 </main>
 
 <div class="tray" id="tray" hidden>
@@ -528,12 +501,12 @@ h1 { font-family: var(--serif); font-weight: 500; font-size: clamp(2rem, 5.5vw, 
 .count { font-family: var(--mono); font-size: .72rem; color: var(--ink-2); white-space: nowrap; }
 
 main { padding: 1.5rem clamp(1rem, 4vw, 3rem) 6rem; }
-.grid { display: grid; gap: 1px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 23rem), 1fr)); background: var(--rule); border: 1px solid var(--rule); }
-.card { background: var(--paper); padding: 1rem; display: flex; flex-direction: column; gap: .75rem; cursor: pointer; }
+.grid { display: grid; gap: 1px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 11.5rem), 1fr)); background: var(--rule); border: 1px solid var(--rule); }
+.card { background: var(--paper); padding: .6rem; display: flex; flex-direction: column; gap: .45rem; cursor: pointer; }
 .card[aria-pressed="true"] { background: var(--paper-2); box-shadow: inset 3px 0 0 var(--hot); }
-.card .eyebrow { margin: 0; font-family: var(--mono); font-size: .68rem; letter-spacing: .06em; color: var(--ink-2); display: flex; gap: .5rem; align-items: baseline; }
+.card .eyebrow { margin: 0; font-family: var(--mono); font-size: .6rem; letter-spacing: .06em; color: var(--ink-2); display: flex; gap: .5rem; align-items: baseline; }
 .card .eyebrow b { color: var(--hot); font-weight: 600; }
-.card h3 { font-family: var(--serif); font-weight: 500; font-size: 1.16rem; line-height: 1.15; letter-spacing: -.02em; margin: 0; }
+.card h3 { font-family: var(--serif); font-weight: 500; font-size: .95rem; line-height: 1.15; letter-spacing: -.02em; margin: 0; }
 .card .desc { margin: 0; font-size: .87rem; color: var(--ink-2); max-width: 52ch; text-wrap: pretty; }
 .flag { display: inline-block; margin-left: .4rem; font-family: var(--mono); font-size: .58rem; letter-spacing: .1em; text-transform: uppercase; color: var(--hot); border: 1px dashed currentColor; border-radius: 999px; padding: .1rem .45rem; vertical-align: middle; }
 .flag--inline { margin: 0; }
@@ -1093,7 +1066,7 @@ def _js() -> str:
   var empty = document.getElementById('empty');
   var tray = document.getElementById('tray');
   var picked = document.getElementById('picked');
-  var active = { cat: null, cost: null, tech: null };
+  var active = { cat: null };
   var chosen = [];
 
   function apply() {
@@ -1102,8 +1075,6 @@ def _js() -> str:
     cards.forEach(function (c) {
       var ok = true;
       if (active.cat && c.dataset.cat !== active.cat) ok = false;
-      if (active.cost && c.dataset.cost !== active.cost) ok = false;
-      if (active.tech && c.dataset.tech.split(' ').indexOf(active.tech) === -1) ok = false;
       if (ok && term && c.dataset.search.indexOf(term) === -1) ok = false;
       c.hidden = !ok;
       if (ok) shown++;
@@ -1126,7 +1097,7 @@ def _js() -> str:
   q.addEventListener('input', apply);
 
   document.getElementById('reset').addEventListener('click', function () {
-    active = { cat: null, cost: null, tech: null };
+    active = { cat: null };
     chips.forEach(function (o) { o.setAttribute('aria-pressed', 'false'); });
     q.value = '';
     apply();

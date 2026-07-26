@@ -7,7 +7,7 @@ craft. Non è una capability.
 
 **Dove sta cosa** — §1 pre-flight · §2 ricerca (dominio + marketing, scritte) ·
 §3 valutazione e G1 (+3.1 tetto rimandi) · **§4.0 i sei documenti** · **§4.0b la
-tempra** · §4.1 slice_plan · §4.2 spec di slice · §5 implementazione · §6
+controllo dei documenti** · §4.1 slice_plan · §4.2 spec di slice · §5 implementazione · §6
 approvazione (+6.1 tetto rifiuti) · §7 precedenza dei documenti (+7.1 quelli
 auto-scritti) · §8 sito del cliente · §9 testi · §10 due artefatti · §11 varianze ·
 §12 dove stanno le indicazioni · §13 canone · §14 mappa dei workflow.
@@ -19,12 +19,12 @@ auto-scritti) · §8 sito del cliente · §9 testi · §10 due artefatti · §11
 | 1 | **Pre-flight** — cosa esiste e cosa vincola | `bmad_context.py` | no |
 | 2 | **Ricerca** — dominio, marketing, servizi reali | Vesper | no |
 | 3 | **Valutazione degli input + G1** — richiesta, ricerca, documenti, ambiguità | consiglio | solo internamente, se la ricerca è insufficiente (max 5 giri) |
-| 4 | **G2 — i sei documenti + `slice_plan`** (§4.0), poi la **tempra** (§4.0b) | consiglio | no: si dichiara, non si chiede |
-| 5 | **Implementazione** — pagina e codice | Vesper · Vera (`bmad-quick-dev` come stampo, §4.2) | no |
+| 4 | **G2 — i sei documenti + `slice_plan`** (§4.0), poi il **controllo dei documenti** (tre passate) (§4.0b) | consiglio | no: si dichiara, non si chiede |
+| 5 | **Implementazione** — pagina e codice | Vesper · Vera (`bmad-quick-dev` come modello, §4.2) | no |
 | 6 | **Approvazione (G3)** — contro i documenti | consiglio | solo internamente, se una richiesta non è soddisfatta (max 5 rifiuti) |
 
 **Nessun passo si ferma sull'owner.** Le uniche fermate sono interne — la ricerca che
-torna indietro, il deliverable che torna in lavorazione — e si risolvono senza uscire
+torna indietro, il lavoro consegnato che torna in lavorazione — e si risolvono senza uscire
 dal flusso. Una cosa sola arriva all'owner in apertura: **sa cosa sta per succedere**
 (§1.1), come dichiarazione, non come domanda. Legge completa: `references/autonomia.md`.
 
@@ -48,19 +48,26 @@ lavoro **non parte in silenzio**. Una battuta all'owner, prima, in voce:
 
 > ⚠️ **Nessun documento vincolante qui** — né PRD, né architettura, né page spec.
 > Procedo in autonomia: ricerca di dominio e marketing, casi limite, review
-> avversaria prima di consegnarti. Perimetro, stack **e i testi** li decido io:
-> il copy lo scrivo dal dominio, e contatti, prezzi e orari che leggerai sono
-> verosimili ma non veri — te lo dico qui perché nella pagina non ci sarà scritto.
+> avversaria prima di consegnarti. **Profilo leggero:** sei documenti corti, una
+> passata di controllo ciascuno, poi la pagina. Perimetro, stack **e i testi** li
+> decido io: il copy lo scrivo dal dominio, e contatti, prezzi e orari che
+> leggerai sono verosimili ma non veri — te lo dico qui perché nella pagina non
+> ci sarà scritto (l'elenco di cosa è inventato lo trovi nel `DESIGN.md`).
 > Senza architettura né project context scrivo sul canone: SOLID · SoC · KISS ·
 > DRY · OWASP · vertical slices.
 
-- **Prima del lavoro, non dopo.** Un avviso in coda al deliverable è una nota:
+- **Prima del lavoro, non dopo.** Un avviso in coda al lavoro consegnato è una nota:
   l'owner l'ha già pagato.
 - **È una dichiarazione, non una domanda.** Detto, si procede nella stessa
   risposta: non si invita a fermare, non si chiede permesso, non si aspetta
   risposta. Se l'owner interviene di sua iniziativa, la sua parola vince.
 - **Vale anche parzialmente:** manca solo l'architettura → l'avviso si restringe
   allo stack. Vincolo trovato → niente avviso su quel fronte.
+- **Dice anche *quanto*, non solo *cosa*.** Il profilo di giri deciso da G1
+  (`autonomia.md` → *I tetti non si sommano*) sta nell'avviso in mezza riga: un
+  owner che legge «procedo in autonomia» senza sapere se il lavoro dura due
+  minuti o due ore non è stato informato. È l'unica leva che gli resta, visto
+  che non gli si chiede niente.
 - **In voce, senza sconti.** Tono di Vesper; i tre nomi (ricerca, casi limite,
   review avversaria) restano riconoscibili; il macchinario non si nomina mai.
 
@@ -97,7 +104,7 @@ Nello stesso giro chiude tutto ciò che, senza di lui, diventerebbe una domanda:
 **perimetro reale**, **stack** quando nessuna fonte lo dichiara, **precedenza** fra
 fonti in conflitto — e il **peso** dei documenti (§4.0): corti su una landing, pieni
 quando c'è un back end. Per ogni voce: decisione + una riga di motivo + `fatto |
-assunzione`. Testo del goal: `references/autonomia.md` → *G1 — Lettura*.
+assunzione`. Testo dell'obiettivo: `references/autonomia.md` → *G1 — Lettura*.
 
 | Input | Cosa si verifica |
 |---|---|
@@ -109,11 +116,19 @@ assunzione`. Testo del goal: `references/autonomia.md` → *G1 — Lettura*.
 | **Project context** (`CLAUDE.md`, `AGENTS.md`) | dice stack e convenzioni o le dà per sottintese? è aggiornato o descrive un progetto di sei mesi fa? |
 | **Spec già consegnati** | la slice nuova li contraddice? |
 
-**Per giurisdizione:** Mary sull'evidenza, Rex sulla deployabilità, Niki sullo
-stack quando è WordPress, Jane sui dati personali dati per scontati, Elena su
-claim e promesse, il commercialista su prezzi e fiscale, Murat su ciò che nessuno
-ha verificato, Sally sul flusso, Winston sulla coerenza tecnica, Vesper e Vera
-sul craft. Chi non ha giurisdizione tace.
+**Per giurisdizione:** Mary sull'evidenza, John sul perimetro, Rex sulla
+deployabilità, Niki sullo stack quando è WordPress, Jane sui dati personali dati
+per scontati, Elena su claim e promesse, il commercialista su prezzi e fiscale,
+Murat su ciò che nessuno ha verificato, Sally sul flusso, Winston sulla coerenza
+tecnica, Amelia sulla fattibilità implementativa, Vesper e Vera sul craft. Chi
+non ha giurisdizione tace.
+
+**Chi c'è, però, non si ricorda: si deriva.** `uv run scripts/council_roster.py
+{project-root}` elenca gli agenti installati — **ognuno è membro di diritto** — e
+nomina chi il gruppo `super-esperti` ha lasciato fuori. Questa riga qui sopra è
+un'istantanea delle giurisdizioni, non l'elenco dei convocati: quando le due cose
+divergono vince lo script, perché è l'unica delle due che si aggiorna da sola
+(`autonomia.md` → *Convoca tutto il consiglio*).
 
 **Cosa può fare il verdetto:**
 
@@ -181,10 +196,10 @@ Sei artefatti, in `planning-artifacts/`, un file l'uno:
 | 5 | **Architettura** — stack, confini, regole | `bmad-architecture` **invocato in headless** |
 | 6 | **Project context** — le regole non ovvie per chi implementa | **scritto dal consiglio** come `project-context.md`: il suo workflow avanza per step con approvazione dell'owner e pianterebbe il flusso |
 
-Tutto dentro **un solo goal del consiglio, con tutto il roster convocato** — testo in
+Tutto dentro **un solo obiettivo del consiglio, con tutto l'elenco di chi siede al tavolo convocato** — testo in
 `autonomia.md` → *G2 — I documenti*. Il party è il contenitore che tiene insieme la
 seduta: dentro, i workflow headless si invocano davvero; quelli con checkpoint si
-usano come stampo (`autonomia.md` → *I workflow che si fermano*). Nessuna domanda
+usano come modello (`autonomia.md` → *I workflow che si fermano*). Nessuna domanda
 all'owner in nessun passaggio.
 
 **Tre criteri attraversano ogni documento**, e si dichiarano voce per voce:
@@ -222,10 +237,14 @@ dice solo dove tacciono. Si producono solo i mancanti — il pre-flight dice qua
 
 Fallimento: codice scritto prima che i sei esistano; documenti prodotti dopo la
 pagina, per copertura; ricerca fatta e non scritta; sicurezza rimandata alla slice
-dopo; un roster scelto a tavolino invece del consiglio intero; un workflow con
+dopo; un elenco di convocati scelto a tavolino invece del consiglio intero; un workflow con
 checkpoint invocato dentro il flusso.
 
-### 4.0b La tempra: nessun documento passa così com'è uscito
+### 4.0b Il controllo dei documenti: nessuno passa così com'è uscito
+
+*(«controllo dei documenti», come per l'acciaio: si scalda e si raffredda il documento finché non
+regge. In pratica tre passate di controllo — casi limite, domande di
+approfondimento, lettura ostile — prima che quel documento valga come vincolo.)*
 
 Un documento scritto in una seduta è una prima stesura, e una prima stesura entra in
 produzione con dentro tutto ciò che nessuno ha ancora provato a rompere. Prima di
@@ -235,7 +254,7 @@ una domanda all'owner.
 | | Passata | Come |
 |---|---|---|
 | 1 | **Casi limite** | `bmad-review-edge-case-hunter` **invocato** su ogni documento: cammina ogni ramo e ogni confine e restituisce solo ciò che non è gestito. Si ferma solo su input vuoto — non è una domanda, è un errore |
-| 2 | **Elicitazione — tutti i metodi applicabili** | `methods.csv` di `bmad-advanced-elicitation` come **stampo**: quel workflow *è* un menu che chiede «scegli un numero da 1 a 5», e non si invoca. Si prendono i 71 metodi, si tengono **tutti quelli applicabili** a quel documento — non cinque proposti — e si applicano |
+| 2 | **Elicitazione — tutti i metodi applicabili** | `methods.csv` di `bmad-advanced-elicitation` come **modello**: quel workflow *è* un menu che chiede «scegli un numero da 1 a 5», e non si invoca. Si prendono i 71 metodi, si tengono **tutti quelli applicabili** a quel documento — non cinque proposti — e si applicano |
 | 3 | **Review adversarial** | `bmad-review-adversarial-general` **invocato**, un passaggio ostile per documento. **Zero findings → si ri-analizza**, mai «ask for guidance»: se dopo la seconda passata resta zero, è un esito, si dichiara e si va |
 
 **Quali metodi sono applicabili** lo decide il tipo di documento, e si dichiara:
@@ -251,8 +270,16 @@ sapeva. Ciò che si decide di non recepire diventa **varianza** (§11) con il pe
 
 **Il tetto dei cinque vale anche qui** (§3.1, §6.1): le tre passate girano fino a
 cinque volte sullo stesso documento; al quinto si prende ciò che regge, si dichiara
-cosa resta scoperto, e si va avanti. La tempra non è un cancello: è una forgiatura
+cosa resta scoperto, e si va avanti. Il controllo dei documenti non è un cancello: è una forgiatura
 che finisce.
+
+**E il profilo lo restringe** (`autonomia.md` → *I tetti non si sommano*): sul
+profilo `leggero` — landing, pagina singola, restyle — le tre passate girano
+**una volta sola** per documento, ed è già più di quanto avesse chiunque prima.
+Il giro successivo si guadagna: si riapre un documento solo se la passata
+precedente ha prodotto una modifica **sostanziale**. Cinque per sei documenti,
+moltiplicati per tre passate, non sono rigore: sono un pomeriggio di sedute che
+l'owner paga senza vedere una riga.
 
 Fallimento: documenti usati come vincolo senza le tre passate; il menu
 dell'elicitazione presentato a qualcuno; cinque metodi invece di tutti quelli
@@ -286,6 +313,10 @@ servirà».
 
 ### 4.1 `slice_plan` — verticale, consegnabile
 
+*(una «slice» è una fetta verticale di prodotto: schermo, dati e logica di quella
+funzione insieme, finita e utilizzabile da sola. «Verticale» perché taglia tutti
+gli strati, invece di fare prima tutta l'impalcatura e poi tutto il resto.)*
+
 - **Una slice è end-to-end:** UI, dati e stato di quella funzione, online da sola.
   «Login + pagina vuota» non è una slice, è infrastruttura travestita.
 - **Sito:** **S1 landing** (sta online da sola, è ciò che il cliente approva) →
@@ -308,13 +339,22 @@ servirà».
 
 La `slice_plan` non è un elenco di intenzioni: **ogni slice diventa una spec
 eseguibile**, e il codice applicativo si scrive contro quella. Il taglio è quello di
-`bmad-quick-dev` — *un singolo goal utente shippabile* per spec — che è la definizione
+`bmad-quick-dev` — *un singolo obiettivo utente shippabile* per spec — che è la definizione
 stessa di slice verticale.
 
 1. **La spec si genera con `bmad-spec`, in headless** (chiamata da skill = nessuna
    domanda, modalità express). Slug per slice — `<progetto>-s1-<nome>`,
    `<progetto>-s2-<nome>` — così ogni slice ha la sua cartella e riaprire lo stesso
    slug **aggiorna in place** preservando gli ID capability.
+   **Headless non chiede, ma può rifiutare:** risponde con
+   `error_code: "missing_slug"` se lo slug non arriva e `insufficient_intent` se
+   l'input è troppo sottile. Non sono domande travestite e non si girano
+   all'owner: `missing_slug` è un errore di chiamata e si corregge passando lo
+   slug; `insufficient_intent` dice che i sei documenti non coprivano quella
+   slice — si torna a G2 per il pezzo mancante (dentro il tetto dei cinque) e si
+   richiama. Lo stesso vale per gli `HALT` su **input vuoto o illeggibile** dei
+   due workflow di review nella controllo dei documenti: input vuoto è un bug di chiamata, si
+   ripassa il documento, non si chiede niente a nessuno.
 2. **Le `open_questions[]` non sopravvivono alla generazione.** In express ogni buco
    diventa una domanda aperta nel file: lì non può restare, perché non ha nessuno a
    cui andare (nessuna domanda all'owner) e perché una spec con domande aperte non è
@@ -328,7 +368,7 @@ stessa di slice verticale.
    Given/When/Then, zero placeholder e zero TBD. Un `TODO` nella spec è lo stesso
    difetto del `TODO` nella pagina (§10) — qui blocca l'implementazione, lì la
    consegna.
-5. **Il craft non entra nella spec eseguibile.** Gli assi dichiarati — palette,
+5. **Il craft non entra nella spec eseguibile.** Le decisioni dichiarate — palette,
    `hue_sector`, `ink_family`, tipografia, griglia, superfici, hero, motion — vivono
    nel **DESIGN.md / spec di accompagnamento** (§10), e la spec di slice li
    **referenzia** in una riga. Duplicarli non aggiunge contratto: aggiunge un secondo
@@ -336,14 +376,14 @@ stessa di slice verticale.
    con il perimetro.
 6. **Misura:** ~900–1600 token per spec, **contati sul contratto applicativo**, non
    sul craft (punto 5). Se sfora davvero, si guarda se dentro ci sono **due
-   deliverable shippabili separatamente** — allora erano due slice, e la `slice_plan`
-   si corregge. Se è un goal solo che attraversa più strati, resta una spec:
-   cross-layer non è multi-goal.
+   lavoro consegnato shippabili separatamente** — allora erano due slice, e la `slice_plan`
+   si corregge. Se è un obiettivo solo che attraversa più strati, resta una spec:
+   cross-layer non è multi-obiettivo.
 7. **Chi fa cosa dentro la slice:** craft della pagina → Vesper (AF → Vera);
    endpoint, persistenza, auth di slice, logica di dominio → **Vesper, con la
    disciplina di `bmad-quick-dev`** — il suo `spec-template.md` e il suo standard
    *Ready for Development* — **senza invocarlo**: quel workflow si ferma a chiedere
-   in ogni ramo (`autonomia.md` → *I workflow che si fermano si usano come stampo*).
+   in ogni ramo (`autonomia.md` → *I workflow che si fermano si usano come modello*).
    Se è l'owner a lanciarlo, si esegue com'è: le fermate se le è scelte lui.
 8. **A consegna fatta la spec resta** in `implementation-artifacts/` e vincola la
    slice dopo. Nessuna spec si hand-edita: si ri-deriva con `bmad-spec` sullo
@@ -370,14 +410,27 @@ L'elenco entra **nello spec di accompagnamento**, mai dentro la pagina (§10).
 Lo stesso consiglio rientra sul risultato. È la risposta a «come ci accorgiamo che
 aveva sbagliato?». Il criterio è uno, e non è il gusto:
 
-> **Un deliverable è approvabile quando soddisfa tutte le richieste dei documenti
+> **Un lavoro consegnato è approvabile quando soddisfa tutte le richieste dei documenti
 > BMAD che lo vincolano** — PRD, UX, architettura, project context, spec già
 > consegnati — **più i craft-rules**. Se le soddisfa si approva **anche se
 > qualcuno l'avrebbe fatto diversamente**: il gusto personale non è un veto.
 
 - **Il rifiuto nomina la richiesta mancante.** «Non mi convince» non è un rifiuto:
   si dice *quale* punto dei documenti, *quale* requisito, *quale* regola di craft. Se
-  nessuno sa nominarla, il deliverable passa.
+  nessuno sa nominarla, il lavoro consegnato passa.
+- **Sul craft è rifiutabile solo ciò che si conta.** «Il craft non si vota»
+  (`autonomia.md`) e «si rifiuta nominando la regola di craft» convivono a una
+  condizione: la regola dev'essere **verificabile senza discutere di gusto** —
+  un numero, una presenza, un esito di script. Rifiutabile: `viewport` assente ·
+  overflow-x a 375 · più di 2 sezioni centrate · mono-allineamento · meno di 2
+  `grid-column` espliciti · `clamp` degenere · `TODO` nel file · `palette_guard`
+  che esce ≠ 0 (**exit 2 compreso: non misurato ≠ approvato**) · `register` o
+  `ink_family` non dichiarati · tre job di fila nello stesso settore · nessuna
+  `surface_texture`. **Non** rifiutabile: «quella palette non mi convince per un
+  ristorante», «avrei usato un altro font», «l'hero è troppo scura». Il secondo
+  elenco è gusto, e il gusto non è un veto: al massimo è una varianza. Un
+  rifiuto che non si può verificare con uno script o con un conteggio **non
+  conta nei cinque** — perché altrimenti i cinque giri si consumano a discutere.
 - **Parla chi ha giurisdizione:** form → Jane; prezzo esposto → commercialista;
   claim → Elena; WordPress → Niki; hosting o DNS → Rex; movimento → Vera. Chi tace
   su una cosa di sua competenza ha fallito, e il consiglio con lui.
@@ -387,11 +440,37 @@ aveva sbagliato?». Il criterio è uno, e non è il gusto:
 - Ciò che emerge e **non** era nei documenti non è motivo di rifiuto: è materiale
   per la slice successiva, o una varianza (§11).
 
-Convocazione: `bmad-party-mode --non-interactive`, goal «approva o rifiuta questo
-deliverable contro i documenti vincolanti e i craft-rules; motiva ogni
+Convocazione: `bmad-party-mode --non-interactive`, obiettivo «approva o rifiuta questo
+lavoro consegnato contro i documenti vincolanti e i craft-rules; motiva ogni
 rifiuto nominando la richiesta non soddisfatta». **Vale come la review avversaria,
 non in aggiunta:** è la stessa passata ostile, fatta da più teste con giurisdizioni
 diverse.
+
+### 6.0 La richiesta dell'owner è il primo documento
+
+Quando i sei li ha scritti il consiglio (§4.0), G3 approva contro un contratto
+che **il consiglio stesso si è dato**: se l'errore sta nel documento, il
+lavoro consegnato gli è coerente e passa all'unanimità. §7.1 rimanda la correzione a
+G1 «alla passata successiva» — ma su una landing one-shot quella passata non
+arriva mai, e allora nessuno se ne accorge, mai.
+
+Per questo l'approvazione ha **due metri, non uno**:
+
+1. **Il contratto** — i documenti vincolanti + i craft-rules (§6).
+2. **La richiesta originale dell'owner, testuale**, riletta com'è arrivata: il
+   lavoro consegnato fa la cosa che l'owner ha chiesto? Le letture dichiarate in G1
+   («l'ho letta come X, non Y») reggono ancora, ora che la pagina esiste?
+
+Se i due metri divergono, **non vince il documento**: vince la richiesta, il
+documento si **emenda** (§7.1) e la divergenza è una **varianza** — perché è la
+prova che una lettura di G1 era sbagliata, ed è l'unico momento in cui si può
+vedere. Un lavoro consegnato perfettamente conforme a un PRD che ha frainteso la
+richiesta è il fallimento più caro di tutto il flusso, ed è invisibile a
+chiunque guardi solo il contratto.
+
+Fallimento: G3 che rilegge solo i documenti; una lettura dichiarata in G1 mai
+più verificata contro la pagina finita; un'assunzione promossa a fatto perché
+il lavoro consegnato la rispetta.
 
 ### 6.1 Il rifiuto ha un tetto: cinque
 
@@ -399,9 +478,9 @@ Un consiglio che può rifiutare all'infinito non è esigente, è un ciclo che no
 termina — e senza nessuno fuori dal flusso a interromperlo, gira finché non finisce
 il tempo. Stessa forma del tetto sui rimandi della ricerca (§3.1), stessa ragione.
 
-1. **Massimo cinque rifiuti** per lo stesso deliverable. Ogni rifiuto nomina la
+1. **Massimo cinque rifiuti** per lo stesso lavoro consegnato. Ogni rifiuto nomina la
    richiesta mancante e **quella** si corregge: chi rifiuta senza nominarla non ha
-   rifiutato, e il deliverable passa (§6).
+   rifiutato, e il lavoro consegnato passa (§6).
 2. **Un rifiuto vale una volta sola — ma una regressione non è una ripetizione.**
    La stessa richiesta mancante non può motivare due rifiuti: se dopo la correzione
    qualcuno la ripropone tale e quale, il giro non conta. Rifiuti che si spostano di
@@ -411,26 +490,26 @@ il tempo. Stessa forma del tetto sui rimandi della ricerca (§3.1), stessa ragio
    ripetizione significherebbe consegnare X rotto senza che nessuno lo dica.
 2b. **L'oscillazione si chiude alla seconda andata e ritorno.** Se X e Y si
    escludono a vicenda — sistemare l'uno rompe l'altro, due volte — il problema non
-   è il deliverable: è che il contratto chiede due cose incompatibili. Si sceglie
+   è il lavoro consegnato: è che il contratto chiede due cose incompatibili. Si sceglie
    **quale delle due cede**, si dichiara perché, e la scelta è una **varianza**
    (§11). Continuare a girare tra X e Y consuma i cinque giri per scoprire una cosa
    che si sapeva al secondo.
 3. **Al quinto si consegna comunque, dichiarando cosa resta aperto.** Non si torna
    dall'owner a chiedere il permesso di consegnare: si scrive in una riga quale
    richiesta non si è riusciti a soddisfare e perché, si marca come **varianza**
-   (§11), e la si porta nella slice successiva. Un deliverable che soddisfa il
-   contratto meno un punto dichiarato vale infinitamente più di un deliverable che
+   (§11), e la si porta nella slice successiva. Un lavoro consegnato che soddisfa il
+   contratto meno un punto dichiarato vale infinitamente più di un lavoro consegnato che
    non esce.
 4. **Il conto si scrive** nello spec, come per i rimandi: zero rifiuti sempre
    significa che nessuno guarda davvero; cinque spesso significa che il problema sta
-   nei documenti, non nel deliverable.
-5. **Il tetto è per deliverable, non per sessione:** non si azzera rigenerando la
+   nei documenti, non dentro quello che consegni.
+5. **Il tetto è per lavoro consegnato, non per sessione:** non si azzera rigenerando la
    pagina, o basterebbe ripartire da capo per ricominciare a girare. **Il contatore
    riparte solo quando cambia il contratto:** una richiesta nuova dell'owner, una
-   slice diversa, un documento emendato. Una correzione dello stesso deliverable contro
+   slice diversa, un documento emendato. Una correzione dello stesso lavoro consegnato contro
    lo stesso contratto eredita il conto — anche se arriva mezz'ora dopo la consegna.
 
-Fallimento: sesto rifiuto sullo stesso deliverable; rifiuto che ripete una richiesta
+Fallimento: sesto rifiuto sullo stesso lavoro consegnato; rifiuto che ripete una richiesta
 già corretta; lavoro fermo in approvazione senza che nessuno nomini cosa manca.
 
 ---
@@ -479,7 +558,7 @@ dell'assenza del documento.
   invece di irrigidirsi.
 - **G3 approva contro i documenti, non li giudica** (§6): se un documento è sbagliato
   il posto per accorgersene è qui, non in approvazione — dove un errore di documento
-  diventa un deliverable coerente con l'errore.
+  diventa un lavoro consegnato coerente con l'errore.
 
 ## 8. Il sito esistente del cliente
 
@@ -513,7 +592,7 @@ Se l'owner **non ha fornito i contenuti**, il copy non è un buco da riempire co
 segnaposto: è un esito della ricerca, alla pari delle sezioni. La stessa ricerca
 che dice *quali* sezioni servono dice anche *cosa dicono*.
 
-Non confondere i piani: negli assi craft `hero_copy` è **dove** sta il testo
+Non confondere i piani: nelle decisioni di design `hero_copy` è **dove** sta il testo
 (placement × panel); qui si tratta di **cosa dice**.
 
 - **Precedenza:** owner → PRD / page spec → **sito esistente** (servizi, nomi,
@@ -542,10 +621,10 @@ e non si contaminano:
 | | **L'artefatto** (pagina, app, codice) | **Lo spec** (`implementation-artifacts/spec-*.md`) |
 |---|---|---|
 | Si legge come | un sito **vero e finito** | un documento di progetto |
-| Contiene | solo il prodotto: copy reale, dati verosimili, zero marcatori | documenti usati o la loro assenza, assi dichiarati, casi limite, canone applicato, requisiti per il backend |
-| Non contiene mai | `TODO` · «da sostituire» · note di processo · elenchi di dati fittizi · `lorem ipsum` | un elenco di «dati da sostituire» — quello si dice **a voce** |
+| Contiene | solo il prodotto: copy reale, dati verosimili, zero marcatori | documenti usati o la loro assenza, decisioni dichiarate, casi limite, canone applicato, requisiti per il backend, **`dati_verosimili:`** — cosa è inventato e dove |
+| Non contiene mai | `TODO` · «da sostituire» · note di processo · elenchi di dati fittizi · `lorem ipsum` | istruzioni all'owner **al posto** della riga in chat: l'elenco documenta, l'avviso si dà comunque a voce |
 
-- **Il deliverable è finito, mai «da completare».** Prezzi, orari, indirizzi e
+- **Il lavoro consegnato è finito, mai «da completare».** Prezzi, orari, indirizzi e
   testimonianze sono verosimili e si scrivono per intero, ma nel file **non
   compare mai** una nota di sostituzione: niente `[INSERIRE …]`, `TODO`, `XXX`,
   «testo di esempio», commenti che avvisano, sezione finale con i dati fittizi.
@@ -561,6 +640,22 @@ e non si contaminano:
   questo si ripete anche quando l'avviso di apertura l'aveva già detto.
   Oltre quell'anello Vesper non arriva e non deve: cosa il cliente decide di
   mettere online è affare suo.
+- **La chat sparisce, il sito resta — quindi la riga vive anche nel DESIGN.md.**
+  Dire i dati verosimili *solo* in conversazione appende la catena al canale più
+  volatile che ci sia: sessione chiusa, e resta un `index.html` con recapiti
+  inventati e nessuna traccia di **quali**. Perciò accanto al lavoro consegnato, nel
+  `DESIGN.md` (o nello spec), sta una voce **`dati_verosimili:`** — elenco secco
+  di cosa è stato inventato e dove: telefono, email, indirizzo, P.IVA, prezzi,
+  orari, recensioni. Non è la nota di sostituzione vietata sopra: quella sporca
+  **l'artefatto**, questa sta nel documento di accompagnamento, che è già il
+  posto di documenti usati, decisioni e casi limite. La riga in chat resta comunque:
+  l'una avvisa adesso, l'altro risponde fra sei mesi a «ma questo numero è
+  vero?».
+- **Il telefono si sceglie perché non possa squillare da nessuno:** prefissi non
+  assegnati, `+39 0X XXXX` inventati fuori dai piani di numerazione reali, email
+  sul dominio del brand fittizio. Un recapito verosimile *e* attribuito a una
+  persona reale non è un dato di esempio: è il numero di qualcuno su un sito che
+  non è suo.
 - **Resta vietato inventare fatti che feriscono se creduti:** certificazioni,
   premi, partner o clienti reali, riferimenti di legge, dati sanitari, recensioni
   attribuite a persone esistenti. Lì non si riempie il vuoto: si progetta la
@@ -626,6 +721,9 @@ o si deducono — e dedurre è la strada per la pagina nello stack sbagliato.
 
 ## 13. Il canone, quando mancano architettura **e** project context
 
+*(il «canone» sono le sei regole di scrittura del codice qui sotto: valgono
+quando il progetto non ne detta di proprie.)*
+
 Nessun documento di architettura e nessun project context = il progetto non detta
 regole. Il vuoto non si riempie con l'improvvisazione: vale il canone, obbligatorio
 come i craft-rules. Se architettura o project context **esistono**, comandano loro;
@@ -664,16 +762,16 @@ quale resta al backend.
 Il costo non è mai stato nei singoli workflow: è nella **sequenza completa applicata
 sempre**, e nelle **fermate** che ognuno può contenere. La tabella verificata di chi
 si ferma e chi no vive in `autonomia.md` → *I workflow che si fermano si usano come
-stampo*; qui basta la mappa di chi fa cosa:
+modello*; qui basta la mappa di chi fa cosa:
 
 | Passo | Chi |
 |---|---|
 | Ricerca dominio + marketing (scritte) | Vesper (§2) |
-| PRD · documento UX · architettura | `bmad-prd` · `bmad-ux` · `bmad-architecture`, **invocati in headless** dentro il goal G2 |
+| PRD · documento UX · architettura | `bmad-prd` · `bmad-ux` · `bmad-architecture`, **invocati in headless** dentro l'obiettivo G2 |
 | Project context | il consiglio, come `project-context.md` (§4.0) |
-| Tempra dei documenti | `bmad-review-edge-case-hunter` e `bmad-review-adversarial-general` **invocati**; `methods.csv` dell'elicitazione come stampo (§4.0b) |
+| Controllo dei documenti | `bmad-review-edge-case-hunter` e `bmad-review-adversarial-general` **invocati**; `methods.csv` dell'elicitazione come modello (§4.0b) |
 | Spec di slice | **`bmad-spec`** headless, slug `<progetto>-s<N>-<nome>` (§4.2) |
-| Codice applicativo | Vesper, con **`bmad-quick-dev` come stampo** — ha checkpoint in ogni ramo |
+| Codice applicativo | Vesper, con **`bmad-quick-dev` come modello** — ha checkpoint in ogni ramo |
 | Craft della pagina | Vesper AF → **`agent-web-animations`** |
 | Slice pesante (S2 con auth e dati) | **`bmad-create-story`** · **`bmad-code-review`** |
 | Progetto con un team che li legge | **`bmad-sprint-planning`** e i workflow BMAD interi |
@@ -687,7 +785,7 @@ stampo*; qui basta la mappa di chi fa cosa:
 
 **Vincoli:** pagina in uno stack diverso da quello dell'architettura; PRD ignorato
 «perché la sezione veniva meglio così»; page spec riscritta dal seed; stack scelto
-per comodità quando il repo o `docs/` ne dichiarano un altro; deliverable che non
+per comodità quando il repo o `docs/` ne dichiarano un altro; lavoro consegnato che non
 dichiara né i documenti usati né la loro assenza.
 
 **Processo:** analisi autonoma partita in silenzio, o con l'avviso appiccicato in
@@ -698,7 +796,7 @@ sceglie font e palette (il craft non si vota); ricerca insufficiente accettata i
 che rifatta; rimando che non nomina cosa manca; sesto rimando sullo stesso lavoro
 invece della decisione sull'evidenza; lavoro fermato al quinto rimando aspettando
 l'owner; rifiuto in approvazione che non nomina la richiesta mancante; **sesto rifiuto
-sullo stesso deliverable**, o rifiuto che ripete tale e quale una richiesta già
+sullo stesso lavoro consegnato**, o rifiuto che ripete tale e quale una richiesta già
 corretta — ma anche una **regressione** scambiata per ripetizione e quindi taciuta;
 due andate e ritorni fra richieste incompatibili senza scegliere quale cede; **un
 workflow con checkpoint invocato dentro il flusso**, o la sua disciplina saltata
@@ -712,7 +810,7 @@ forniti; servizi inventati mentre il sito ne elencava altri; stock generico quan
 il cliente aveva foto sue; restyle che somiglia al sito vecchio; testi dell'owner
 riscritti «perché suonavano meglio».
 
-**Artefatti:** `TODO`, «da sostituire» o blocchi di dati fittizi nel deliverable;
+**Artefatti:** `TODO`, «da sostituire» o blocchi di dati fittizi dentro quello che consegni;
 dati verosimili non segnalati in chat; assunzioni scritte come fatti; assunzione
 decisa in consiglio e mai finita in `docs/varianze/`; varianza lunga una pagina, o
 una varianza per ogni decisione ordinaria.

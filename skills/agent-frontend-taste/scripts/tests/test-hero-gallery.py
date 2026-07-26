@@ -91,7 +91,8 @@ def main() -> int:
     else:
         print(f"PASS: {len(treatments)} famiglie di hero_treatment nel catalogo")
 
-    # A card must carry a name and a description: the page is a chooser, not a token dump.
+    # Le schede del catalogo restano complete — `--show <id>` le stampa in chat —
+    # ma la PAGINA non le riversa più sotto ogni miniatura: lì si guarda.
     thin = [a["id"] for a in archetypes if len(a["desc"]) < 60 or len(a["use"]) < 25 or len(a["watch"]) < 25]
     if thin:
         print(f"FAIL: descrizioni troppo magre: {thin}")
@@ -292,24 +293,23 @@ def check_in_browser(mod, catalog) -> int:
                 problems.append(name)
 
         check("stato iniziale", shown(), {a["id"] for a in archetypes})
-        for group in ("media", "placement", "panel"):
-            for value in catalog["axes"][group]:
-                page.click("#reset")
-                page.click(f'.chip[data-group="{group}"][data-value="{value}"]')
-                check(f"{group}={value}", shown(), {a["id"] for a in archetypes if a[group] == value})
+        # Un filtro solo, quello sul media: testo e pannello si vedono guardando
+        # la miniatura, e ventitré pulsanti sopra gli esempi erano più da leggere
+        # che da usare.
+        for value in catalog["axes"]["media"]:
+            page.click("#reset")
+            page.click(f'.chip[data-group="media"][data-value="{value}"]')
+            check(f"media={value}", shown(), {a["id"] for a in archetypes if a["media"] == value})
+        check("nessun filtro oltre al media", page.locator('.chip').count(),
+              len(catalog["axes"]["media"]))
         page.click("#reset")
         page.click('.chip[data-group="media"][data-value="video"]')
         page.click('.chip[data-group="media"][data-value="carousel"]')
-        check("unione nello stesso asse", shown(),
+        check("unione nello stesso filtro", shown(),
               {a["id"] for a in archetypes if a["media"] in ("video", "carousel")})
-        page.click("#reset")
-        page.click('.chip[data-group="media"][data-value="still"]')
-        page.click('.chip[data-group="panel"][data-value="solid"]')
-        check("intersezione fra assi", shown(),
-              {a["id"] for a in archetypes if a["media"] == "still" and a["panel"] == "solid"})
-        page.click('.chip[data-group="panel"][data-value="solid"]')
+        page.click('.chip[data-group="media"][data-value="carousel"]')
         check("secondo click spegne il chip", shown(),
-              {a["id"] for a in archetypes if a["media"] == "still"})
+              {a["id"] for a in archetypes if a["media"] == "video"})
         page.click("#reset")
         page.fill("#q", "prima neve")
         check("ricerca sul testo della miniatura", shown(),

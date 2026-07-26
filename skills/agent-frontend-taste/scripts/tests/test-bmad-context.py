@@ -241,6 +241,36 @@ def main() -> int:
         check("path assoluto in config non ri-radicato nel progetto",
               str(p), "/var/shared/plans")
 
+    # --- il nome non basta: `ux` dentro `luxury` (review 2026-07-26) --------
+    # `register: luxury` è un asse dello skill: file con "luxury" nel nome sono
+    # l'esito normale della ricerca di dominio. Classificarli come page spec
+    # vincolante saltava l'avviso di apertura e la stesura dei sei documenti.
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        make_project(root, with_docs=False)
+        planning = root / "_bmad-output" / "planning-artifacts"
+        (planning / "ricerca-hotel-luxury.md").write_text(
+            "# Ricerca di dominio — hotel luxury\nappunti\n", encoding="utf-8")
+        (planning / "note-deluxe.md").write_text("# Note\n", encoding="utf-8")
+        d = mod.discover(root)
+        check("«luxury» non è una page spec", d["ux_specs"], [])
+        check("«deluxe» non è una page spec", len(d["ux_specs"]), 0)
+        check("ricerca di dominio non rende il progetto vincolato", d["binding"], False)
+        check("i file non classificati restano elencati", len(d["planning_other"]), 2)
+        check("verdetto: i sei documenti si scrivono",
+              "NESSUN DOCUMENTO VINCOLANTE" in mod.render_md(d), True)
+
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        make_project(root, with_docs=False)
+        planning = root / "_bmad-output" / "planning-artifacts"
+        for name in ("ux-home.md", "UX_flows.md", "wireframe-menu.md", "page-spec-home.md"):
+            (planning / name).write_text("# Spec\n", encoding="utf-8")
+        (planning / "prd-v2.md").write_text("# PRD\n", encoding="utf-8")
+        d = mod.discover(root)
+        check("le vere page spec restano riconosciute", len(d["ux_specs"]), 4)
+        check("il PRD resta riconosciuto", len(d["prd"]), 1)
+
     r = run("/nonexistent-path-xyz")
     check("root inesistente rifiutata", r.returncode != 0, True)
 

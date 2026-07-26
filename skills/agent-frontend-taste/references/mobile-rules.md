@@ -5,7 +5,7 @@ template consumer di default. Load da DX/UE/AF quando la superficie è `mobile`.
 Non è una capability.
 
 Il problema misurato: sulla web app mobile la skill era **più sottile che altrove**.
-C'erano le regole responsive (che valgono per ogni pagina) e uno stampo DESIGN.md,
+C'erano le regole responsive (che valgono per ogni pagina) e uno modello DESIGN.md,
 ma nessuna regola sul **primo istante** (splash), sul **fondo di marca**, sul
 marchio, sull'onboarding — cioè su tutto ciò che si vede prima del contenuto. Quel
 vuoto si riempie da solo, sempre allo stesso modo: fondo bianco, icona generata a
@@ -16,7 +16,7 @@ Due strumenti, in quest'ordine:
 | Strumento | Cosa fa | Quando |
 |---|---|---|
 | `scripts/mobile_corpus.py` | costruisce/legge il corpus di **centinaia** di template mobile/PWA reali, con tratti (stack · domain · graphic) | una volta, poi refresh quando invecchia |
-| `scripts/mobile_recipe.py` | estrae dal seed una **ricetta**: 16 assi (6 dei quali grafici) + motion + extra + firma, con invarianti e refs dal corpus | a ogni new app / restyle sostanziale |
+| `scripts/mobile_recipe.py` | estrae dal seed una **ricetta**: 16 decisioni (6 dei quali grafici) + motion + extra + firma, con invarianti e refs dal corpus | a ogni new app / restyle sostanziale |
 
 ```bash
 uv run scripts/mobile_corpus.py --build            # ~22 request → assets/mobile-corpus.json
@@ -38,13 +38,13 @@ prima non è il contenuto ma il **primo istante** e il **fondo di marca**. Era i
 più largo della skill — senza una regola, ogni app finiva con fondo bianco, icona di
 riflesso, lampo bianco all'avvio e un gradiente viola-indaco «perché fa app».
 
-**Ricetta prima della shell (new app / restyle sostanziale):** genera gli assi con
+**Ricetta prima della shell (new app / restyle sostanziale):** genera le decisioni con
 `mobile_recipe.py` (seed `YYYYMMDDHH`, `--domain`, esclusioni da MEMORY incluse
 `--last-splash` e `--last-background`; `--batch` per varianti sorelle) e dichiarali.
 Corpus con `mobile_corpus.py`. Leve misurate (e **leve morte**: i tag path che negli admin sono la leva, qui
 non esistono) e craft grafico nel resto di questo file. Il minimo non negoziabile:
 
-1. **Sei assi grafici dichiarati:** `splash` · `app_background` · `brand_mark` ·
+1. **Sei decisioni grafiche dichiarati:** `splash` · `app_background` · `brand_mark` ·
    `onboarding` · `illustration` · `depth`. Non dichiararli significa ereditarli.
 2. **Manifest coerente:** `background_color` **identico** al fondo dello splash
    (altrimenti lampo bianco all'avvio), icona `maskable` con glifo in safe zone,
@@ -120,18 +120,18 @@ mirror di asset, nessuna fonte che ha detto di no.
 
 ## La legge randomica (deterministica, non capricciosa)
 
-Identica a `dashboard-rules.md`: seed `YYYYMMDDHH`, **uno stream RNG per asse**
+Identica a `dashboard-rules.md`: seed `YYYYMMDDHH`, **uno stream RNG per decisione**
 (`random.Random("<seed>|<asse>")`), esclusioni da MEMORY (`--last-palette`,
 `--last-radius`, `--last-type`, `--last-shell`, **`--last-splash`**,
 **`--last-background`**), conflitti risolti e dichiarati, `--batch` mutuamente
 distinto su shell · splash · fondo · liste · palette · radius · type.
 
 **Armonia estetica (2026-07-26):** la palette è l'**àncora di registro** — viene
-estratta per prima e gli assi visivi si accordano a lei tramite una matrice di
+estratta per prima e le decisioni visive si accordano a lei tramite una matrice di
 affinità dichiarata (`AFFINITY`: obsidian-champagne → sharp/segno, clay-ember →
 rounded/fotografia…). I pesi favoriscono o sfavoriscono, **mai eliminano**; le
 poche coppie davvero stonate sono `DISSONANCES` dure, risolte come i conflitti e
-dichiarate. La ricetta stampa la riga **Armonia** con gli assi accordati;
+dichiarate. La ricetta stampa la riga **Armonia** con le decisioni accordate;
 `--flat` spegne tutto (pesi di dominio e affinità). Misurato: gli abbinamenti
 stonati scendono dal 12,2% al 2,2% (mobile) e dal 6,9% all'1,3% (dashboard),
 con varietà e determinismo intatti. È gusto codificato in una tabella
@@ -142,14 +142,14 @@ sul renderizzato.
 una piccola tabella `DOMAIN_WEIGHTS` sposta i pesi verso ciò che la vertical chiede
 davvero (fintech ↑ sharp/dense/compact-data, food ↑ rounded/card-stack/photo-crop…).
 I pesi **sfavoriscono, mai eliminano** (nessun peso zero), la ricetta dichiara su
-quali assi hanno agito, `--flat` ripristina l'estrazione uniforme, e il determinismo
+quali decisioni hanno agito, `--flat` ripristina l'estrazione uniforme, e il determinismo
 resta pieno: stesso seed+dominio → stessa ricetta.
 
-La ricetta **propone**. DX/UE/AF confermano o alterano ogni asse contro `activity`,
-dominio e corpus — e poi lo **dichiarano**. Un asse non dichiarato è un asse
+La ricetta **propone**. DX/UE/AF confermano o alterano ogni decisione contro `activity`,
+dominio e corpus — e poi lo **dichiarano**. Un decisione non dichiarato è una decisione
 ereditato per riflesso.
 
-## Assi grafici (il motivo per cui questo file esiste)
+## Decisioni grafici (il motivo per cui questo file esiste)
 
 Pool nel codice, non duplicati qui: `splash` · `app_background` · `brand_mark` ·
 `onboarding` · `illustration` · `depth`. Le regole che li governano:
@@ -336,9 +336,9 @@ contrasto AA, `prefers-reduced-motion`; motion repeat; hard-reject palette.
 1. Corpus presente e non vecchio (`--stats`); se manca, `--build` o dichiara il gap.
 2. Genera la ricetta col dominio giusto e le esclusioni da MEMORY. Su varianti
    sorelle usa `--batch`.
-3. Per gli assi grafici guarda **a mano** Figma Community o Dribbble, oppure decidi
+3. Per le decisioni grafiche guarda **a mano** Figma Community o Dribbble, oppure decidi
    dalla palette. Non fingere una ricerca che il corpus non può fare.
-4. Traduci **ogni** asse in markup/CSS concreti. Se un asse non ha senso per il
+4. Traduci **ogni** decisione in markup/CSS concreti. Se una decisione non ha senso per il
    dominio, cambialo **e dichiara perché** — non ignorarlo in silenzio.
 5. Verifica **installata**, non solo in scheda: lampo bianco all'avvio, safe area
    con la tastiera aperta, pollice su ogni azione primaria, contrasto sul fondo reale.
