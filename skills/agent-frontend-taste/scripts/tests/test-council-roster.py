@@ -165,6 +165,27 @@ def main() -> int:
         check("con gruppo configurato si convoca con --party",
               d["convocazione"], "bmad-party-mode --non-interactive --party super-esperti")
 
+    # Il gruppo che --emit-party scrive nomina gli agenti col loro codice
+    # installato, senza personas custom: deve risultare completo. Trovato
+    # installandolo davvero in un progetto — usciva 1 dicendo che non sedeva
+    # nessuno, cioè lo script bocciava il file che aveva generato lui.
+    with tempfile.TemporaryDirectory() as td:
+        root = Path(td)
+        agent(root, "agent-frontend-taste", "Vesper — craft FE.", where=".claude/skills")
+        agent(root, "agent-world-cpa", "Commercialista Mondiale (fiscale).",
+              where=".claude/skills")
+        (root / "_bmad" / "custom").mkdir(parents=True)
+        (root / "_bmad" / "custom" / "bmad-party-mode.toml").write_text(
+            mod.emit_party(root), encoding="utf-8")
+        d = mod.build(root)
+        check("il gruppo generato da --emit-party è completo", d["complete"], True)
+        check("ogni agente è seduto col proprio codice",
+              sorted(a["party_code"] for a in d["agents"]),
+              ["agent-frontend-taste", "agent-world-cpa"])
+        check("con il gruppo si convoca con --party",
+              d["convocazione"], "bmad-party-mode --non-interactive --party super-esperti")
+        check("CLI: exit 0 sul gruppo appena generato", run(str(root)).returncode, 0)
+
     # --emit-party genera un gruppo installabile che contiene tutti.
     with tempfile.TemporaryDirectory() as td:
         root = Path(td)
