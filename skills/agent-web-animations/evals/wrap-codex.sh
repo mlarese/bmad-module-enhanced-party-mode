@@ -6,12 +6,21 @@
 set -euo pipefail
 PROMPT=${1:-}
 CWD=${2:-.}
+
+# In coda a ogni query: via le cache che il runtime si è scaricato nell'HOME
+# isolato della run (Chromium & co.). Gli esiti restano, il giga di browser no.
+_clean_run_caches() {
+  local script
+  script="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/clean-caches.sh"
+  [ -f "$script" ] && bash "$script" "$CWD" || true
+}
+
 HOST_HOME="${BMAD_EVAL_HOST_HOME:-/Users/maurolarese}"
 export CODEX_HOME="${CODEX_HOME:-$HOST_HOME/.codex}"
 cd "$CWD"
 
 RAW=$(mktemp)
-trap 'rm -f "$RAW"' EXIT
+trap 'rm -f "$RAW"; _clean_run_caches' EXIT
 
 # Prompt as argv; never consume host stdin (avoids "Reading additional input…").
 codex exec \
