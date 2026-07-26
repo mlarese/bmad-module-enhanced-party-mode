@@ -43,6 +43,171 @@ teorico — un probe senza `--out` esplicito ha sovrascritto il corpus committat
 5. Row actions = **icons only** (e.g. delete); `stopPropagation`; `aria-label` required.
 6. Scorciatoia (lavoro piccolo): micro-copy OK; new shell/table → rules 1–5.
 
+## Tabelle: paginazione e filtro multicampo, sempre
+
+*(«server side» = il lavoro lo fa il server: la pagina chiede *quelle* venti righe
+e *quel* filtro, invece di scaricare tutto e setacciarlo nel browser.
+«autocomplete» = mentre scrivi, il campo propone i valori che esistono davvero.)*
+
+Default **non negoziabile su ogni tabella**, salvo che i documenti dicano altro
+(ultimo punto). Non è una preferenza: una tabella senza paginazione regge finché
+i dati sono finti, e un filtro che setaccia in pagina regge finché le righe sono
+venti. Le dashboard vere non stanno in nessuno dei due casi.
+
+**Paginazione**
+
+1. **Ogni tabella è paginata, e la paginazione è server side.** La pagina chiede
+   un intervallo, il server risponde con le righe **e il totale**.
+2. **Si vede a che punto sei:** «1–25 di 340», non solo frecce avanti e indietro.
+   Senza il totale nessuno sa se sta guardando il 7% o il 90% dei dati.
+3. **Ordinamento e filtro vanno server side con lei, o la paginazione mente.**
+   Ordinare le 25 righe della pagina corrente sembra funzionare e non funziona:
+   ordina un venticinquesimo dei dati e chiama «il più recente» il più recente
+   *di questa pagina*. È il difetto classico, ed è invisibile in demo.
+4. **Il modo di paginare si dichiara:** `offset` regge le prime pagine e crolla in
+   fondo ai dataset grandi; `cursore` regge ma non salta a «pagina 12». Si sceglie
+   sul dominio, si scrive nel DESIGN, e la dimensione di pagina predefinita con lui.
+5. **Vuoto e vuoto-per-filtro sono due stati diversi.** «Non ci sono ancora
+   prenotazioni» e «nessuna prenotazione con questi filtri» dicono cose opposte:
+   il secondo offre di azzerare i filtri, il primo no. Confonderli fa credere che
+   i dati siano spariti.
+6. **Tastiera e lettori di schermo:** `nav` con `aria-label`, pagina corrente con
+   `aria-current="page"`, e il cambio pagina annunciato — non solo dipinto.
+
+**Filtro multicampo, server side, con autocomplete**
+
+1. **Multicampo:** più campi combinabili — testo, stato, intervallo di date,
+   relazione — non una sola casella di ricerca. La casella singola è il filtro che
+   si mette quando non si è deciso su cosa si filtra davvero.
+2. **La forma la sceglie la ricetta, il comportamento no.** `filter_pattern`
+   (faceted-panel · search-first · saved-views…) resta **sorteggiato**: decide
+   *che aspetto ha* il filtro e dove sta. Che sia multicampo, server side e con
+   autocomplete non è sorteggiabile — è un invariante, e vale qualunque forma esca.
+3. **Autocomplete sui campi che lo ammettono**, con quello che lo rende usabile
+   invece che fastidioso: attesa breve prima di chiamare (~250 ms), un minimo di
+   caratteri, stati di **caricamento · nessun risultato · errore**, frecce e invio
+   e `esc` da tastiera, `role="combobox"` con `aria-expanded` e
+   `aria-activedescendant`. **I suggerimenti non sono un veto:** si deve poter
+   cercare un valore che non compare in lista.
+4. **Le risposte tornano fuori ordine, e va gestito.** Chi digita «mar» in fretta
+   manda tre richieste: se arriva per ultima quella di «ma», la tendina mostra i
+   suggerimenti sbagliati sotto il testo giusto. Ogni risposta che non corrisponde
+   all'ultima query si **scarta** (`AbortController` o un contatore di sequenza).
+   È il difetto numero uno degli autocomplete, e in demo non si vede mai perché in
+   locale le risposte tornano in ordine.
+5. **Su una consegna statica non si finge:** si costruisce con la **forma** server
+   side — una funzione di fetch parametrica, l'attesa, gli stati, il totale — e gli
+   **endpoint si scrivono come requisito per il back end** nello spec
+   (`implementation-handoff.md` §13 punto 5). Un filtro che setaccia in pagina venti
+   righe finte è una demo che mente su come si comporterà a cinquantamila, e chi la
+   approva compra quella bugia.
+6. **Sicurezza e dati personali — qui parlano Jane e Rex, non il craft:**
+   - il testo del filtro finisce in una query: **parametrizzata**, mai concatenata;
+   - **l'endpoint di autocomplete è un enumeratore.** Digitare «a» restituisce
+     l'elenco dei clienti: va autorizzato **come i dati che espone**, con un tetto
+     ai risultati e un limite di frequenza, e non deve suggerire a qualcuno dati
+     che non avrebbe il diritto di leggere. È il punto che non finisce mai nello
+     spec, e resta aperto anche quando la tabella è protetta bene;
+   - **i filtri con dati personali non vanno nella query string** — finiscono nei
+     log, nel referrer e nella cronologia. Gli altri sì, e devono: una vista
+     filtrata si manda a un collega, o non è una vista.
+
+**Scorciatoia (lavoro piccolo):** una correzione su una tabella che c'è già non
+obbliga a rifarle la paginazione. Una **tabella nuova** sì, sempre.
+
+**A meno che i documenti non dicano altro.** PRD, documento UX, page spec e
+architettura **vincolano** (`implementation-handoff.md` §7): se dicono lista corta
+senza paginazione, o filtro in pagina perché l'insieme è chiuso e piccolo, comanda
+il documento — e la deroga si scrive in una riga nel DESIGN, con il perché. Questo
+è il default per quando **nessuno ha deciso**, non una regola da difendere contro
+la specifica.
+
+**Si dichiara nel DESIGN**, o è una decisione ereditata per riflesso:
+
+```yaml
+paginazione: server-side · offset · 25 per pagina · totale esposto
+filtro: server-side · stato + intervallo date + cliente(autocomplete) · debounce 250ms
+        requisiti backend → spec-<slug>.md (endpoint, autorizzazione, tetto risultati)
+```
+
+## Account: profilo, logout, admin — sempre
+
+Una dashboard è un'area riservata: se ci si entra, si deve poter **uscire** e si
+deve poter **cambiare la propria password**. E qualcuno deve poter rimettere in
+piedi l'utente che si è chiuso fuori, o l'unico rimedio diventa una query a mano
+sul database. Sono tre cose che non si aggiungono dopo: si progettano con la shell.
+
+**Nel chrome, sempre**
+
+1. **Profilo** raggiungibile da ogni schermata (voce di menù utente o avatar in
+   alto a destra), e **logout** dentro quel menù — non nascosto in una pagina
+   impostazioni.
+2. **Il logout chiude la sessione sul server**, non svuota solo `localStorage`. Un
+   logout che cancella un token e lascia la sessione viva sul server è un logout
+   finto: chi ha copiato quel token entra lo stesso.
+3. Chi sei e con che ruolo **si legge** nel menù utente. Un'interfaccia che cambia
+   in base al ruolo senza mai dire quale ruolo hai è un'interfaccia che sembra
+   rotta a chi ha meno permessi.
+
+**Profilo — cambio password**
+
+1. Il profilo permette il **cambio password**, e il cambio **chiede la password
+   attuale**. Senza, chi si siede al posto di un collega con la sessione aperta si
+   prende l'account in due clic: la ri-autenticazione è ciò che separa una sessione
+   rubata da un account rubato.
+2. **Cambiata la password, le altre sessioni cadono.** Se cambio la password
+   *perché* qualcuno è entrato, e la sua sessione resta valida, non ho fatto niente.
+3. Regole di robustezza dichiarate e verificate **anche sul server**: la
+   validazione nel browser è comodità, mai sicurezza (`implementation-handoff.md`
+   §13 punto 5).
+
+**Admin — esiste sempre, e resetta le password**
+
+1. **Il ruolo admin esiste dal momento in cui esistono gli account.** Non si
+   aggiunge alla slice dopo: aggiungere i ruoli a cose fatte vuol dire riaprire
+   ogni query e ogni schermata.
+2. **L'admin resetta, non sceglie.** Non imposta una password che poi conosce e
+   non gliela mostra: **emette un link di reset a uso singolo e con scadenza**, e
+   la password se la sceglie l'utente. Un admin che conosce la password di un
+   utente può agire *come lui*, e da quel momento nessun registro può più dire chi
+   ha fatto cosa. È la differenza fra un amministratore e una chiave universale.
+3. **Il token di reset:** uso singolo, scadenza corta, conservato **cifrato** (chi
+   legge il database non deve poter usare i link in sospeso), invalidato quando ne
+   viene chiesto un altro, e **tutte le sessioni dell'utente cadono** quando il
+   reset va a buon fine.
+4. **Nessuna password in chiaro, da nessuna parte:** non nei log, non in una mail,
+   non in una schermata «ecco la nuova password», non nella risposta di un'API.
+   Conservate con un algoritmo pensato per le password (argon2id, bcrypt) — mai un
+   hash generico.
+5. **Chi resetta cosa resta scritto.** Un registro delle azioni amministrative —
+   chi, su chi, quando — non è burocrazia: è l'unico modo di rispondere fra sei
+   mesi a «chi è entrato nel mio account?», ed è responsabilità che il GDPR chiede
+   di poter dimostrare. **Qui parla Jane.**
+6. **Nessuna credenziale di default consegnata.** `admin/admin` — o una password
+   iniziale scritta nel repo, nel README o nel seed — è la vulnerabilità più banale
+   che esista, ed è quella che sopravvive fino in produzione. Il primo accesso si
+   fa con una procedura di avvio che **obbliga** a impostare le credenziali.
+7. **Il reset e il cambio hanno un limite di frequenza**, o l'endpoint diventa un
+   modo per provare password e per bersagliare di mail un utente.
+
+**Chi lo scrive.** Profilo, sessione, ruoli e reset sono **parte applicativa**: li
+scrive `bmad-quick-dev`, invocato sulla scheda `ready-for-dev` della slice
+(`implementation-handoff.md` §4.2b). Vesper fa la loro superficie.
+
+**In quale slice.** Profilo e logout stanno nella slice che porta la shell della
+dashboard — una dashboard consegnata senza uscita non è consegnabile. Il **reset
+amministrativo** sta nella slice dell'autenticazione, e quella slice porta il back
+end: i sei documenti si **approfondiscono prima** di aprirla (§4.0b → *Il peso si
+alza quando arriva il back end*). Finché non è aperta, ciò che manca vive nello
+spec come **requisito per il back end**, scritto — non come un buco taciuto.
+
+**A meno che i documenti non dicano altro** (`implementation-handoff.md` §7): se il
+PRD dice accesso unico senza ruoli, o l'architettura impone un identity provider
+esterno che gestisce password e reset per conto suo, comanda quello — e la deroga
+si scrive nel DESIGN con il perché. Il default vale quando nessuno ha deciso.
+**Ma l'uscita e il cambio password non sono derogabili per comodità:** se li toglie
+un documento, quel documento ha preso una decisione di sicurezza, e va detto.
+
 ## Corpus — cosa funziona davvero come leva
 
 Misurato 2026-07-25 (rifallo se cambia):
@@ -93,7 +258,7 @@ Nota su tre decisioni che tornano nel resto della skill: `palette_family` resta 
 
 ## Invarianti (non sorteggiabili)
 
-Sono stampati in ogni ricetta e valgono sempre: light+dark con due mappe di token e toggle **solo icona**; nav icona SVG + label; **riga = azione** con focus da tastiera e azioni di riga solo icone (`aria-label` + `stopPropagation`); `tabular-nums` su ogni cifra in colonna; **grafici inline SVG** senza librerie né canvas, con titolo e valori leggibili; ≥1 grafico vero e ≤5 KPI; empty state **e** skeleton per ogni lista; responsive (rail → orizzontale ≤900px, tabella con colonna sticky o card-list, nessun overflow-x, target ≥44px); `:focus-visible` e contrasto AA nei due temi; `prefers-reduced-motion` rispettato; motion **repeat**; palette hard-reject (purple-indigo AI, cream+serif+terracotta, Inter/system come display).
+Sono stampati in ogni ricetta e valgono sempre: light+dark con due mappe di token e toggle **solo icona**; nav icona SVG + label; **riga = azione** con focus da tastiera e azioni di riga solo icone (`aria-label` + `stopPropagation`); **ogni tabella paginata server side con il totale esposto, e filtro multicampo server side con autocomplete** (§ *Tabelle: paginazione e filtro multicampo, sempre* — la forma la sorteggia `filter_pattern`, il comportamento no; salvo che un documento vincolante dica altro); **profilo e logout sempre nel chrome**, logout che chiude la sessione **sul server**, cambio password che chiede **la password attuale**, **ruolo admin dal primo account** con reset **a link monouso** (mai una password che l'admin conosce), zero credenziali di default (§ *Account: profilo, logout, admin — sempre*); `tabular-nums` su ogni cifra in colonna; **grafici inline SVG** senza librerie né canvas, con titolo e valori leggibili; ≥1 grafico vero e ≤5 KPI; empty state **e** skeleton per ogni lista; responsive (rail → orizzontale ≤900px, tabella con colonna sticky o card-list, nessun overflow-x, target ≥44px); `:focus-visible` e contrasto AA nei due temi; `prefers-reduced-motion` rispettato; motion **repeat**; palette hard-reject (purple-indigo AI, cream+serif+terracotta, Inter/system come display).
 
 Corollario operativo: i grafici si calcolano **dai dati veri** dello stato dell'app. Un grafico con numeri finti è un placeholder, e un placeholder non può essere la firma.
 
@@ -103,8 +268,10 @@ Corollario operativo: i grafici si calcolano **dai dati veri** dello stato dell'
 2. Genera la ricetta col dominio giusto e le esclusioni da MEMORY. Su varianti sorelle usa `--batch`.
 3. Traduci **ogni** decisione in markup/CSS/JS concreti per quel dominio (es. `utilization-grid` = una cella per asset colorata per stato; `drilldown-panel` = dal KPI alla lista filtrata che lo spiega). Se una decisione non ha senso per il dominio, cambialo **e dichiara perché** — non ignorarlo in silenzio.
 4. Verifica i due temi a ~375px e ~1280px, poi affianca la dashboard all'ultima consegnata: se le silhouette si somigliano, il batch o le esclusioni non hanno fatto il loro lavoro.
+4b. **Prova la tabella come se i dati fossero tanti:** seconda pagina, ordinamento su una colonna mentre un filtro è attivo, filtro che non trova niente, autocomplete digitato in fretta. Sono i quattro punti in cui una tabella finta si rompe, e nessuno di loro si vede guardando la prima schermata.
+4c. **Prova l'uscita e il rientro:** logout, poi torna indietro col tasto del browser — se rivedi la dashboard, la sessione non è chiusa. Poi cambia la password e verifica che l'altra sessione cada.
 5. Aggiorna MEMORY: `last_palette_families`, `last_radius_families`, `last_type_voices`, `dashboard_shells`.
 
 ## Fallimenti
 
-Sidebar + cinque card bianche + tabella piatta; grafici da libreria o con dati inventati; ricetta generata e poi ignorata («ho tenuto la sidebar perché era già lì»); tre varianti con palette diverse e stessa impaginazione; KPI senza drill-down che spieghi il numero; tabella vuota senza spiegazione; tema scuro ottenuto per inversione.
+Sidebar + cinque card bianche + tabella piatta; **tabella senza paginazione**, o paginata in pagina su dati già tutti scaricati; **ordinamento che riordina solo la pagina corrente** e si spaccia per ordinamento; totale delle righe non esposto; **una sola casella di ricerca** al posto del filtro multicampo; filtro che setaccia un array in pagina senza che gli endpoint siano scritti come requisito per il back end; autocomplete senza scarto delle risposte fuori ordine, o senza stato di «nessun risultato»; **endpoint di autocomplete non autorizzato**, che enumera i clienti a chi digita una lettera; filtri con dati personali nella query string; vuoto-per-filtro confuso con il vuoto vero; deroga presa senza che un documento la dicesse, o presa e non dichiarata; **dashboard senza logout**, o logout che svuota `localStorage` e lascia viva la sessione sul server; **cambio password senza la password attuale**; sessioni che sopravvivono al cambio o al reset; **admin che imposta una password e la conosce**, o che la mostra a schermo; token di reset riusabile, senza scadenza o in chiaro nel database; password in un log, in una mail o in una risposta di API; **`admin/admin` o una password iniziale nel repo**; ruoli aggiunti alla slice dopo; reset amministrativo senza traccia di chi l'ha fatto e su chi; grafici da libreria o con dati inventati; ricetta generata e poi ignorata («ho tenuto la sidebar perché era già lì»); tre varianti con palette diverse e stessa impaginazione; KPI senza drill-down che spieghi il numero; tabella vuota senza spiegazione; tema scuro ottenuto per inversione.

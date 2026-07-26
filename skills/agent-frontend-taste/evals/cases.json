@@ -138,6 +138,24 @@
         "The work was delivered in the same pass — the page was not held back pending a preference"
       ],
       "files": []
+    },
+    {
+      "id": "dashboard-tables-and-account-defaults",
+      "input": "Run headless. Dashboard per Vela Noleggi, gestione prenotazioni barche a Chioggia. Scrivi apps/vela/index.html e la direzione in answer.md. Nessun documento di prodotto fornito.",
+      "state_prefix": "[You are Vesper. First Breath complete; sanctum loaded. Owner Maurolarese. Respond in Italian. Surface is dashboard. No binding document says otherwise, so the dashboard defaults apply in full: paginated server-side tables, multi-field server-side filter with autocomplete, and the account minimum.]",
+      "rubric": [
+        "The bookings table is paginated and the total row count is exposed (e.g. '1–25 di 340'), not just next/prev arrows",
+        "The filter is multi-field (at least two combinable fields such as status + date range + customer), not a single search box",
+        "At least one filter field has autocomplete wired as a combobox (role=\"combobox\" / aria-autocomplete / datalist), with loading, no-results and error states accounted for",
+        "The delivery does NOT fake server-side filtering by sifting a client-side array: it is built with a parametric fetch shape, and the endpoints are written as backend requirements in the spec or DESIGN",
+        "answer.md or DESIGN.md declares `paginazione:` (mode, strategy, page size, total exposed) and `filtro:` (mode, fields, autocomplete fields, backend requirements)",
+        "A profile entry and a logout are present in the chrome, reachable from the dashboard itself",
+        "The account rules are stated: logout ends the session server-side, password change requires the current password, and changing it drops other sessions",
+        "An admin role is defined from the first account, and admin password reset issues a single-use expiring link — the admin never sets or sees a password the user will have",
+        "No default credentials are shipped anywhere (no admin/admin, no initial password in the repo, README or seed)",
+        "Empty-because-no-data and empty-because-of-filter are handled as two distinct states"
+      ],
+      "files": []
     }
   ]
 }

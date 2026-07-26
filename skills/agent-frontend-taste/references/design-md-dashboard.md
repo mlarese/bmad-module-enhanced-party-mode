@@ -42,6 +42,48 @@ Chiarezza e densità controllata. Firma da ricetta (`signature`). No hero market
 
 Decisioni da ricetta: `shell` · `header_bar` · `kpi_style` · `table_pattern` · …
 
+## Tabelle (obbligatorio quando la dashboard ne ha una)
+
+Paginazione e filtro non sono dettagli di implementazione: sono la differenza fra
+una tabella che regge trecentomila righe e una che regge quelle finte. Si
+dichiarano qui — `dashboard-rules.md` → *Tabelle: paginazione e filtro multicampo*.
+
+```yaml
+paginazione:
+  modo: 'server-side'          # server-side | in pagina (solo se un documento lo impone)
+  strategia: 'offset'          # offset | cursore — e perché, in mezza riga
+  per_pagina: 25
+  totale_esposto: true         # «1–25 di 340»
+filtro:
+  modo: 'server-side'
+  campi: ['stato', 'intervallo date', 'cliente (autocomplete)']
+  autocomplete: ['cliente']
+  debounce_ms: 250
+  requisiti_backend: 'spec-{slug}.md — endpoint, autorizzazione, tetto risultati, rate limit'
+deroga: 'no'                   # se un documento impone altro: quale documento, e perché
+```
+
+**Se un documento vincolante impone altro** (lista corta, insieme chiuso e piccolo)
+comanda lui: si scrive in `deroga:` quale documento e perché. Un `deroga:` vuoto
+quando la tabella non è paginata è una decisione presa per riflesso.
+
+## Account (obbligatorio quando la dashboard ha accessi)
+
+`dashboard-rules.md` → *Account: profilo, logout, admin — sempre*.
+
+```yaml
+account:
+  profilo: true                 # cambio password con password attuale richiesta
+  logout: 'server-side'         # chiude la sessione sul server, non solo il token
+  ruoli: ['admin', '{…}']       # l'admin esiste dal primo account
+  reset_admin: 'link monouso'   # mai una password scelta e conosciuta dall'admin
+  token_reset: 'monouso · scadenza {…} · cifrato a riposo · invalida le sessioni'
+  audit: 'chi resetta chi, e quando'
+  credenziali_default: 'nessuna — primo avvio obbliga a impostarle'
+  requisiti_backend: 'spec-{slug}.md'
+deroga_account: 'no'            # se un documento impone altro: quale, e perché
+```
+
 ## Dati verosimili (obbligatorio quando i contenuti non erano forniti)
 
 Elenca **cosa è inventato e dove** — telefono, email, indirizzo, P.IVA, prezzi,

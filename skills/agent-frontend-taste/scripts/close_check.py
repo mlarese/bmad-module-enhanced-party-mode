@@ -26,12 +26,17 @@ Cosa controlla:
   5. consiglio   — `docs/consiglio/<slug>.md` con almeno una seduta registrata:
                    il consiglio decide tutto senza interpellare l'owner, e senza
                    quel file non resta scritto da nessuna parte chi c'era
+  6. dashboard   — solo con `--surface dashboard`: profilo e logout sempre; ogni
+                   tabella con paginazione e filtro con autocomplete; il DESIGN
+                   dichiara `paginazione:` e `filtro:` (server side, strategia,
+                   requisiti per il back end)
 
 Usage:
     uv run scripts/close_check.py apps/<slug>/index.html
     uv run scripts/close_check.py apps/<slug>/index.html --ledger _bmad/memory/agent-frontend-taste/hue-ledger.json
     uv run scripts/close_check.py apps/<slug>/index.html --design apps/<slug>/DESIGN.md
     uv run scripts/close_check.py apps/<slug>/index.html --council docs/consiglio/<slug>.md
+    uv run scripts/close_check.py apps/<slug>/*.html --surface dashboard --design apps/<slug>/DESIGN.md
     uv run scripts/close_check.py apps/<slug>/*.html --format json
 
 Exit: 0 si consegna · 1 c'è da correggere · 2 non misurabile (non è un pass).
@@ -121,6 +126,57 @@ def check_design(design: Path | None, page_text: str) -> tuple[bool, list[str]]:
 # fallimento garantito. Si riconoscono dalla firma che chi le genera ci mette.
 GENERATED_RE = re.compile(r"<html[^>]+data-generated-by=[\"']([^\"']+)", re.I)
 
+# --- Tabelle di dashboard: paginazione e filtro non si ricordano, si misurano.
+# Marcatori volutamente larghi: qui un falso allarme costa una riga di markup,
+# un falso via libera costa una tabella che regge solo i dati finti.
+TABLE_RE = re.compile(r"<table\b|role=[\"']grid[\"']|role=[\"']table[\"']", re.I)
+PAGING_RE = re.compile(r"class=[\"'][^\"']*(?:pagin|pager)|aria-label=[\"'][^\"']*pagin"
+                       r"|aria-current=[\"']page|data-page\b|rel=[\"']next[\"']", re.I)
+FILTER_RE = re.compile(r"type=[\"']search[\"']|class=[\"'][^\"']*filtr?|"
+                       r"aria-label=[\"'][^\"']*filtr?|<form[^>]*\bfilter", re.I)
+AUTOCOMPLETE_RE = re.compile(r"role=[\"']combobox[\"']|aria-autocomplete|<datalist\b", re.I)
+LOGOUT_RE = re.compile(r"logout|log-out|sign.?out|esci\b|disconnett", re.I)
+PROFILE_RE = re.compile(r"profil|account|/me\b|mio-account|impostazioni account", re.I)
+
+
+def check_dashboard(text: str, design: Path | None) -> tuple[bool, list[str]]:
+    """Solo su `--surface dashboard`. Le tabelle si controllano se ci sono; profilo
+    e logout no: un'area riservata da cui non si esce non è consegnabile."""
+    problems = []
+    if not LOGOUT_RE.search(text):
+        problems.append("nessun logout: da un'area riservata si deve poter uscire, "
+                        "e l'uscita chiude la sessione **sul server** "
+                        "(`dashboard-rules.md` → Account)")
+    if not PROFILE_RE.search(text):
+        problems.append("nessun profilo: è il posto del cambio password, e il cambio "
+                        "chiede la password attuale")
+    if not TABLE_RE.search(text):
+        return not problems, problems
+    if not PAGING_RE.search(text):
+        problems.append("tabella senza paginazione: regge finché i dati sono finti "
+                        "(`dashboard-rules.md` → Tabelle)")
+    if not FILTER_RE.search(text):
+        problems.append("tabella senza filtro: il default è multicampo e server side, "
+                        "non una casella di ricerca e nemmeno niente")
+    elif not AUTOCOMPLETE_RE.search(text):
+        problems.append("filtro senza autocomplete (`role=\"combobox\"`, `aria-autocomplete` "
+                        "o `<datalist>`): manca il pezzo che lo rende usabile")
+    # La forma si vede nel markup; server side e requisiti di backend no —
+    # quelli esistono solo se qualcuno li ha scritti.
+    if design is None or not design.is_file():
+        problems.append("nessun DESIGN.md: `paginazione:` e `filtro:` (modo, campi, "
+                        "strategia, requisiti backend) non sono dichiarati da nessuna parte")
+    else:
+        d = design.read_text(encoding="utf-8", errors="replace")
+        missing = [k for k in ("paginazione:", "filtro:") if k not in d]
+        if missing:
+            names = " e ".join(f"`{k.rstrip(':')}`" for k in missing)
+            problems.append(f"`{design.name}` non dichiara {names}: "
+                            "server side, strategia e requisiti per il back end non si "
+                            "leggono dal markup — o si scrivono, o nessuno li ha decisi")
+    return not problems, problems
+
+
 COUNCIL_ENTRY_RE = re.compile(r"^- \*\*\d{4}-\d{2}-\d{2}", re.M)
 
 
@@ -179,6 +235,8 @@ def main() -> int:
     ap.add_argument("pages", nargs="+", help="file HTML consegnati")
     ap.add_argument("--design", help="DESIGN.md di accompagnamento")
     ap.add_argument("--council", help="registro del consiglio, docs/consiglio/<slug>.md")
+    ap.add_argument("--surface", choices=("marketing", "dashboard", "mobile"),
+                    help="dashboard → controlla anche paginazione e filtro delle tabelle")
     ap.add_argument("--ledger", help="registro dei settori di tinta")
     ap.add_argument("--last", default="", help="settori recenti, il più recente per primo")
     ap.add_argument("--format", choices=("md", "json"), default="md")
@@ -208,8 +266,11 @@ def main() -> int:
         fin_ok, fin_problems = check_finished(text)
         des_ok, des_problems = check_design(design, text)
         cou_ok, cou_problems = check_council(council)
+        dash_ok, dash_problems = (check_dashboard(text, design)
+                                  if args.surface == "dashboard" else (True, []))
 
-        problems = colour_problems + resp_problems + fin_problems + des_problems + cou_problems
+        problems = (colour_problems + resp_problems + fin_problems
+                    + des_problems + cou_problems + dash_problems)
         state = 2 if colour_state == 2 else (1 if problems else 0)
         worst = max(worst, state)
         if report:
@@ -233,6 +294,8 @@ def main() -> int:
         lines.append(f"- finito: {'nessun segnaposto' if fin_ok else 'da correggere'}")
         lines.append(f"- traccia: {'ok' if des_ok else 'da correggere'}")
         lines.append(f"- consiglio: {'registrato' if cou_ok else 'da correggere'}")
+        if args.surface == "dashboard":
+            lines.append(f"- dashboard: {'profilo, uscita, tabelle' if dash_ok else 'da correggere'}")
         if problems:
             lines.append("")
             lines.extend(f"  - {p}" for p in problems)

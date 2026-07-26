@@ -42,6 +42,20 @@ Credibilità B2B/B2C senza purple-glow AI. Pricing e CTA leggibili; feature come
 - Marketing: hero + sezioni dal dominio (social proof, pricing, FAQ) — non stub
 - Product: seguire regole dashboard se è admin; mobile-web-app se è app task
 
+## Tabelle (obbligatorio quando ce n'è una)
+
+Come per la dashboard (`dashboard-rules.md` → *Tabelle: paginazione e filtro
+multicampo, sempre*): paginazione server side col totale esposto, filtro
+multicampo server side con autocomplete, salvo che un documento vincolante dica
+altro — e allora si scrive `deroga:` con quale documento e perché.
+
+```yaml
+paginazione: {modo: 'server-side', strategia: 'offset', per_pagina: 25, totale_esposto: true}
+filtro: {modo: 'server-side', campi: [], autocomplete: [], debounce_ms: 250,
+         requisiti_backend: 'spec-{slug}.md'}
+deroga: 'no'
+```
+
 ## Dati verosimili (obbligatorio quando i contenuti non erano forniti)
 
 Elenca **cosa è inventato e dove** — telefono, email, indirizzo, P.IVA, prezzi,
