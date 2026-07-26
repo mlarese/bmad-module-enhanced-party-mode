@@ -98,6 +98,8 @@ irriconoscibile ciò che tutti chiamano così. Ma si spiega la prima volta, semp
 | `ready-for-dev` | il **timbro** sulla scheda di lavoro che dice «si può implementare così com'è»: è anche ciò che fa entrare `bmad-quick-dev` direttamente nell'implementazione, saltando le sue domande |
 | `Ask First` | un campo del modello di scheda che **genera fermate**: ciò che ci scrivi dentro diventa una domanda all'umano a metà implementazione. Qui resta vuoto |
 | varianza | il **verbale di uno scostamento**: cosa ci si aspettava, cosa si è fatto, perché |
+| pagina delle combinazioni | `apps/<slug>/palette.html`: le combinazioni **colore · carattere · pulsanti** che reggevano, con quella applicata marcata «in uso». Si guarda, non si risponde |
+| pulsante pieno / fantasma | il pulsante **riempito** di colore e quello **solo contornato**: una pagina vera ha due livelli di azione, e la forma si giudica sulla coppia |
 | registro del consiglio | l'**elenco delle sedute**, una riga l'una, un file per progetto (`docs/consiglio/<slug>.md`): quando, quale obiettivo, **chi ha parlato**, cosa si è deciso. È un indice, non un verbale |
 | workflow «che si ferma» | un procedimento BMAD che a un certo punto **chiede qualcosa a un umano**: qui non si invoca, se ne copia il formato |
 | **modello** (era «stampo») | usare **la forma** di un procedimento — i suoi schemi e criteri — senza farlo partire |

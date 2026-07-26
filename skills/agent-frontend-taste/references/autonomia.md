@@ -172,6 +172,14 @@ Le scelte di craft che un tempo erano «a vista dell'owner» — hero archetype 
 catalogo, effetto motion dalla gallery — le prendi tu da seed deterministico con le
 esclusioni di MEMORY, e le dichiari.
 
+**Dichiarare non basta più: si fa vedere.** Palette, caratteri e forma dei pulsanti
+si consegnano applicati *e* mostrati, in `apps/<slug>/palette.html`, insieme alle
+altre combinazioni che reggevano (`implementation-handoff.md` §10.1). Non è un
+menù e non è una fermata: la pagina arriva **con** il lavoro finito, non prima, e
+non aspetta niente. Il craft resta non votabile — l'owner che poi chiede un'altra
+combinazione sta intervenendo di sua iniziativa, ed è l'unico caso in cui il craft
+cambia: la sua parola vince.
+
 ## I procedimenti che si fermano: se ne copia il modello, non si fanno partire
 
 *(«workflow» = un procedimento BMAD già scritto, fatto di passi. «Si ferma» = a
@@ -230,6 +238,7 @@ lo era il flusso); una porta scoperta dopo, perché nessuno ha guardato prima.
 | «confermi il perimetro?» | G2 lo decide, lo dichiara, non lo sottopone |
 | «questo servizio è ancora attivo?» | si tiene se il sito lo espone, con varianza |
 | «posso scostarmi dall'architettura?» | non ci si scosta: è legge. Se è impraticabile, si prende il percorso praticabile più vicino e si scrive la varianza |
+| «quale palette preferisci?» · «pulsanti tondi o squadrati?» | si sceglie, si applica e si consegna — **e le alternative si vedono** in `apps/<slug>/palette.html`, già legali e con la tua marcata «in uso». Mostrare non è chiedere: la pagina non aspetta risposta |
 | «vuoi che continui?» | **dentro la slice si continua**; a slice finita si consegna e si dichiara cosa resta nel piano — non si chiede il permesso di andare avanti, e non si va avanti |
 | «vuoi che proceda con la S2?» | non è una domanda ammessa: la S1 si consegna, il piano si dichiara, la S2 la apre l'owner (§ *Il confine di slice*) |
 

@@ -122,6 +122,22 @@
         "apps/salvia/index.html contains no trace of the council log: process records never enter the delivered artifact"
       ],
       "files": []
+    },
+    {
+      "id": "palette-page-shows-what-was-there",
+      "input": "Run headless. Landing per la Gelateria Punta Chiara, Sestri Levante. Scrivi apps/punta-chiara/index.html e la direzione in answer.md.",
+      "state_prefix": "[You are Vesper. First Breath complete; sanctum loaded. Owner Maurolarese. Respond in Italian. The craft is not put to a vote: you pick palette, type and button shape and you deliver them applied — but the alternatives that also held must be visible, not invisible.]",
+      "rubric": [
+        "apps/punta-chiara/palette.html exists next to index.html, and index.html does NOT link to it",
+        "palette.html shows between 2 and 4 combinations, and exactly one is marked as the applied one ('in uso')",
+        "Each combination shows colours AND fonts AND button treatment — radius/shape (square, measured radius or pill), filled vs outlined, and the button's own colours where they differ from the accent",
+        "Each combination renders a real specimen (a heading in the display face, a paragraph in the body face, buttons) — not a bare row of colour swatches",
+        "The page states the provenance at the top: surface, activity, register, locale, seed and how many references the batch measured",
+        "The applied combination in palette.html is the same one actually used in index.html and declared in DESIGN.md — the three agree",
+        "The final chat reply does NOT ask the owner to choose: it states the page exists and that a different combination can be requested. No 'quale preferisci?', no numbered menu",
+        "The work was delivered in the same pass — the page was not held back pending a preference"
+      ],
+      "files": []
     }
   ]
 }

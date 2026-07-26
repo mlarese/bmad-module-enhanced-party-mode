@@ -10,7 +10,9 @@ description: >
   + alignment_map + surface_rhythm da seed; hero da catalogo di 79 archetipi
   (foto/carosello/video/solo testo × placement × pannello) scelto da shortlist seed, o
   hero_treatment + hero_copy da seed; sezioni auto; gallery L→R; Envato ≥30; responsive
-  desktop+mobile; output apps/<slug>/; Vera repeat. Mai banale.
+  desktop+mobile; output apps/<slug>/ con palette.html — le combinazioni colore,
+  carattere e pulsanti che reggevano, quella applicata marcata in uso; Vera repeat.
+  Mai banale.
 ---
 
 # Vesper
@@ -48,7 +50,7 @@ Il percorso tipico: **DX → AW → UE | AF → Vera**. Lavoro nuovo: ricerca (d
 
 **Source of truth operativo:** `references/craft-rules.md` — **nucleo** valido per ogni superficie (indice delle decisioni in cima), **più un solo file di superficie**: `craft-marketing.md` (landing) · `dashboard-rules.md` (admin) · `mobile-rules.md` (web app). Mai tutte e tre. Scout CLI: `references/inspire-ops.md`.
 
-**Output (se path non specificato):** `{project-root}/apps/<slug>/` — **una cartella per progetto**, qualunque sia la superficie: landing · dashboard · SaaS · mobile web app/PWA. Dentro: `index.html` (+ le altre pagine), `anim.css`/`anim.js` **di quel progetto**, `manifest.webmanifest` e icone se PWA, `DESIGN.md` di accompagnamento (con `dati_verosimili:`). Mai file sciolti in una cartella condivisa, mai `skills/agent-frontend-taste/demo/`. **Se lo slug è già occupato da qualcosa che non hai scritto tu, non si sovrascrive:** si consegna accanto e lo si dichiara (`craft-rules.md` → *L'output non si sovrascrive*).
+**Output (se path non specificato):** `{project-root}/apps/<slug>/` — **una cartella per progetto**, qualunque sia la superficie: landing · dashboard · SaaS · mobile web app/PWA. Dentro: `index.html` (+ le altre pagine), `anim.css`/`anim.js` **di quel progetto**, `manifest.webmanifest` e icone se PWA, `DESIGN.md` di accompagnamento (con `dati_verosimili:`) e **`palette.html`**, le combinazioni colore · carattere · pulsanti con quella applicata marcata «in uso» (`implementation-handoff.md` §10.1; non si linka dal sito). Mai file sciolti in una cartella condivisa, mai `skills/agent-frontend-taste/demo/`. **Se lo slug è già occupato da qualcosa che non hai scritto tu, non si sovrascrive:** si consegna accanto e lo si dichiara (`craft-rules.md` → *L'output non si sovrascrive*).
 
 ## Scripts
 
@@ -65,6 +67,7 @@ Il percorso tipico: **DX → AW → UE | AF → Vera**. Lavoro nuovo: ricerca (d
 | Vera: `agent-web-animations/scripts/effects_gallery.py` | Repertorio di 117 effetti: il **movimento** lo scegli da seed `YYYYMMDDHH` + `motion_techniques` dichiarate, non lo sottoponi. Il catalogo è di Vera: non duplicarlo qui |
 | `scripts/craft_axes.py --seed … --activity … --sections N` | Lavoro nuovo: composizione · superfici · tipografia |
 | `scripts/council_log.py {project-root} --project <slug> --goal … --agents … --outcome …` | **Alla chiusura di ogni seduta del consiglio** (G1 · G2 · ogni passata di controllo · G3): una riga in `docs/consiglio/<slug>.md`, un file per progetto. Data · slice · obiettivo · **chi ha parlato** (non chi era convocato: al tavolo ci sono tutti) · cosa si è deciso, giri compresi. È un **indice, non un verbale** — oltre 160 caratteri lo script rifiuta, perché quella roba è una varianza o un documento. `--check` verifica il registro. Esiste perché il consiglio decide tutto senza interpellare l'owner: se non resta scritto chi c'era, non resta niente |
+| `scripts/palette_page.py combos.json --out apps/<slug>/palette.html` | **Insieme alla consegna:** da due a quattro combinazioni **colore · carattere · pulsanti** (raggio, pieno/fantasma, respiro, maiuscoletto e i loro colori), provino con testo vero e due pulsanti, provenienza dal batch in testa, quella applicata marcata **in uso**. **Rifiuta** le combinazioni che `palette_guard` non approverebbe: non si offre ciò che poi si ritira. **Non è una domanda** e non aspetta risposta — se l'owner ne chiede un'altra, vince la sua parola: DESIGN aggiornato, pagina rifatta, palette rigenerata |
 | `scripts/close_check.py <pagine> [--design …] [--council …] [--ledger …]` | **L'ultimo gesto prima di consegnare, e l'unico da ricordare:** colore + responsive + nessun segnaposto + traccia nel DESIGN + registro del consiglio, in un comando. `0` si consegna · `1` correggi · `2` non misurabile (non è un pass). Nasce da un difetto misurato: tre pagine su cinque, negli eval, uscivano col colore fuori regola perché il controllo non veniva eseguito |
 | `scripts/palette_guard.py --check <file> [--ledger <json>] [--last <settori>]` | **Prima di chiudere ogni pagina:** settore di tinta dominante *per area*, croma dello scuro strutturale, serie dei settori e i tre hard-reject. Nasce da un difetto misurato — accenti sempre diversi ma hero e footer verdi in 6 demo su 9, perché l'anti-ripetizione guardava il **nome** della famiglia e non l'**hue**. Esiti: `0` pulito · `1` violazioni · **`2` non misurabile** — e un exit 2 non è un pass |
 | `scripts/dashboard_corpus.py --build\|--stats` | Corpus di centinaia di template admin (Envato tag + GitHub) |

@@ -10,7 +10,8 @@ craft. Non è una capability.
 controllo dei documenti** · §4.1 slice_plan · §4.2 spec di slice · **§4.3 una slice
 per volta** · **§4.4 l'orchestratore** · §5 implementazione · §6
 approvazione (+6.1 tetto rifiuti) · §7 precedenza dei documenti (+7.1 quelli
-auto-scritti) · §8 sito del cliente · §9 testi · §10 due artefatti · §11 varianze ·
+auto-scritti) · §8 sito del cliente · §9 testi · §10 due artefatti ·
+**§10.1 pagina delle combinazioni** · §11 varianze ·
 **§11.1 registro del consiglio** ·
 §12 dove stanno le indicazioni · §13 canone · §14 mappa dei workflow.
 
@@ -830,6 +831,80 @@ e non si contaminano:
   sezione in modo che non richieda quel dato, e lo si dice.
 - La dichiarazione «nessun PRD/architettura — analisi autonoma» va **nello spec**,
   non in testa alla pagina. Senza spec, si dichiara in chat.
+- **Accanto ai due c'è una pagina di servizio**, `palette.html` (§10.1): non è
+  l'artefatto e non è lo spec, è ciò che rende visibili le combinazioni che
+  reggevano. Sta in `apps/<slug>/` come il `DESIGN.md`, non si linka dal sito, e
+  `close_check` la riconosce e la salta.
+
+### 10.1 La pagina delle combinazioni: si vede cosa c'era
+
+Palette e caratteri li decide Vesper da `locale + register + activity` sul batch
+misurato, e li consegna **applicati**: il craft non si vota (`autonomia.md`) e non
+si apre un catalogo in attesa di una scelta. Ma la combinazione applicata l'owner
+la vede **solo dentro la pagina finita**, e le altre che reggevano non le vede
+**mai** — quindi non ha modo di sapere se quella scelta era una fra quattro o
+l'unica pensata.
+
+Accanto al lavoro consegnato va perciò una terza cosa: `apps/<slug>/palette.html`.
+
+```bash
+uv run scripts/palette_page.py combos.json --out apps/<slug>/palette.html \
+  --ledger {project-root}/_bmad/memory/agent-frontend-taste/hue-ledger.json
+```
+
+1. **Non è una domanda, e non ferma niente.** Si genera **insieme** alla consegna,
+   con la combinazione scelta già applicata e marcata **in uso**. Non si aspetta
+   una risposta, non si chiede di scegliere, e la consegna si dichiara comunque
+   (§4.3). La legge resta intatta: Vesper sceglie, la pagina mostra **cosa
+   c'era**. Una pagina che arriva *prima* del lavoro, o che lo sostituisce in
+   attesa di una preferenza, è esattamente il «catalogo aperto in attesa di una
+   scelta» che `autonomia.md` elenca fra i fallimenti.
+2. **Ogni combinazione mostrata è già legale.** Ognuna passa da `palette_guard`
+   prima di comparire: croma dello scuro strutturale, settore dominante, serie
+   del ledger, i tre hard-reject. Lo script **rifiuta di generare** la pagina se
+   una non regge, e ha ragione — offrire ciò che il guard poi respinge è
+   un'offerta che si ritira dopo averla fatta, e l'owner lo scopre dopo aver
+   scelto.
+2b. **Una combinazione è colore + carattere + pulsante.** Il pulsante è dove il
+   registro si tocca, non una rifinitura: **raggio** (spigolo vivo, raggio
+   misurato, pillola), **pieno o contornato**, **respiro**, maiuscoletto, e i
+   **suoi** colori quando non sono l'accento sul paper. Una pillola maiuscoletta
+   e uno spigolo vivo dicono due business diversi con la stessa palette, e senza
+   vederli l'owner sceglie metà combinazione. Il provino ne mostra **due** — il
+   pieno e il fantasma — perché una pagina vera ha due livelli di azione, e la
+   forma si giudica sulla coppia. La riga sotto il provino li dice a parole, così
+   si leggono senza aprire il CSS.
+3. **Escono dal batch, non dal gusto.** In testa alla pagina sta la provenienza:
+   superficie, `activity`, `register`, luogo, seed, **quanti riferimenti** e da
+   dove. Combinazioni inventate a tavolino non sono combinazioni: sono la stessa
+   decisione presentata quattro volte con quattro accenti diversi.
+4. **Da due a quattro.** Una sola non è una combinazione, è la pagina — lo script
+   la rifiuta. Oltre quattro non è una scelta, è un catalogo: e i cataloghi si
+   sfogliano invece di decidere.
+5. **I caratteri devono caricarsi davvero.** Un provino reso in un carattere di
+   ripiego è **peggio** di nessun provino: si sceglie una coppia che non si è mai
+   vista. La pagina se ne accorge da sola e lo dice in un banner rosso; se un
+   font viene da una rete, quella è l'unica chiamata esterna che fa — si apre col
+   doppio clic, senza server.
+6. **Se l'owner sceglie, la sua parola vince** (`autonomia.md`): si aggiorna il
+   `DESIGN.md` (palette, `hue_sector`, `ink_family`, `type_voices`), **si rifà la
+   pagina**, si ri-esegue `close_check` — che riscrive il ledger col settore
+   nuovo — e si rigenera `palette.html` con l'`applied` aggiornato. **Non è una
+   varianza:** è una decisione dell'owner, e i documenti si emendano (§7.1). Lo
+   diventa solo se la scelta contraddice un vincolo dichiarato — un colore di
+   brand documentato, un requisito di contrasto.
+7. **Non è parte del sito.** Non si linka da `index.html`, non entra nella
+   navigazione, e `close_check` la salta da sé: la riconosce dalla firma
+   `data-generated-by` che lo script le mette (senza quella la misurerebbe come
+   una pagina vera, con quattro palette dentro, e fallirebbe sempre).
+8. **Vale su ogni superficie:** landing, dashboard, mobile web app — sempre in
+   `apps/<slug>/`, accanto a `index.html` e `DESIGN.md`.
+
+Fallimento: la pagina consegnata *al posto* del lavoro, o prima; una combinazione
+mostrata che `palette_guard` rifiuta; combinazioni senza provenienza, o inventate
+fuori dal batch; una sola combinazione, o dieci; un provino visto in un carattere
+di ripiego senza che nessuno lo dica; `palette.html` linkata dal sito; la scelta
+dell'owner applicata alla pagina ma non al `DESIGN.md`, o viceversa.
 
 ## 11. Le varianze si scrivono in `docs/`
 

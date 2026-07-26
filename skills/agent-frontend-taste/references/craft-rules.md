@@ -53,7 +53,7 @@ che consegni.
 | Inspiration | quanti riferimenti veri hai guardato prima di decidere | batch ≥30 | — | `hero_sample.py` / inspire-ops |
 | Motion | il movimento: quali effetti e con che numero di sorteggio | `motion_seed` · `motion_techniques` (2–4) | — | Vera **repeat**; seed `YYYYMMDDHH` |
 | Responsive | la pagina si adatta allo schermo, telefono compreso | viewport meta · breakpoints · touch · no overflow | — | **sempre** — desktop e mobile |
-| Output | dove finisce quello che consegni | cartella del progetto | `demo_output` | default `{project-root}/apps/<slug>/` — una per progetto, ogni superficie; **se lo slug esiste non si sovrascrive** (§ *L'output non si sovrascrive*) |
+| Output | dove finisce quello che consegni | cartella del progetto | `demo_output` | default `{project-root}/apps/<slug>/` — una per progetto, ogni superficie; dentro anche `DESIGN.md` e `palette.html` (§10.1); **se lo slug esiste non si sovrascrive** (§ *L'output non si sovrascrive*) |
 
 ## Il lavoro consegnato è finito (sempre — nessuna eccezione)
 
@@ -125,6 +125,15 @@ Il flusso implementativo vive in `implementation-handoff.md`; i testi dei obiett
    cosa resta nel piano — «landing online; la S2 back office parte quando me lo dici»
    — e non si chiede il permesso di continuare (§4.3, `autonomia.md` → *Il confine di
    slice*). La S2 la apre l'owner.
+
+**Colori, caratteri e pulsanti si consegnano visti.** Accanto al lavoro consegnato,
+in `apps/<slug>/palette.html`, le combinazioni che reggevano — colore · carattere ·
+**forma e colore dei pulsanti** (raggio, pieno o contornato, respiro, maiuscoletto),
+con quella applicata marcata **in uso**. La genera `scripts/palette_page.py`, che
+**rifiuta** le combinazioni che `palette_guard` non approverebbe: non si mostra ciò
+che non si potrebbe scegliere. Non è una domanda e non ferma niente — se poi l'owner
+ne chiede un'altra, vince la sua parola: si aggiorna il DESIGN, si rifà la pagina, si
+rigenera la palette (`implementation-handoff.md` §10.1).
 
 **Ogni seduta lascia una riga.** Alla chiusura di ogni convocazione — G1, G2, ogni
 passata di controllo, G3 — una riga in `docs/consiglio/<slug>.md` con

@@ -115,6 +115,12 @@ def check_design(design: Path | None, page_text: str) -> tuple[bool, list[str]]:
     return True, []
 
 
+# Le pagine di servizio che gli script generano dentro `apps/<slug>/` —
+# `palette.html`, il catalogo hero — non sono lavoro consegnato: contengono di
+# proposito più palette in un file solo, e misurarle come una pagina vera dà un
+# fallimento garantito. Si riconoscono dalla firma che chi le genera ci mette.
+GENERATED_RE = re.compile(r"<html[^>]+data-generated-by=[\"']([^\"']+)", re.I)
+
 COUNCIL_ENTRY_RE = re.compile(r"^- \*\*\d{4}-\d{2}-\d{2}", re.M)
 
 
@@ -185,11 +191,17 @@ def main() -> int:
     last = args.last.split(",")
 
     worst, out, blocks, reports = 0, [], [], []
+    skipped: list[tuple[Path, str]] = []
     for raw in args.pages:
         page = Path(raw)
         if not page.is_file():
             raise SystemExit(f"file inesistente: {page}")
         text = page.read_text(encoding="utf-8", errors="replace")
+
+        gen = GENERATED_RE.search(text)
+        if gen:
+            skipped.append((page, gen.group(1)))
+            continue
 
         colour_state, report, colour_problems = check_colour(pg, text, last, ledger, page)
         resp_ok, resp_problems = check_responsive(text)
@@ -226,13 +238,24 @@ def main() -> int:
             lines.extend(f"  - {p}" for p in problems)
         blocks.append("\n".join(lines))
 
+    if not out and skipped:
+        print("Solo pagine generate, nessun lavoro consegnato da misurare: "
+              + ", ".join(f"{p} ({by})" for p, by in skipped), file=sys.stderr)
+        return 2
+
     if args.format == "json":
-        print(json.dumps({"pages": out, "state": worst}, ensure_ascii=False, indent=1))
+        print(json.dumps({"pages": out, "state": worst,
+                          "skipped": [{"page": str(p), "generated_by": by} for p, by in skipped]},
+                         ensure_ascii=False, indent=1))
         return worst
 
     print("# Check di chiusura\n")
     print("\n\n".join(blocks))
     print()
+    for p, by in skipped:
+        print(f"_Saltata `{p}`: la genera `{by}`, non è lavoro consegnato._")
+    if skipped:
+        print()
     if worst == 0:
         print("Si consegna. Nel `DESIGN.md` va la traccia di ciò che è stato misurato "
               "— così «l'ho controllato» resta verificabile anche fra sei mesi:\n")
