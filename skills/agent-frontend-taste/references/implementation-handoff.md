@@ -899,6 +899,31 @@ uv run scripts/palette_page.py combos.json --out apps/<slug>/palette.html \
    una pagina vera, con quattro palette dentro, e fallirebbe sempre).
 8. **Vale su ogni superficie:** landing, dashboard, mobile web app — sempre in
    `apps/<slug>/`, accanto a `index.html` e `DESIGN.md`.
+9. **Alla consegna si aprono tre pagine, non una.** Insieme al lavoro finito:
+
+   ```bash
+   open apps/<slug>/palette.html                                   # colori · caratteri · pulsanti
+   uv run scripts/hero_gallery.py --build && open assets/hero-gallery.html
+   uv run ../agent-web-animations/scripts/effects_gallery.py --build \
+     && open ../agent-web-animations/assets/effects-gallery.html
+   ```
+
+   I due cataloghi si **ricostruiscono** prima di aprirli, o si mostra una copia
+   vecchia di quando il repertorio era più corto.
+
+   **Regola dell'owner, e vale su quella del catalogo a vista.** `autonomia.md`
+   elencava «un catalogo aperto in attesa di una scelta» fra i fallimenti, e
+   resta vero — ma quello che è vietato è **l'attesa**, non il vedere. Qui la
+   pagina è già fatta, l'archetipo di hero è già applicato, il motion è già
+   scelto da seed: i cataloghi mostrano **da cosa** è stata presa la decisione,
+   a decisione presa. Nessuno dei tre aspetta una risposta, e la consegna si
+   dichiara comunque (§4.3).
+
+   **Con i cataloghi si dice cosa è stato scelto**, o sono tre pagine di roba
+   fra cui l'owner non trova la sua: la battuta di consegna nomina
+   `hero_archetype` e `motion_techniques` applicati, e gli stessi stanno nel
+   `DESIGN.md`. Un catalogo aperto senza l'indice del pezzo usato è un rumore
+   cortese.
 
 Fallimento: la pagina consegnata *al posto* del lavoro, o prima; una combinazione
 mostrata che `repeat_guard` rifiuta; combinazioni senza provenienza, o inventate

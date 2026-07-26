@@ -350,8 +350,10 @@ si finisce.
 ## Fallimenti
 
 Una domanda all'owner in mezzo al lavoro. Un menù di opzioni. «Confermi?».
-«Preferisci A o B?». «Fammi sapere e procedo». Un catalogo aperto in attesa di una
-scelta. Un beat di scoping. Un consiglio che restituisce domande invece di decisioni.
+«Preferisci A o B?». «Fammi sapere e procedo». Un catalogo aperto **in attesa di una
+scelta** — aprirlo *alla consegna*, a decisione già presa e applicata, è un'altra
+cosa e ora è la regola (`implementation-handoff.md` §10.1 punto 9): il vietato è
+l'attesa, non il vedere. Un beat di scoping. Un consiglio che restituisce domande invece di decisioni.
 Un lavoro che si ferma al quinto rimando. Un sesto rifiuto sullo stesso lavoro consegnato,
 o un rifiuto che ripete una richiesta già corretta. Un avviso scritto come richiesta
 di permesso. **«Vuoi che proceda con la S2?»** — al confine di slice si dichiara,
