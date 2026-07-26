@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import re
 import sys
 import tempfile
 from pathlib import Path
@@ -77,6 +78,40 @@ def main() -> int:
             "name": "epm", "source": "./", "version": "9.9.9",
             "skills": ["./epm-setup", "./agent-x"]}]}))
         check("e tace quando il manifesto e a posto", mod.guai_manifesto(mk), [])
+
+    # --- epm-setup allinea la versione da solo -------------------------------
+    # La versione vive in quattro posti e uno solo si modifica. Qui si verifica
+    # che `merge-config` la prenda da module.yaml invece di lasciare quella
+    # vecchia — e che nel farlo NON butti via le risposte gia date, che sono
+    # l'altra meta del lavoro: un aggiornamento che riporta le cartelle ai
+    # default e peggio di un aggiornamento mancato.
+    import subprocess
+    merge = SCRIPT.parent / "merge-config.py"
+    with tempfile.TemporaryDirectory() as td:
+        cfg = Path(td) / "config.yaml"
+        cfg.write_text("output_folder: '{project-root}/docs'\n"
+                       "epm:\n  name: Enhanced Party Mode\n  version: 1.2.3\n"
+                       "  epm_demos_folder: '{project-root}/le-mie-demo'\n")
+        ans = Path(td) / "ans.json"
+        ans.write_text(json.dumps({"module": {"epm_demos_folder": "{project-root}/le-mie-demo"}}))
+        # `uv run`, non `sys.executable`: quello script dichiara le sue
+        # dipendenze nell'intestazione PEP 723, e l'interprete della suite non
+        # le ha. Lanciarlo con sys.executable dava exit 2 e sembrava un difetto
+        # dello script — era il modo di chiamarlo.
+        r = subprocess.run(["uv", "run", str(merge), "--config-path", str(cfg),
+                            "--module-yaml", str(mod.ASSET), "--answers", str(ans),
+                            "--user-config-path", str(Path(td) / "user.yaml")],
+                           capture_output=True, text=True)
+        check("merge-config gira", r.returncode, 0)
+        scritto = cfg.read_text(encoding="utf-8")
+        attesa = re.search(r"^module_version:\s*(\S+)",
+                           mod.ASSET.read_text(encoding="utf-8"), re.M).group(1)
+        check("allinea la versione da module.yaml", f"version: {attesa}" in scritto, True)
+        check("e non lascia quella vecchia", "1.2.3" not in scritto, True)
+        check("conservando le risposte gia date",
+              "le-mie-demo" in scritto, True)
+        check("e senza toccare le chiavi fuori dal modulo",
+              "output_folder: '{project-root}/docs'" in scritto, True)
 
     print()
     print("tutti i test passati" if not fails else f"{fails} test falliti")
