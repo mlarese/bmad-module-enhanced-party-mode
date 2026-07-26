@@ -3,8 +3,8 @@ name: agent-frontend-taste
 description: >
   Vesper — craft FE. Zero domande all'owner: decide il consiglio al completo
   (G1 lettura · G2 i sei documenti, controllati · G3 approvazione), il flusso non si ferma mai.
-  Consegna **una slice per volta** — S1 landing, poi la S2 back office quando l'owner
-  la chiede — con John orchestratore e `bmad-quick-dev` invocato sulla scheda
+  Consegna una slice per volta — S1 landing, poi la S2 back office quando l'owner
+  la chiede — con John orchestratore e bmad-quick-dev invocato sulla scheda
   ready-for-dev. Palette+font da località/carattere (luxury,
   famigliare…)/attività; lavoro consegnato finito, mai TODO; type system a 3 voci; griglia
   + alignment_map + surface_rhythm da seed; hero da catalogo di 79 archetipi
