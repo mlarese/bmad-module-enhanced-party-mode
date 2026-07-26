@@ -13,9 +13,9 @@ con `palette_guard` a 1**: `#395058` croma 12.2, `#273139` croma 7.1,
 `#1d5b62` croma 27.1, tutte su fasce a piena larghezza. Non perché la regola
 mancasse: perché nessuno aveva eseguito il controllo prima di consegnare.
 
-Quattro comandi da ricordare diventano uno da eseguire. E l'esito non resta in
-chat: `--design` lo scrive nel DESIGN.md, così «ho chiuso la pagina» è una cosa
-che si può verificare dopo, invece di una cosa che si dichiara.
+Cinque controlli da ricordare diventano un comando da eseguire. E l'esito non
+resta in chat: `--design` lo scrive nel DESIGN.md, così «ho chiuso la pagina» è
+una cosa che si può verificare dopo, invece di una cosa che si dichiara.
 
 Cosa controlla:
   1. colore      — palette_guard: croma dello scuro, settore dominante, serie,
@@ -23,11 +23,15 @@ Cosa controlla:
   2. responsive  — viewport meta, griglie che collassano, niente larghezze fisse
   3. finito      — nessun TODO / lorem ipsum / «da sostituire» nel consegnato
   4. traccia     — `dati_verosimili:` nel DESIGN.md quando i testi non erano dati
+  5. consiglio   — `docs/consiglio/<slug>.md` con almeno una seduta registrata:
+                   il consiglio decide tutto senza interpellare l'owner, e senza
+                   quel file non resta scritto da nessuna parte chi c'era
 
 Usage:
     uv run scripts/close_check.py apps/<slug>/index.html
     uv run scripts/close_check.py apps/<slug>/index.html --ledger _bmad/memory/agent-frontend-taste/hue-ledger.json
     uv run scripts/close_check.py apps/<slug>/index.html --design apps/<slug>/DESIGN.md
+    uv run scripts/close_check.py apps/<slug>/index.html --council docs/consiglio/<slug>.md
     uv run scripts/close_check.py apps/<slug>/*.html --format json
 
 Exit: 0 si consegna · 1 c'è da correggere · 2 non misurabile (non è un pass).
@@ -111,6 +115,28 @@ def check_design(design: Path | None, page_text: str) -> tuple[bool, list[str]]:
     return True, []
 
 
+COUNCIL_ENTRY_RE = re.compile(r"^- \*\*\d{4}-\d{2}-\d{2}", re.M)
+
+
+def check_council(council: Path | None) -> tuple[bool, list[str]]:
+    """Il registro delle sedute: chi c'era, in una riga per seduta.
+
+    Il motore è `council_log.py`; qui si verifica solo che il registro esista e
+    non sia vuoto — perché è l'ultimo momento in cui qualcuno guarda.
+    """
+    if council is None:
+        return False, ["nessun `--council`: passa `docs/consiglio/<slug>.md`. "
+                       "Il consiglio ha deciso tutto senza chiedere niente all'owner; "
+                       "se non resta scritto chi c'era, non resta niente"]
+    if not council.is_file():
+        return False, [f"`{council}` non esiste: le sedute del consiglio non sono state "
+                       "registrate. Una riga per seduta, con `council_log.py`"]
+    if not COUNCIL_ENTRY_RE.search(council.read_text(encoding="utf-8", errors="replace")):
+        return False, [f"`{council.name}` non ha nemmeno una seduta registrata: "
+                       "è un titolo senza registro"]
+    return True, []
+
+
 def check_colour(pg, text: str, last: list[str], ledger: Path | None,
                  page: Path) -> tuple[int, dict, list[str]]:
     """(stato, report, problemi) — stato 0 ok, 1 violazioni, 2 non misurabile."""
@@ -146,6 +172,7 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="Check di chiusura di una pagina consegnata")
     ap.add_argument("pages", nargs="+", help="file HTML consegnati")
     ap.add_argument("--design", help="DESIGN.md di accompagnamento")
+    ap.add_argument("--council", help="registro del consiglio, docs/consiglio/<slug>.md")
     ap.add_argument("--ledger", help="registro dei settori di tinta")
     ap.add_argument("--last", default="", help="settori recenti, il più recente per primo")
     ap.add_argument("--format", choices=("md", "json"), default="md")
@@ -153,6 +180,7 @@ def main() -> int:
 
     pg = _palette_guard()
     design = Path(args.design) if args.design else None
+    council = Path(args.council) if args.council else None
     ledger = Path(args.ledger) if args.ledger else None
     last = args.last.split(",")
 
@@ -167,8 +195,9 @@ def main() -> int:
         resp_ok, resp_problems = check_responsive(text)
         fin_ok, fin_problems = check_finished(text)
         des_ok, des_problems = check_design(design, text)
+        cou_ok, cou_problems = check_council(council)
 
-        problems = colour_problems + resp_problems + fin_problems + des_problems
+        problems = colour_problems + resp_problems + fin_problems + des_problems + cou_problems
         state = 2 if colour_state == 2 else (1 if problems else 0)
         worst = max(worst, state)
         if report:
@@ -191,6 +220,7 @@ def main() -> int:
         lines.append(f"- responsive: {'ok' if resp_ok else 'da correggere'}")
         lines.append(f"- finito: {'nessun segnaposto' if fin_ok else 'da correggere'}")
         lines.append(f"- traccia: {'ok' if des_ok else 'da correggere'}")
+        lines.append(f"- consiglio: {'registrato' if cou_ok else 'da correggere'}")
         if problems:
             lines.append("")
             lines.extend(f"  - {p}" for p in problems)

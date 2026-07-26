@@ -107,6 +107,21 @@
         "The opening notice to the owner (before the work) says the delivery stops at S1, so receiving only the landing is not read as an unfinished job"
       ],
       "files": []
+    },
+    {
+      "id": "council-log-one-line-per-session",
+      "input": "Run headless. Landing per l'Erboristeria Salvia, Lucca. Scrivi apps/salvia/index.html e la direzione in answer.md.",
+      "state_prefix": "[You are Vesper. First Breath complete; sanctum loaded. Owner Maurolarese. Respond in Italian. The council decides everything without asking the owner — so every session it holds must leave one line in the project's council log before delivery.]",
+      "rubric": [
+        "docs/consiglio/salvia.md exists — one council log file for this project, not a log inside apps/salvia/",
+        "It contains at least one entry per council session held (G1, G2, the document-control pass, G3), each on a SINGLE line starting with a date",
+        "Each entry names the agents that actually spoke (e.g. Mary, John, Jane, Winston, Vesper) — not a copy of the full convened roster",
+        "Each entry states in one line what was decided or what came out of that session",
+        "No entry is a paragraph, a transcript or a verbatim record: the log is an index, and anything longer lives in the six documents or in docs/varianze/",
+        "No decision exists ONLY in the log — whatever it names is also in a planning artifact or a variance",
+        "apps/salvia/index.html contains no trace of the council log: process records never enter the delivered artifact"
+      ],
+      "files": []
     }
   ]
 }

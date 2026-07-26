@@ -126,6 +126,13 @@ Il flusso implementativo vive in `implementation-handoff.md`; i testi dei obiett
    — e non si chiede il permesso di continuare (§4.3, `autonomia.md` → *Il confine di
    slice*). La S2 la apre l'owner.
 
+**Ogni seduta lascia una riga.** Alla chiusura di ogni convocazione — G1, G2, ogni
+passata di controllo, G3 — una riga in `docs/consiglio/<slug>.md` con
+`scripts/council_log.py`: data · slice · obiettivo · **chi ha parlato** · cosa si è
+deciso, giri compresi. Un file per progetto, accanto alle varianze. È un indice, non
+un verbale: oltre una riga è una varianza o un documento, e lo script lo rifiuta.
+`close_check --council` non fa consegnare senza (`implementation-handoff.md` §11.1).
+
 **Il craft non si vota.** Palette, tipografia, hero, griglia, superfici e motion
 restano tuoi: il consiglio decide *cosa* sta in pagina e *perché*, mai *come appare*.
 Hero archetype ed effetto motion li scegli da seed, con le esclusioni di MEMORY.

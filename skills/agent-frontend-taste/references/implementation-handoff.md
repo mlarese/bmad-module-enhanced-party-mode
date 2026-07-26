@@ -11,6 +11,7 @@ controllo dei documenti** · §4.1 slice_plan · §4.2 spec di slice · **§4.3 
 per volta** · **§4.4 l'orchestratore** · §5 implementazione · §6
 approvazione (+6.1 tetto rifiuti) · §7 precedenza dei documenti (+7.1 quelli
 auto-scritti) · §8 sito del cliente · §9 testi · §10 due artefatti · §11 varianze ·
+**§11.1 registro del consiglio** ·
 §12 dove stanno le indicazioni · §13 canone · §14 mappa dei workflow.
 
 **Il flusso, in ordine:**
@@ -541,7 +542,10 @@ Cosa tiene John:
   giurisdizioni che quella slice tocca davvero: un form porta Jane, un prezzo porta
   Dan Arrow, un login porta Rex e Jane insieme;
 - **la chiusura** — è John a dire che la slice è finita, e la dichiarazione di
-  §4.3 esce da lì.
+  §4.3 esce da lì;
+- **che ogni seduta lasci la sua riga** nel registro del consiglio (§11.1): è
+  l'unico posto in cui resta scritto chi ha parlato, e tocca a chi tiene la
+  sequenza accorgersi se una convocazione è passata senza traccia.
 
 Cosa **non** tiene John: **il craft non si vota** (`autonomia.md`), e non si
 orchestra nemmeno. Palette, tipografia, griglia, hero, superfici e motion restano
@@ -860,6 +864,64 @@ le varianze vengono elencate **per prime**. L'assunzione di oggi è il contesto
 verificato di domani — o la prima cosa che salta all'occhio quando la pagina dopo
 la contraddice.
 
+### 11.1 Il registro del consiglio: una riga per seduta
+
+Il consiglio decide **tutto** e non chiede niente all'owner: è la legge
+(`autonomia.md`). Il prezzo è che l'owner non vede niente di come si è arrivati
+alla pagina — quali agenti hanno parlato, chi ha deciso cosa, quante volte è
+tornata indietro. Le decisioni finiscono nei sei documenti e gli scostamenti in
+`docs/varianze/`, ma **chi era nella stanza non sta scritto da nessuna parte**, e
+la chat sparisce.
+
+**Dove:** `{project-root}/docs/consiglio/<slug>.md` — **un file per progetto**,
+accanto alle varianze, che il pre-flight rilegge per prime. Fuori da
+`apps/<slug>/`, che deve leggersi come un sito vero e finito (§10).
+
+**Come:** un comando, non un gesto da ricordare.
+
+```bash
+uv run scripts/council_log.py {project-root} --project <slug> \
+  --goal G1 --agents "Mary,John,Rex,Vesper" \
+  --outcome "landing, register famigliare, stack statico. 0 rimandi." [--slice S1]
+```
+
+Ne esce una riga:
+
+```markdown
+- **2026-07-26 · S1 · G3 approvazione** — Vesper · Vera · Jane → approvata al 2º giro (mancava il consenso sul form). 1 varianza.
+```
+
+1. **Una riga per seduta, e le sedute sono quattro tipi:** G1, G2, ogni passata
+   di controllo, G3. Una convocazione che non lascia la riga non è avvenuta, per
+   chiunque legga fra sei mesi.
+2. **Si scrive quando la seduta si chiude**, non ricostruito alla fine. Un
+   registro compilato a lavoro finito è un ricordo, e i ricordi si ordinano da
+   soli in modo che tutto torni.
+3. **Ci va chi ha *parlato*, non chi era convocato.** Al tavolo ci sono tutti —
+   è `council_roster.py` a dirlo, ed è membro di diritto ogni agente installato.
+   Il registro serve all'altra domanda: **chi ha aperto bocca**. Un lavoro in cui
+   parlano sempre le stesse tre voci è un consiglio che si sta restringendo, e si
+   vede solo qui.
+4. **È un indice, non un verbale.** `council_log.py` rifiuta un `--outcome` oltre
+   i 160 caratteri, e ha ragione: se non sta in una riga, quello che stai
+   scrivendo è una **varianza** (§11) o un pezzo di **documento** — va lì, e qui
+   resta il rimando. Nessuna decisione vive solo nel registro.
+5. **Il numero dei giri ci sta, ed è il punto.** «0 rimandi», «approvata al 2º
+   giro», «al quinto si è consegnato lo stesso»: i tetti (§3.1, §6.1) dicono che
+   il conto va scritto, e questo è il posto dove si legge in un colpo d'occhio.
+   Zero rifiuti su tutte le sedute significa che nessuno guarda davvero.
+6. **La slice si nomina appena esiste** (`--slice S1`): con la consegna a fette
+   (§4.3) il registro diventa anche la storia di quali slice sono state aperte e
+   quando.
+7. **Il gate è `close_check`** (`--council docs/consiglio/<slug>.md`): senza
+   registro non si consegna. È lo stesso motivo per cui esiste il resto di quel
+   comando — una regola che vive solo in prosa non viene eseguita.
+
+Fallimento: una convocazione senza la sua riga; un registro scritto tutto alla
+fine; l'elenco dei convocati copiato al posto di chi ha parlato; un paragrafo di
+verbale dove andava un rimando; una decisione che esiste **solo** qui; il conto
+dei giri taciuto perché era alto.
+
 ## 12. Dove stanno le indicazioni
 
 Senza documento di architettura, stack e convenzioni devono stare da qualche parte,
@@ -982,7 +1044,9 @@ riscritti «perché suonavano meglio».
 **Artefatti:** `TODO`, «da sostituire» o blocchi di dati fittizi dentro quello che consegni;
 dati verosimili non segnalati in chat; assunzioni scritte come fatti; assunzione
 decisa in consiglio e mai finita in `docs/varianze/`; varianza lunga una pagina, o
-una varianza per ogni decisione ordinaria.
+una varianza per ogni decisione ordinaria; **una seduta del consiglio senza la sua
+riga in `docs/consiglio/<slug>.md`**, un registro compilato tutto alla fine, o un
+verbale dove andava un rimando.
 
 **Slice:** slice che non sta in piedi da sola; auth completa come S1; **S2
 costruita nella stessa passata della S1**, o aperta prima che l'owner l'abbia

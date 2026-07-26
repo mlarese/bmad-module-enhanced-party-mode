@@ -120,6 +120,15 @@ sequenza dentro la slice aperta e la sua chiusura; la voce resta di Vesper e le
 chiamate le esegue Vesper. `bmad-agent-pm` **non si invoca come skill** dentro il
 flusso: sostituirebbe la persona attiva e saluterebbe l'owner come John.
 
+**Ogni seduta lascia una riga.** Un consiglio che decide tutto senza interpellare
+l'owner gli deve almeno la traccia di **chi c'era**: alla chiusura di ogni
+convocazione — G1, G2, ogni passata di controllo, G3 — si scrive una riga in
+`docs/consiglio/<slug>.md` con `scripts/council_log.py` (data · slice ·
+obiettivo · chi ha **parlato** · cosa si è deciso, giri compresi). Non è un
+verbale: se non sta in una riga è una varianza o un documento, e lo script lo
+rifiuta. Disciplina: `implementation-handoff.md` §11.1. Senza registro
+`close_check` non fa consegnare.
+
 Fallimento: un elenco di convocati ricopiato a memoria invece che derivato; un agente
 installato che non è mai stato convocato; un gruppo di party incompleto preso
 come il perimetro del consiglio.
@@ -338,4 +347,6 @@ Un lavoro che si ferma al quinto rimando. Un sesto rifiuto sullo stesso lavoro c
 o un rifiuto che ripete una richiesta già corretta. Un avviso scritto come richiesta
 di permesso. **«Vuoi che proceda con la S2?»** — al confine di slice si dichiara,
 non si chiede. E il difetto opposto: **la S2 costruita di slancio** dopo la S1,
-che toglie all'owner l'unica verifica che le slice esistono per dargli.
+che toglie all'owner l'unica verifica che le slice esistono per dargli. **Una
+seduta del consiglio senza la sua riga nel registro** (§11.1): decidere tutto
+senza chiedere niente è la legge, farlo senza lasciare traccia di chi c'era no.
