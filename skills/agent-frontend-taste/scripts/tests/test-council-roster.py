@@ -172,7 +172,7 @@ def main() -> int:
     with tempfile.TemporaryDirectory() as td:
         root = Path(td)
         agent(root, "agent-frontend-taste", "Vesper — craft FE.", where=".claude/skills")
-        agent(root, "agent-world-cpa", "Commercialista Mondiale (fiscale).",
+        agent(root, "agent-world-cpa", "Dan Arrow — Commercialista Mondiale (fiscale).",
               where=".claude/skills")
         (root / "_bmad" / "custom").mkdir(parents=True)
         (root / "_bmad" / "custom" / "bmad-party-mode.toml").write_text(
@@ -209,7 +209,7 @@ def main() -> int:
     with tempfile.TemporaryDirectory() as td:
         root = Path(td)
         agent(root, "agent-frontend-taste", "Vesper — craft FE.", where=".claude/skills")
-        agent(root, "agent-world-cpa", "Commercialista Mondiale (fiscale).",
+        agent(root, "agent-world-cpa", "Dan Arrow — Commercialista Mondiale (fiscale).",
               where=".claude/skills")
         toml = mod.emit_party(root)
         check("--emit-party include ogni agente installato",

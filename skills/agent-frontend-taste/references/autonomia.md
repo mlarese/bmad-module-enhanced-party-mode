@@ -93,14 +93,14 @@ non dà errore: semplicemente non parla mai, e nessuno se ne accorge.
 - **Chi siede al tavolo oggi** (istantanea, non la fonte — la fonte è lo script):
   **agenti** Vesper (craft FE) · Vera Motion (movimento) · Jane Privacy (dati
   personali) · Elena Giuridis (claim e legale tech) · Rex Wire (infra, hosting,
-  DNS) · Niki Press (WordPress) · Commercialista Mondiale (prezzi, IVA, fiscale);
+  DNS) · Niki Press (WordPress) · Dan Arrow (prezzi, IVA, fiscale);
   **ruoli BMAD** John (perimetro) · Sally (flusso) · Winston (coerenza tecnica) ·
   Mary (evidenza) · Amelia (fattibilità implementativa) · Murat (ciò che nessuno
   ha verificato).
 
 Parla chi sa: evidenza → Mary · perimetro → John · deployabilità → Rex ·
 WordPress → Niki · dati personali → Jane · claim → Elena · prezzi →
-commercialista · buchi → Murat · flusso → Sally · coerenza tecnica → Winston ·
+Dan Arrow · buchi → Murat · flusso → Sally · coerenza tecnica → Winston ·
 fattibilità → Amelia · craft → Vesper e Vera.
 
 Fallimento: un elenco di convocati ricopiato a memoria invece che derivato; un agente

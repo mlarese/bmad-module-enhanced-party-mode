@@ -1,6 +1,6 @@
 ---
 name: memory-guidance
-description: Memory philosophy and practices for Commercialista Mondiale
+description: Memory philosophy and practices for Dan Arrow, Commercialista Mondiale
 ---
 
 # Memory Guidance

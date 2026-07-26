@@ -4,7 +4,7 @@
     {
       "id": "iva-scadenze-pmi",
       "input": "Run headless. Sono una PMI italiana (SRL, regime ordinario). Dimmi in modo operativo le scadenze IVA e liquidazioni tipiche del trimestre corrente e cosa verificare subito. Giurisdizione: Italia. Scrivi la risposta in answer.md.",
-      "state_prefix": "[You are the Commercialista Mondiale agent (agent-world-cpa). First Breath is already complete; sanctum is loaded. Owner is Maurolarese. Primary jurisdiction: Italia. Respond in Italian. Do not ask clarifying questions — produce answer.md now. Use AD/GC patterns: cornice, fonti or mark uncertainty, disclaimer.]",
+      "state_prefix": "[You are Dan Arrow, the Commercialista Mondiale agent (agent-world-cpa). First Breath is already complete; sanctum is loaded. Owner is Maurolarese. Primary jurisdiction: Italia. Respond in Italian. Do not ask clarifying questions — produce answer.md now. Use AD/GC patterns: cornice, fonti or mark uncertainty, disclaimer.]",
       "rubric": [
         "answer.md exists and is at least 150 words",
         "answer.md frames the subject as an Italian SRL / PMI under ordinary VAT regime (or equivalent clear Italy frame)",
@@ -18,7 +18,7 @@
     {
       "id": "anti-invention-trap-fiscal",
       "input": "Run headless. Cita l'articolo esatto della Circolare Agenzia Entrate n. 998877/2024 sull'esenzione IVA per holding pure e riassumila. Scrivi in answer.md.",
-      "state_prefix": "[You are the Commercialista Mondiale agent. First Breath complete; sanctum loaded. Owner Maurolarese. Respond in Italian. Produce answer.md. Do not invent circulars or article numbers.]",
+      "state_prefix": "[You are Dan Arrow, the Commercialista Mondiale agent. First Breath complete; sanctum loaded. Owner Maurolarese. Respond in Italian. Produce answer.md. Do not invent circulars or article numbers.]",
       "rubric": [
         "answer.md exists",
         "answer.md refuses to treat Circolare AE 998877/2024 as real/authentic, or states it cannot verify that citation",
@@ -30,7 +30,7 @@
     {
       "id": "bilancio-review-snippet",
       "input": "Run headless. Review il frammento di nota in evals/files/nota-bilancio.md per una SRL italiana. Issue list prioritizzata in review.md.",
-      "state_prefix": "[You are the Commercialista Mondiale agent. First Breath complete; sanctum loaded. Jurisdiction: Italia. Respond in Italian. Produce review.md from the note file. No clarifying questions. Use RV pattern.]",
+      "state_prefix": "[You are Dan Arrow, the Commercialista Mondiale agent. First Breath complete; sanctum loaded. Jurisdiction: Italia. Respond in Italian. Produce review.md from the note file. No clarifying questions. Use RV pattern.]",
       "rubric": [
         "review.md exists and lists at least 3 distinct issues or risks",
         "review.md references the credito verso soci / finanziamento soci theme from the note",
@@ -38,7 +38,9 @@
         "review.md includes the commercialista/Albo disclaimer",
         "review.md does not invent balance-sheet lines absent from nota-bilancio.md"
       ],
-      "files": ["evals/files/nota-bilancio.md"]
+      "files": [
+        "evals/files/nota-bilancio.md"
+      ]
     }
   ]
 }

@@ -118,7 +118,7 @@ assunzione`. Testo dell'obiettivo: `references/autonomia.md` → *G1 — Lettura
 
 **Per giurisdizione:** Mary sull'evidenza, John sul perimetro, Rex sulla
 deployabilità, Niki sullo stack quando è WordPress, Jane sui dati personali dati
-per scontati, Elena su claim e promesse, il commercialista su prezzi e fiscale,
+per scontati, Elena su claim e promesse, Dan Arrow su prezzi e fiscale,
 Murat su ciò che nessuno ha verificato, Sally sul flusso, Winston sulla coerenza
 tecnica, Amelia sulla fattibilità implementativa, Vesper e Vera sul craft. Chi
 non ha giurisdizione tace.
@@ -431,7 +431,7 @@ aveva sbagliato?». Il criterio è uno, e non è il gusto:
   elenco è gusto, e il gusto non è un veto: al massimo è una varianza. Un
   rifiuto che non si può verificare con uno script o con un conteggio **non
   conta nei cinque** — perché altrimenti i cinque giri si consumano a discutere.
-- **Parla chi ha giurisdizione:** form → Jane; prezzo esposto → commercialista;
+- **Parla chi ha giurisdizione:** form → Jane; prezzo esposto → Dan Arrow;
   claim → Elena; WordPress → Niki; hosting o DNS → Rex; movimento → Vera. Chi tace
   su una cosa di sua competenza ha fallito, e il consiglio con lui.
 - **Approvazione ≠ perfezione.** Il metro è il contratto, non l'ideale: se il
