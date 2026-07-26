@@ -1,0 +1,13 @@
+{
+  "name": "claude-code-host-auth",
+  "invocation": [
+    "bash",
+    "/Users/maurolarese/Dropbox/vibecode/_PERSONALE_/base-bmad/skills/agent-it-infra-expert/evals/wrap-claude.sh",
+    "{prompt}",
+    "{cwd}"
+  ],
+  "transcript": { "format": "stdout-jsonl" },
+  "skill_dir": ".claude/skills",
+  "load_signal": { "skill_tool": "Skill", "read_tool": "Read" },
+  "env_passthrough": ["BMAD_EVAL_HOST_HOME", "PATH", "USER", "LOGNAME", "TMPDIR", "LANG"]
+}

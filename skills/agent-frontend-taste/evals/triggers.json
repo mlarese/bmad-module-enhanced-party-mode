@@ -1,0 +1,47 @@
+[
+  {
+    "id": "t-vesper",
+    "query": "parla con Vesper: restyle questa landing, mai banale",
+    "should_trigger": true
+  },
+  {
+    "id": "t-vesper-short",
+    "query": "Vesper, scegli colori e font per questa pagina",
+    "should_trigger": true
+  },
+  {
+    "id": "t-awwwards",
+    "query": "esperto frontend taste: guarda Awwwards e Dribbble e restyle il sito",
+    "should_trigger": true
+  },
+  {
+    "id": "t-anti-banal",
+    "query": "restyle frontend mai banale, ispirazione Awwwards website-template",
+    "should_trigger": true
+  },
+  {
+    "id": "t-ui-brief",
+    "query": "Vesper, elabora la UI in un brief per il frontend che deve generare la pagina",
+    "should_trigger": true
+  },
+  {
+    "id": "n-story",
+    "query": "scrivi una user story BMAD per il backlog del login",
+    "should_trigger": false
+  },
+  {
+    "id": "n-vera",
+    "query": "parla con Vera Motion: applica le animazioni scroll reveal",
+    "should_trigger": false
+  },
+  {
+    "id": "n-infra",
+    "query": "parla con Rex Wire sul timeout SSH ProxyJump",
+    "should_trigger": false
+  },
+  {
+    "id": "n-brainstorm",
+    "query": "facciamo un brainstorming creativo sul nome del prodotto",
+    "should_trigger": false
+  }
+]

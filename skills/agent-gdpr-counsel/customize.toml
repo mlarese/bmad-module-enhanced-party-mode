@@ -1,0 +1,18 @@
+# DO NOT EDIT -- overwritten on every update.
+#
+# Agent customization surface for agent-gdpr-counsel.
+# Team overrides:     {project-root}/_bmad/custom/agent-gdpr-counsel.toml
+# Personal overrides: {project-root}/_bmad/custom/agent-gdpr-counsel.user.toml
+
+[agent]
+
+# --- Metadata (install-time roster contract) ---
+# Consumed by module.yaml:agents[] and `[agents.<code>]` in central config.
+
+code = "agent-gdpr-counsel"
+name = "Jane Privacy"
+title = "Consigliere GDPR"
+icon = "🛡️"
+description = "Jane Privacy — esperto GDPR Italia/UE: RoPA, DPIA, breach, transfer, cookie/ePrivacy e privacy-by-design; specializzazione sotto Elena."
+agent_type = "memory"   # stateless | memory | autonomous
+

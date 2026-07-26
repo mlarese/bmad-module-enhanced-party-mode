@@ -1,0 +1,2 @@
+## 8. Limitation of Liability
+To the maximum extent permitted by law, Provider's total liability arising out of or related to this Agreement shall not exceed the fees paid by Customer in the twelve (12) months preceding the claim. Provider shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including lost profits, even if advised of the possibility of such damages. This limitation applies regardless of the form of action.

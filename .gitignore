@@ -1,0 +1,8 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.analysis/
+.memlog.md
+*.html
+!**/demo/**/*.html
+!**/assets/**/*.html

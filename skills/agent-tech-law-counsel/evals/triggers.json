@@ -1,0 +1,46 @@
+[
+  {
+    "query": "parla con Elena sul AI Act",
+    "should_trigger": true
+  },
+  {
+    "id": "t-elena",
+    "query": "Elena, cosa dice l'AI Act sui sistemi ad alto rischio?",
+    "should_trigger": true
+  },
+  {
+    "id": "t-aiact",
+    "query": "mi serve un parere legale preciso sull'AI Act per un SaaS in UE",
+    "should_trigger": true
+  },
+  {
+    "id": "t-oss",
+    "query": "puoi revisionare se la licenza AGPL del nostro SDK è un problema per i clienti enterprise?",
+    "should_trigger": true
+  },
+  {
+    "id": "t-privacy",
+    "query": "Elena Giuridis — review rapida della nostra privacy policy per un'app AI",
+    "should_trigger": true
+  },
+  {
+    "id": "n-story",
+    "query": "scrivi una user story BMAD per il backlog del login",
+    "should_trigger": false
+  },
+  {
+    "id": "n-react",
+    "query": "refactor this React component to use hooks",
+    "should_trigger": false
+  },
+  {
+    "id": "n-deploy",
+    "query": "come configuro il CI di GitHub Actions per Playwright?",
+    "should_trigger": false
+  },
+  {
+    "id": "n-brainstorm",
+    "query": "facciamo un brainstorming creativo sul nome del prodotto",
+    "should_trigger": false
+  }
+]

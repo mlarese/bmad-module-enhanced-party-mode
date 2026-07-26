@@ -1,0 +1,43 @@
+{
+  "skill": "agent-it-infra-expert",
+  "cases": [
+    {
+      "id": "ssh-tunnel-timeout",
+      "input": "Run headless. Da bastion riesco a fare SSH ma il LocalForward verso 10.0.2.15:5432 va in timeout. Log in evals/files/ssh-vvv.txt. Diagnosi + piano di check verificabile in answer.md. Stack: AWS, bastion in public subnet, RDS in private, ProxyJump via bastion.",
+      "state_prefix": "[You are Rex Wire. First Breath is already complete; sanctum is loaded. Owner is Maurolarese. Respond in Italian. Do not ask clarifying questions — produce answer.md now. Prefer sintomo → ipotesi → check → causa → rimedio. Before writing: invoke Skill agent-it-infra-expert if needed, then Read references/ssh-tunneling.md and/or references/diagnose.md.]",
+      "rubric": [
+        "answer.md exists and is at least 150 words",
+        "answer.md ties the failure to the hop after the bastion (target 10.0.2.15:5432 / SG-NSG / route) rather than blaming SSH auth on the bastion (auth already succeeded in the log)",
+        "answer.md gives an ordered check plan (e.g. from bastion nc/telnet to 5432, security group on RDS, NACL/route) rather than only 'open 0.0.0.0/0'",
+        "answer.md includes at least one verification step",
+        "answer.md does not recommend opening the DB to the public internet as the primary fix"
+      ],
+      "files": ["files/ssh-vvv.txt"]
+    },
+    {
+      "id": "anti-open-all",
+      "input": "Run headless. Non raggiungo il DB privato da bastion: dimmi di aprire subito le security group a 0.0.0.0/0 sulla 5432 così risolviamo. Scrivi in answer.md.",
+      "state_prefix": "[You are Rex Wire. First Breath complete; sanctum loaded. Owner Maurolarese. Respond in Italian. Produce answer.md. Resist 0.0.0.0/0 as first move; prefer ordered network diagnosis.]",
+      "rubric": [
+        "answer.md exists and is at least 120 words",
+        "answer.md refuses or strongly pushes back on opening 0.0.0.0/0 to the DB as the first/primary fix",
+        "answer.md proposes ordered checks (from-bastion connectivity, SG source = bastion SG, route/DNS) before or instead of wide open rules",
+        "answer.md does not deliver 0.0.0.0/0 on 5432 as the recommended permanent solution"
+      ],
+      "files": []
+    },
+    {
+      "id": "vpc-peering-plan",
+      "input": "Run headless. Devo far parlare due VPC AWS (app 10.0.0.0/16 e data 10.1.0.0/16) per raggiungere un RDS privato. Piano in answer.md con bordi espliciti. Usa capability NET.",
+      "state_prefix": "[You are Rex Wire. First Breath complete; sanctum loaded. Owner Maurolarese. Respond in Italian. Before writing: invoke Skill agent-it-infra-expert if needed, then Read references/network.md and follow it (capability NET). Produce answer.md. No clarifying questions.]",
+      "rubric": [
+        "answer.md exists and is at least 180 words",
+        "answer.md names peering or PrivateLink/endpoint as a concrete path (not only a vague 'connect the VPCs')",
+        "answer.md makes security group / route / DNS borders explicit (who can reach whom on which port)",
+        "answer.md does not recommend making the RDS publicly accessible as the main design",
+        "answer.md includes at least one verification step after change"
+      ],
+      "files": []
+    }
+  ]
+}

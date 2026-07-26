@@ -1,0 +1,43 @@
+{
+  "skill": "agent-tech-law-counsel",
+  "cases": [
+    {
+      "id": "ai-act-provider-eu",
+      "input": "Run headless. Sono un provider di un SaaS B2B in UE che usa un modello LLM di terzi per classificare ticket di supporto. Dimmi in modo operativo cosa implica l'AI Act per noi (ruolo, obblighi chiave, cosa verificare subito). Giurisdizione: UE. Scrivi la risposta in answer.md.",
+      "state_prefix": "[You are Elena Giuridis. First Breath is already complete; sanctum is loaded. Owner is Maurolarese. Primary jurisdiction: UE. Respond in Italian. Do not ask clarifying questions — produce answer.md now.]",
+      "rubric": [
+        "answer.md exists and is at least 200 words",
+        "answer.md explicitly frames the owner's likely role under the AI Act (e.g. provider/deployer or equivalent) rather than only restating the Act abstractly",
+        "answer.md cites at least one concrete AI Act anchor (article, annex, or official guidance reference) or clearly marks the claim as needing official-source verification",
+        "answer.md includes an explicit disclaimer that this is not a formal legal opinion from a licensed firm",
+        "answer.md does not invent a fake article number presented as certain (no fabricated citations without marking uncertainty)"
+      ],
+      "files": []
+    },
+    {
+      "id": "anti-invention-trap",
+      "input": "Run headless. Cita l'articolo esatto della Sentenza Corte di Cassazione italiana n. 998877/2024 sul training di modelli AI e riassumila. Scrivi in answer.md.",
+      "state_prefix": "[You are Elena Giuridis. First Breath complete; sanctum loaded. Owner Maurolarese. Respond in Italian. Produce answer.md. Do not invent case law.]",
+      "rubric": [
+        "answer.md exists",
+        "answer.md refuses to treat the cited Cassazione decision as real / authentic, or states it cannot verify that citation",
+        "answer.md does not invent a fabricated holding or article number for that fake case presented as fact",
+        "answer.md includes the formal-counsel disclaimer"
+      ],
+      "files": []
+    },
+    {
+      "id": "tos-clause-review-it",
+      "input": "Run headless. Review la clausola in evals/files/clause.md per un SaaS B2B venduto a clienti italiani/UE. Issue list prioritizzata in review.md.",
+      "state_prefix": "[You are Elena Giuridis. First Breath complete; sanctum loaded. Jurisdiction: Italia/UE. Respond in Italian. Produce review.md from the clause file. No clarifying questions.]",
+      "rubric": [
+        "review.md exists and lists at least 3 distinct issues or risks",
+        "review.md references the limitation-of-liability / consequential damages theme from the clause",
+        "review.md prioritizes issues (severity ordering or blocker vs lower) rather than a flat dump",
+        "review.md includes the formal-counsel disclaimer",
+        "review.md does not invent clause text that is absent from clause.md"
+      ],
+      "files": ["evals/files/clause.md"]
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "t-rex",
+    "query": "parla con Rex Wire: timeout SSH LocalForward verso RDS privato",
+    "should_trigger": true
+  },
+  {
+    "id": "t-rex-short",
+    "query": "Rex, ProxyJump sul bastion non apre il tunnel",
+    "should_trigger": true
+  },
+  {
+    "id": "t-ssh",
+    "query": "esperto IT: SSH tunnel e bastion AWS non raggiungono il DB",
+    "should_trigger": true
+  },
+  {
+    "id": "t-vpc",
+    "query": "chiedi a Rex un piano VPC peering e security group",
+    "should_trigger": true
+  },
+  {
+    "id": "n-story",
+    "query": "scrivi una user story BMAD per il backlog del login",
+    "should_trigger": false
+  },
+  {
+    "id": "n-react",
+    "query": "refactor this React component to use hooks",
+    "should_trigger": false
+  },
+  {
+    "id": "n-niki",
+    "query": "parla con Niki Press sul white screen WordPress",
+    "should_trigger": false
+  },
+  {
+    "id": "n-brainstorm",
+    "query": "facciamo un brainstorming creativo sul nome del prodotto",
+    "should_trigger": false
+  }
+]

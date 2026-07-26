@@ -1,0 +1,13 @@
+{
+  "name": "codex-cli-host-auth",
+  "invocation": [
+    "bash",
+    "/Users/maurolarese/Dropbox/vibecode/_PERSONALE_/base-bmad/skills/agent-web-animations/evals/wrap-codex.sh",
+    "{prompt}",
+    "{cwd}"
+  ],
+  "transcript": { "format": "stdout-jsonl" },
+  "skill_dir": ".agents/skills",
+  "load_signal": { "skill_tool": "Skill", "read_tool": "Read" },
+  "env_passthrough": ["BMAD_EVAL_HOST_HOME", "CODEX_HOME", "PATH", "USER", "LOGNAME", "TMPDIR", "LANG"]
+}

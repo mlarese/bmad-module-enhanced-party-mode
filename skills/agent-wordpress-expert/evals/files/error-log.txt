@@ -1,0 +1,7 @@
+[25-Jul-2026 07:12:01 UTC] PHP Fatal error: Uncaught Error: Call to undefined function acf_add_local_field_group() in /var/www/html/wp-content/themes/client-child/functions.php:88
+Stack trace:
+#0 /var/www/html/wp-settings.php(645): include()
+#1 /var/www/html/wp-config.php(98): require_once('...')
+#2 /var/www/html/wp-load.php(50): require_once('...')
+#3 /var/www/html/wp-blog-header.php(13): require_once('...')
+#4 /var/www/html/index.php(17): require('...')

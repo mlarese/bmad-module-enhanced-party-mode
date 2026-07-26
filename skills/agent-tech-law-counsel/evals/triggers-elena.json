@@ -1,0 +1,18 @@
+[
+  {
+    "query": "Elena, cosa dice l'AI Act sui sistemi ad alto rischio?",
+    "should_trigger": true
+  },
+  {
+    "query": "Elena Giuridis — review rapida della nostra privacy policy per un'app AI",
+    "should_trigger": true
+  },
+  {
+    "query": "parla con Elena Giuridis sul GDPR del nostro SaaS",
+    "should_trigger": true
+  },
+  {
+    "query": "refactor this React component to use hooks",
+    "should_trigger": false
+  }
+]

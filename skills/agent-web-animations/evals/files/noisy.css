@@ -1,0 +1,21 @@
+/* Intentionally bad motion for audit eval */
+.hero-title {
+  position: relative;
+  left: -40px;
+  opacity: 0;
+  animation: slideIn 2s infinite linear;
+}
+@keyframes slideIn {
+  from { left: -40px; width: 80%; opacity: 0; }
+  to { left: 0; width: 100%; opacity: 1; }
+}
+.card {
+  transition: height 0.8s linear, top 0.8s linear;
+}
+.marquee {
+  animation: scroll 3s linear infinite;
+}
+@keyframes scroll {
+  from { top: 0; }
+  to { top: -200px; }
+}

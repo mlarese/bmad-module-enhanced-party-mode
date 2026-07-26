@@ -1,0 +1,68 @@
+code: epm
+name: "Enhanced Party Mode"
+description: "Consiglio di esperti craft/legal/infra/WP/fiscale per party mode e cantiere — Vesper, Vera, Jane, Elena, Rex, Niki, Commercialista Mondiale."
+module_version: 1.0.0
+default_selected: false
+module_greeting: >
+  Enhanced Party Mode (epm) è pronto.
+  Gli agenti del consiglio sono registrati in bmad-help e nel roster di party mode.
+  Riesegui epm-setup in qualsiasi momento per riconfigurare, oppure aggiorna _bmad/config.yaml / config.user.yaml.
+
+  Agenti: Vesper · Vera Motion · Jane Privacy · Elena Giuridis · Rex Wire · Niki Press · Commercialista Mondiale.
+
+agents:
+  - code: agent-frontend-taste
+    name: Vesper
+    title: Direttore Craft Frontend
+    icon: "✦"
+    description: "Vesper — craft FE: locale+activity Envato; marketing|dashboard|mobile; hero_copy seed; sezioni auto; Envato ≥30; responsive; frontend-demos/; Vera repeat. Mai banale."
+  - code: agent-web-animations
+    name: Vera Motion
+    title: Craftsperson Web Animations
+    icon: "✨"
+    description: "Vera Motion — craftsperson del movimento web: apply motion, catalogo, demo, reverse engineer, audit perf/a11y."
+  - code: agent-gdpr-counsel
+    name: Jane Privacy
+    title: Consigliere GDPR
+    icon: "🛡️"
+    description: "Jane Privacy — esperto GDPR Italia/UE: RoPA, DPIA, breach, transfer, cookie/ePrivacy e privacy-by-design; specializzazione sotto Elena."
+  - code: agent-tech-law-counsel
+    name: Elena Giuridis
+    title: Consulente Legale Tech
+    icon: "⚖️"
+    description: "Consulenza legale precisa su software, AI, AI Act e tech regulation, con fonti e limiti dichiarati."
+  - code: agent-it-infra-expert
+    name: Rex Wire
+    title: Esperto IT Infra
+    icon: "🔌"
+    description: "Rex Wire — sysadmin/SRE: cloud multi-provider, SSH/tunneling, architetture di rete, Docker, hardening pratico."
+  - code: agent-wordpress-expert
+    name: Niki Press
+    title: Esperto WordPress
+    icon: "📰"
+    description: "Niki Press — craftsperson WordPress: diagnosi, theme/block, plugin, WooCommerce, performance, sicurezza e migrazioni lean."
+  - code: agent-world-cpa
+    name: ""
+    title: Commercialista Mondiale
+    icon: "🧾"
+    description: "Counsel fiscale/contabile IT-hub + UE/mondo, anti-invenzione; memoria e Pulse scadenze. Non per bookkeeping generico, GDPR o tech-law."
+
+epm_demos_folder:
+  prompt: "Dove salvare le demo frontend di Vesper/Vera? (path relativo al progetto)"
+  default: "frontend-demos"
+  result: "{project-root}/{value}"
+
+epm_memory_folder:
+  prompt: "Dove tenere la memoria degli agenti del consiglio? (path relativo al progetto)"
+  default: "_bmad/memory/epm"
+  result: "{project-root}/{value}"
+
+directories:
+  - "{epm_demos_folder}"
+  - "{epm_memory_folder}"
+
+post-install-notes: >
+  Dopo l'installazione: attiva bmad-party-mode (gruppo super-esperti se configurato)
+  oppure chiama direttamente Vesper, Vera, Jane, Elena, Rex, Niki o Commercialista Mondiale.
+  Per aggiornare il modulo: npx bmad-method install --action quick-update
+  oppure riesegui epm-setup.

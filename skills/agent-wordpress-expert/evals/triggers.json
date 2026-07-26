@@ -1,0 +1,42 @@
+[
+  {
+    "id": "t-niki",
+    "query": "parla con Niki Press sul white screen WordPress",
+    "should_trigger": true
+  },
+  {
+    "id": "t-niki-short",
+    "query": "Niki, il checkout Woo è lentissimo",
+    "should_trigger": true
+  },
+  {
+    "id": "t-wsod",
+    "query": "esperto WordPress: white screen of death dopo update plugin",
+    "should_trigger": true
+  },
+  {
+    "id": "t-migrate",
+    "query": "chiedi a Niki un piano di migrazione WP staging to prod",
+    "should_trigger": true
+  },
+  {
+    "id": "n-story",
+    "query": "scrivi una user story BMAD per il backlog del login",
+    "should_trigger": false
+  },
+  {
+    "id": "n-react",
+    "query": "refactor this React component to use hooks",
+    "should_trigger": false
+  },
+  {
+    "id": "n-gdpr",
+    "query": "parla con Jane Privacy sulla DPIA del form lead",
+    "should_trigger": false
+  },
+  {
+    "id": "n-brainstorm",
+    "query": "facciamo un brainstorming creativo sul nome del prodotto",
+    "should_trigger": false
+  }
+]

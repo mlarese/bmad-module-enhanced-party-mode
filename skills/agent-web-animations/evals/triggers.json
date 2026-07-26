@@ -1,0 +1,42 @@
+[
+  {
+    "id": "t-vera",
+    "query": "parla con Vera Motion: applica le animazioni a questa landing",
+    "should_trigger": true
+  },
+  {
+    "id": "t-vera-short",
+    "query": "Vera, anima lo scroll reveal della hero",
+    "should_trigger": true
+  },
+  {
+    "id": "t-apply",
+    "query": "esperto animazioni web: applica le animazioni che ritieni opportune a questa pagina",
+    "should_trigger": true
+  },
+  {
+    "id": "t-demo",
+    "query": "chiedi a Vera di aprire la demo animazioni",
+    "should_trigger": true
+  },
+  {
+    "id": "n-story",
+    "query": "scrivi una user story BMAD per il backlog del login",
+    "should_trigger": false
+  },
+  {
+    "id": "n-infra",
+    "query": "parla con Rex Wire sul timeout SSH ProxyJump",
+    "should_trigger": false
+  },
+  {
+    "id": "n-niki",
+    "query": "parla con Niki Press sul white screen WordPress",
+    "should_trigger": false
+  },
+  {
+    "id": "n-brainstorm",
+    "query": "facciamo un brainstorming creativo sul nome del prodotto",
+    "should_trigger": false
+  }
+]

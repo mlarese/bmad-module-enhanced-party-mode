@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Web Animations — Demo completa (repeat)</title>
+  <link rel="stylesheet" href="../assets/anim.css" />
+  <link rel="stylesheet" href="./demo.css" />
+</head>
+<body class="demo">
+  <a class="demo-skip" href="#catalogo">Vai al catalogo</a>
+
+  <header class="demo-hdr hdr">
+    <div class="demo-hdr-inner">
+      <strong class="demo-brand">Web Animations</strong>
+      <p class="demo-hdr-note">Demo skill — tutti gli effetti, <em>sempre repeat</em></p>
+      <button type="button" class="demo-burger" id="demo-burger" aria-expanded="false" aria-controls="demo-menu" aria-label="Apri menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="demo-menu" id="demo-menu" hidden>
+    <nav class="demo-menu-nav" id="demo-toc" aria-label="Categorie"></nav>
+  </div>
+
+  <main>
+    <section class="demo-hero">
+      <div class="demo-hero-bg lp-kenburns" aria-hidden="true"></div>
+      <div class="demo-hero-grain" aria-hidden="true"></div>
+      <div class="demo-hero-aurora" aria-hidden="true">
+        <span></span><span></span>
+      </div>
+      <div class="demo-hero-copy">
+        <p class="demo-kicker" data-anim="up" data-anim-group="hero">Skill web-animations</p>
+        <h1 data-anim="up" data-anim-group="hero">Catalogo effetti live</h1>
+        <p data-anim="up" data-anim-group="hero">
+          117 animazioni, tutte visibili. Scroll su e giù: ogni reveal si ripete a ogni
+          ingresso in viewport. Passa il mouse (o il focus da tastiera) su una card per
+          rigiocare l’effetto. Gli effetti che in produzione userebbero GSAP, WebGL, Lottie
+          o Rive sono riprodotti in CSS/JS con il badge della tecnica consigliata.
+        </p>
+        <a class="demo-btn" href="#catalogo" data-anim="up" data-anim-group="hero">Esplora catalogo</a>
+      </div>
+      <div class="demo-scroll-hint lp-bounce" aria-hidden="true"><span></span></div>
+    </section>
+
+    <div class="demo-progress" aria-hidden="true"></div>
+
+    <section class="demo-section" id="catalogo">
+      <header class="demo-section-head" data-anim="up">
+        <h2>Indice per categoria</h2>
+        <p>Clicca una voce o scrolla le sezioni sotto. Ogni card ripete l’effetto quando rientra in vista e lo rigioca all’hover.</p>
+      </header>
+      <div class="demo-toc-grid" id="demo-toc-grid"></div>
+    </section>
+
+    <div id="demo-sections"></div>
+
+    <section class="demo-curtain" data-curtain>
+      <div class="demo-curtain-panel demo-curtain-panel--l" aria-hidden="true"></div>
+      <div class="demo-curtain-panel demo-curtain-panel--r" aria-hidden="true"></div>
+      <div class="demo-curtain-inner">
+        <h2 data-anim="up">Curtain reveal (#11)</h2>
+        <p data-anim="up">Le due metà si riaprono ogni volta che questa fascia rientra in viewport.</p>
+      </div>
+    </section>
+
+    <section class="demo-stack-zone">
+      <div class="demo-stack-panel" style="--z:1">
+        <h3>Stack panel A (#28)</h3>
+        <p>Sezione sticky — la successiva le scorre sopra.</p>
+      </div>
+      <div class="demo-stack-panel demo-stack-panel--b" style="--z:2">
+        <h3>Stack panel B</h3>
+        <p>Copre il pannello A allo scroll.</p>
+      </div>
+      <div class="demo-stack-panel demo-stack-panel--c" style="--z:3">
+        <h3>Stack panel C</h3>
+        <p>Ultimo livello dello stack.</p>
+      </div>
+    </section>
+
+    <section class="demo-section">
+      <header class="demo-section-head" data-anim="up">
+        <h2>Card impilate</h2>
+        <p>Ogni card sticky scorre sopra la precedente (pattern #28 + stack).</p>
+      </header>
+      <div class="demo-card-stack">
+        <article class="demo-card-slot" style="--i:0"><div class="demo-stage">Card 1</div></article>
+        <article class="demo-card-slot" style="--i:1"><div class="demo-stage">Card 2</div></article>
+        <article class="demo-card-slot" style="--i:2"><div class="demo-stage">Card 3</div></article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="demo-footer" data-anim="up">
+    <p>Skill <code>web-animations</code> · demo/index.html · effetti in <strong>repeat</strong></p>
+  </footer>
+
+  <script src="./demo.js"></script>
+  <script src="../assets/anim.js"></script>
+</body>
+</html>

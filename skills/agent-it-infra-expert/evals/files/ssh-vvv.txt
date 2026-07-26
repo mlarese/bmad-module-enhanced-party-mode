@@ -1,0 +1,11 @@
+OpenSSH_9.6p1, LibreSSL 3.3.6
+debug1: Connecting to bastion.example.com [203.0.113.10] port 22.
+debug1: Connection established.
+debug1: Authenticating to bastion.example.com:22 as 'deploy'
+debug1: Offering public key: /Users/me/.ssh/id_ed25519 ED25519 SHA256:abc
+debug1: Server accepts key: /Users/me/.ssh/id_ed25519
+Authenticated to bastion.example.com
+debug1: channel_connect_stdio_fwd: 10.0.2.15:5432
+debug1: channel 0: new [direct-tcpip]
+channel 0: open failed: connect failed: Connection timed out
+stdio forwarding failed

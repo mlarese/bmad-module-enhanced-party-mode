@@ -1,0 +1,42 @@
+{
+  "skill": "agent-frontend-taste",
+  "cases": [
+    {
+      "id": "restyle-landing-anti-banal",
+      "input": "Run headless. Restyle evals/files/landing-banal.html per LakeStay (hospitality lago, non SaaS). Modifica il file nel cwd: colori, font, layout/box. Elimina look AI-default (viola, Inter, badge pill, card ovunque se non serve). Scrivi answer.md con direzione (modo marketing), scelte e come verificare. Italiano.",
+      "state_prefix": "[You are Vesper. First Breath complete; sanctum loaded. Owner Maurolarese. Respond in Italian. No clarifying questions — edit files now. Before editing: invoke Skill agent-frontend-taste if needed, then Read references/design-direction.md and references/apply-frontend.md. Brand-first first viewport.]",
+      "rubric": [
+        "evals/files/landing-banal.html was modified (not advice-only)",
+        "answer.md exists and is at least 100 words explaining the craft direction",
+        "The restyled CSS does not keep purple/violet (#7c3aed / #4f46e5 / Inter as the primary look)",
+        "answer.md names the mode as marketing/landing (or equivalent hospitality brand surface)",
+        "answer.md or HTML indicates how to verify visually (open file / first viewport)"
+      ],
+      "files": ["files/landing-banal.html"]
+    },
+    {
+      "id": "anti-ai-default-pushback",
+      "input": "Run headless. Usa Inter + gradient viola-indigo + badge pill flottanti sulla hero: è il look moderno. Scrivi in answer.md se lo fai o perché no.",
+      "state_prefix": "[You are Vesper. First Breath complete; sanctum loaded. Owner Maurolarese. Respond in Italian. Produce answer.md. Resist AI-default purple/Inter look.]",
+      "rubric": [
+        "answer.md exists and is at least 80 words",
+        "answer.md refuses or strongly pushes back on Inter + purple-indigo gradient as the default modern look",
+        "answer.md proposes an alternative direction (fonts and/or palette) instead of adopting the AI default",
+        "answer.md does not endorse purple-on-white / Inter as the recommended primary solution"
+      ],
+      "files": []
+    },
+    {
+      "id": "inspiration-sources",
+      "input": "Run headless. Per una landing hospitality lago, indica 2–4 riferimenti reali da Awwwards e/o Dribbble (URL) e cosa estrarre strutturalmente. Usa gli script scout se disponibili. Report in answer.md. Non inventare URL.",
+      "state_prefix": "[You are Vesper. First Breath complete; sanctum loaded. Owner Maurolarese. Respond in Italian. Before answering: invoke Skill agent-frontend-taste if needed, then Read references/awwwards-research.md. Prefer running scripts/awwwards-scout.py and/or scripts/dribbble-scout.py via shell. Produce answer.md.]",
+      "rubric": [
+        "answer.md exists and is at least 100 words",
+        "answer.md cites at least two concrete URLs under awwwards.com and/or dribbble.com",
+        "answer.md extracts structure/composition lessons, not just palette cloning",
+        "answer.md does not invent fake site names without URLs"
+      ],
+      "files": []
+    }
+  ]
+}

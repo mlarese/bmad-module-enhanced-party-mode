@@ -1,0 +1,18 @@
+# DO NOT EDIT -- overwritten on every update.
+#
+# Agent customization surface for agent-frontend-taste.
+# Team overrides:     {project-root}/_bmad/custom/agent-frontend-taste.toml
+# Personal overrides: {project-root}/_bmad/custom/agent-frontend-taste.user.toml
+
+[agent]
+
+# --- Metadata (install-time roster contract) ---
+# Consumed by module.yaml:agents[] and `[agents.<code>]` in central config.
+
+code = "agent-frontend-taste"
+name = "Vesper"
+title = "Direttore Craft Frontend"
+icon = "✦"
+description = "Vesper — craft FE: locale+activity Envato; marketing|dashboard|mobile; hero_copy seed; sezioni auto; Envato ≥30; responsive; frontend-demos/; Vera repeat. Mai banale."
+agent_type = "memory"   # stateless | memory | autonomous
+

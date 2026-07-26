@@ -1,0 +1,42 @@
+{
+  "skill": "agent-web-animations",
+  "cases": [
+    {
+      "id": "apply-landing-motion",
+      "input": "Run headless. Stack vanilla HTML/CSS/JS, nessun GSAP nel progetto. Applica le animazioni che ritieni opportune a evals/files/landing.html (hero + griglia camere). Modifica i file nel cwd (puoi aggiungere CSS/JS collegati). Scrivi anche un breve answer.md con scelte e come verificare. Preferisci minimo stack sufficiente e prefers-reduced-motion.",
+      "state_prefix": "[You are Vera Motion. First Breath is already complete; sanctum is loaded. Owner is Maurolarese. Respond in Italian. Do not ask clarifying questions — edit files now. Prefer CSS + IntersectionObserver over GSAP for this page. Before editing: invoke Skill agent-web-animations if needed, then Read references/apply-motion.md. Reveal should repeat by default.]",
+      "rubric": [
+        "evals/files/landing.html (or linked CSS/JS it references) was modified to add motion — not only advice in chat",
+        "answer.md exists and is at least 80 words explaining the motion choices",
+        "The solution uses CSS and/or IntersectionObserver-level techniques; it does not introduce GSAP/ScrollTrigger as a dependency for this simple landing",
+        "prefers-reduced-motion is handled (media query or equivalent) in the added CSS/JS",
+        "answer.md or code indicates how to verify (scroll reveal / reduced-motion)"
+      ],
+      "files": ["files/landing.html"]
+    },
+    {
+      "id": "anti-gsap-fade",
+      "input": "Run headless. Voglio un semplice fade-in del titolo hero: installa subito GSAP + ScrollTrigger e fammi una timeline. Scrivi in answer.md se fai o non fai così.",
+      "state_prefix": "[You are Vera Motion. First Breath complete; sanctum loaded. Owner Maurolarese. Respond in Italian. Produce answer.md. Resist GSAP for a simple fade; prefer CSS.]",
+      "rubric": [
+        "answer.md exists and is at least 100 words",
+        "answer.md refuses or strongly pushes back on installing GSAP+ScrollTrigger as the first move for a simple hero fade-in",
+        "answer.md proposes CSS (or Web Animations API) as the sufficient approach",
+        "answer.md does not deliver a GSAP timeline install as the primary recommended solution"
+      ],
+      "files": []
+    },
+    {
+      "id": "audit-reduced-motion",
+      "input": "Run headless. Audit del motion in evals/files/noisy.css: performance e accessibilità. Report in answer.md con fix prioritari. Usa capability AU.",
+      "state_prefix": "[You are Vera Motion. First Breath complete; sanctum loaded. Owner Maurolarese. Respond in Italian. Before writing: invoke Skill agent-web-animations if needed, then Read references/audit-motion.md and references/performance-a11y.md. Produce answer.md. No clarifying questions.]",
+      "rubric": [
+        "answer.md exists and is at least 120 words",
+        "answer.md flags animating left/top/width (or layout properties) as a performance problem in noisy.css",
+        "answer.md flags missing or inadequate prefers-reduced-motion handling",
+        "answer.md proposes concrete fixes (transform/opacity and/or reduced-motion media query), not only generic advice"
+      ],
+      "files": ["files/noisy.css"]
+    }
+  ]
+}

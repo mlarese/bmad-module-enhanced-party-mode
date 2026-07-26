@@ -1,0 +1,2120 @@
+{
+  "version": 1,
+  "purpose": "Catalogo effetti per scelta a vista: ogni riquadro esegue l'animazione. Sorgente di verità di assets/effects-gallery.html. La numerazione segue references/catalog.md (1-117).",
+  "axes": {
+    "cat": {
+      "reveal": {
+        "label": "Reveal / entrata",
+        "note": "L'elemento entra in scena quando arriva nel viewport."
+      },
+      "text": {
+        "label": "Testo",
+        "note": "La parola è il soggetto: lettere, righe, numeri, scritte in movimento."
+      },
+      "scroll": {
+        "label": "Scroll",
+        "note": "Il movimento è guidato dalla posizione o dalla progressione dello scroll."
+      },
+      "hero": {
+        "label": "Hero e sfondi",
+        "note": "Primo viewport e piani di fondo: quello che si muove dietro al contenuto."
+      },
+      "hover": {
+        "label": "Hover e micro-interazioni",
+        "note": "Risposte al puntatore e al click: il feedback che fa sentire viva l'interfaccia."
+      },
+      "nav": {
+        "label": "Navigazione",
+        "note": "Menu, header, indicatori: il movimento che orienta."
+      },
+      "layout": {
+        "label": "Layout e liste",
+        "note": "Griglie, filtri, caroselli, accordion: elementi che si riordinano."
+      },
+      "page": {
+        "label": "Transizioni di pagina",
+        "note": "Il passaggio tra due viste, incluso il caricamento iniziale."
+      },
+      "feedback": {
+        "label": "Feedback e stato",
+        "note": "Attesa, esito, errore: il movimento che comunica cosa sta succedendo."
+      },
+      "loop": {
+        "label": "Loop ambientali",
+        "note": "Movimento continuo e discreto che tiene viva la pagina senza chiedere attenzione."
+      },
+      "svg": {
+        "label": "SVG e vettoriali",
+        "note": "Tracciati, forme, icone e animazioni importate."
+      },
+      "3d": {
+        "label": "3D e WebGL",
+        "note": "Profondità vera, shader e scene: la fascia più costosa."
+      }
+    },
+    "tech": {
+      "CSS": {
+        "label": "CSS",
+        "note": "Keyframes o transition: nessun JavaScript."
+      },
+      "IO": {
+        "label": "IO",
+        "note": "IntersectionObserver: fa scattare l'animazione all'ingresso in viewport."
+      },
+      "GSAP": {
+        "label": "GSAP",
+        "note": "GSAP e ScrollTrigger: timeline e scrub precisi."
+      },
+      "WA": {
+        "label": "WA",
+        "note": "Web Animations API: animazioni da JavaScript senza libreria."
+      },
+      "SVG": {
+        "label": "SVG",
+        "note": "SMIL, stroke-dasharray o mask su vettoriale."
+      },
+      "CANVAS": {
+        "label": "CANVAS",
+        "note": "Disegno su canvas 2D, frame per frame."
+      },
+      "WEBGL": {
+        "label": "WEBGL",
+        "note": "three.js, OGL o shader: GPU."
+      },
+      "LIB": {
+        "label": "LIB",
+        "note": "Libreria dedicata (Swiper, Lenis, Lottie, Rive, Barba...)."
+      },
+      "NATIVE": {
+        "label": "NATIVE",
+        "note": "API del browser: View Transitions, scroll-driven animations, scroll-snap."
+      }
+    },
+    "cost": {
+      "free": {
+        "label": "Gratis",
+        "note": "Solo CSS: nessun peso aggiunto, nessun rischio."
+      },
+      "light": {
+        "label": "Leggero",
+        "note": "Poco JavaScript o un observer: peso trascurabile, attenzione al reflow."
+      },
+      "heavy": {
+        "label": "Pesante",
+        "note": "Libreria, canvas o GPU: si giustifica solo se è il messaggio, e va misurato."
+      }
+    }
+  },
+  "kits": [
+    {
+      "id": "vetrina",
+      "label": "Vetrina, ristorante, hotel",
+      "note": "Movimento discreto che non ruba niente alla prenotazione.",
+      "effects": [
+        1,
+        2,
+        24,
+        38,
+        31,
+        50,
+        39,
+        67,
+        75
+      ]
+    },
+    {
+      "id": "landing",
+      "label": "Landing marketing",
+      "note": "Costruire fiducia e portare al CTA senza rallentare la pagina.",
+      "effects": [
+        10,
+        17,
+        27,
+        28,
+        54,
+        89,
+        30,
+        92
+      ]
+    },
+    {
+      "id": "portfolio",
+      "label": "Portfolio o agenzia",
+      "note": "Qui il movimento è il portfolio: si può osare, ma con dei fallback.",
+      "effects": [
+        14,
+        29,
+        46,
+        59,
+        62,
+        85,
+        113,
+        6
+      ]
+    },
+    {
+      "id": "dashboard",
+      "label": "Dashboard o app",
+      "note": "Solo movimento che comunica stato: nessuna decorazione.",
+      "effects": [
+        75,
+        76,
+        82,
+        89,
+        92,
+        93,
+        94,
+        70
+      ]
+    },
+    {
+      "id": "editoriale",
+      "label": "Editoriale e long form",
+      "note": "Accompagnare una lettura lunga senza mai interromperla.",
+      "effects": [
+        30,
+        24,
+        5,
+        37,
+        23,
+        32
+      ]
+    }
+  ],
+  "effects": [
+    {
+      "n": 1,
+      "id": "fade-in",
+      "name": "Fade in",
+      "cat": "reveal",
+      "tech": [
+        "CSS",
+        "IO"
+      ],
+      "cost": "free",
+      "stage": "block",
+      "fx": "fade-in",
+      "desc": "L'elemento passa da trasparente a pieno, senza spostarsi.",
+      "use": "Il default onesto: quando vuoi solo ammorbidire l'ingresso senza dichiarare una direzione.",
+      "watch": "Sotto i 250ms non si percepisce, sopra i 700ms si aspetta. Mai sul contenuto sopra la piega.",
+      "approx": false
+    },
+    {
+      "n": 2,
+      "id": "fade-up",
+      "name": "Fade up / down / left / right",
+      "cat": "reveal",
+      "tech": [
+        "CSS",
+        "IO"
+      ],
+      "cost": "free",
+      "stage": "block",
+      "fx": "fade-up",
+      "desc": "Comparsa con una piccola traslazione: l'elemento arriva da una direzione.",
+      "use": "Reveal di sezione standard; la direzione racconta da dove viene il contenuto.",
+      "watch": "Traslazioni da 16 a 40px. Se tutta la pagina entra da sotto, nessuna sezione ha più carattere.",
+      "approx": false
+    },
+    {
+      "n": 3,
+      "id": "zoom-in",
+      "name": "Zoom in / zoom out",
+      "cat": "reveal",
+      "tech": [
+        "CSS",
+        "IO"
+      ],
+      "cost": "free",
+      "stage": "block",
+      "fx": "zoom-in",
+      "desc": "L'elemento cresce (o cala) fino alla sua scala finale mentre appare.",
+      "use": "Immagini e card che devono sembrare avvicinarsi; buono per gallerie.",
+      "watch": "Partire sotto 0.94 fa sobbalzare il layout; su testo rende sfocata la resa in transizione.",
+      "approx": false
+    },
+    {
+      "n": 4,
+      "id": "blur-in",
+      "name": "Blur in",
+      "cat": "reveal",
+      "tech": [
+        "CSS",
+        "IO"
+      ],
+      "cost": "free",
+      "stage": "block",
+      "fx": "blur-in",
+      "desc": "Da sfocato a nitido: la messa a fuoco come metafora dell'arrivo.",
+      "use": "Hero editoriali, immagini di apertura, brand che vogliono un ingresso morbido.",
+      "watch": "`filter: blur` costa in composizione: pochi elementi per volta, mai su liste lunghe.",
+      "approx": false
+    },
+    {
+      "n": 5,
+      "id": "clip-wipe",
+      "name": "Clip-path wipe (tendina)",
+      "cat": "reveal",
+      "tech": [
+        "CSS",
+        "IO"
+      ],
+      "cost": "free",
+      "stage": "block",
+      "fx": "clip-wipe",
+      "desc": "Una tendina scopre l'elemento da un lato, senza che l'elemento si muova.",
+      "use": "Titoli e immagini in pagine editoriali: più netto e meno molle del fade.",
+      "watch": "La direzione della tendina deve seguire la lettura, non contraddirla.",
+      "approx": false
+    },
+    {
+      "n": 6,
+      "id": "mask-reveal",
+      "name": "Mask reveal immagine",
+      "cat": "reveal",
+      "tech": [
+        "CSS",
+        "GSAP"
+      ],
+      "cost": "free",
+      "stage": "photo",
+      "fx": "mask-reveal",
+      "desc": "Un pannello scorre via e lascia l'immagine, che intanto si assesta di poco.",
+      "use": "Foto d'apertura e portfolio: la più elegante delle entrate su media.",
+      "watch": "Serve un contrasto tra pannello e sfondo, o non si legge il gesto.",
+      "approx": false
+    },
+    {
+      "n": 7,
+      "id": "flip-3d",
+      "name": "Flip 3D su X o Y",
+      "cat": "reveal",
+      "tech": [
+        "CSS",
+        "IO"
+      ],
+      "cost": "free",
+      "stage": "block",
+      "fx": "flip-3d",
+      "desc": "L'elemento ruota su un asse mostrando la faccia frontale.",
+      "use": "Card di gioco, statistiche, elementi che vogliono un tono giocoso.",
+      "watch": "Con `perspective` sbagliata sembra un errore. Su testo lungo è illeggibile a metà rotazione.",
+      "approx": false
+    },
+    {
+      "n": 8,
+      "id": "rotate-in",
+      "name": "Rotate in / swing",
+      "cat": "reveal",
+      "tech": [
+        "CSS",
+        "IO"
+      ],
+      "cost": "free",
+      "stage": "block",
+      "fx": "rotate-in",
+      "desc": "Piccola rotazione che si annulla arrivando a zero.",
+      "use": "Elementi sparsi, polaroid, badge: dove la geometria è già informale.",
+      "watch": "Oltre i 6-8 gradi diventa cartoon. Mai su blocchi di testo.",
+      "approx": false
+    },
+    {
+      "n": 9,
+      "id": "stagger-grid",
+      "name": "Stagger di griglia",
+      "cat": "reveal",
+      "tech": [
+        "CSS",
+        "GSAP"
+      ],
+      "cost": "free",
+      "stage": "blocks",
+      "fx": "stagger-grid",
+      "desc": "Le celle entrano a cascata con un ritardo crescente invece che tutte insieme.",
+      "use": "Griglie di card, gallerie, listati: dà ritmo a un blocco altrimenti piatto.",
+      "watch": "Il ritardo totale non deve superare ~600ms: oltre, l'ultima card arriva quando l'utente è già oltre.",
+      "approx": false
+    },
+    {
+      "n": 10,
+      "id": "seq-section",
+      "name": "Reveal sequenziale di sezione",
+      "cat": "reveal",
+      "tech": [
+        "GSAP",
+        "CSS"
+      ],
+      "cost": "light",
+      "stage": "card",
+      "fx": "seq-section",
+      "desc": "Occhiello, titolo, testo e pulsante entrano in ordine, non in blocco.",
+      "use": "Hero e sezioni chiave: costruisce la gerarchia nel tempo oltre che nello spazio.",
+      "watch": "L'ordine deve essere quello di lettura. Il CTA per ultimo, ma non troppo dopo.",
+      "approx": false
+    },
+    {
+      "n": 11,
+      "id": "curtain",
+      "name": "Curtain reveal (due metà)",
+      "cat": "reveal",
+      "tech": [
+        "CSS",
+        "GSAP"
+      ],
+      "cost": "free",
+      "stage": "block",
+      "fx": "curtain",
+      "desc": "Due metà si aprono e scoprono il contenuto al centro.",
+      "use": "Aperture di pagina, sipari, lanci: un gesto teatrale, da usare una volta sola.",
+      "watch": "È vistoso: uno per pagina. Ritarda il contenuto, quindi mai su pagine di servizio.",
+      "approx": false
+    },
+    {
+      "n": 12,
+      "id": "split-chars",
+      "name": "Split per lettera",
+      "cat": "text",
+      "tech": [
+        "LIB",
+        "GSAP"
+      ],
+      "cost": "light",
+      "stage": "chars",
+      "fx": "split-chars",
+      "desc": "Le lettere entrano una dopo l'altra con un ritardo minimo.",
+      "use": "Titoli brevi e memorabili; brand che vogliono firmare la parola.",
+      "watch": "Spezza il testo per gli screen reader: serve `aria-label` sull'intero titolo. Solo poche parole.",
+      "approx": false
+    },
+    {
+      "n": 13,
+      "id": "split-words",
+      "name": "Split per parola",
+      "cat": "text",
+      "tech": [
+        "LIB",
+        "GSAP"
+      ],
+      "cost": "light",
+      "stage": "words",
+      "fx": "split-words",
+      "desc": "Le parole entrano in sequenza, mantenendo leggibile l'unità di senso.",
+      "use": "L'alternativa sensata al split per lettera su titoli di più parole.",
+      "watch": "Stesso problema di accessibilità del per-lettera, ma meno grave. Ritardi sotto i 60ms.",
+      "approx": false
+    },
+    {
+      "n": 14,
+      "id": "split-lines",
+      "name": "Split per riga con mask",
+      "cat": "text",
+      "tech": [
+        "LIB",
+        "GSAP"
+      ],
+      "cost": "light",
+      "stage": "words",
+      "fx": "split-lines",
+      "desc": "Le righe salgono da sotto una maschera, come uscissero da una fessura.",
+      "use": "Il reveal tipografico più raffinato: editoriale, moda, studi di design.",
+      "watch": "Va ricalcolato al resize, o le righe si rompono e la maschera taglia male.",
+      "approx": false
+    },
+    {
+      "n": 15,
+      "id": "typewriter",
+      "name": "Typewriter",
+      "cat": "text",
+      "tech": [
+        "LIB",
+        "WA"
+      ],
+      "cost": "light",
+      "stage": "line",
+      "fx": "typewriter",
+      "desc": "Il testo si scrive carattere per carattere con un cursore lampeggiante.",
+      "use": "Terminali, prodotti per sviluppatori, tono conversazionale.",
+      "watch": "Lento da leggere e fastidioso se ripetuto. Mai su contenuto che serve subito.",
+      "approx": false
+    },
+    {
+      "n": 16,
+      "id": "scramble",
+      "name": "Scramble / decrypt",
+      "cat": "text",
+      "tech": [
+        "GSAP",
+        "WA"
+      ],
+      "cost": "light",
+      "stage": "line",
+      "fx": "scramble",
+      "desc": "I caratteri si mescolano e poi si risolvono nella parola giusta.",
+      "use": "Tecnologia, sicurezza, dati: dice «calcolo» senza scriverlo.",
+      "watch": "Illeggibile durante l'effetto: mai su informazioni che l'utente sta cercando.",
+      "approx": false
+    },
+    {
+      "n": 17,
+      "id": "counter",
+      "name": "Counter numerico",
+      "cat": "text",
+      "tech": [
+        "WA",
+        "IO"
+      ],
+      "cost": "light",
+      "stage": "num",
+      "fx": "counter",
+      "desc": "Il numero sale da zero al valore finale quando entra in viewport.",
+      "use": "Statistiche, risultati, prove di scala: dà peso alla cifra.",
+      "watch": "`tabular-nums` obbligatorio o la cifra balla. Il valore finale deve stare nell'HTML per SEO e screen reader.",
+      "approx": false
+    },
+    {
+      "n": 18,
+      "id": "odometer",
+      "name": "Odometer a rullo",
+      "cat": "text",
+      "tech": [
+        "LIB",
+        "CSS"
+      ],
+      "cost": "light",
+      "stage": "num",
+      "fx": "odometer",
+      "desc": "Le cifre scorrono verticalmente come i rulli di un contatore.",
+      "use": "Prezzi che cambiano, contatori live, dashboard con valori in aggiornamento.",
+      "watch": "Bello ma pesante da fare bene: se il valore cambia spesso, il rullo diventa rumore.",
+      "approx": false
+    },
+    {
+      "n": 19,
+      "id": "marquee",
+      "name": "Marquee orizzontale infinito",
+      "cat": "text",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "line",
+      "fx": "marquee",
+      "desc": "Una striscia di testo scorre in continuo senza inizio né fine.",
+      "use": "Annunci, liste di servizi, brand con attitudine grafica forte.",
+      "watch": "Va duplicato il contenuto per il loop senza salto. Fermalo all'hover e su reduced-motion.",
+      "approx": false
+    },
+    {
+      "n": 20,
+      "id": "marquee-scroll",
+      "name": "Marquee legato allo scroll",
+      "cat": "text",
+      "tech": [
+        "GSAP"
+      ],
+      "cost": "light",
+      "stage": "line",
+      "fx": "marquee-scroll",
+      "desc": "La striscia accelera, rallenta e inverte seguendo lo scroll dell'utente.",
+      "use": "Pagine lunghe con carattere: lega il movimento alla mano invece che al tempo.",
+      "watch": "Se non torna mai ferma, disturba. Serve un'inerzia, non un aggancio rigido.",
+      "approx": false
+    },
+    {
+      "n": 21,
+      "id": "circular-text",
+      "name": "Testo su tracciato circolare",
+      "cat": "text",
+      "tech": [
+        "SVG",
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "path",
+      "fx": "circular-text",
+      "desc": "Una scritta segue un cerchio e ruota lentamente su sé stessa.",
+      "use": "Sigilli, badge «scorri», marchi artigianali.",
+      "watch": "Poche parole in maiuscoletto spaziato: una frase sul cerchio non si legge.",
+      "approx": false
+    },
+    {
+      "n": 22,
+      "id": "gradient-text",
+      "name": "Gradient text animato",
+      "cat": "text",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "line",
+      "fx": "gradient-text",
+      "desc": "Un gradiente scorre dentro le lettere tramite `background-clip: text`.",
+      "use": "Titoli di prodotti tech, momenti di enfasi isolati.",
+      "watch": "È il cliché AI per eccellenza: usato su viola-indaco è squalificante. Serve contrasto verificato.",
+      "approx": false
+    },
+    {
+      "n": 23,
+      "id": "underline-draw",
+      "name": "Highlight che si disegna",
+      "cat": "text",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "link",
+      "fx": "underline-draw",
+      "desc": "Una linea o un evidenziatore si estende sotto la parola.",
+      "use": "Evidenziare un concetto nel corpo del testo senza grassetti.",
+      "watch": "Va ancorata alla baseline e non deve tagliare i discendenti (g, p, q).",
+      "approx": false
+    },
+    {
+      "n": 24,
+      "id": "reveal-on-scroll",
+      "name": "Reveal on scroll",
+      "cat": "scroll",
+      "tech": [
+        "IO"
+      ],
+      "cost": "light",
+      "stage": "blocks",
+      "fx": "reveal-scroll",
+      "desc": "Gli elementi si animano quando entrano nel viewport, non al caricamento.",
+      "use": "Il meccanismo base di quasi tutte le pagine lunghe.",
+      "watch": "Reversibile (repeat), non one-shot. Soglia al 15-20%: al 50% l'utente ha già visto l'elemento fermo.",
+      "approx": false
+    },
+    {
+      "n": 25,
+      "id": "parallax-layers",
+      "name": "Parallasse multi livello",
+      "cat": "scroll",
+      "tech": [
+        "GSAP",
+        "WA"
+      ],
+      "cost": "light",
+      "stage": "photo",
+      "fx": "parallax-layers",
+      "desc": "Piani diversi scorrono a velocità diverse creando profondità.",
+      "use": "Hero e sezioni immersive dove la foto è protagonista.",
+      "watch": "Massimo tre piani e differenze piccole (0.1-0.3): oltre, viene il mal di mare.",
+      "approx": false
+    },
+    {
+      "n": 26,
+      "id": "parallax-bg",
+      "name": "Parallasse su immagine di sfondo",
+      "cat": "scroll",
+      "tech": [
+        "CSS",
+        "GSAP"
+      ],
+      "cost": "light",
+      "stage": "photo",
+      "fx": "parallax-bg",
+      "desc": "Lo sfondo si muove più lentamente del contenuto che ci scorre sopra.",
+      "use": "Fasce di stacco tra sezioni: costa poco e dà respiro.",
+      "watch": "`background-attachment: fixed` è rotto su iOS e costa in repaint: meglio transform.",
+      "approx": false
+    },
+    {
+      "n": 27,
+      "id": "scrub",
+      "name": "Scrub timeline",
+      "cat": "scroll",
+      "tech": [
+        "GSAP"
+      ],
+      "cost": "light",
+      "stage": "photo",
+      "fx": "scrub",
+      "desc": "L'animazione avanza e torna indietro seguendo la progressione dello scroll.",
+      "use": "Racconti in cui il tempo lo decide l'utente: prodotti che si smontano, processi.",
+      "watch": "Va sempre reversibile e senza inerzia infinita. Su mobile ricalcola dopo il cambio di viewport.",
+      "approx": false
+    },
+    {
+      "n": 28,
+      "id": "pin",
+      "name": "Pin di sezione",
+      "cat": "scroll",
+      "tech": [
+        "GSAP",
+        "CSS"
+      ],
+      "cost": "light",
+      "stage": "scrollbox",
+      "fx": "pin",
+      "desc": "La sezione resta ferma mentre il contenuto interno avanza.",
+      "use": "Passaggi chiave che meritano di essere raccontati in più battute.",
+      "watch": "Ruba scroll: se non succede niente mentre è agganciata, l'utente si sente bloccato.",
+      "approx": false
+    },
+    {
+      "n": 29,
+      "id": "hscroll",
+      "name": "Scroll orizzontale",
+      "cat": "scroll",
+      "tech": [
+        "GSAP"
+      ],
+      "cost": "light",
+      "stage": "blocks",
+      "fx": "hscroll",
+      "desc": "Una galleria scorre in orizzontale mentre la pagina scorre in verticale.",
+      "use": "Portfolio, timeline, cataloghi: rompe il ritmo verticale una volta sola.",
+      "watch": "Serve un'uscita evidente e la tastiera deve poterlo attraversare. Su mobile spesso va disattivato.",
+      "approx": false
+    },
+    {
+      "n": 30,
+      "id": "progress-bar",
+      "name": "Progress bar di lettura",
+      "cat": "scroll",
+      "tech": [
+        "NATIVE",
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "bar",
+      "fx": "progress-bar",
+      "desc": "Una barra sottile indica quanto manca alla fine della pagina.",
+      "use": "Articoli lunghi, documentazione, guide.",
+      "watch": "Solo su contenuti davvero lunghi. Su una landing di tre schermate è decorazione.",
+      "approx": false
+    },
+    {
+      "n": 31,
+      "id": "header-shrink",
+      "name": "Header che si rimpicciolisce",
+      "cat": "scroll",
+      "tech": [
+        "CSS",
+        "IO"
+      ],
+      "cost": "light",
+      "stage": "nav",
+      "fx": "header-shrink",
+      "desc": "L'header perde altezza e guadagna densità dopo i primi pixel di scroll.",
+      "use": "Siti con navigazione ricca che devono restituire spazio al contenuto.",
+      "watch": "Il salto va animato, non istantaneo, e l'altezza finale deve reggere il logo senza deformarlo.",
+      "approx": false
+    },
+    {
+      "n": 32,
+      "id": "header-hide",
+      "name": "Header che si nasconde e riappare",
+      "cat": "scroll",
+      "tech": [
+        "IO",
+        "WA"
+      ],
+      "cost": "light",
+      "stage": "nav",
+      "fx": "header-hide",
+      "desc": "Scompare scorrendo verso il basso, torna appena si risale.",
+      "use": "Pagine lunghe da leggere dove la barra ruba spazio prezioso.",
+      "watch": "Serve una soglia (60-80px) o l'header sfarfalla a ogni micro-movimento.",
+      "approx": false
+    },
+    {
+      "n": 33,
+      "id": "scroll-snap",
+      "name": "Scroll snap tra sezioni",
+      "cat": "scroll",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "scrollbox",
+      "fx": "scroll-snap",
+      "desc": "Lo scroll si aggancia a schermate intere invece di fermarsi a metà.",
+      "use": "Presentazioni, storie a capitoli, siti a schermate piene.",
+      "watch": "Odiato quando è forzato: usa `proximity`, mai `mandatory`, se le sezioni sono più alte del viewport.",
+      "approx": false
+    },
+    {
+      "n": 34,
+      "id": "image-sequence",
+      "name": "Image sequence su canvas",
+      "cat": "scroll",
+      "tech": [
+        "CANVAS",
+        "GSAP"
+      ],
+      "cost": "heavy",
+      "stage": "photo",
+      "fx": "image-seq",
+      "desc": "Decine di frame disegnati su canvas che avanzano con lo scroll.",
+      "use": "Prodotti fisici che ruotano, il trucco delle pagine Apple.",
+      "watch": "Costa megabyte: senza preload e senza versione ridotta per mobile è un disastro di performance.",
+      "approx": true
+    },
+    {
+      "n": 35,
+      "id": "scroll-driven",
+      "name": "Scroll-driven animations native",
+      "cat": "scroll",
+      "tech": [
+        "NATIVE",
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "block",
+      "fx": "scroll-driven",
+      "desc": "`animation-timeline: view()` lega l'animazione allo scroll senza JavaScript.",
+      "use": "Da preferire a GSAP quando basta: gira sul compositor, costa quasi nulla.",
+      "watch": "Supporto ancora parziale: serve che senza la feature l'elemento resti visibile e fermo.",
+      "approx": false
+    },
+    {
+      "n": 36,
+      "id": "smooth-scroll",
+      "name": "Smooth scroll / inerzia",
+      "cat": "scroll",
+      "tech": [
+        "LIB"
+      ],
+      "cost": "light",
+      "stage": "scrollbox",
+      "fx": "smooth-scroll",
+      "desc": "Lo scroll acquista inerzia e si ferma con dolcezza (Lenis, Locomotive).",
+      "use": "Siti da premio dove tutto il resto del movimento è già curato.",
+      "watch": "Toglie il controllo all'utente e rompe `Ctrl+F` e l'ancoraggio: va disattivato su reduced-motion.",
+      "approx": false
+    },
+    {
+      "n": 37,
+      "id": "section-color",
+      "name": "Cambio colore allo scroll",
+      "cat": "scroll",
+      "tech": [
+        "IO",
+        "CSS"
+      ],
+      "cost": "light",
+      "stage": "scrollbox",
+      "fx": "section-color",
+      "desc": "Il fondo della pagina cambia tinta passando da una sezione all'altra.",
+      "use": "Pagine a capitoli: dà identità a ogni blocco senza cambiare layout.",
+      "watch": "La transizione deve essere lenta (600ms+) e il testo deve restare leggibile in ogni fase.",
+      "approx": false
+    },
+    {
+      "n": 38,
+      "id": "ken-burns",
+      "name": "Ken Burns",
+      "cat": "hero",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "photo",
+      "fx": "ken-burns",
+      "desc": "Zoom lentissimo e continuo su una foto ferma.",
+      "use": "Hero fotografiche che devono respirare senza un video.",
+      "watch": "Molto lento (15-25s) e con scala minima: sopra 1.12 si vede la foto perdere definizione.",
+      "approx": false
+    },
+    {
+      "n": 39,
+      "id": "hero-crossfade",
+      "name": "Slider hero con crossfade",
+      "cat": "hero",
+      "tech": [
+        "CSS",
+        "LIB"
+      ],
+      "cost": "light",
+      "stage": "photo",
+      "fx": "hero-crossfade",
+      "desc": "Le immagini si sostituiscono in dissolvenza incrociata.",
+      "use": "Strutture e locali con più ambienti da mostrare senza gerarchia.",
+      "watch": "Solo la prima immagine è LCP: le altre in lazy. Dissolvenze da 1.2s in su.",
+      "approx": false
+    },
+    {
+      "n": 40,
+      "id": "video-bg",
+      "name": "Video di sfondo con fade",
+      "cat": "hero",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "light",
+      "stage": "photo",
+      "fx": "video-bg",
+      "desc": "Un filmato muto in loop dietro il contenuto, con un velo che ne calma il contrasto.",
+      "use": "Locali, eventi, brand con girato buono già disponibile.",
+      "watch": "Muto, `playsinline`, poster obbligatorio e stop su reduced-motion e su rete lenta.",
+      "approx": false
+    },
+    {
+      "n": 41,
+      "id": "text-video-mask",
+      "name": "Testo con maschera video",
+      "cat": "hero",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "light",
+      "stage": "line",
+      "fx": "text-video-mask",
+      "desc": "Il filmato si vede solo dentro le lettere del titolo.",
+      "use": "Un colpo solo, molto forte: brand con una parola sola da dire.",
+      "watch": "Serve un font molto grasso e un fallback a tinta piena: se la maschera non regge, resta un titolo invisibile.",
+      "approx": false
+    },
+    {
+      "n": 42,
+      "id": "gradient-mesh",
+      "name": "Gradient mesh animato",
+      "cat": "hero",
+      "tech": [
+        "CSS",
+        "WEBGL"
+      ],
+      "cost": "light",
+      "stage": "block",
+      "fx": "gradient-mesh",
+      "desc": "Macchie di colore che si spostano lentamente creando un fondo vivo.",
+      "use": "Prodotti digitali senza materiale fotografico.",
+      "watch": "È il fondale AI per definizione: fuori dal viola-indaco e con tinte prese dal brand, o è banale.",
+      "approx": false
+    },
+    {
+      "n": 43,
+      "id": "aurora-blob",
+      "name": "Aurora / blob morphing",
+      "cat": "hero",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "blob",
+      "fx": "aurora",
+      "desc": "Forme sfocate che si deformano e si attraversano piano.",
+      "use": "Fondali morbidi per pagine di prodotto e sezioni di stacco.",
+      "watch": "`filter: blur` su superfici grandi costa: limita l'area e il numero di blob.",
+      "approx": false
+    },
+    {
+      "n": 44,
+      "id": "particles",
+      "name": "Particelle",
+      "cat": "hero",
+      "tech": [
+        "CANVAS",
+        "LIB"
+      ],
+      "cost": "heavy",
+      "stage": "dots",
+      "fx": "particles",
+      "desc": "Punti che fluttuano e reagiscono al puntatore.",
+      "use": "Tema tecnico o scientifico, quando il fondo deve suggerire un sistema.",
+      "watch": "Mangia CPU e batteria: limita il numero, ferma fuori viewport, disattiva su mobile.",
+      "approx": true
+    },
+    {
+      "n": 45,
+      "id": "starfield",
+      "name": "Campo di stelle o rete di punti",
+      "cat": "hero",
+      "tech": [
+        "CANVAS",
+        "WEBGL"
+      ],
+      "cost": "heavy",
+      "stage": "dots",
+      "fx": "starfield",
+      "desc": "Punti collegati da linee che si formano e si sciolgono.",
+      "use": "Reti, connessioni, dati: la metafora visiva del collegamento.",
+      "watch": "Vista mille volte. Se non è il messaggio del prodotto, è solo peso.",
+      "approx": true
+    },
+    {
+      "n": 46,
+      "id": "shader-distort",
+      "name": "Distorsione shader su immagine",
+      "cat": "hero",
+      "tech": [
+        "WEBGL"
+      ],
+      "cost": "heavy",
+      "stage": "photo",
+      "fx": "shader-distort",
+      "desc": "L'immagine si deforma con un'onda calcolata sulla GPU.",
+      "use": "Portfolio e agenzie che competono su Awwwards.",
+      "watch": "Serve una libreria 3D e un fallback statico completo: senza WebGL la hero non deve sparire.",
+      "approx": true
+    },
+    {
+      "n": 47,
+      "id": "ripple-water",
+      "name": "Ripple d'acqua al mouse",
+      "cat": "hero",
+      "tech": [
+        "WEBGL"
+      ],
+      "cost": "heavy",
+      "stage": "photo",
+      "fx": "ripple",
+      "desc": "Il puntatore increspa la superficie dell'immagine come acqua.",
+      "use": "Brand legati all'acqua, al benessere, al movimento naturale.",
+      "watch": "Inesistente su touch: serve un comportamento alternativo, non solo l'assenza.",
+      "approx": true
+    },
+    {
+      "n": 48,
+      "id": "noise",
+      "name": "Grana / noise animata",
+      "cat": "hero",
+      "tech": [
+        "CSS",
+        "SVG"
+      ],
+      "cost": "free",
+      "stage": "photo",
+      "fx": "noise",
+      "desc": "Una texture di grana finissima vibra sopra l'immagine.",
+      "use": "Tono analogico e pellicola: riscalda un digitale troppo pulito.",
+      "watch": "Sotto il 6% di opacità e con grana fine: sopra diventa un pattern e sporca la compressione.",
+      "approx": false
+    },
+    {
+      "n": 49,
+      "id": "split-screen-open",
+      "name": "Split screen che si apre",
+      "cat": "hero",
+      "tech": [
+        "GSAP",
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "block",
+      "fx": "split-open",
+      "desc": "Due metà si separano rivelando il contenuto sotto.",
+      "use": "Ingresso di pagina memorabile per siti-manifesto.",
+      "watch": "Ritarda il primo contenuto utile: giustificabile solo in home, mai in una pagina di conversione.",
+      "approx": false
+    },
+    {
+      "n": 50,
+      "id": "img-zoom",
+      "name": "Zoom immagine nel contenitore",
+      "cat": "hover",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "photo",
+      "fx": "img-zoom",
+      "desc": "La foto cresce dentro un riquadro che la ritaglia.",
+      "use": "Card, gallerie, liste di articoli: il feedback hover più usato e più sicuro.",
+      "watch": "Il contenitore deve avere `overflow: hidden` e la scala restare sotto 1.08.",
+      "approx": false
+    },
+    {
+      "n": 51,
+      "id": "caption-rise",
+      "name": "Overlay con caption che sale",
+      "cat": "hover",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "photo",
+      "fx": "caption-rise",
+      "desc": "Una didascalia entra dal basso su un velo che compare.",
+      "use": "Portfolio e gallerie dove il titolo non deve stare sempre in vista.",
+      "watch": "L'informazione nascosta è invisibile su touch: il titolo essenziale deve stare fuori.",
+      "approx": false
+    },
+    {
+      "n": 52,
+      "id": "card-lift",
+      "name": "Card lift",
+      "cat": "hover",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "card",
+      "fx": "card-lift",
+      "desc": "La card si solleva di poco e l'ombra si allarga.",
+      "use": "Griglie cliccabili: dichiara che l'intera card è un bersaglio.",
+      "watch": "Sollevamenti di 2-6px. Se anche l'ombra non cambia, sembra un errore di rendering.",
+      "approx": false
+    },
+    {
+      "n": 53,
+      "id": "tilt-3d",
+      "name": "Tilt 3D con il mouse",
+      "cat": "hover",
+      "tech": [
+        "LIB",
+        "CSS"
+      ],
+      "cost": "light",
+      "stage": "card",
+      "fx": "tilt-3d",
+      "desc": "La card si inclina seguendo la posizione del puntatore.",
+      "use": "Card di prodotto isolate, elementi da mettere in mostra.",
+      "watch": "Su una griglia intera è nausea. Serve `will-change` e un ritorno morbido all'uscita.",
+      "approx": false
+    },
+    {
+      "n": 54,
+      "id": "btn-fill",
+      "name": "Bottone con riempimento",
+      "cat": "hover",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "btn",
+      "fx": "btn-fill",
+      "desc": "Il colore invade il bottone da un lato fino a riempirlo.",
+      "use": "CTA principali: dà peso al gesto senza aggiungere elementi.",
+      "watch": "Il contrasto del testo deve reggere sia sul fondo iniziale sia su quello finale.",
+      "approx": false
+    },
+    {
+      "n": 55,
+      "id": "btn-magnetic",
+      "name": "Bottone magnetico",
+      "cat": "hover",
+      "tech": [
+        "GSAP",
+        "WA"
+      ],
+      "cost": "light",
+      "stage": "btn",
+      "fx": "btn-magnetic",
+      "desc": "Il bottone si sposta verso il puntatore quando gli passi vicino.",
+      "use": "Siti di agenzia e portfolio dove il puntatore è già protagonista.",
+      "watch": "Spostare il bersaglio peggiora l'usabilità: raggio piccolo e mai su form o menu.",
+      "approx": false
+    },
+    {
+      "n": 56,
+      "id": "link-underline",
+      "name": "Underline animato su link",
+      "cat": "hover",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "link",
+      "fx": "link-underline",
+      "desc": "La sottolineatura si estende da un lato all'altro.",
+      "use": "Link di testo e voci di menu: il micro-dettaglio che si nota senza accorgersene.",
+      "watch": "Deve comparire anche su `:focus-visible`, o chi naviga da tastiera non vede dove si trova.",
+      "approx": false
+    },
+    {
+      "n": 57,
+      "id": "text-roll",
+      "name": "Testo che ruota sul duplicato",
+      "cat": "hover",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "btn",
+      "fx": "text-roll",
+      "desc": "L'etichetta scorre in su e viene sostituita da una copia identica.",
+      "use": "Bottoni e voci di menu in siti curati: gesto piccolo, resa alta.",
+      "watch": "Il duplicato va nascosto agli screen reader con `aria-hidden`.",
+      "approx": false
+    },
+    {
+      "n": 58,
+      "id": "ripple-click",
+      "name": "Ripple al click",
+      "cat": "hover",
+      "tech": [
+        "CSS",
+        "WA"
+      ],
+      "cost": "free",
+      "stage": "btn",
+      "fx": "ripple-click",
+      "desc": "Un'onda parte dal punto esatto del click.",
+      "use": "Interfacce di stampo Material o app con molti tocchi.",
+      "watch": "Fortemente connotato Material: su un brand con altra grammatica stona.",
+      "approx": false
+    },
+    {
+      "n": 59,
+      "id": "cursor-follower",
+      "name": "Cursore custom follower",
+      "cat": "hover",
+      "tech": [
+        "WA",
+        "GSAP"
+      ],
+      "cost": "light",
+      "stage": "cursor",
+      "fx": "cursor-follow",
+      "desc": "Un cerchio insegue il puntatore con un ritardo elastico.",
+      "use": "Portfolio e agenzie: firma di categoria.",
+      "watch": "Non toccare mai il cursore di sistema su elementi di form. Inutile su touch: va spento.",
+      "approx": false
+    },
+    {
+      "n": 60,
+      "id": "cursor-expand",
+      "name": "Cursore che si espande",
+      "cat": "hover",
+      "tech": [
+        "WA"
+      ],
+      "cost": "light",
+      "stage": "cursor",
+      "fx": "cursor-expand",
+      "desc": "Il cursore cresce e cambia forma sugli elementi interattivi.",
+      "use": "Completa il follower: segnala cosa è cliccabile senza cambiare la pagina.",
+      "watch": "Se sostituisce l'unico segnale di interattività, chi non muove il mouse non capisce niente.",
+      "approx": false
+    },
+    {
+      "n": 61,
+      "id": "image-trail",
+      "name": "Scia di immagini al movimento",
+      "cat": "hover",
+      "tech": [
+        "WA",
+        "GSAP"
+      ],
+      "cost": "light",
+      "stage": "photo",
+      "fx": "image-trail",
+      "desc": "Muovendo il mouse restano dietro immagini che svaniscono.",
+      "use": "Home di studi creativi: mostra il lavoro senza una griglia.",
+      "watch": "Molto pesante in DOM: riusa un pool fisso di nodi, non crearne uno per movimento.",
+      "approx": false
+    },
+    {
+      "n": 62,
+      "id": "hover-preview",
+      "name": "Preview su lista link",
+      "cat": "hover",
+      "tech": [
+        "WA",
+        "GSAP"
+      ],
+      "cost": "light",
+      "stage": "list",
+      "fx": "hover-preview",
+      "desc": "Passando su una voce di elenco compare l'immagine relativa.",
+      "use": "Indici di progetti, menu di navigazione ricchi: elegante e denso.",
+      "watch": "Su touch non esiste: serve una versione con miniature già visibili.",
+      "approx": false
+    },
+    {
+      "n": 63,
+      "id": "icon-morph",
+      "name": "Icona che si trasforma",
+      "cat": "hover",
+      "tech": [
+        "CSS",
+        "SVG"
+      ],
+      "cost": "free",
+      "stage": "btn",
+      "fx": "icon-morph",
+      "desc": "Play diventa pausa, menu diventa croce: la forma cambia stato.",
+      "use": "Controlli che hanno due stati: comunica il risultato del click prima del click.",
+      "watch": "La transizione deve essere sotto i 200ms: un controllo lento sembra rotto.",
+      "approx": false
+    },
+    {
+      "n": 64,
+      "id": "glow-border",
+      "name": "Glow o bordo animato",
+      "cat": "hover",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "card",
+      "fx": "glow-border",
+      "desc": "Una luce corre lungo il perimetro dell'elemento.",
+      "use": "Card in evidenza, piani a pagamento, elementi premium.",
+      "watch": "`conic-gradient` in loop costa: solo su pochi elementi e fermo quando non serve.",
+      "approx": false
+    },
+    {
+      "n": 65,
+      "id": "shake-error",
+      "name": "Shake su errore",
+      "cat": "hover",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "btn",
+      "fx": "shake",
+      "desc": "L'elemento vibra lateralmente per segnalare un rifiuto.",
+      "use": "Login sbagliato, campo non valido: la reazione più comprensibile che esista.",
+      "watch": "Breve (300ms) e accompagnato da un messaggio testuale: il movimento da solo non è accessibile.",
+      "approx": false
+    },
+    {
+      "n": 66,
+      "id": "hamburger",
+      "name": "Hamburger che diventa X",
+      "cat": "nav",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "btn",
+      "fx": "hamburger",
+      "desc": "Le tre righe si trasformano nella croce di chiusura.",
+      "use": "Standard assoluto del menu mobile.",
+      "watch": "Serve `aria-expanded` sul bottone: senza, per uno screen reader non è successo niente.",
+      "approx": false
+    },
+    {
+      "n": 67,
+      "id": "menu-fullscreen",
+      "name": "Menu fullscreen con voci in stagger",
+      "cat": "nav",
+      "tech": [
+        "CSS",
+        "GSAP"
+      ],
+      "cost": "light",
+      "stage": "nav",
+      "fx": "menu-full",
+      "desc": "Il pannello copre lo schermo e le voci entrano una dopo l'altra.",
+      "use": "Siti con poche voci forti, dove il menu è un momento e non un accessorio.",
+      "watch": "Il focus va spostato dentro e intrappolato, e `Esc` deve chiudere.",
+      "approx": false
+    },
+    {
+      "n": 68,
+      "id": "offcanvas",
+      "name": "Off canvas laterale",
+      "cat": "nav",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "nav",
+      "fx": "offcanvas",
+      "desc": "Il pannello entra da un lato spingendo o coprendo la pagina.",
+      "use": "Navigazioni lunghe, filtri, carrelli.",
+      "watch": "Il fondo non deve scorrere sotto il pannello aperto: blocca lo scroll del body.",
+      "approx": false
+    },
+    {
+      "n": 69,
+      "id": "megamenu",
+      "name": "Mega menu con fade e slide",
+      "cat": "nav",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "nav",
+      "fx": "megamenu",
+      "desc": "Il pannello scende sotto la voce con una discesa breve.",
+      "use": "Cataloghi e siti con molte sezioni.",
+      "watch": "Ritardo in chiusura (150-250ms) o il menu sparisce mentre ci si sta muovendo dentro.",
+      "approx": false
+    },
+    {
+      "n": 70,
+      "id": "active-indicator",
+      "name": "Indicatore attivo che scorre",
+      "cat": "nav",
+      "tech": [
+        "WA",
+        "LIB"
+      ],
+      "cost": "light",
+      "stage": "nav",
+      "fx": "active-ind",
+      "desc": "Una barretta scivola dalla voce precedente a quella nuova.",
+      "use": "Tab e navigazioni orizzontali: rende continuo il cambio di stato.",
+      "watch": "Con la tecnica FLIP resta fluido anche al resize. Va nascosto agli screen reader.",
+      "approx": false
+    },
+    {
+      "n": 71,
+      "id": "dock-magnify",
+      "name": "Dock con magnificazione",
+      "cat": "nav",
+      "tech": [
+        "WA"
+      ],
+      "cost": "light",
+      "stage": "nav",
+      "fx": "dock",
+      "desc": "Le icone crescono avvicinandosi al puntatore, come nel dock macOS.",
+      "use": "Barre di strumenti giocose, prodotti con personalità.",
+      "watch": "Fortemente citazionista: se il prodotto non c'entra con Apple, sembra un vezzo.",
+      "approx": false
+    },
+    {
+      "n": 72,
+      "id": "step-progress",
+      "name": "Breadcrumb / step animato",
+      "cat": "nav",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "bar",
+      "fx": "step-progress",
+      "desc": "Il passo completato si riempie e la linea avanza al successivo.",
+      "use": "Checkout, onboarding, moduli lunghi: dice quanto manca.",
+      "watch": "Il numero di passi deve essere vero e stabile: se cresce in corsa, l'utente si sente ingannato.",
+      "approx": false
+    },
+    {
+      "n": 73,
+      "id": "filter-flip",
+      "name": "Filtro con riordino fluido",
+      "cat": "layout",
+      "tech": [
+        "LIB",
+        "GSAP"
+      ],
+      "cost": "light",
+      "stage": "blocks",
+      "fx": "filter-flip",
+      "desc": "Le card si spostano nelle nuove posizioni invece di saltarci.",
+      "use": "Portfolio filtrabili, cataloghi con categorie.",
+      "watch": "Con molte card il riordino diventa lento: sopra i 40 elementi conviene paginare.",
+      "approx": false
+    },
+    {
+      "n": 74,
+      "id": "masonry-in",
+      "name": "Masonry con inserimento animato",
+      "cat": "layout",
+      "tech": [
+        "LIB",
+        "CSS"
+      ],
+      "cost": "light",
+      "stage": "blocks",
+      "fx": "masonry-in",
+      "desc": "I nuovi elementi si inseriscono nel mosaico trovando il loro posto.",
+      "use": "Gallerie con formati misti e caricamento progressivo.",
+      "watch": "Il layout va ricalcolato a immagini caricate, o il mosaico si assesta a scatti sotto gli occhi.",
+      "approx": false
+    },
+    {
+      "n": 75,
+      "id": "accordion",
+      "name": "Accordion con altezza fluida",
+      "cat": "layout",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "list",
+      "fx": "accordion",
+      "desc": "Il pannello si apre con un'altezza che cresce senza salti.",
+      "use": "FAQ, schede tecniche, filtri: il pattern più utile della lista.",
+      "watch": "`grid-template-rows: 0fr → 1fr` anima l'altezza automatica senza JavaScript.",
+      "approx": false
+    },
+    {
+      "n": 76,
+      "id": "tabs-crossfade",
+      "name": "Tabs con crossfade",
+      "cat": "layout",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "blocks",
+      "fx": "tabs-cross",
+      "desc": "Il contenuto si sostituisce in dissolvenza mentre l'indicatore si sposta.",
+      "use": "Schede di prodotto, contenuti alternativi nello stesso spazio.",
+      "watch": "L'altezza deve essere gestita o la pagina sobbalza cambiando scheda.",
+      "approx": false
+    },
+    {
+      "n": 77,
+      "id": "carousel-loop",
+      "name": "Carousel con autoplay e loop",
+      "cat": "layout",
+      "tech": [
+        "LIB"
+      ],
+      "cost": "light",
+      "stage": "blocks",
+      "fx": "carousel-loop",
+      "desc": "Le slide avanzano da sole e ricominciano senza stacco.",
+      "use": "Testimonianze, loghi, gallerie secondarie.",
+      "watch": "Serve pausa all'hover e al focus, e comandi raggiungibili da tastiera. Autoplay lento.",
+      "approx": false
+    },
+    {
+      "n": 78,
+      "id": "coverflow",
+      "name": "Coverflow / carousel 3D",
+      "cat": "layout",
+      "tech": [
+        "LIB"
+      ],
+      "cost": "light",
+      "stage": "blocks",
+      "fx": "coverflow",
+      "desc": "Le slide laterali arretrano e ruotano in prospettiva.",
+      "use": "Cataloghi visivi dove la slide centrale deve dominare.",
+      "watch": "Costa in leggibilità: i titoli sulle slide laterali sono deformati e illeggibili.",
+      "approx": false
+    },
+    {
+      "n": 79,
+      "id": "before-after",
+      "name": "Before / after comparativo",
+      "cat": "layout",
+      "tech": [
+        "WA"
+      ],
+      "cost": "light",
+      "stage": "photo",
+      "fx": "before-after",
+      "desc": "Una maniglia scopre progressivamente la seconda immagine.",
+      "use": "Restauri, ritocchi, prima e dopo di ogni genere.",
+      "watch": "Le due immagini devono coincidere per inquadratura e luce, o il confronto mente.",
+      "approx": false
+    },
+    {
+      "n": 80,
+      "id": "lightbox-zoom",
+      "name": "Lightbox con zoom dall'origine",
+      "cat": "layout",
+      "tech": [
+        "LIB",
+        "NATIVE"
+      ],
+      "cost": "light",
+      "stage": "photo",
+      "fx": "lightbox",
+      "desc": "L'immagine cresce dalla miniatura fino alla vista piena.",
+      "use": "Gallerie: mantiene il filo tra dove si era e cosa si sta guardando.",
+      "watch": "Il focus va portato nel lightbox e restituito alla miniatura in chiusura.",
+      "approx": false
+    },
+    {
+      "n": 81,
+      "id": "drag-drop",
+      "name": "Drag and drop con transizioni",
+      "cat": "layout",
+      "tech": [
+        "LIB",
+        "GSAP"
+      ],
+      "cost": "light",
+      "stage": "blocks",
+      "fx": "drag-drop",
+      "desc": "L'elemento trascinato si stacca e gli altri fanno spazio.",
+      "use": "Bacheche, ordinamenti, configuratori.",
+      "watch": "Serve sempre un'alternativa da tastiera: il drag puro è inaccessibile.",
+      "approx": false
+    },
+    {
+      "n": 82,
+      "id": "skeleton-list",
+      "name": "Lista infinita con skeleton",
+      "cat": "layout",
+      "tech": [
+        "CSS",
+        "IO"
+      ],
+      "cost": "free",
+      "stage": "list",
+      "fx": "skeleton-list",
+      "desc": "Segnaposto luminosi occupano il posto dei contenuti in arrivo.",
+      "use": "Liste lunghe e feed: riduce la sensazione di attesa.",
+      "watch": "Lo scheletro deve avere la forma del contenuto vero, o il salto al caricamento è peggio dell'attesa.",
+      "approx": false
+    },
+    {
+      "n": 83,
+      "id": "view-transitions",
+      "name": "View Transitions API",
+      "cat": "page",
+      "tech": [
+        "NATIVE"
+      ],
+      "cost": "free",
+      "stage": "page",
+      "fx": "view-trans",
+      "desc": "Il browser interpola da solo tra due stati o due pagine.",
+      "use": "Da preferire sempre quando basta: nessuna libreria, nessun router custom.",
+      "watch": "Ancora non ovunque: la navigazione deve restare perfetta senza la transizione.",
+      "approx": false
+    },
+    {
+      "n": 84,
+      "id": "shared-element",
+      "name": "Shared element transition",
+      "cat": "page",
+      "tech": [
+        "NATIVE",
+        "LIB"
+      ],
+      "cost": "light",
+      "stage": "page",
+      "fx": "shared-el",
+      "desc": "Un elemento sopravvive al cambio pagina spostandosi al nuovo posto.",
+      "use": "Da griglia a dettaglio: la transizione più utile che esista, non solo la più bella.",
+      "watch": "Richiede lo stesso identificativo sui due lati: se non combacia, l'elemento sparisce e ricompare.",
+      "approx": false
+    },
+    {
+      "n": 85,
+      "id": "curtain-page",
+      "name": "Curtain wipe tra pagine",
+      "cat": "page",
+      "tech": [
+        "LIB",
+        "GSAP"
+      ],
+      "cost": "light",
+      "stage": "page",
+      "fx": "curtain-page",
+      "desc": "Un pannello copre, la pagina cambia sotto, il pannello se ne va.",
+      "use": "Siti-portfolio dove la navigazione fa parte dello spettacolo.",
+      "watch": "Aggiunge attesa reale a ogni click: sopra i 400ms diventa un pedaggio.",
+      "approx": false
+    },
+    {
+      "n": 86,
+      "id": "route-fade",
+      "name": "Fade e slide su cambio route",
+      "cat": "page",
+      "tech": [
+        "LIB"
+      ],
+      "cost": "light",
+      "stage": "page",
+      "fx": "route-fade",
+      "desc": "Le viste si sostituiscono con una breve dissolvenza in una SPA.",
+      "use": "App a pagina singola: dà continuità dove il browser non la dà più.",
+      "watch": "Il focus e il titolo della pagina vanno aggiornati a mano, o la navigazione è muta per gli screen reader.",
+      "approx": false
+    },
+    {
+      "n": 87,
+      "id": "preloader-pct",
+      "name": "Preloader con percentuale",
+      "cat": "page",
+      "tech": [
+        "WA"
+      ],
+      "cost": "light",
+      "stage": "num",
+      "fx": "preloader",
+      "desc": "Una cifra sale fino a cento mentre il sito carica.",
+      "use": "Siti pesanti dove l'attesa esiste davvero.",
+      "watch": "Se la percentuale è finta, è una bugia che costa secondi. Meglio nessun preloader che uno inventato.",
+      "approx": false
+    },
+    {
+      "n": 88,
+      "id": "preloader-logo",
+      "name": "Preloader con logo che si disegna",
+      "cat": "page",
+      "tech": [
+        "SVG",
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "path",
+      "fx": "preloader-logo",
+      "desc": "Il marchio si traccia da solo mentre le risorse arrivano.",
+      "use": "Brand con un logo lineare: trasforma l'attesa in firma.",
+      "watch": "Deve avere un tetto massimo e sparire comunque: mai legato solo all'evento `load`.",
+      "approx": false
+    },
+    {
+      "n": 89,
+      "id": "skeleton",
+      "name": "Skeleton shimmer",
+      "cat": "feedback",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "list",
+      "fx": "skeleton",
+      "desc": "Un riflesso attraversa i segnaposto del contenuto in arrivo.",
+      "use": "Qualunque attesa sopra i 300ms in interfacce dense.",
+      "watch": "Il riflesso lento e a basso contrasto: se lampeggia, l'attesa sembra più lunga.",
+      "approx": false
+    },
+    {
+      "n": 90,
+      "id": "spinner",
+      "name": "Spinner",
+      "cat": "feedback",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "block",
+      "fx": "spinner",
+      "desc": "Un cerchio che gira: attesa di durata ignota.",
+      "use": "Azioni brevi e puntuali, dentro un bottone o un pannello.",
+      "watch": "Per attese sopra i due secondi non basta: serve un testo che dica cosa sta succedendo.",
+      "approx": false
+    },
+    {
+      "n": 91,
+      "id": "progress-det",
+      "name": "Progress bar determinata",
+      "cat": "feedback",
+      "tech": [
+        "CSS",
+        "WA"
+      ],
+      "cost": "free",
+      "stage": "bar",
+      "fx": "progress-det",
+      "desc": "La barra avanza in proporzione al lavoro davvero svolto.",
+      "use": "Upload, elaborazioni, esportazioni: quando la percentuale è nota.",
+      "watch": "Non deve mai tornare indietro né fermarsi al 99%: è la rovina della fiducia.",
+      "approx": false
+    },
+    {
+      "n": 92,
+      "id": "toast",
+      "name": "Toast in entrata e uscita",
+      "cat": "feedback",
+      "tech": [
+        "CSS",
+        "WA"
+      ],
+      "cost": "free",
+      "stage": "panel",
+      "fx": "toast",
+      "desc": "Un messaggio entra da un bordo, resta qualche secondo e se ne va.",
+      "use": "Conferme e notifiche non bloccanti.",
+      "watch": "Serve `role=\"status\"` e una durata sufficiente a leggere: sotto i 4 secondi è inutile.",
+      "approx": false
+    },
+    {
+      "n": 93,
+      "id": "modal",
+      "name": "Modale con scale e backdrop blur",
+      "cat": "feedback",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "panel",
+      "fx": "modal",
+      "desc": "Il pannello cresce di poco mentre il fondo si sfoca.",
+      "use": "Conferme, moduli brevi, dettagli che richiedono attenzione piena.",
+      "watch": "Focus intrappolato, `Esc` che chiude e scroll del fondo bloccato: senza, è un difetto di accessibilità.",
+      "approx": false
+    },
+    {
+      "n": 94,
+      "id": "checkmark",
+      "name": "Checkmark disegnato",
+      "cat": "feedback",
+      "tech": [
+        "SVG",
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "path",
+      "fx": "checkmark",
+      "desc": "La spunta si traccia da sola alla conferma.",
+      "use": "Fine di un flusso: pagamento riuscito, modulo inviato.",
+      "watch": "Va accompagnata da testo: un segno grafico da solo non comunica l'esito a chi non lo vede.",
+      "approx": false
+    },
+    {
+      "n": 95,
+      "id": "error-shake",
+      "name": "Errore con shake e colore",
+      "cat": "feedback",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "panel",
+      "fx": "error-shake",
+      "desc": "Il campo vibra e passa al colore di errore.",
+      "use": "Validazione di moduli, in tempo reale o all'invio.",
+      "watch": "Il colore da solo non basta: serve icona e testo, per il daltonismo e per lo screen reader.",
+      "approx": false
+    },
+    {
+      "n": 96,
+      "id": "confetti",
+      "name": "Confetti",
+      "cat": "feedback",
+      "tech": [
+        "CANVAS",
+        "LIB"
+      ],
+      "cost": "heavy",
+      "stage": "dots",
+      "fx": "confetti",
+      "desc": "Coriandoli esplodono dal punto della conferma.",
+      "use": "Traguardi rari e veri: fine corso, obiettivo raggiunto.",
+      "watch": "Se scatta a ogni salvataggio, diventa rumore. Una volta, e con reduced-motion disattivato.",
+      "approx": true
+    },
+    {
+      "n": 97,
+      "id": "pull-refresh",
+      "name": "Pull to refresh",
+      "cat": "feedback",
+      "tech": [
+        "WA"
+      ],
+      "cost": "light",
+      "stage": "block",
+      "fx": "pull-refresh",
+      "desc": "Trascinando in giù compare l'indicatore e la lista si ricarica.",
+      "use": "Liste mobile che si aggiornano spesso.",
+      "watch": "Va oltre una soglia netta, o si attiva per sbaglio durante lo scroll normale.",
+      "approx": false
+    },
+    {
+      "n": 98,
+      "id": "float",
+      "name": "Float / levitazione",
+      "cat": "loop",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "block",
+      "fx": "float",
+      "desc": "L'elemento sale e scende di pochi pixel, in continuo.",
+      "use": "Illustrazioni e mockup in hero: vivo senza chiedere attenzione.",
+      "watch": "Ampiezza piccola (4-10px) e durata lunga: oltre, diventa un elemento che disturba la lettura accanto.",
+      "approx": false
+    },
+    {
+      "n": 99,
+      "id": "pulse",
+      "name": "Pulse / breathe",
+      "cat": "loop",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "block",
+      "fx": "pulse",
+      "desc": "Un respiro lento di scala o di opacità.",
+      "use": "Indicatori di stato live, punti su mappa, elementi in ascolto.",
+      "watch": "Su un CTA diventa un banner lampeggiante: usalo su segnali, non su bottoni.",
+      "approx": false
+    },
+    {
+      "n": 100,
+      "id": "spin-slow",
+      "name": "Rotazione lenta continua",
+      "cat": "loop",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "path",
+      "fx": "spin-slow",
+      "desc": "Un elemento gira su sé stesso senza fermarsi.",
+      "use": "Sigilli, badge, elementi decorativi circolari.",
+      "watch": "Va fermato all'hover se è cliccabile: un bersaglio che ruota è difficile da centrare.",
+      "approx": false
+    },
+    {
+      "n": 101,
+      "id": "wave",
+      "name": "Wave SVG",
+      "cat": "loop",
+      "tech": [
+        "SVG",
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "path",
+      "fx": "wave",
+      "desc": "Un'onda scorre sul bordo tra due sezioni.",
+      "use": "Separatori tra fasce di colore, temi legati ad acqua e natura.",
+      "watch": "Due onde sfasate sembrano acqua; una sola sembra una decorazione da template.",
+      "approx": false
+    },
+    {
+      "n": 102,
+      "id": "blob-morph",
+      "name": "Blob che cambia forma",
+      "cat": "loop",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "blob",
+      "fx": "blob-morph",
+      "desc": "Una forma morbida si deforma lentamente cambiando i raggi.",
+      "use": "Maschere per immagini, fondi di sezione, brand morbidi.",
+      "watch": "Con `border-radius` animato resta economico: con path morphing serve una libreria.",
+      "approx": false
+    },
+    {
+      "n": 103,
+      "id": "gradient-shift",
+      "name": "Gradient shift",
+      "cat": "loop",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "block",
+      "fx": "gradient-shift",
+      "desc": "Il gradiente si sposta lentamente cambiando l'umore del fondo.",
+      "use": "Fasce di stacco, footer, sezioni di attesa.",
+      "watch": "Molto lento (20s+) e a bassa saturazione, o diventa un fondale da presentazione.",
+      "approx": false
+    },
+    {
+      "n": 104,
+      "id": "scroll-hint",
+      "name": "Scroll hint",
+      "cat": "loop",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "block",
+      "fx": "scroll-hint",
+      "desc": "Una freccia o una linea rimbalza in fondo alla hero.",
+      "use": "Hero a schermo pieno dove non è ovvio che sotto ci sia altro.",
+      "watch": "Se la piega mostra già l'inizio della sezione dopo, è inutile: togli il segnale e alza il contenuto.",
+      "approx": false
+    },
+    {
+      "n": 105,
+      "id": "rotating-badge",
+      "name": "Badge circolare rotante",
+      "cat": "loop",
+      "tech": [
+        "CSS",
+        "SVG"
+      ],
+      "cost": "free",
+      "stage": "path",
+      "fx": "rot-badge",
+      "desc": "Un sigillo con testo circolare gira in continuo.",
+      "use": "Etichette «disponibile ora», «scorri», premi.",
+      "watch": "Testo corto e rotazione molto lenta (12-20s), o è illeggibile e nervoso.",
+      "approx": false
+    },
+    {
+      "n": 106,
+      "id": "line-drawing",
+      "name": "Line drawing",
+      "cat": "svg",
+      "tech": [
+        "SVG",
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "path",
+      "fx": "line-draw",
+      "desc": "Il tracciato si disegna da solo tramite `stroke-dasharray`.",
+      "use": "Loghi lineari, mappe, illustrazioni tecniche, firme.",
+      "watch": "Funziona solo su tracciati aperti e sottili: su forme piene non si legge il gesto.",
+      "approx": false
+    },
+    {
+      "n": 107,
+      "id": "path-morph",
+      "name": "Path morphing",
+      "cat": "svg",
+      "tech": [
+        "LIB",
+        "GSAP"
+      ],
+      "cost": "light",
+      "stage": "path",
+      "fx": "path-morph",
+      "desc": "Una forma si trasforma in un'altra senza tagli.",
+      "use": "Icone che cambiano significato, illustrazioni narrative.",
+      "watch": "Richiede path con lo stesso numero di punti: serve una libreria per interpolarli davvero.",
+      "approx": false
+    },
+    {
+      "n": 108,
+      "id": "fill-progress",
+      "name": "Riempimento progressivo",
+      "cat": "svg",
+      "tech": [
+        "SVG",
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "path",
+      "fx": "fill-prog",
+      "desc": "Il colore sale dentro la forma come un liquido in un contenitore.",
+      "use": "Indicatori di completamento con una forma di brand.",
+      "watch": "Serve un valore testuale accanto: la forma piena non dice la percentuale.",
+      "approx": false
+    },
+    {
+      "n": 109,
+      "id": "lottie",
+      "name": "Animazione Lottie",
+      "cat": "svg",
+      "tech": [
+        "LIB"
+      ],
+      "cost": "light",
+      "stage": "block",
+      "fx": "lottie",
+      "desc": "Un'animazione fatta in After Effects e riprodotta come vettoriale.",
+      "use": "Illustrazioni complesse che nessuno rifarebbe in CSS.",
+      "watch": "Il file JSON pesa: controlla il peso, riproduci al viewport e ferma quando esce.",
+      "approx": true
+    },
+    {
+      "n": 110,
+      "id": "rive",
+      "name": "Animazione Rive interattiva",
+      "cat": "svg",
+      "tech": [
+        "LIB"
+      ],
+      "cost": "light",
+      "stage": "block",
+      "fx": "rive",
+      "desc": "Animazione a stati che reagisce a input e a hover.",
+      "use": "Personaggi, mascotte, controlli con più stati.",
+      "watch": "Introduce un runtime e un formato in più nel progetto: si giustifica se gli stati sono tanti.",
+      "approx": true
+    },
+    {
+      "n": 111,
+      "id": "icon-hover",
+      "name": "Icone animate al hover",
+      "cat": "svg",
+      "tech": [
+        "SVG",
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "btn",
+      "fx": "icon-hover",
+      "desc": "Il tracciato dell'icona si muove al passaggio: la freccia scorre, la busta si apre.",
+      "use": "Liste di servizi, menu, bottoni secondari: dettaglio a costo quasi zero.",
+      "watch": "Deve restare comprensibile da ferma: l'icona si legge anche senza il movimento.",
+      "approx": false
+    },
+    {
+      "n": 112,
+      "id": "three-model",
+      "name": "Scena three.js con modello",
+      "cat": "3d",
+      "tech": [
+        "WEBGL"
+      ],
+      "cost": "heavy",
+      "stage": "scene",
+      "fx": "three-model",
+      "desc": "Un oggetto tridimensionale ruota nello spazio della pagina.",
+      "use": "Prodotti fisici da esaminare, configuratori.",
+      "watch": "Pesa in megabyte e in batteria: serve poster statico, lazy init e stop fuori viewport.",
+      "approx": true
+    },
+    {
+      "n": 113,
+      "id": "camera-scroll",
+      "name": "Camera guidata dallo scroll",
+      "cat": "3d",
+      "tech": [
+        "WEBGL",
+        "GSAP"
+      ],
+      "cost": "heavy",
+      "stage": "scene",
+      "fx": "camera-scroll",
+      "desc": "La telecamera attraversa la scena mentre l'utente scorre.",
+      "use": "Racconti di prodotto immersivi, siti da premio.",
+      "watch": "Costosissimo da produrre e da mantenere: la versione senza WebGL deve raccontare la stessa storia.",
+      "approx": true
+    },
+    {
+      "n": 114,
+      "id": "hover-distort",
+      "name": "Distorsione immagine al hover",
+      "cat": "3d",
+      "tech": [
+        "WEBGL"
+      ],
+      "cost": "heavy",
+      "stage": "photo",
+      "fx": "hover-distort",
+      "desc": "L'immagine si deforma dove passa il puntatore.",
+      "use": "Griglie di progetti in portfolio di alto livello.",
+      "watch": "Un canvas per immagine è insostenibile: serve una scena unica condivisa.",
+      "approx": true
+    },
+    {
+      "n": 115,
+      "id": "displacement",
+      "name": "Transizione con displacement map",
+      "cat": "3d",
+      "tech": [
+        "WEBGL"
+      ],
+      "cost": "heavy",
+      "stage": "photo",
+      "fx": "displacement",
+      "desc": "Due immagini si sostituiscono attraverso una mappa di distorsione.",
+      "use": "Slider hero di siti-vetrina di fascia alta.",
+      "watch": "Bellissimo e fragilissimo: senza fallback il carosello resta bloccato sulla prima immagine.",
+      "approx": true
+    },
+    {
+      "n": 116,
+      "id": "text-3d",
+      "name": "Testo 3D estruso",
+      "cat": "3d",
+      "tech": [
+        "WEBGL"
+      ],
+      "cost": "heavy",
+      "stage": "scene",
+      "fx": "text-3d",
+      "desc": "Il titolo ha spessore e reagisce alla luce e al puntatore.",
+      "use": "Manifesti digitali, brand grafici, pagine di lancio.",
+      "watch": "Il testo vero deve esistere comunque nel DOM per SEO e accessibilità.",
+      "approx": true
+    },
+    {
+      "n": 117,
+      "id": "card-depth",
+      "name": "Card con profondità a strati",
+      "cat": "3d",
+      "tech": [
+        "CSS"
+      ],
+      "cost": "free",
+      "stage": "card",
+      "fx": "card-depth",
+      "desc": "Gli strati della card si separano in profondità muovendo il puntatore.",
+      "use": "L'effetto 3D più economico che esista: nessuna libreria, solo transform.",
+      "watch": "Serve `transform-style: preserve-3d` e una prospettiva sul contenitore, o gli strati restano piatti.",
+      "approx": false
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "enhanced-party-mode",
+  "owner": {
+    "name": "Maurolarese"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/mlarese/bmad-module-enhanced-party-mode",
+  "repository": "https://github.com/mlarese/bmad-module-enhanced-party-mode",
+  "keywords": [
+    "bmad",
+    "party-mode",
+    "craft",
+    "gdpr",
+    "infra",
+    "wordpress",
+    "fiscal"
+  ],
+  "plugins": [
+    {
+      "name": "epm",
+      "source": "./",
+      "description": "Consiglio di esperti craft/legal/infra/WP/fiscale per party mode e cantiere — Vesper, Vera, Jane, Elena, Rex, Niki, Commercialista Mondiale.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Maurolarese"
+      },
+      "skills": [
+        "./skills/epm-setup",
+        "./skills/agent-frontend-taste",
+        "./skills/agent-web-animations",
+        "./skills/agent-gdpr-counsel",
+        "./skills/agent-tech-law-counsel",
+        "./skills/agent-it-infra-expert",
+        "./skills/agent-wordpress-expert",
+        "./skills/agent-world-cpa"
+      ]
+    }
+  ]
+}

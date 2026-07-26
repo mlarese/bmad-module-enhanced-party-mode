@@ -1,0 +1,23 @@
+[
+  {"id": "t01", "query": "chiedi al commercialista mondiale delle scadenze IVA della mia SRL", "should_trigger": true},
+  {"id": "t02", "query": "agent-world-cpa: parere fiscale ancorato su CFC e holding italiana", "should_trigger": true},
+  {"id": "t03", "query": "Commercialista Mondiale — mappa adempimenti trimestre corrente", "should_trigger": true},
+  {"id": "t04", "query": "world cpa: confronto cross-border IT vs Irlanda per holding IP", "should_trigger": true},
+  {"id": "t05", "query": "sanatoria cartelle / rottamazione — voglio l'orientamento del commercialista mondiale", "should_trigger": true},
+  {"id": "t06", "query": "ho un accertamento AdE, chiedi al commercialista la mappa di reazione", "should_trigger": true},
+  {"id": "t07", "query": "contabilità operativa: come classifico un finanziamento soci in bilancio?", "should_trigger": true},
+  {"id": "t08", "query": "parere fiscale preciso su PE e transfer pricing light per la mia PMI", "should_trigger": true},
+  {"id": "t09", "query": "agent-world-cpa review della nota integrativa allegata", "should_trigger": true},
+  {"id": "t10", "query": "scadenze IMU e liquidazione IVA — commercialista mondiale per favore", "should_trigger": true},
+
+  {"id": "n01", "query": "quanto fa 22% di IVA su una fattura da 1000 euro? solo il calcolo", "should_trigger": false},
+  {"id": "n02", "query": "scrivimi una user story BMAD per il backlog del login", "should_trigger": false},
+  {"id": "n03", "query": "refactor this React component to use hooks", "should_trigger": false},
+  {"id": "n04", "query": "Jane Privacy — fammi un DPIA per il nuovo form lead", "should_trigger": false},
+  {"id": "n05", "query": "Elena Giuridis, cosa implica l'AI Act per il nostro SaaS?", "should_trigger": false},
+  {"id": "n06", "query": "come configuro GitHub Actions per Playwright?", "should_trigger": false},
+  {"id": "n07", "query": "traduci in inglese questa email di sollecito al fornitore", "should_trigger": false},
+  {"id": "n08", "query": "brainstorming creativo sul nome del prodotto fintech", "should_trigger": false},
+  {"id": "n09", "query": "il mio script bash di backup fallisce sul rollback — debug", "should_trigger": false},
+  {"id": "n10", "query": "spiega cos'è una LLC americana in due frasi da wikipedia-style, senza parere", "should_trigger": false}
+]

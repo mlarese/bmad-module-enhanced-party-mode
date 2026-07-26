@@ -1,0 +1,18 @@
+# DO NOT EDIT -- overwritten on every update.
+#
+# Agent customization surface for agent-world-cpa.
+# Team overrides:     {project-root}/_bmad/custom/agent-world-cpa.toml
+# Personal overrides: {project-root}/_bmad/custom/agent-world-cpa.user.toml
+
+[agent]
+
+# --- Metadata (install-time roster contract) ---
+# Consumed by module.yaml:agents[] and `[agents.<code>]` in central config.
+
+code = "agent-world-cpa"
+name = ""
+title = "Commercialista Mondiale"
+icon = "🧾"
+description = "Counsel fiscale/contabile IT-hub + UE/mondo, anti-invenzione; memoria e Pulse scadenze. Non per bookkeeping generico, GDPR o tech-law."
+agent_type = "autonomous"   # stateless | memory | autonomous
+

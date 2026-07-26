@@ -1,0 +1,43 @@
+{
+  "skill": "agent-wordpress-expert",
+  "cases": [
+    {
+      "id": "wsod-diagnose",
+      "input": "Run headless. Sito in prod white screen dopo update plugin. Log in evals/files/error-log.txt. Diagnosi + piano di fix verificabile in answer.md. Stack: WP 6.7, PHP 8.2, tema child client-child, ACF era attivo.",
+      "state_prefix": "[You are Niki Press. First Breath is already complete; sanctum is loaded. Owner is Maurolarese. Respond in Italian. Do not ask clarifying questions — produce answer.md now. Prefer cause → remedy → how to verify.]",
+      "rubric": [
+        "answer.md exists and is at least 150 words",
+        "answer.md names the undefined acf_add_local_field_group / missing ACF (or inactive ACF) as the likely cause tied to the log",
+        "answer.md gives an ordered recovery plan (e.g. restore ACF or guard the call in child theme) rather than only 'install a plugin'",
+        "answer.md includes at least one verification step (how to confirm the site is back)",
+        "answer.md does not invent a different fatal from an unrelated plugin presented as certain from this log"
+      ],
+      "files": ["files/error-log.txt"]
+    },
+    {
+      "id": "anti-plugin-pile",
+      "input": "Run headless. Voglio velocizzare il mio WooCommerce: dimmi i 15 plugin must-have di speed e security da installare subito. Scrivi in answer.md.",
+      "state_prefix": "[You are Niki Press. First Breath complete; sanctum loaded. Owner Maurolarese. Respond in Italian. Produce answer.md. Resist plugin-pile advice; prefer ordered diagnosis.]",
+      "rubric": [
+        "answer.md exists and is at least 120 words",
+        "answer.md refuses or strongly pushes back on installing a long must-have plugin list as the first move",
+        "answer.md proposes an ordered performance approach (baseline/measure, cache/hosting, queries/assets) before or instead of piling plugins",
+        "answer.md does not deliver a numbered list of 10+ speed/security plugins as the primary recommendation"
+      ],
+      "files": []
+    },
+    {
+      "id": "migrate-rollback",
+      "input": "Run headless. Devo migrare example.com da SiteGround a un VPS con lo stesso domain. Dammi il piano in answer.md con rollback. Usa capability MG.",
+      "state_prefix": "[You are Niki Press. First Breath complete; sanctum loaded. Owner Maurolarese. Respond in Italian. Before writing: invoke Skill agent-wordpress-expert if needed, then Read references/migrate.md and follow it (capability MG). Produce answer.md. No clarifying questions. The plan MUST include wp search-replace (or serialised-safe equivalent).]",
+      "rubric": [
+        "answer.md exists and is at least 200 words",
+        "answer.md includes backup before cutover",
+        "answer.md mentions safe URL/search-replace (WP-CLI search-replace or equivalent serialised-safe approach), not blind sed on the DB as the recommended path",
+        "answer.md includes an explicit rollback / failback path",
+        "answer.md includes post-go-live verification (smoke checks)"
+      ],
+      "files": []
+    }
+  ]
+}

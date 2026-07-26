@@ -1,0 +1,1903 @@
+{
+  "version": 1,
+  "purpose": "Archetipi hero per scelta visiva: miniature + nome + descrizione. Sorgente di verità di hero-gallery.html.",
+  "axes": {
+    "media": {
+      "still": {
+        "label": "Foto singola",
+        "note": "una sola immagine ferma nel primo viewport"
+      },
+      "carousel": {
+        "label": "Carosello",
+        "note": "più slide che si avvicendano (crossfade, slide, deck, verticale)"
+      },
+      "video": {
+        "label": "Video",
+        "note": "loop muto o filmato: `poster`, `muted`, `playsinline`, reduced-motion"
+      },
+      "none": {
+        "label": "Nessun media",
+        "note": "la hero è tipografia o grafica: nessuna foto, nessun filmato"
+      },
+      "collage": {
+        "label": "Collage",
+        "note": "più immagini insieme, formati misti, mosaico senza buchi"
+      },
+      "sequence": {
+        "label": "Sequenza a scroll",
+        "note": "pochi frame che avanzano col progress dello scroll"
+      },
+      "ui": {
+        "label": "UI di prodotto",
+        "note": "screenshot dell'app come fotografia del prodotto"
+      },
+      "map": {
+        "label": "Mappa",
+        "note": "il luogo come media, nei colori della palette, non interattivo"
+      },
+      "compare": {
+        "label": "Prima / dopo",
+        "note": "due immagini divise da una maniglia trascinabile"
+      }
+    },
+    "placement": {
+      "left": {
+        "label": "Testo a sinistra",
+        "note": "blocco copy sul terzo sinistro"
+      },
+      "right": {
+        "label": "Testo a destra",
+        "note": "blocco copy sul terzo destro"
+      },
+      "center": {
+        "label": "Testo centrato",
+        "note": "blocco copy al centro — massimo 2 sezioni centrate in pagina"
+      },
+      "bottom-left": {
+        "label": "Testo in basso a sinistra",
+        "note": "angolo basso, come i crediti di un manifesto"
+      },
+      "bottom": {
+        "label": "Testo in basso",
+        "note": "ancorato al bordo inferiore, centrato"
+      },
+      "top": {
+        "label": "Testo sopra il media",
+        "note": "copy fuori dall'immagine, sulla carta"
+      },
+      "split": {
+        "label": "Testo su due poli",
+        "note": "titolo su un polo, metadati o CTA sull'altro"
+      },
+      "rail": {
+        "label": "Testo su rail laterale",
+        "note": "colonna stretta, label anche in `writing-mode: vertical-rl`"
+      }
+    },
+    "panel": {
+      "solid": {
+        "label": "Plate pieno",
+        "note": "pannello tinta piena locale dietro il testo, ≤40% dell'area"
+      },
+      "transparent": {
+        "label": "Nessun pannello",
+        "note": "leggibilità dal crop, dal negative space o dal blend"
+      },
+      "wash": {
+        "label": "Velo chiaro",
+        "note": "wash col chiaro del brand su tutta la hero, testo scuro"
+      },
+      "glass": {
+        "label": "Pannello vetro",
+        "note": "traslucido con blur locale — una volta per progetto, con fallback"
+      },
+      "band": {
+        "label": "Fascia opaca",
+        "note": "fascia a tutta larghezza che taglia l'immagine"
+      },
+      "gradient-edge": {
+        "label": "Gradiente di un bordo",
+        "note": "un solo lato sfumato, ≤40% dell'area"
+      }
+    }
+  },
+  "archetypes": [
+    {
+      "id": "still-split-plate-left",
+      "name": "Split — plate a sinistra",
+      "media": "still",
+      "treatment": "split",
+      "placement": "left",
+      "panel": "solid",
+      "tone": "light",
+      "hero_copy": "left-solid",
+      "desc": "Hero divisa in due piani: pannello tinta piena a sinistra col blocco testo, foto a destra intatta senza un grammo di overlay.",
+      "use": "Quando la foto ha luce propria da difendere e il messaggio è lungo (claim + due righe + CTA).",
+      "watch": "Il taglio deve cadere fuori dal centro (55/45, 60/40): metà e metà legge come template.",
+      "sketch": {
+        "media_area": "half-right",
+        "chrome": []
+      },
+      "photo": "interior"
+    },
+    {
+      "id": "still-split-plate-right",
+      "name": "Split — plate a destra",
+      "media": "still",
+      "treatment": "split",
+      "placement": "right",
+      "panel": "solid",
+      "tone": "light",
+      "hero_copy": "right-solid",
+      "desc": "Simmetrico dello split: foto a sinistra a piena altezza, pannello pieno a destra con eyebrow, titolo e azione.",
+      "use": "Quando il soggetto della foto guarda o si apre verso destra e il testo chiude la composizione.",
+      "watch": "È la combinazione più abusata: usala solo se non è nelle ultime consegne (MEMORY `last_hero_copy`).",
+      "sketch": {
+        "media_area": "half-left",
+        "chrome": []
+      },
+      "photo": "coast"
+    },
+    {
+      "id": "still-editorial-above",
+      "name": "Editorial — titolo sopra la foto",
+      "media": "still",
+      "treatment": "editorial",
+      "placement": "top",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": null,
+      "desc": "Headline e riga di contesto vivono sulla carta, sopra l'immagine: zero overlay, la foto entra come secondo movimento.",
+      "use": "Brand editoriale, culturale, studi e portfolio: la tipografia annuncia, l'immagine conferma.",
+      "watch": "Serve una misura corta (10–20ch) e tracking negativo: il titolo su carta non ha la foto che lo sostiene.",
+      "sketch": {
+        "media_area": "bottom",
+        "chrome": []
+      },
+      "photo": "peaks"
+    },
+    {
+      "id": "still-editorial-caption",
+      "name": "Editorial — didascalia sotto",
+      "media": "still",
+      "treatment": "editorial",
+      "placement": "split",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": null,
+      "desc": "Immagine in alto a pieno taglio, sotto due poli: titolo a sinistra, didascalia o dato a destra allineato al bordo.",
+      "use": "Quando la terza voce tipografica (mono, italic) porta un'informazione vera: anno, luogo, coperti, indirizzo.",
+      "watch": "Il polo destro è per metadati, mai per il corpo del testo.",
+      "sketch": {
+        "media_area": "top",
+        "chrome": []
+      },
+      "photo": "street"
+    },
+    {
+      "id": "still-inset-frame",
+      "name": "Inset su carta",
+      "media": "still",
+      "treatment": "inset",
+      "placement": "bottom",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": null,
+      "desc": "Foto rientrata dai bordi come una stampa incorniciata dal fondo pagina; il blocco testo sta sulla carta, sotto.",
+      "use": "Hospitality calda, food, artigianato: il margine di carta dà quiete e fa respirare l'immagine.",
+      "watch": "Il rientro deve derivare dai token di griglia, non da un `padding: 40px` a occhio.",
+      "sketch": {
+        "media_area": "inset-top",
+        "chrome": []
+      },
+      "photo": "interior"
+    },
+    {
+      "id": "still-negative-left",
+      "name": "Negative space a sinistra",
+      "media": "still",
+      "treatment": "negative-space",
+      "placement": "left",
+      "panel": "transparent",
+      "tone": "light",
+      "hero_copy": "left-transparent",
+      "desc": "Foto full-bleed scelta per il suo vuoto (cielo, neve, muro, acqua) e testo appoggiato lì dentro, senza plate né velo.",
+      "use": "Quando puoi scegliere il crop: è la hero più luminosa possibile su immagine piena.",
+      "watch": "Se il vuoto non c'è, l'archetipo cade: verifica il contrasto sul crop reale, non sulla mockup.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": []
+      },
+      "photo": "night"
+    },
+    {
+      "id": "still-negative-right",
+      "name": "Negative space a destra",
+      "media": "still",
+      "treatment": "negative-space",
+      "placement": "right",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": "right-transparent",
+      "desc": "Stesso principio speculare: il soggetto occupa la sinistra, il testo entra nell'area calma di destra a fondo nudo.",
+      "use": "Ritratti e still life che guardano a sinistra; interni con una parete libera sul lato destro.",
+      "watch": "Su mobile il crop cambia: definisci `object-position` per il ritaglio verticale.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": []
+      },
+      "photo": "sign"
+    },
+    {
+      "id": "still-wash-center",
+      "name": "Velo chiaro centrato",
+      "media": "still",
+      "treatment": "velo-chiaro",
+      "placement": "center",
+      "panel": "wash",
+      "tone": "dark",
+      "hero_copy": "center-transparent",
+      "desc": "Wash col chiaro del brand sopra la foto e testo scuro al centro: la hero diventa luminosa invece di annerirsi.",
+      "use": "Località di luce alta — neve, mare, giorno, spa — e brand che devono leggere puliti.",
+      "watch": "È l'antidoto al velo scuro, non il suo gemello: resta sul chiaro del brand, non sul bianco generico.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": []
+      },
+      "photo": "coast"
+    },
+    {
+      "id": "still-band-center",
+      "name": "Fascia locale",
+      "media": "still",
+      "treatment": "plate",
+      "placement": "center",
+      "panel": "band",
+      "tone": "light",
+      "hero_copy": "center-solid",
+      "desc": "Una sola fascia opaca a tutta larghezza taglia la foto e ospita il titolo; sopra e sotto l'immagine resta intatta.",
+      "use": "Insegne e statement brevi: funziona quando il claim è di tre parole.",
+      "watch": "La fascia è una decisione grafica: dichiara altezza e posizione (terzo alto o basso), non centrala per default.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": []
+      },
+      "photo": "sign"
+    },
+    {
+      "id": "still-plate-bottom-left",
+      "name": "Plate d'angolo (poster)",
+      "media": "still",
+      "treatment": "plate",
+      "placement": "bottom-left",
+      "panel": "solid",
+      "tone": "light",
+      "hero_copy": null,
+      "desc": "Plate opaco ancorato all'angolo in basso a sinistra, come il blocco crediti di un manifesto: copre poco, pesa molto.",
+      "use": "Foto forti e piene dove nessuna zona è calma: l'angolo è il compromesso onesto.",
+      "watch": "Massimo ~35% dell'area; se cresce diventa un velo travestito.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": []
+      },
+      "photo": "peaks"
+    },
+    {
+      "id": "still-duotone-knockout",
+      "name": "Duotone + knockout",
+      "media": "still",
+      "treatment": "duotone",
+      "placement": "center",
+      "panel": "transparent",
+      "tone": "light",
+      "hero_copy": "center-transparent",
+      "desc": "Foto virata nei due toni della palette e tipografia in `mix-blend-mode`: il contrasto nasce dal grading, non dallo scurimento.",
+      "use": "Brand grafici, eventi, sport, notte urbana: quando la foto può diventare materia di marca.",
+      "watch": "Il blend va verificato sui punti chiari e scuri della foto vera, o una parola sparisce.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [
+          "duotone"
+        ]
+      },
+      "photo": "city"
+    },
+    {
+      "id": "still-gradient-edge",
+      "name": "Gradiente di un solo bordo",
+      "media": "still",
+      "treatment": "gradiente-bordo",
+      "placement": "left",
+      "panel": "gradient-edge",
+      "tone": "light",
+      "hero_copy": "left-transparent",
+      "desc": "Un gradiente entra da un solo lato (≤40% dell'area) e regge il testo; il resto della foto rimane pulito.",
+      "use": "Immagini uniformi senza vuoti, quando serve leggibilità garantita senza pannello.",
+      "watch": "Un bordo solo. Due gradienti opposti sono il velo scuro rimontato in due pezzi.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": []
+      },
+      "photo": "street"
+    },
+    {
+      "id": "still-glass-right",
+      "name": "Pannello vetro a destra",
+      "media": "still",
+      "treatment": "plate",
+      "placement": "right",
+      "panel": "glass",
+      "tone": "dark",
+      "hero_copy": "right-solid",
+      "desc": "Pannello traslucido con blur locale sopra la foto: si intravede il colore sotto, il testo resta scuro e leggibile.",
+      "use": "Interni luminosi, wellness, retail premium; una volta per progetto, non come risposta a ogni pannello.",
+      "watch": "`backdrop-filter` costa e su Android vecchio cade: prevedi il fallback tinta piena.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": []
+      },
+      "photo": "interior"
+    },
+    {
+      "id": "still-mask-arc",
+      "name": "Foto mascherata (arco)",
+      "media": "still",
+      "treatment": "inset",
+      "placement": "left",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": "left-transparent",
+      "desc": "L'immagine vive dentro una forma — arco, cerchio, `clip-path` — e il testo le sta accanto sulla carta.",
+      "use": "Architettura, ospitalità storica, brand con un'identità di forma (portale, volta, bottiglia).",
+      "watch": "La forma deve tornare altrove nella pagina (bottone, gallery, footer), sennò è un vezzo isolato.",
+      "sketch": {
+        "media_area": "mask-arc",
+        "chrome": []
+      },
+      "photo": "snow"
+    },
+    {
+      "id": "still-offset-overlap",
+      "name": "Blocco che scavalca la foto",
+      "media": "still",
+      "treatment": "split",
+      "placement": "right",
+      "panel": "solid",
+      "tone": "light",
+      "hero_copy": "right-solid",
+      "desc": "Il pannello testo è spostato in sovrapposizione sul bordo dell'immagine: due piani che si accavallano, con ombra netta o nessuna.",
+      "use": "Quando vuoi profondità senza parallax e la griglia fine ti dà l'off-center per farlo.",
+      "watch": "La sovrapposizione va dichiarata nella griglia (`grid-column` esplicito), non ottenuta con `margin-left: -60px`.",
+      "sketch": {
+        "media_area": "half-left",
+        "chrome": [
+          "offset"
+        ]
+      },
+      "photo": "desk"
+    },
+    {
+      "id": "still-bottom-anchor",
+      "name": "Full-bleed ancorata in basso",
+      "media": "still",
+      "treatment": "gradiente-bordo",
+      "placement": "bottom",
+      "panel": "gradient-edge",
+      "tone": "light",
+      "hero_copy": null,
+      "desc": "Immagine a pieno viewport e blocco testo ancorato al bordo inferiore, sostenuto solo dal gradiente di quel bordo.",
+      "use": "Hero cinematografiche dove la parte alta della foto è il soggetto e va lasciata libera.",
+      "watch": "Su mobile usa `min-height` in `svh`: il 100vh bloccato taglia il testo sotto la barra del browser.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [
+          "scroll-cue"
+        ]
+      },
+      "photo": "wave"
+    },
+    {
+      "id": "still-rail-vertical",
+      "name": "Rail verticale + foto",
+      "media": "still",
+      "treatment": "editorial",
+      "placement": "rail",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": null,
+      "desc": "Colonna laterale stretta con label in `writing-mode: vertical-rl` (luogo, anno, numero di sezione) e foto che occupa il resto.",
+      "use": "Direzioni con `grid_system: asym-rail`: il rail nasce dalla griglia e torna in tutte le sezioni.",
+      "watch": "Il rail deve portare informazione, non una parola decorativa girata di 90°.",
+      "sketch": {
+        "media_area": "half-right",
+        "chrome": [
+          "vertical-label"
+        ]
+      },
+      "photo": "coast"
+    },
+    {
+      "id": "carousel-crossfade-plate",
+      "name": "Carosello crossfade — testo fermo",
+      "media": "carousel",
+      "treatment": "carousel",
+      "placement": "left",
+      "panel": "solid",
+      "tone": "light",
+      "hero_copy": "left-solid",
+      "desc": "Le slide si dissolvono una nell'altra dietro un blocco testo che non si muove: cambia il mondo, resta il messaggio.",
+      "use": "Hospitality e ristorazione con 3–5 immagini di pari valore e un solo claim.",
+      "watch": "Il plate deve reggere su tutte le slide: verifica il contrasto sulla più chiara e sulla più scura.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [
+          "dots"
+        ]
+      },
+      "photo": "interior"
+    },
+    {
+      "id": "carousel-hard-slide",
+      "name": "Carosello hard-slide — testo per slide",
+      "media": "carousel",
+      "treatment": "carousel",
+      "placement": "bottom-left",
+      "panel": "transparent",
+      "tone": "light",
+      "hero_copy": null,
+      "desc": "Slide che traslano di taglio, ognuna col proprio titolo che entra in ritardo sul movimento dell'immagine.",
+      "use": "Quando le slide raccontano cose diverse (camere, portate, servizi) e ognuna merita una riga sua.",
+      "watch": "Tre claim diversi in cinque secondi non si leggono: dai ≥6s per slide e una pausa su hover/focus.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [
+          "dots",
+          "arrows"
+        ]
+      },
+      "photo": "street"
+    },
+    {
+      "id": "carousel-split-static",
+      "name": "Carosello solo sul lato foto",
+      "media": "carousel",
+      "treatment": "carousel",
+      "placement": "left",
+      "panel": "solid",
+      "tone": "light",
+      "hero_copy": "left-solid",
+      "desc": "Il pannello di testo è fisso a sinistra, il carosello gira solo nella metà destra: movimento contenuto in un riquadro.",
+      "use": "Quando servono più immagini ma la pagina non deve sembrare uno slideshow.",
+      "watch": "Le slide devono avere lo stesso crop: dentro un riquadro ogni salto di inquadratura si vede.",
+      "sketch": {
+        "media_area": "half-right",
+        "chrome": [
+          "dots-vertical"
+        ]
+      },
+      "photo": "snow"
+    },
+    {
+      "id": "carousel-peek",
+      "name": "Carosello con peek",
+      "media": "carousel",
+      "treatment": "carousel",
+      "placement": "left",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": "left-transparent",
+      "desc": "La slide corrente non arriva al bordo: si vede la fetta della successiva, che dichiara che c'è un seguito.",
+      "use": "Cataloghi visivi — piatti, camere, prodotti — dove scorrere è parte del messaggio.",
+      "watch": "Il peek va replicato su mobile (una fetta più stretta), non eliminato: è la firma dell'archetipo.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [
+          "peek",
+          "counter"
+        ]
+      },
+      "photo": "coast"
+    },
+    {
+      "id": "carousel-thumbs",
+      "name": "Carosello con rail di miniature",
+      "media": "carousel",
+      "treatment": "carousel",
+      "placement": "right",
+      "panel": "solid",
+      "tone": "light",
+      "hero_copy": "right-solid",
+      "desc": "Slide grande più una fila di miniature cliccabili e un contatore 01/04: navigazione esplicita, niente dots ciechi.",
+      "use": "Quando le immagini sono contenuti scelti (camere, sale, itinerari) e l'utente deve poterle scegliere.",
+      "watch": "Le miniature sono controlli: focus visibile, `aria-current`, target ≥44px al tocco.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [
+          "thumbs",
+          "counter"
+        ]
+      },
+      "photo": "peaks"
+    },
+    {
+      "id": "carousel-deck",
+      "name": "Deck di card che avanza",
+      "media": "carousel",
+      "treatment": "carousel",
+      "placement": "right",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": "right-transparent",
+      "desc": "Le immagini sono card impilate con leggero offset: la prima esce, la seconda sale al suo posto, come un mazzo che si sfoglia.",
+      "use": "Portfolio, studi creativi, brand di prodotto: il gesto è tattile e ricorda una collezione.",
+      "watch": "Serve profondità coerente (una sola scala di ombra/offset) e reduced-motion che ferma l'auto-avanzamento.",
+      "sketch": {
+        "media_area": "inset-left",
+        "chrome": [
+          "deck"
+        ]
+      },
+      "photo": "desk"
+    },
+    {
+      "id": "carousel-vertical",
+      "name": "Carosello verticale",
+      "media": "carousel",
+      "treatment": "carousel",
+      "placement": "center",
+      "panel": "transparent",
+      "tone": "light",
+      "hero_copy": "center-transparent",
+      "desc": "Le slide scorrono in verticale con paginazione a lato: movimento inatteso che rompe l'abitudine dello slider orizzontale.",
+      "use": "Brand cinematici e pagine con scroll narrativo, dove il verticale è già la lingua della pagina.",
+      "watch": "Non deve rubare lo scroll: il carosello è auto o a click, mai un hijack della rotellina.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [
+          "dots-vertical"
+        ]
+      },
+      "photo": "wave"
+    },
+    {
+      "id": "carousel-marquee",
+      "name": "Striscia continua invece di slide",
+      "media": "carousel",
+      "treatment": "marquee",
+      "placement": "top",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": null,
+      "desc": "Nessuna slide discreta: una striscia di immagini che scorre in loop sotto una headline grande e ferma.",
+      "use": "Quando le immagini sono tante e nessuna è protagonista: atmosfera invece di catalogo.",
+      "watch": "Loop senza salto (duplica il set) e stop su `prefers-reduced-motion` e su hover.",
+      "sketch": {
+        "media_area": "strip-bottom",
+        "chrome": [
+          "marquee"
+        ]
+      },
+      "photo": "street"
+    },
+    {
+      "id": "video-ambient-plate",
+      "name": "Video ambient + plate",
+      "media": "video",
+      "treatment": "video-plate",
+      "placement": "right",
+      "panel": "solid",
+      "tone": "light",
+      "hero_copy": "right-solid",
+      "desc": "Loop muto a colori pieni con il testo su un plate opaco laterale: il filmato non viene annerito per far leggere due righe.",
+      "use": "Cucina, laboratorio, cantiere, mare: dove il movimento è la prova che il posto è vivo.",
+      "watch": "`poster`, `muted`, `playsinline`, ≤6s, e su `prefers-reduced-motion` resta il poster fermo.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [
+          "play",
+          "progress"
+        ]
+      },
+      "photo": "night"
+    },
+    {
+      "id": "video-inset-window",
+      "name": "Video in finestra rientrata",
+      "media": "video",
+      "treatment": "inset",
+      "placement": "left",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": "left-transparent",
+      "desc": "Il video sta in una finestra rientrata o mascherata a destra; il testo vive sulla carta a sinistra, senza overlay.",
+      "use": "Quando il filmato è breve e prezioso e la pagina deve restare chiara e leggibile.",
+      "watch": "Il rapporto della finestra è una scelta (`4/5`, `1/1.2`), non `16/9` per inerzia.",
+      "sketch": {
+        "media_area": "window-right",
+        "chrome": [
+          "play"
+        ]
+      },
+      "photo": "interior"
+    },
+    {
+      "id": "video-split",
+      "name": "Video su metà schermo",
+      "media": "video",
+      "treatment": "split",
+      "placement": "left",
+      "panel": "solid",
+      "tone": "light",
+      "hero_copy": "left-solid",
+      "desc": "Metà pannello tinta piena col messaggio, metà loop a piena altezza: lo split classico con il movimento su un lato solo.",
+      "use": "Servizi e prodotti che si spiegano in una frase, con un gesto da mostrare accanto.",
+      "watch": "Il video verticale su mobile va sopra o sotto il testo, non compresso in una fascia da 120px.",
+      "sketch": {
+        "media_area": "half-right",
+        "chrome": [
+          "play"
+        ]
+      },
+      "photo": "wave"
+    },
+    {
+      "id": "video-type-mask",
+      "name": "Video dentro la tipografia",
+      "media": "video",
+      "treatment": "type-first",
+      "placement": "center",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": "center-transparent",
+      "desc": "Il filmato si vede solo dentro le lettere del titolo (mask o `background-clip`): la parola diventa la finestra sul mondo.",
+      "use": "Statement di brand con una parola sola, in cui il nome deve restare in testa.",
+      "watch": "Fallback obbligatorio a testo pieno; serve un font molto pesante o la maschera non si legge.",
+      "sketch": {
+        "media_area": "none",
+        "chrome": [
+          "mask-type"
+        ],
+        "copy_shift": "bottom",
+        "copy_hide": [
+          "title"
+        ]
+      },
+      "photo": "wave",
+      "copy": {
+        "title": "Ponente"
+      }
+    },
+    {
+      "id": "video-micro-loops",
+      "name": "Tre micro-loop invece di un film",
+      "media": "video",
+      "treatment": "collage",
+      "placement": "left",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": "left-transparent",
+      "desc": "Due o tre loop piccoli in griglia accanto alla headline, ognuno su un dettaglio: mani, fuoco, acqua.",
+      "use": "Quando non hai un filmato d'insieme buono ma hai frammenti belli — e pesa meno di un full-bleed.",
+      "watch": "Tre loop = tre decodifiche: file corti, `preload=\"metadata\"`, uno solo in play su mobile.",
+      "sketch": {
+        "media_area": "mosaic-right",
+        "chrome": [
+          "play",
+          "loops"
+        ]
+      },
+      "photo": "street"
+    },
+    {
+      "id": "video-cover-cta",
+      "name": "Video full-bleed + CTA",
+      "media": "video",
+      "treatment": "video-plate",
+      "placement": "bottom-left",
+      "panel": "transparent",
+      "tone": "light",
+      "hero_copy": null,
+      "desc": "Filmato a pieno viewport, controllo di play e audio minimale, titolo e CTA raccolti nell'angolo basso.",
+      "use": "Brand e location dove il video è il prodotto (hotel, resort, evento, showreel).",
+      "watch": "Il controllo audio deve esserci ed essere raggiungibile da tastiera; niente autoplay con suono.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [
+          "play",
+          "progress"
+        ]
+      },
+      "photo": "night"
+    },
+    {
+      "id": "type-first-vw",
+      "name": "Type-first in vw nudi",
+      "media": "none",
+      "treatment": "type-first",
+      "placement": "top",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": null,
+      "desc": "Il display occupa il viewport in unità viewport nude (8–24vw); le immagini, se ci sono, entrano come inserti piccoli.",
+      "use": "Brand con un nome forte, studi, cultura, manifesti: la tipografia è la superficie.",
+      "watch": "Il `vw` non è `clamp`: verifica il taglio a 375px e la sillabazione delle parole lunghe.",
+      "sketch": {
+        "media_area": "none",
+        "chrome": [
+          "inserts"
+        ],
+        "title_scale": "xl"
+      },
+      "photo": "desk",
+      "copy": {
+        "title": "Studio Filo",
+        "sub": "Identità e siti per chi fa cose vere."
+      }
+    },
+    {
+      "id": "text-solid-brand",
+      "name": "Solo testo su tinta di brand",
+      "media": "none",
+      "treatment": "type-first",
+      "placement": "left",
+      "panel": "transparent",
+      "tone": "light",
+      "hero_copy": "left-transparent",
+      "desc": "Nessun media: la hero è una campitura piena del colore di marca con titolo, sottotitolo e azione, più un rail di metadati.",
+      "use": "Quando le foto disponibili sono brutte o assenti; SaaS, servizi professionali, annunci.",
+      "watch": "Senza foto tutto il peso è su tipografia e ritmo: serve la terza voce e almeno un dettaglio di superficie.",
+      "sketch": {
+        "media_area": "none",
+        "chrome": [
+          "flat-brand"
+        ]
+      },
+      "photo": null,
+      "copy": {
+        "eyebrow": "Piattaforma · revenue",
+        "title": "Il prezzo giusto, ogni notte",
+        "sub": "Tariffe dinamiche per hotel indipendenti.",
+        "cta": "Prova la demo"
+      }
+    },
+    {
+      "id": "text-rule-paper",
+      "name": "Solo testo su carta rigata",
+      "media": "none",
+      "treatment": "type-first",
+      "placement": "center",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": "center-transparent",
+      "desc": "La `surface_texture` fa da media: righe hairline o pattern SVG col passo della griglia, testo centrato sopra.",
+      "use": "Editoriale, archivi, studi legali o tecnici: sobrio senza essere vuoto, peso zero.",
+      "watch": "Il passo del pattern deve agganciarsi al modulo di griglia o alla riga di base, non essere un valore casuale.",
+      "sketch": {
+        "media_area": "none",
+        "chrome": [
+          "rules"
+        ]
+      },
+      "photo": null,
+      "copy": {
+        "eyebrow": "Archivio · 1908–oggi",
+        "title": "Cento anni di carte, una stanza",
+        "sub": "Consultazione su appuntamento, sala lettura al primo piano.",
+        "cta": "Prenota la sala"
+      }
+    },
+    {
+      "id": "text-mesh-light",
+      "name": "Luce radiale come sfondo",
+      "media": "none",
+      "treatment": "type-first",
+      "placement": "center",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": "center-transparent",
+      "desc": "Due o tre luci radiali di palette, con raggio dichiarato, dietro un blocco di testo centrato: profondità senza immagini.",
+      "use": "Prodotto digitale, tech, eventi: quando serve atmosfera e non hai materiale fotografico.",
+      "watch": "Luci con raggio (`transparent 8–15rem`), non un gradiente lineare a tutta pagina.",
+      "sketch": {
+        "media_area": "none",
+        "chrome": [
+          "mesh"
+        ]
+      },
+      "photo": null,
+      "copy": {
+        "eyebrow": "Festival · 12–15 giugno",
+        "title": "Quattro notti di musica in cava",
+        "sub": "Venti concerti, navette dal centro, biglietti a scaglioni.",
+        "cta": "Compra il biglietto"
+      }
+    },
+    {
+      "id": "text-diptych",
+      "name": "Dittico di testo",
+      "media": "none",
+      "treatment": "editorial",
+      "placement": "split",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": null,
+      "desc": "Due poli tipografici sulla stessa riga d'oro: titolo grande a sinistra, paragrafo e CTA a destra, hairline che li separa.",
+      "use": "Manifesti, studi, agenzie: dichiara subito posizione e servizio senza immagini.",
+      "watch": "I due poli devono avere misure diverse (10–20ch e 55–68ch), sennò sono due colonne uguali.",
+      "sketch": {
+        "media_area": "none",
+        "chrome": [
+          "rules"
+        ]
+      },
+      "photo": null,
+      "copy": {
+        "eyebrow": "Studio legale · Verona",
+        "title": "Diritto del lavoro, senza giri",
+        "sub": "Assistiamo imprese e persone nei contenziosi e nei contratti.",
+        "cta": "Fissa un incontro"
+      }
+    },
+    {
+      "id": "ui-product-right",
+      "name": "Hero prodotto — UI a destra",
+      "media": "ui",
+      "treatment": "ui-shot",
+      "placement": "left",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": "left-transparent",
+      "desc": "Claim e prova a sinistra su carta, schermata di prodotto a destra ritagliata dal bordo: l'interfaccia è la fotografia.",
+      "use": "SaaS, dashboard, tool B2B: mostrare la cosa vale più di descriverla.",
+      "watch": "Lo screenshot deve essere reale e leggibile a 375px (ritaglia un pannello, non l'intera app).",
+      "sketch": {
+        "media_area": "window-right",
+        "chrome": [
+          "window"
+        ]
+      },
+      "photo": "ui-shot"
+    },
+    {
+      "id": "ui-product-bleed",
+      "name": "Hero prodotto — UI che sborda",
+      "media": "ui",
+      "treatment": "ui-shot",
+      "placement": "center",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": "center-transparent",
+      "desc": "Testo centrato in alto e schermata che entra dal basso tagliata dal viewport: invita a scorrere per vedere il resto.",
+      "use": "Lanci di prodotto e pagine feature, con la UI come oggetto di scena.",
+      "watch": "Solo qui la centratura è concessa: conta come una delle due sezioni centrate della pagina.",
+      "sketch": {
+        "media_area": "bottom",
+        "chrome": [
+          "window"
+        ],
+        "copy_shift": "center-top"
+      },
+      "photo": "ui-shot"
+    },
+    {
+      "id": "collage-mosaic",
+      "name": "Mosaico di più foto",
+      "media": "collage",
+      "treatment": "collage",
+      "placement": "center",
+      "panel": "solid",
+      "tone": "light",
+      "hero_copy": "center-solid",
+      "desc": "Tre a cinque immagini di formato diverso tessono il primo viewport e un plate centrale opaco tiene il titolo.",
+      "use": "Quando la varietà è il messaggio: menu, collezioni, festival, portfolio.",
+      "watch": "Vale la regola della gallery: mosaico senza buchi, ordine L→R, formati misti dichiarati.",
+      "sketch": {
+        "media_area": "mosaic",
+        "chrome": []
+      },
+      "photo": "interior"
+    },
+    {
+      "id": "sequence-scroll",
+      "name": "Sequenza legata allo scroll",
+      "media": "sequence",
+      "treatment": "sequence",
+      "placement": "center",
+      "panel": "transparent",
+      "tone": "light",
+      "hero_copy": "center-transparent",
+      "desc": "Pochi frame che avanzano col progress dello scroll mentre il titolo resta agganciato: il movimento è guidato dalla mano.",
+      "use": "Prodotti che si trasformano, ricette, cantieri, prima-durante-dopo cinematico.",
+      "watch": "Frame pochi e leggeri (6–12, preload), reversibile, e su reduced-motion si ferma al primo.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [
+          "frames",
+          "progress"
+        ]
+      },
+      "photo": "wave"
+    },
+    {
+      "id": "map-place-plate",
+      "name": "Mappa del luogo come media",
+      "media": "map",
+      "treatment": "map",
+      "placement": "right",
+      "panel": "solid",
+      "tone": "light",
+      "hero_copy": "right-solid",
+      "desc": "La mappa stilizzata del posto occupa la hero e il plate porta nome, indirizzo e azione: il luogo è la prima informazione.",
+      "use": "Attività dove la posizione decide (rifugio, bistrot di quartiere, stabilimento, noleggio).",
+      "watch": "Mappa nei colori della palette e non interattiva nella hero: l'iframe che cattura lo scroll è un fallimento.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [
+          "pin"
+        ]
+      },
+      "photo": "map"
+    },
+    {
+      "id": "compare-before-after",
+      "name": "Prima / dopo",
+      "media": "compare",
+      "treatment": "compare",
+      "placement": "top",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": null,
+      "desc": "Due immagini divise da una maniglia trascinabile, titolo sopra sulla carta: la trasformazione si prova, non si racconta.",
+      "use": "Restauro, ristrutturazione, estetica, pulizie tecniche, riqualificazione.",
+      "watch": "Le due foto devono avere stesso punto di vista e stessa luce, e la maniglia va manovrabile da tastiera.",
+      "sketch": {
+        "media_area": "compare",
+        "chrome": [
+          "handle"
+        ]
+      },
+      "photo": "street"
+    },
+    {
+      "id": "fullbleed-header-reveal",
+      "name": "Full-bleed senza nav (header reveal)",
+      "media": "still",
+      "treatment": "negative-space",
+      "placement": "bottom",
+      "panel": "transparent",
+      "tone": "light",
+      "hero_copy": null,
+      "desc": "Primo viewport senza chrome: solo immagine e una riga in basso; la nav compare quando lo scroll supera la soglia.",
+      "use": "Hero d'impatto dove ogni elemento in più rovina il silenzio: brand, resort, fotografia.",
+      "watch": "Serve un accesso al menu comunque raggiungibile (tasto o skip-link): l'impatto non giustifica un vicolo cieco.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [
+          "scroll-cue"
+        ]
+      },
+      "photo": "coast"
+    },
+    {
+      "id": "search-center-plate",
+      "name": "Barra di ricerca al centro",
+      "media": "still",
+      "treatment": "search-first",
+      "placement": "center",
+      "panel": "band",
+      "tone": "light",
+      "hero_copy": "center-solid",
+      "desc": "Foto del luogo, claim breve su fascia, e sotto la barra che fa la sola cosa che l'utente è venuto a fare: cercare.",
+      "use": "Portali, travel, immobiliare, marketplace: quando l'intento è già formato e la hero deve solo non intralciarlo.",
+      "watch": "La barra è il vero CTA — togli il bottone dal blocco copy o litigano. Su mobile diventa un campo solo che apre il pannello.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [
+          "searchbar"
+        ],
+        "copy_hide": [
+          "cta"
+        ]
+      },
+      "photo": "city"
+    },
+    {
+      "id": "booking-bar-hotel",
+      "name": "Barra di prenotazione (date + ospiti)",
+      "media": "still",
+      "treatment": "search-first",
+      "placement": "center",
+      "panel": "transparent",
+      "tone": "light",
+      "hero_copy": "center-transparent",
+      "desc": "Arrivo, partenza, ospiti e verifica disponibilità dentro il primo viewport: la hero è il motore di prenotazione.",
+      "use": "Hotel, B&B, rifugi, case vacanza — dove ogni click in più verso il booking engine è margine perso.",
+      "watch": "Tre campi al massimo. Se il gestionale non risponde in tempo reale, la barra promette una cosa che il sito non mantiene.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [
+          "bookingbar"
+        ],
+        "copy_hide": [
+          "cta"
+        ]
+      },
+      "photo": "interior"
+    },
+    {
+      "id": "stat-trio-photo",
+      "name": "Tre numeri come protagonisti",
+      "media": "still",
+      "treatment": "stat-first",
+      "placement": "left",
+      "panel": "transparent",
+      "tone": "light",
+      "hero_copy": "left-transparent",
+      "desc": "Il claim resta corto e il peso lo portano tre cifre in fila sul bordo basso: anni, stanze, punteggio.",
+      "use": "Quando la credibilità è numerica e verificabile — storicità, capienza, recensioni, capitale gestito.",
+      "watch": "Numeri veri o niente. Tre è il tetto: al quarto diventa un cruscotto e nessuno ne legge uno.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [
+          "stats"
+        ],
+        "copy_hide": [
+          "cta",
+          "sub"
+        ]
+      },
+      "photo": "peaks"
+    },
+    {
+      "id": "logo-wall-claim",
+      "name": "Claim + muro di loghi",
+      "media": "none",
+      "treatment": "type-first",
+      "placement": "center",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": "center-transparent",
+      "desc": "Nessuna foto: una frase che promette e la fila di chi ci ha già creduto, su carta rigata.",
+      "use": "B2B, agenzie, SaaS con clienti riconoscibili: la prova sociale vale più di uno stock photo.",
+      "watch": "Loghi in grigio uniforme e stessa altezza ottica. Se i marchi non li conosce nessuno, la fila lavora contro di te.",
+      "sketch": {
+        "media_area": "none",
+        "chrome": [
+          "rules",
+          "logos"
+        ],
+        "copy_hide": [
+          "cta"
+        ]
+      },
+      "photo": null,
+      "copy": {
+        "eyebrow": "Dal 2011",
+        "title": "Costruiamo la parte che i vostri clienti toccano.",
+        "sub": "Design e front-end per aziende che vendono cose serie.",
+        "cta": "Parliamone"
+      }
+    },
+    {
+      "id": "quote-review-full",
+      "name": "Citazione come hero",
+      "media": "still",
+      "treatment": "editorial",
+      "placement": "left",
+      "panel": "transparent",
+      "tone": "light",
+      "hero_copy": "left-transparent",
+      "desc": "Foto piena e, su un pannello di carta, il giudizio di qualcuno che conta più di quanto puoi dire tu di te.",
+      "use": "Ristoranti recensiti, hotel premiati, servizi con testimonianze forti e attribuibili.",
+      "watch": "Firma e testata sempre visibili: una citazione anonima è un claim travestito. Massimo due righe.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [
+          "quote"
+        ],
+        "copy_hide": [
+          "sub",
+          "cta"
+        ]
+      },
+      "photo": "night"
+    },
+    {
+      "id": "price-list-menu",
+      "name": "Listino dentro la hero",
+      "media": "still",
+      "treatment": "editorial",
+      "placement": "left",
+      "panel": "transparent",
+      "tone": "light",
+      "hero_copy": "left-transparent",
+      "desc": "Il menu del giorno, tre voci e i prezzi, accanto alla foto: risponde subito alla domanda vera.",
+      "use": "Ristoranti, bistrot, servizi a listino semplice — quando il prezzo è un argomento e non un imbarazzo.",
+      "watch": "Va tenuto aggiornato o diventa un danno. Se il listino cambia ogni giorno, serve un campo editabile, non HTML statico.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [
+          "price-list"
+        ],
+        "copy_hide": [
+          "sub"
+        ]
+      },
+      "photo": "street"
+    },
+    {
+      "id": "form-lead-wash",
+      "name": "Velo chiaro + form di contatto",
+      "media": "still",
+      "treatment": "velo-chiaro",
+      "placement": "center",
+      "panel": "wash",
+      "tone": "dark",
+      "hero_copy": "center-transparent",
+      "desc": "Un velo chiaro calma la foto e lascia leggere il titolo; sotto, un solo campo e un bottone.",
+      "use": "Lead magnet, liste d'attesa, newsletter di prodotto: quando l'obiettivo unico è l'indirizzo email.",
+      "watch": "Un campo solo. Ogni campo aggiunto costa conversione, e la privacy va linkata sotto, non nascosta.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [
+          "form"
+        ],
+        "copy_hide": [
+          "cta"
+        ]
+      },
+      "photo": "desk"
+    },
+    {
+      "id": "countdown-event",
+      "name": "Conto alla rovescia",
+      "media": "still",
+      "treatment": "plate",
+      "placement": "center",
+      "panel": "transparent",
+      "tone": "light",
+      "hero_copy": "center-transparent",
+      "desc": "Data e ore che scendono sotto il titolo: la hero dichiara che esiste una scadenza reale.",
+      "use": "Eventi, aperture, festival, drop a tiratura: urgenza vera, con una data che esiste in calendario.",
+      "watch": "Countdown finto = credibilità bruciata. Serve lo stato dopo lo zero, e il fuso orario dichiarato.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [
+          "countdown"
+        ],
+        "copy_hide": [
+          "cta"
+        ]
+      },
+      "photo": "night"
+    },
+    {
+      "id": "index-hover-list",
+      "name": "Indice numerato che rivela",
+      "media": "still",
+      "treatment": "editorial",
+      "placement": "right",
+      "panel": "transparent",
+      "tone": "light",
+      "hero_copy": "right-transparent",
+      "desc": "Una lista numerata delle sezioni: al passaggio del mouse la foto dietro cambia sulla voce puntata.",
+      "use": "Portfolio, studi, strutture con poche aree forti da annunciare: la navigazione è il contenuto.",
+      "watch": "Su touch l'hover non esiste — servono foto già assegnate o autoplay lento. Massimo cinque voci.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [
+          "index-list",
+          "hover-cue"
+        ],
+        "copy_hide": [
+          "sub",
+          "cta"
+        ]
+      },
+      "photo": "interior"
+    },
+    {
+      "id": "badge-award-corner",
+      "name": "Sigillo di riconoscimento",
+      "media": "still",
+      "treatment": "plate",
+      "placement": "bottom-left",
+      "panel": "gradient-edge",
+      "tone": "light",
+      "hero_copy": null,
+      "desc": "Foto piena, copy ancorato in basso e un sigillo tondo nell'angolo alto: il premio non chiede permesso.",
+      "use": "Guide, stelle, certificazioni, rating: quando il riconoscimento è il primo motivo per fidarsi.",
+      "watch": "Uno solo. Tre sigilli in fila leggono come banner pubblicitari e li salta l'occhio.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [
+          "badge"
+        ],
+        "copy_hide": []
+      },
+      "photo": "sign"
+    },
+    {
+      "id": "avatars-proof",
+      "name": "Prova sociale con volti",
+      "media": "still",
+      "treatment": "editorial",
+      "placement": "top",
+      "panel": "transparent",
+      "tone": "light",
+      "hero_copy": null,
+      "desc": "Titolo appoggiato in alto e, sul fondo, una piccola fila di volti sovrapposti col conteggio di chi è già passato.",
+      "use": "Community, corsi, prenotazioni ricorrenti: il numero di persone è la leva, non la feature.",
+      "watch": "Volti veri e liberatoria firmata. Con avatar stock la prova sociale si sente falsa a colpo d'occhio.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [
+          "avatars"
+        ],
+        "copy_hide": [
+          "cta"
+        ]
+      },
+      "photo": "desk"
+    },
+    {
+      "id": "bento-grid",
+      "name": "Bento — griglia di riquadri",
+      "media": "collage",
+      "treatment": "collage",
+      "placement": "left",
+      "panel": "transparent",
+      "tone": "light",
+      "hero_copy": "left-transparent",
+      "desc": "Cinque riquadri di dimensione diversa che si incastrano pieni, col testo appoggiato sopra il più grande.",
+      "use": "Quando le cose da mostrare sono più d'una e nessuna vince: strutture con ambienti, studi multiservizio.",
+      "watch": "Riquadri di peso diverso, mai cinque uguali. Sotto i 900px si smonta in due colonne o diventa illeggibile.",
+      "sketch": {
+        "media_area": "bento",
+        "chrome": [],
+        "copy_hide": [
+          "sub"
+        ]
+      },
+      "photo": "coast"
+    },
+    {
+      "id": "columns-parallax",
+      "name": "Colonne a velocità diverse",
+      "media": "collage",
+      "treatment": "collage",
+      "placement": "center",
+      "panel": "transparent",
+      "tone": "light",
+      "hero_copy": "center-transparent",
+      "desc": "Tre colonne verticali sfalsate che allo scroll si muovono a velocità diverse: profondità senza 3D.",
+      "use": "Brand visivi con molto materiale fotografico — moda, viaggi, architettura.",
+      "watch": "Lo sfalsamento è la firma: allineate diventa una griglia qualsiasi. Su reduced-motion resta ferma e regge lo stesso.",
+      "sketch": {
+        "media_area": "columns",
+        "chrome": [
+          "scroll-cue"
+        ],
+        "copy_hide": [
+          "cta"
+        ]
+      },
+      "photo": "peaks"
+    },
+    {
+      "id": "angled-split",
+      "name": "Taglio diagonale",
+      "media": "still",
+      "treatment": "split",
+      "placement": "right",
+      "panel": "solid",
+      "tone": "light",
+      "hero_copy": "right-solid",
+      "desc": "La foto non finisce dritta: un taglio obliquo la consegna al pannello di testo, e la pagina prende velocità.",
+      "use": "Sport, montagna, automotive, servizi che vogliono dire movimento senza animare niente.",
+      "watch": "Un angolo solo, ripetuto altrove nella pagina, o sembra un incidente. Verifica il taglio su 4:3 e su mobile.",
+      "sketch": {
+        "media_area": "angled",
+        "chrome": [],
+        "copy_hide": []
+      },
+      "photo": "snow"
+    },
+    {
+      "id": "frame-passepartout",
+      "name": "Passepartout",
+      "media": "still",
+      "treatment": "inset",
+      "placement": "center",
+      "panel": "transparent",
+      "tone": "light",
+      "hero_copy": "center-transparent",
+      "desc": "La foto sta dentro una cornice di carta con doppio filo: guardi un'immagine appesa, non un banner.",
+      "use": "Gallerie, artigianato, hotel di carattere, archivi: dà valore d'oggetto a una foto sola.",
+      "watch": "Il passepartout deve essere generoso e uguale sui quattro lati; stretto sembra un bordo sbagliato.",
+      "sketch": {
+        "media_area": "frame",
+        "chrome": [],
+        "copy_hide": [
+          "cta"
+        ]
+      },
+      "photo": "interior"
+    },
+    {
+      "id": "stack-polaroid",
+      "name": "Foto impilate",
+      "media": "collage",
+      "treatment": "collage",
+      "placement": "left",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": "left-transparent",
+      "desc": "Tre stampe con bordo bianco buttate una sull'altra, ruotate di poco: il mucchio sul tavolo, non l'archivio.",
+      "use": "Racconti personali, ristoranti di famiglia, studi con storia, anniversari.",
+      "watch": "Rotazioni piccole e diverse tra loro (2-7°). Uguali sembra un errore di CSS, grandi sembra clipart.",
+      "sketch": {
+        "media_area": "stack",
+        "chrome": [],
+        "copy_hide": []
+      },
+      "photo": "street"
+    },
+    {
+      "id": "scatter-desk",
+      "name": "Foto sparse sul piano",
+      "media": "collage",
+      "treatment": "collage",
+      "placement": "center",
+      "panel": "solid",
+      "tone": "light",
+      "hero_copy": "center-solid",
+      "desc": "Quattro immagini sparse agli angoli e il blocco testo al centro su plate: il tavolo di lavoro visto dall'alto.",
+      "use": "Studi creativi, moodboard, servizi che mostrano il processo invece del risultato.",
+      "watch": "Le foto non devono toccarsi né uscire storte dal bordo: sparso non è casuale, è composto.",
+      "sketch": {
+        "media_area": "scatter",
+        "chrome": [],
+        "copy_hide": [
+          "sub"
+        ]
+      },
+      "photo": "desk"
+    },
+    {
+      "id": "half-fold-duo",
+      "name": "Due mondi, metà esatta",
+      "media": "still",
+      "treatment": "split",
+      "placement": "split",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": null,
+      "desc": "Metà foto, metà tinta, taglio esattamente al centro: due offerte che si guardano invece di gerarchizzarsi.",
+      "use": "Doppio pubblico dichiarato — privati e aziende, pranzo e cena, corsi e consulenza.",
+      "watch": "È l'unico caso in cui il 50/50 è giusto: qui la simmetria è il messaggio. Se un lato conta di più, usa lo split asimmetrico.",
+      "sketch": {
+        "media_area": "half-fold",
+        "chrome": [],
+        "copy_hide": []
+      },
+      "photo": "wave"
+    },
+    {
+      "id": "circle-portrait",
+      "name": "Tondo",
+      "media": "still",
+      "treatment": "negative-space",
+      "placement": "left",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": "left-transparent",
+      "desc": "La foto ritagliata in cerchio su carta: la forma ammorbidisce tutto e il testo respira a sinistra.",
+      "use": "Persone, professionisti, brand caldi e artigianali; ottimo dove il rettangolo pieno sarebbe aggressivo.",
+      "watch": "Il tondo taglia molto: serve una foto con il soggetto centrato e aria intorno, non un panorama.",
+      "sketch": {
+        "media_area": "circle",
+        "chrome": [],
+        "copy_hide": []
+      },
+      "photo": "sign"
+    },
+    {
+      "id": "arc-bottom-mask",
+      "name": "Arco che sale dal fondo",
+      "media": "still",
+      "treatment": "inset",
+      "placement": "top",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": null,
+      "desc": "Il titolo sta sulla carta in alto e la foto entra dal basso con la testa arrotondata, come una volta.",
+      "use": "Terme, benessere, hospitality morbida, cosmetica: la curva vale più di mille parole di tono.",
+      "watch": "Il raggio va tenuto ampio e coerente col resto della pagina; stretto diventa una bolla da app.",
+      "sketch": {
+        "media_area": "arc-bottom",
+        "chrome": [],
+        "copy_hide": [
+          "cta"
+        ]
+      },
+      "photo": "peaks"
+    },
+    {
+      "id": "corner-type-xl",
+      "name": "Tipografia enorme + foto d'angolo",
+      "media": "still",
+      "treatment": "type-first",
+      "placement": "center",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": "center-transparent",
+      "desc": "Il titolo occupa quasi tutto e la foto si riduce a un riquadro nell'angolo basso: la parola comanda.",
+      "use": "Brand con un claim forte e una sola cosa da dire; manifesti, studi, campagne.",
+      "watch": "Regge solo con poche parole e un font display che tiene i corpi grandi. Il tracking va stretto a mano.",
+      "sketch": {
+        "media_area": "corner",
+        "chrome": [],
+        "title_scale": "xl",
+        "copy_hide": [
+          "sub",
+          "cta"
+        ]
+      },
+      "photo": "snow"
+    },
+    {
+      "id": "magazine-cover-xl",
+      "name": "Copertina — titolo che scavalca",
+      "media": "still",
+      "treatment": "editorial",
+      "placement": "center",
+      "panel": "transparent",
+      "tone": "light",
+      "hero_copy": "center-transparent",
+      "desc": "Foto rientrata e titolo gigante che le passa sopra, come la testata di una rivista sopra il soggetto.",
+      "use": "Editoriale, moda, food, turismo di carattere: quando vuoi che la pagina sembri stampata.",
+      "watch": "La sovrapposizione va dove la foto è calma, mai sulle facce. Serve un contrasto verificato, non sperato.",
+      "sketch": {
+        "media_area": "inset",
+        "chrome": [],
+        "title_scale": "xl",
+        "copy_hide": [
+          "sub"
+        ]
+      },
+      "photo": "coast"
+    },
+    {
+      "id": "strip-top-editorial",
+      "name": "Striscia di foto in alto",
+      "media": "collage",
+      "treatment": "editorial",
+      "placement": "bottom",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": null,
+      "desc": "Una fascia di cinque immagini piccole in cima e sotto, sulla carta, il titolo con tutta la sua aria.",
+      "use": "Archivi, rassegne, cataloghi, festival: annuncia varietà prima ancora di scendere.",
+      "watch": "Le miniature vanno tagliate sullo stesso formato e sullo stesso soggetto-tipo, o la striscia sembra sporca.",
+      "sketch": {
+        "media_area": "strip-top",
+        "chrome": [],
+        "copy_hide": [
+          "cta"
+        ]
+      },
+      "photo": "city"
+    },
+    {
+      "id": "arc-type-seal",
+      "name": "Testo su tracciato curvo",
+      "media": "none",
+      "treatment": "type-first",
+      "placement": "center",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": "center-transparent",
+      "desc": "Nessuna foto: una scritta che segue un arco sopra il titolo, come il timbro di una bottega.",
+      "use": "Marchi artigianali, birrifici, panetterie, brand con vocazione di insegna.",
+      "watch": "Poche parole sull'arco e in maiuscoletto spaziato. Se ci metti una frase, il tracciato la rende illeggibile.",
+      "sketch": {
+        "media_area": "none",
+        "chrome": [
+          "arc-type"
+        ],
+        "copy_hide": [
+          "sub"
+        ]
+      },
+      "photo": null,
+      "copy": {
+        "eyebrow": "Forno dal 1948",
+        "title": "Pane, ogni mattina alle sei.",
+        "sub": "Lievito madre, farine del mulino di Rovolon.",
+        "cta": "Dove siamo"
+      }
+    },
+    {
+      "id": "ui-tilt-perspective",
+      "name": "UI in prospettiva",
+      "media": "ui",
+      "treatment": "ui-shot",
+      "placement": "left",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": "left-transparent",
+      "desc": "Lo screenshot inclinato che entra dal bordo destro: si legge come prodotto, non come figura incollata.",
+      "use": "SaaS e app dove l'interfaccia è bella ma nessun dettaglio singolo è decisivo.",
+      "watch": "L'inclinazione rende illeggibili i testi dell'app: se un numero deve leggersi, va dritto e ingrandito.",
+      "sketch": {
+        "media_area": "tilt",
+        "chrome": [],
+        "copy_hide": []
+      },
+      "photo": "ui-shot"
+    },
+    {
+      "id": "ui-device-duo",
+      "name": "Desktop + mobile",
+      "media": "ui",
+      "treatment": "ui-shot",
+      "placement": "left",
+      "panel": "solid",
+      "tone": "light",
+      "hero_copy": "left-solid",
+      "desc": "Due dispositivi accostati, il telefono davanti allo schermo grande: dichiara che il prodotto sta su entrambi.",
+      "use": "Prodotti con uso misto reale — gestionali con app di campo, servizi che si consultano in mobilità.",
+      "watch": "Le due schermate devono mostrare lo stesso momento del flusso, altrimenti raccontano due prodotti.",
+      "sketch": {
+        "media_area": "device-duo",
+        "chrome": [],
+        "copy_hide": []
+      },
+      "photo": "ui-shot"
+    },
+    {
+      "id": "ui-window-glass",
+      "name": "Finestra flottante su vetro",
+      "media": "ui",
+      "treatment": "ui-shot",
+      "placement": "right",
+      "panel": "glass",
+      "tone": "dark",
+      "hero_copy": "right-solid",
+      "desc": "La UI in una finestra con la sua barra, e il testo su un pannello di vetro smerigliato che la sfiora.",
+      "use": "Prodotti desktop, tool professionali, strumenti che si aprono in finestra e non in tab.",
+      "watch": "Il vetro chiede contrasto dietro: sopra un'area piatta smette di leggersi come vetro e sembra un box grigio.",
+      "sketch": {
+        "media_area": "window-right",
+        "chrome": [
+          "window"
+        ],
+        "copy_hide": [
+          "sub"
+        ]
+      },
+      "photo": "ui-shot"
+    },
+    {
+      "id": "map-fullbleed-pins",
+      "name": "Mappa piena con più punti",
+      "media": "map",
+      "treatment": "map",
+      "placement": "bottom-left",
+      "panel": "gradient-edge",
+      "tone": "light",
+      "hero_copy": null,
+      "desc": "La mappa occupa tutto e i punti dichiarano la copertura; il testo sta in basso su una sfumatura di un lato solo.",
+      "use": "Reti di sedi, servizi a domicilio, itinerari: quando la domanda vera è «arrivate anche da me?».",
+      "watch": "Colori della mappa dentro la palette, mai il verde-azzurro di default. Non interattiva nella hero: si trascina per sbaglio.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [
+          "map-pins"
+        ],
+        "copy_hide": []
+      },
+      "photo": "map"
+    },
+    {
+      "id": "compare-vertical",
+      "name": "Prima / dopo verticale",
+      "media": "compare",
+      "treatment": "compare",
+      "placement": "left",
+      "panel": "solid",
+      "tone": "light",
+      "hero_copy": "left-solid",
+      "desc": "Le due immagini stanno una sopra l'altra con la maniglia orizzontale: il confronto sta sul lato destro, il discorso a sinistra.",
+      "use": "Restauri, prima-dopo di cantiere, trattamenti: quando il taglio verticale spezzerebbe il soggetto.",
+      "watch": "Stesso punto di ripresa e stessa luce, o il confronto è propaganda. Serve stato iniziale visibile, non a metà.",
+      "sketch": {
+        "media_area": "compare-v",
+        "chrome": [
+          "handle-v"
+        ],
+        "copy_hide": []
+      },
+      "photo": "desk"
+    },
+    {
+      "id": "sequence-horizontal",
+      "name": "Sequenza in striscia",
+      "media": "sequence",
+      "treatment": "sequence",
+      "placement": "bottom",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": null,
+      "desc": "I frame avanzano in orizzontale in cima con una barra di progresso: il tempo si legge da sinistra a destra.",
+      "use": "Processi in tappe, ricette, lavorazioni, storia di un prodotto in cinque momenti.",
+      "watch": "Cinque frame al massimo e leggeri. Va anche senza JavaScript: senza scrub deve restare una striscia sensata.",
+      "sketch": {
+        "media_area": "strip-top",
+        "chrome": [
+          "progress"
+        ],
+        "copy_hide": [
+          "cta"
+        ]
+      },
+      "photo": "wave"
+    },
+    {
+      "id": "video-portrait-reel",
+      "name": "Video verticale",
+      "media": "video",
+      "treatment": "video-plate",
+      "placement": "left",
+      "panel": "transparent",
+      "tone": "dark",
+      "hero_copy": "left-transparent",
+      "desc": "Un 9:16 sulla destra, come un reel appoggiato sulla pagina, e il testo che gli parla accanto sulla carta.",
+      "use": "Brand nati sui social, ristorazione, moda: riusa il girato verticale che esiste già invece di rifarlo.",
+      "watch": "Muto, in loop, con poster; il verticale pesa in alto sul mobile — lì va sotto il titolo, non sopra.",
+      "sketch": {
+        "media_area": "portrait",
+        "chrome": [
+          "play"
+        ],
+        "copy_hide": []
+      },
+      "photo": "street"
+    },
+    {
+      "id": "video-grain-type",
+      "name": "Video + grana + titolo grande",
+      "media": "video",
+      "treatment": "type-first",
+      "placement": "center",
+      "panel": "transparent",
+      "tone": "light",
+      "hero_copy": "center-transparent",
+      "desc": "Filmato pieno con una grana leggera sopra e il titolo enorme al centro: pellicola, non stock footage.",
+      "use": "Locali notturni, musica, eventi, brand con attitudine ruvida.",
+      "watch": "La grana costa in compressione e in accessibilità: tienila sotto il 6% e verifica il contrasto sul frame peggiore.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [
+          "grain",
+          "play"
+        ],
+        "title_scale": "xl",
+        "copy_hide": [
+          "sub"
+        ]
+      },
+      "photo": "night"
+    },
+    {
+      "id": "carousel-steps-counter",
+      "name": "Carosello a tappe numerate",
+      "media": "carousel",
+      "treatment": "carousel",
+      "placement": "right",
+      "panel": "transparent",
+      "tone": "light",
+      "hero_copy": "right-transparent",
+      "desc": "Le slide sono tappe numerate su un rail a sinistra, col contatore in alto: si sa sempre dove si è.",
+      "use": "Percorsi, itinerari, stagioni, fasi di servizio: quando l'ordine delle slide significa qualcosa.",
+      "watch": "Se l'ordine conta, l'autoplay va tolto o rallentato molto: l'utente deve poter restare su una tappa.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [
+          "steps",
+          "counter"
+        ],
+        "copy_hide": [
+          "sub"
+        ]
+      },
+      "photo": "snow"
+    },
+    {
+      "id": "carousel-fullbleed-quiet",
+      "name": "Carosello pieno, comandi discreti",
+      "media": "carousel",
+      "treatment": "carousel",
+      "placement": "bottom",
+      "panel": "transparent",
+      "tone": "light",
+      "hero_copy": null,
+      "desc": "Foto a tutto schermo che si alternano in dissolvenza, copy ancorato in basso, pallini e contatore appena accennati.",
+      "use": "Quando le immagini sono tutte forti e nessuna merita di essere la prima per sempre.",
+      "watch": "Solo la prima slide è LCP: le altre vanno in lazy. Dissolvenze lente (1.2s+) o la hero diventa nervosa.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [
+          "dots",
+          "counter"
+        ],
+        "copy_hide": []
+      },
+      "photo": "coast"
+    },
+    {
+      "id": "wash-editorial-top",
+      "name": "Velo chiaro + titolo in alto",
+      "media": "still",
+      "treatment": "velo-chiaro",
+      "placement": "top",
+      "panel": "wash",
+      "tone": "dark",
+      "hero_copy": null,
+      "desc": "Un velo chiaro su tutta la foto e il titolo scuro appoggiato in alto: schiarisce invece di scurire.",
+      "use": "Foto molto contrastate o confuse, dove il testo scuro non si appoggerebbe da nessuna parte.",
+      "watch": "È l'alternativa buona al velo nero, ma resta un velo: se serve oltre il 45% di opacità, la foto è sbagliata.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [],
+        "copy_hide": [
+          "cta"
+        ]
+      },
+      "photo": "wave"
+    },
+    {
+      "id": "glass-panel-left",
+      "name": "Pannello vetro a sinistra",
+      "media": "still",
+      "treatment": "plate",
+      "placement": "left",
+      "panel": "glass",
+      "tone": "dark",
+      "hero_copy": "left-solid",
+      "desc": "Il blocco testo sta su vetro smerigliato appoggiato sulla foto: la immagine continua a vivere sotto.",
+      "use": "Paesaggi e interni con texture ricca che un plate pieno spegnerebbe del tutto.",
+      "watch": "`backdrop-filter` costa e su alcuni Android non c'è: serve un fondo semitrasparente di riserva già leggibile.",
+      "sketch": {
+        "media_area": "full",
+        "chrome": [],
+        "copy_hide": []
+      },
+      "photo": "peaks"
+    }
+  ],
+  "media_dir": "hero-media",
+  "media_pool": {
+    "coast": {
+      "file": "coast.jpg",
+      "credit": "Unsplash (Lorem Picsum)",
+      "brand": "Marea",
+      "eyebrow": "Positano · dal 1964",
+      "title": "La cucina che guarda il mare",
+      "sub": "Pesce del giorno, terrazza sul golfo, tramonto compreso.",
+      "cta": "Prenota un tavolo",
+      "kind": "photo"
+    },
+    "interior": {
+      "file": "interior.jpg",
+      "credit": "Unsplash (Lorem Picsum)",
+      "brand": "Sottotetto",
+      "eyebrow": "Locanda · Val di Non",
+      "title": "Dodici stanze, un solo silenzio",
+      "sub": "Colazione col pane cotto in casa e vista sui meleti.",
+      "cta": "Guarda le camere",
+      "kind": "photo"
+    },
+    "peaks": {
+      "file": "peaks.jpg",
+      "credit": "Unsplash (Lorem Picsum)",
+      "brand": "Alta Via",
+      "eyebrow": "Rifugio · 2.140 m",
+      "title": "Si arriva a piedi. Si resta per la luce.",
+      "sub": "Quattro camerate, cucina di montagna, stelle senza filtri.",
+      "cta": "Prenota la notte",
+      "kind": "photo"
+    },
+    "night": {
+      "file": "night.jpg",
+      "credit": "Unsplash (Lorem Picsum)",
+      "brand": "Otto",
+      "eyebrow": "Cocktail bar · Milano",
+      "title": "La città si beve al buio",
+      "sub": "Ghiaccio scolpito, vermouth di casa, aperto fino a tardi.",
+      "cta": "Vedi la carta",
+      "kind": "photo"
+    },
+    "wave": {
+      "file": "wave.jpg",
+      "credit": "Unsplash (Lorem Picsum)",
+      "brand": "Ponente",
+      "eyebrow": "Scuola di vela · Ponente",
+      "title": "Impari il vento in due giorni",
+      "sub": "Corsi per adulti e ragazzi, barche pronte in banchina.",
+      "cta": "Scegli il corso",
+      "kind": "photo"
+    },
+    "sign": {
+      "file": "sign.jpg",
+      "credit": "Unsplash (Lorem Picsum)",
+      "brand": "Aurora",
+      "eyebrow": "Motel · statale 16",
+      "title": "Insegna accesa, chiavi al banco",
+      "sub": "Ventidue stanze, caffè alle sei, nessuna sorpresa.",
+      "cta": "Camere e prezzi",
+      "kind": "photo"
+    },
+    "desk": {
+      "file": "desk.jpg",
+      "credit": "Unsplash (Lorem Picsum)",
+      "brand": "Filo",
+      "eyebrow": "Studio di design · Torino",
+      "title": "Progettiamo cose che restano",
+      "sub": "Identità, siti, packaging. Un progetto per volta.",
+      "cta": "Guarda i lavori",
+      "kind": "photo"
+    },
+    "city": {
+      "file": "city.jpg",
+      "credit": "Unsplash (Lorem Picsum)",
+      "brand": "Quota",
+      "eyebrow": "Piattaforma · revenue",
+      "title": "Il prezzo giusto, ogni notte",
+      "sub": "Tariffe dinamiche per hotel indipendenti, in un pannello solo.",
+      "cta": "Prova la demo",
+      "kind": "photo"
+    },
+    "snow": {
+      "file": "snow.jpg",
+      "credit": "Unsplash (Lorem Picsum)",
+      "brand": "Alba",
+      "eyebrow": "Scuola sci · Cortina",
+      "title": "Prima neve, prima curva",
+      "sub": "Maestri per bambini e adulti, lezioni da un'ora.",
+      "cta": "Prenota il maestro",
+      "kind": "photo"
+    },
+    "street": {
+      "file": "street.jpg",
+      "credit": "Unsplash (Lorem Picsum)",
+      "brand": "Vicolo",
+      "eyebrow": "Trattoria · Bologna",
+      "title": "Due passi dentro il vicolo",
+      "sub": "Tagliatelle tirate a mano, vini che parlano dialetto.",
+      "cta": "Scopri il menu",
+      "kind": "photo"
+    },
+    "ui-shot": {
+      "file": "ui-shot.jpg",
+      "credit": "screenshot di apps/adozioni-dashboard di questo progetto",
+      "brand": "Plancia",
+      "eyebrow": "Gestionale · rifugi",
+      "title": "Ogni numero porta alla lista che lo spiega",
+      "sub": "Occupazione, iter di adozione e ritmo degli ingressi in un pannello.",
+      "cta": "Prova la demo",
+      "kind": "ui"
+    },
+    "map": {
+      "file": "map.jpg",
+      "credit": "© OpenStreetMap contributors (ODbL)",
+      "brand": "Ruota",
+      "eyebrow": "Noleggio bici · Padova",
+      "title": "Ti aspettiamo in Riviera Tiso 4",
+      "sub": "Aperto 8–19, ritiro e riconsegna in dieci minuti.",
+      "cta": "Apri in mappa",
+      "kind": "map"
+    }
+  }
+}

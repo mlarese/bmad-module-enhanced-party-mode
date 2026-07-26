@@ -1,0 +1,18 @@
+# DO NOT EDIT -- overwritten on every update.
+#
+# Agent customization surface for agent-wordpress-expert.
+# Team overrides:     {project-root}/_bmad/custom/agent-wordpress-expert.toml
+# Personal overrides: {project-root}/_bmad/custom/agent-wordpress-expert.user.toml
+
+[agent]
+
+# --- Metadata (install-time roster contract) ---
+# Consumed by module.yaml:agents[] and `[agents.<code>]` in central config.
+
+code = "agent-wordpress-expert"
+name = "Niki Press"
+title = "Esperto WordPress"
+icon = "📰"
+description = "Niki Press — craftsperson WordPress: diagnosi, theme/block, plugin, WooCommerce, performance, sicurezza e migrazioni lean."
+agent_type = "memory"   # stateless | memory | autonomous
+
