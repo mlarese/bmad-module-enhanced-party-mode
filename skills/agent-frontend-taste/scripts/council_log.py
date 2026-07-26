@@ -57,7 +57,23 @@ Una riga per seduta: data · obiettivo · chi ha parlato · cosa si è deciso.
 ENTRY_RE = re.compile(r"^- \*\*\d{4}-\d{2}-\d{2}", re.M)
 
 
+SLUG_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
+
+
 def log_path(root: Path, slug: str) -> Path:
+    """Lo slug e un nome, non un percorso.
+
+    Senza questo controllo `--project ../../../fuori` scriveva **fuori dal
+    progetto**: la legge dello skill ha un solo confine — le azioni fuori dal
+    workspace — e un registro che lo attraversa per distrazione lo viola lo
+    stesso.
+    """
+    if not SLUG_RE.match(slug or ""):
+        raise SystemExit(
+            f"slug non valido: '{slug}'. Serve un nome di progetto — lettere, "
+            "cifre, punto, trattino — non un percorso: il registro si scrive "
+            "dentro `docs/consiglio/`, mai fuori dal progetto."
+        )
     return root / "docs" / "consiglio" / f"{slug}.md"
 
 

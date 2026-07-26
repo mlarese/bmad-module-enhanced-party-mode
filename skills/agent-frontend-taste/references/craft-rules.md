@@ -231,9 +231,39 @@ Neutro = **croma ≤ 4** — sotto quella soglia non resta tinta da nominare (la
    **Perché il verde e non un altro:** `verde` (70°–165°) e `teal` (165°–200°) occupano **130° dei 360** della ruota — il 36%, contro i 30° del rosso e i 25° del giallo. Una palette che non eviti apposta quella zona ci finisce **una volta su tre per geometria**, prima ancora che ci si metta il gusto. Non è un vezzo da correggere con la buona volontà: va contato.
 
    In MEMORY vive `last_hue_sectors` accanto a `last_palette_families`: il nome serve a te, il settore serve all'occhio. **Ordine: il più recente per primo** — `--last` conta la serie dall'inizio della lista, e una lista in ordine cronologico inverte il controllo senza che nessuno se ne accorga.
+2b. **Una consegna, non un file.** Le pagine di uno **stesso sito** sono una sola
+   consegna e *devono* somigliarsi: `close_check` legge la storia una volta sola
+   prima di misurarle e scrive **una** voce alla fine, con la cartella come
+   chiave. Misurando file per file, la terza pagina trovava le sorelle appena
+   registrate e sbatteva contro la propria coerenza — nessun sito di tre pagine
+   passava più il gate. Il registro conta consegne; il glob passa file.
+
 3. **Il controllo di chiusura è un comando solo:** `uv run scripts/close_check.py <pagina> --design <DESIGN.md> --ledger <ledger.json>` — colore, responsive, segnaposto e traccia insieme. **Si consegna solo su esito `0`**, e l'esito si scrive nel `DESIGN.md`. Quattro regole sparse le si salta una alla volta; un comando o lo esegui o no, e si vede.
 4. **Il motore del colore, se vuoi guardarci dentro:** `uv run scripts/repeat_guard.py --check <file>` (o `--hex …`) stampa settori, saturazioni e violazioni. Su lavoro nuovo è parte del check di chiusura, come il responsive.
    - **Tre esiti, non due:** `0` pulito · `1` violazioni da correggere · **`2` non misurabile**. Il 2 arriva quando la palette non è leggibile da quel file (utility class senza mappa di tema, colori in un altro modulo): allora si misura il file che dichiara i colori, o si passa `--hex`. **Un exit 2 non è un pass:** «repeat_guard pulito» si dichiara solo su un exit 0.
+   - **La quota è per asse, perché non tutti gli assi hanno lo stesso spazio.**
+     `craft_axes` ammette **due sole** griglie per una dashboard (`12-col`,
+     `asym-rail`): con due valori su otto lavori il minimo inevitabile è 4 su 8,
+     cioè il 50%, e una quota a un terzo rendeva la regola **impossibile da
+     rispettare**. Una regola che non si può soddisfare non è rigore: è rumore
+     che si impara a ignorare. Perciò `grid_system` ha soglia **1/2**, tutti gli
+     altri assi restano a **1/3**.
+   - **L'eccezione si dichiara, non si spegne** — `--deroga asse:motivo`. Se il
+     brand del cliente **è** verde ed è un vincolo documentato
+     (`implementation-handoff.md` §8), la violazione è legittima: con la deroga
+     resta **misurata e scritta** nel referto col suo motivo, non blocca la
+     consegna, e **il ledger si scrive lo stesso**. Il motivo è obbligatorio: una
+     deroga senza perché è una scusa. `--no-ledger` non è la via d'uscita — quello
+     spegne tutti i controlli *e* non registra: si perde la regola e pure la
+     storia, e la pagina dopo decide al buio.
+   - **Che cosa conta il registro, e che cosa no.** Conta **consegne fra clienti
+     diversi**: è lì che la varietà serve, ed è lì che la ripetizione si vedeva.
+     Non conta le pagine di uno stesso sito (sono una consegna sola, punto 2b),
+     e non pretende che due lavori per lo **stesso** cliente si somiglino o
+     differiscano: se il secondo deve richiamare il primo, quella è una deroga
+     dichiarata, non un difetto. Un ledger separato per team o per studio si
+     tiene con `VESPER_CRAFT_LEDGER`; il default è uno solo, condiviso, e va bene
+     finché a consegnare è una persona sola.
    - **Il ledger tiene il conto al posto tuo, e ora è condiviso di suo.** Serve perché `last_hue_sectors` vive nel sanctum **di quel progetto**: un'agenzia che fa un repo per cliente ha un job per sanctum, e la regola non avrebbe mai dati su cui scattare — misurato, l'unico ledger trovato aveva **una voce**. «Puntalo a un percorso condiviso» era una cosa da ricordare, e le cose da ricordare non si fanno: adesso il default è `~/.claude/agent-frontend-taste/craft-ledger.json`, fuori dai progetti, e `--ledger` serve solo per tenerne uno per cliente o per team (o `VESPER_CRAFT_LEDGER`). `--no-ledger` per non toccarlo. Se il ledger c'è, `--last` non serve.
    - **I tre hard-reject sono misurati adesso:** purple-indigo AI, cream+serif+terracotta, Inter/system come display escono come violazione dallo script, non più solo dal tuo occhio.
 

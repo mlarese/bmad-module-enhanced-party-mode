@@ -368,6 +368,18 @@ def main() -> int:
               file=sys.stderr)
         return 2
 
+    applied = data.get("applied")
+    ids = [c.get("id") for c in combos]
+    if applied and applied not in ids:
+        print(f"`applied: {applied}` non e fra le combinazioni ({', '.join(map(str, ids))}): "
+              "la pagina non marcherebbe niente come «in uso», e l'owner vedrebbe "
+              "delle alternative senza sapere quale gli hai consegnato — cioe un menu.",
+              file=sys.stderr)
+        return 2
+    if len(set(ids)) != len(ids):
+        print(f"id ripetuti fra le combinazioni: {', '.join(map(str, ids))}", file=sys.stderr)
+        return 2
+
     pg = _repeat_guard()
     last = [s for s in args.last.split(",") if s.strip()]
     last_fonts: list[dict] = []
@@ -401,7 +413,6 @@ def main() -> int:
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(build(data, reports), encoding="utf-8")
-    applied = data.get("applied")
     print(f"{out} — {len(combos)} combinazioni, tutte legali"
           + (f", in uso: {applied}" if applied else ""))
     if not applied:

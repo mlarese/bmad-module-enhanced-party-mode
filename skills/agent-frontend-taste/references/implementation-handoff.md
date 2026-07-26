@@ -988,6 +988,12 @@ Ne esce una riga:
 6. **La slice si nomina appena esiste** (`--slice S1`): con la consegna a fette
    (§4.3) il registro diventa anche la storia di quali slice sono state aperte e
    quando.
+6b. **La «scorciatoia lavoro piccolo» non salta questo.** Il registro **persiste
+   nel progetto**: una correzione su un lavoro già consegnato trova il file già
+   lì e passa senza scrivere niente. E se il progetto non ne ha ancora uno, la
+   riga da aggiungere è **una** — G3 si riunisce anche per una correzione
+   piccola, quindi quella riga esiste comunque. La scorciatoia toglie il batch,
+   la hero da catalogo, Vera: non toglie la traccia di chi ha approvato.
 7. **Il gate è `close_check`** (`--council docs/consiglio/<slug>.md`): senza
    registro non si consegna. È lo stesso motivo per cui esiste il resto di quel
    comando — una regola che vive solo in prosa non viene eseguita.

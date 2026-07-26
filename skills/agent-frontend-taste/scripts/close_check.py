@@ -141,10 +141,35 @@ LOGOUT_RE = re.compile(r"logout|log-out|sign.?out|esci\b|disconnett", re.I)
 PROFILE_RE = re.compile(r"profil|account|/me\b|mio-account|impostazioni account", re.I)
 
 
-def check_dashboard(text: str, design: Path | None) -> tuple[bool, list[str]]:
+# Una schermata di accesso non ha profilo né uscita, e non e un difetto: e la
+# definizione. La regola vale per le schermate **dietro** l'accesso, non per
+# quella che lo chiede — «sempre» era la parola sbagliata.
+AUTH_SCREEN_RE = re.compile(r"type=[\"']password[\"']", re.I)
+AUTH_NAME_RE = re.compile(r"(login|log-in|signin|sign-in|accedi|auth|registrat|"
+                          r"recupera|reset|password-dimenticat)", re.I)
+
+
+def is_auth_screen(text: str, page: Path) -> bool:
+    """Vera solo quando la pagina **chiede** le credenziali, non quando le cambia.
+
+    Il profilo ha anch'esso un campo password (il cambio), ma sta dietro
+    l'accesso e ha la sua uscita: e il logout a distinguerli.
+    """
+    if not AUTH_SCREEN_RE.search(text):
+        return False
+    if LOGOUT_RE.search(text):
+        return False          # ha un'uscita: e gia dentro, non e la porta
+    return bool(AUTH_NAME_RE.search(page.name) or AUTH_NAME_RE.search(text))
+
+
+def check_dashboard(text: str, design: Path | None,
+                    page: Path | None = None) -> tuple[bool, list[str]]:
     """Solo su `--surface dashboard`. Le tabelle si controllano se ci sono; profilo
-    e logout no: un'area riservata da cui non si esce non è consegnabile."""
+    e logout no: un'area riservata da cui non si esce non è consegnabile —
+    tranne la porta d'ingresso, che per definizione non ne ha."""
     problems = []
+    if page is not None and is_auth_screen(text, page):
+        return True, []
     if not LOGOUT_RE.search(text):
         problems.append("nessun logout: da un'area riservata si deve poter uscire, "
                         "e l'uscita chiude la sessione **sul server** "
@@ -201,9 +226,16 @@ def check_council(council: Path | None) -> tuple[bool, list[str]]:
     return True, []
 
 
-def check_colour(pg, text: str, last: list[str], ledger: Path | None,
-                 page: Path) -> tuple[int, dict, list[str]]:
-    """(stato, report, problemi) — stato 0 ok, 1 violazioni, 2 non misurabile."""
+def check_colour(pg, text: str, last: list[str], last_fonts: list[dict],
+                 deroghe: dict) -> tuple[int, dict, list[str]]:
+    """(stato, report, problemi) — stato 0 ok, 1 violazioni, 2 non misurabile.
+
+    **Non tocca il ledger.** La storia si legge una volta sola prima del ciclo e
+    si scrive una volta sola dopo: le pagine di uno stesso sito sono UNA consegna,
+    e devono somigliarsi. Misurando pagina per pagina, la terza trovava le due
+    sorelle appena registrate e sbatteva contro l'anti-ripetizione — cioè contro
+    la propria coerenza. Il ledger conta consegne, il glob passava file.
+    """
     pairs, painted, small, ok = pg.measured_pairs(text)
     if not ok or not pairs:
         return 2, {}, [pg.unmeasurable_note(text)]
@@ -211,15 +243,7 @@ def check_colour(pg, text: str, last: list[str], ledger: Path | None,
     report["typefaces"] = pg.typefaces(text)
     report["layout"] = pg.layout_signature(text)
     rejects = pg.hard_rejects(text, pg.palette_colours(text, report["colours"]))
-    entries, last_fonts = [], []
-    if ledger:
-        entries = pg.ledger_load(ledger)
-        last_fonts = pg.ledger_fonts(entries)
-        if not any(s.strip() for s in last):
-            last = pg.ledger_sectors(entries)
-    problems = pg.violations(report, last, last_fonts) + rejects
-    if ledger:
-        pg.ledger_record(ledger, entries, str(page.resolve()), report)
+    problems = pg.violations(report, last, last_fonts, deroghe) + rejects
     return (1 if problems else 0), report, problems
 
 
@@ -246,11 +270,15 @@ def main() -> int:
                     "(default: quello condiviso fra progetti)")
     ap.add_argument("--no-ledger", action="store_true",
                     help="non leggere né scrivere il registro condiviso")
+    ap.add_argument("--deroga", action="append", metavar="ASSE:MOTIVO",
+                    help="eccezione dichiarata su un asse di ripetizione; il motivo è "
+                         "obbligatorio e finisce nel referto")
     ap.add_argument("--last", default="", help="settori recenti, il più recente per primo")
     ap.add_argument("--format", choices=("md", "json"), default="md")
     args = ap.parse_args()
 
     pg = _repeat_guard()
+    deroghe = pg.parse_deroghe(args.deroga)
     design = Path(args.design) if args.design else None
     council = Path(args.council) if args.council else None
     ledger = (Path(args.ledger) if args.ledger
@@ -259,6 +287,14 @@ def main() -> int:
 
     worst, out, blocks, reports = 0, [], [], []
     skipped: list[tuple[Path, str]] = []
+    # La storia si legge UNA volta: nessuna pagina vede le sorelle di questa
+    # stessa consegna.
+    entries, last_fonts = [], []
+    if ledger:
+        entries = pg.ledger_load(ledger)
+        last_fonts = pg.ledger_fonts(entries)
+        if not any(s.strip() for s in last):
+            last = pg.ledger_sectors(entries)
     for raw in args.pages:
         page = Path(raw)
         if not page.is_file():
@@ -270,20 +306,23 @@ def main() -> int:
             skipped.append((page, gen.group(1)))
             continue
 
-        colour_state, report, colour_problems = check_colour(pg, text, last, ledger, page)
+        colour_state, report, colour_problems = check_colour(pg, text, last, last_fonts, deroghe)
         resp_ok, resp_problems = check_responsive(text)
         fin_ok, fin_problems = check_finished(text)
         des_ok, des_problems = check_design(design, text)
         cou_ok, cou_problems = check_council(council)
-        dash_ok, dash_problems = (check_dashboard(text, design)
+        dash_ok, dash_problems = (check_dashboard(text, design, page)
                                   if args.surface == "dashboard" else (True, []))
 
         problems = (colour_problems + resp_problems + fin_problems
                     + des_problems + cou_problems + dash_problems)
-        state = 2 if colour_state == 2 else (1 if problems else 0)
+        # Le deroghe restano nel referto ma non fermano la consegna: è la
+        # differenza fra un'eccezione dichiarata e un controllo spento.
+        bloccanti = pg.only_blocking(problems)
+        state = 2 if colour_state == 2 else (1 if bloccanti else 0)
         worst = max(worst, state)
         if report:
-            reports.append(report)
+            reports.append((page, report))
         out.append({
             "page": str(page), "state": state,
             "colour": {"dominant_sector": report.get("dominant_sector"),
@@ -311,11 +350,22 @@ def main() -> int:
         lines.append(f"- traccia: {'ok' if des_ok else 'da correggere'}")
         lines.append(f"- consiglio: {'registrato' if cou_ok else 'da correggere'}")
         if args.surface == "dashboard":
-            lines.append(f"- dashboard: {'profilo, uscita, tabelle' if dash_ok else 'da correggere'}")
+            auth = is_auth_screen(text, page)
+            lines.append("- dashboard: " + ("schermata di accesso — profilo e uscita "
+                         "non si chiedono qui" if auth else
+                         ("profilo, uscita, tabelle" if dash_ok else "da correggere")))
         if problems:
             lines.append("")
             lines.extend(f"  - {p}" for p in problems)
         blocks.append("\n".join(lines))
+
+    # Una consegna, una voce: la chiave e la CARTELLA, non il file. Riaprire lo
+    # stesso progetto aggiorna il suo record invece di aggiungerne un altro.
+    if ledger and reports:
+        folder = Path(args.pages[0]).resolve().parent
+        principale = next((r for pg_path, r in reports
+                           if pg_path.name.lower().startswith("index")), reports[0][1])
+        pg.ledger_record(ledger, entries, str(folder), principale)
 
     if not out and skipped:
         print("Solo pagine generate, nessun lavoro consegnato da misurare: "
@@ -338,7 +388,7 @@ def main() -> int:
     if worst == 0:
         print("Si consegna. Nel `DESIGN.md` va la traccia di ciò che è stato misurato "
               "— così «l'ho controllato» resta verificabile anche fra sei mesi:\n")
-        print("\n".join(design_lines(reports[0] if reports else {})))
+        print("\n".join(design_lines(reports[0][1] if reports else {})))
     elif worst == 1:
         print("**Non si consegna così:** correggi i punti qui sopra e rilancia. "
               "Un difetto trovato adesso costa una riga; trovato dal cliente costa la pagina.")

@@ -339,11 +339,11 @@ def font_violations(faces: dict, last_fonts: list[dict]) -> list[str]:
         if len(window) >= 3:
             n = sum(1 for s in window if s.lower() == here.lower()) + 1
             tot = len(window) + 1
-            if n / tot > MAX_SHARE:
+            if n / tot > _share_cap(role):
                 out.append(
                     f"carattere predominante: '{here}' è il {role} di {n} delle "
                     f"ultime {tot} consegne ({n / tot * 100:.0f}%, max "
-                    f"{MAX_SHARE * 100:.0f}%). Cambia voce.")
+                    f"{_share_cap(role) * 100:.0f}%). Cambia voce.")
     return out
 
 
@@ -451,11 +451,11 @@ def layout_violations(sig: dict, last: list) -> list:
         if len(window) >= 3:
             n = sum(1 for s in window if s == here) + 1
             tot = len(window) + 1
-            if n / tot > MAX_SHARE:
+            if n / tot > _share_cap(axis):
                 out.append(
                     label + " predominante: '" + here + "' su " + str(n) +
                     " delle ultime " + str(tot) + " consegne (" +
-                    f"{n / tot * 100:.0f}%, max {MAX_SHARE * 100:.0f}%). " +
+                    f"{n / tot * 100:.0f}%, max {_share_cap(axis) * 100:.0f}%). " +
                     "L'etichetta cambia, la geometria no.")
     return out
 
@@ -707,8 +707,44 @@ def hard_rejects(text: str, colours: list[dict]) -> list[str]:
     return out
 
 
+# ⑤ Una soglia uguale per tutti non e satisfacibile su ogni asse. `craft_axes`
+# ammette **due sole** griglie per una dashboard (12-col, asym-rail): con due
+# valori su otto lavori il minimo inevitabile e 4/8 = 50%, e la quota a un terzo
+# rendeva la regola matematicamente impossibile da rispettare. Una regola che non
+# si puo soddisfare non e una regola: e un rumore che si impara a ignorare.
+AXIS_SHARE = {"grid_system": 1 / 2}
+
+
+def _share_cap(axis: str) -> float:
+    return AXIS_SHARE.get(axis, MAX_SHARE)
+
+
+def parse_deroghe(values: list[str] | None) -> dict:
+    """`--deroga asse:motivo` — l'eccezione si dichiara, non si spegne.
+
+    Senza, l'unica uscita da una violazione legittima (il brand del cliente **e**
+    verde, ed e un vincolo documentato) era `--no-ledger`, che spegne tutti i
+    controlli **e** non registra: si perde la regola e anche la storia. Qui la
+    violazione resta misurata e detta, marcata come deroga, e il ledger si scrive
+    lo stesso. Il motivo e obbligatorio: una deroga senza perche e una scusa.
+    """
+    out = {}
+    for raw in values or []:
+        axis, _, why = raw.partition(":")
+        axis, why = axis.strip(), why.strip()
+        if not axis or not why:
+            raise SystemExit(
+                f"deroga malformata: '{raw}'. Serve `asse:motivo`, per esempio "
+                "--deroga 'hue:il brand del cliente e verde, documentato'. "
+                "Una deroga senza motivo non e una deroga."
+            )
+        out[axis] = why
+    return out
+
+
 def violations(report: dict, last_sectors: list[str],
-               last_fonts: list[dict] | None = None) -> list[str]:
+               last_fonts: list[dict] | None = None,
+               deroghe: dict | None = None) -> list[str]:
     out = []
     # Every large dark surface is checked, not just the darkest one: the page
     # that started this had a compliant `--ink` and a green `--abete` in the hero.
@@ -753,16 +789,45 @@ def violations(report: dict, last_sectors: list[str],
         if len(window) >= 3:
             fams = [family_of(s) for s in window] + [fam]
             n = fams.count(fam)
-            if n / len(fams) > MAX_SHARE:
+            if n / len(fams) > _share_cap("hue"):
                 out.append(
                     f"famiglia predominante: con questo job '{fam}' sta su {n} degli "
                     f"ultimi {len(fams)} lavori ({n / len(fams) * 100:.0f}%, max "
-                    f"{MAX_SHARE * 100:.0f}%). Non è una ripetizione di fila — è una "
+                    f"{_share_cap('hue') * 100:.0f}%). Non è una ripetizione di fila — è una "
                     "predominanza, e si vede solo contando. Cambia famiglia."
                 )
     out += font_violations(report.get("typefaces") or {}, last_fonts or [])
     out += layout_violations(report.get("layout") or {}, last_fonts or [])
+    return apply_deroghe(out, deroghe or {}, report)
+
+
+# Quale violazione appartiene a quale asse — serve solo alle deroghe.
+_AXIS_HINTS = (
+    ("hue", ("settore ripetuto", "famiglia predominante", "tinta unica",
+             "scuro strutturale")),
+    ("display", ("come display",)), ("body", ("come body",)), ("mono", ("come mono",)),
+    ("grid_system", ("impaginazione",)), ("radius_family", ("famiglia di raggio",)),
+    ("hero_shape", ("forma della hero",)),
+)
+
+
+def apply_deroghe(problems: list[str], deroghe: dict, report: dict) -> list[str]:
+    """Una violazione derogata resta scritta, con il motivo, e non blocca."""
+    if not deroghe:
+        return problems
+    out = []
+    for p in problems:
+        axis = next((a for a, hints in _AXIS_HINTS if any(h in p for h in hints)), None)
+        if axis and axis in deroghe:
+            out.append(f"[deroga · {axis}] {p} — motivo dichiarato: {deroghe[axis]}")
+        else:
+            out.append(p)
     return out
+
+
+def only_blocking(problems: list[str]) -> list[str]:
+    """Le deroghe si leggono, non fermano."""
+    return [p for p in problems if not p.startswith("[deroga ")]
 
 
 # --- ledger -----------------------------------------------------------------
@@ -895,6 +960,9 @@ def main() -> int:
     ap.add_argument("--last", default="", help="recent dominant sectors, most recent first")
     ap.add_argument("--no-ledger", action="store_true",
                     help="non leggere né scrivere il registro condiviso")
+    ap.add_argument("--deroga", action="append", metavar="ASSE:MOTIVO",
+                    help="eccezione dichiarata su un asse (hue · display · body · mono · "
+                         "grid_system · radius_family · hero_shape). Il motivo è obbligatorio")
     ap.add_argument("--ledger", metavar="FILE",
                     help="JSON ledger of past measurements: reads the streak and records this one")
     ap.add_argument("--format", choices=("md", "json"), default="md")
@@ -945,7 +1013,8 @@ def main() -> int:
         if not any(s.strip() for s in last):
             last = ledger_sectors(entries)
 
-    problems = violations(report, last, last_fonts) + rejects
+    deroghe = parse_deroghe(args.deroga)
+    problems = violations(report, last, last_fonts, deroghe) + rejects
 
     if ledger_path and args.check:
         ledger_record(ledger_path, entries, str(Path(args.check).resolve()), report)
@@ -954,7 +1023,7 @@ def main() -> int:
         print(json.dumps({**report, "violations": problems, "hard_rejects": rejects},
                          ensure_ascii=False, indent=1))
     else:
-        print(render(report, violations(report, last, last_fonts), label, rejects))
+        print(render(report, problems, label, rejects))
     return 1 if problems else 0
 
 

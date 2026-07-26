@@ -112,6 +112,13 @@ venti. Le dashboard vere non stanno in nessuno dei due casi.
      log, nel referrer e nella cronologia. Gli altri sì, e devono: una vista
      filtrata si manda a un collega, o non è una vista.
 
+**La porta d'ingresso è l'eccezione.** Profilo e uscita valgono per le schermate
+**dietro** l'accesso: una pagina di login, di registrazione o di recupero
+password non ne ha, e non è un difetto — è la definizione. `close_check` la
+riconosce (campo password, nessun logout, nome o testo da schermata d'accesso) e
+non gliele chiede. Il **profilo** invece ha anche lui un campo password e resta
+controllato, perché sta dentro e la sua uscita ce l'ha.
+
 **Scorciatoia (lavoro piccolo):** una correzione su una tabella che c'è già non
 obbliga a rifarle la paginazione. Una **tabella nuova** sì, sempre.
 
