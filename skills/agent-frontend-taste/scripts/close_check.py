@@ -361,11 +361,18 @@ def main() -> int:
 
     # Una consegna, una voce: la chiave e la CARTELLA, non il file. Riaprire lo
     # stesso progetto aggiorna il suo record invece di aggiungerne un altro.
+    # Una CARTELLA = una consegna. Non una invocazione: passare due progetti allo
+    # stesso comando li faceva collassare in un record solo, e il secondo non
+    # entrava mai nella storia. Le pagine di uno stesso sito restano una voce.
     if ledger and reports:
-        folder = Path(args.pages[0]).resolve().parent
-        principale = next((r for pg_path, r in reports
-                           if pg_path.name.lower().startswith("index")), reports[0][1])
-        pg.ledger_record(ledger, entries, str(folder), principale)
+        per_cartella: dict[Path, list[tuple[Path, dict]]] = {}
+        for pagina, rep in reports:
+            per_cartella.setdefault(pagina.resolve().parent, []).append((pagina, rep))
+        for cartella, gruppo in per_cartella.items():
+            principale = next((r for p, r in gruppo
+                               if p.name.lower().startswith("index")), gruppo[0][1])
+            entries = pg.ledger_load(ledger)
+            pg.ledger_record(ledger, entries, str(cartella), principale)
 
     if not out and skipped:
         print("Solo pagine generate, nessun lavoro consegnato da misurare: "

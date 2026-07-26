@@ -237,6 +237,25 @@ def main() -> int:
     check("hex non valido rifiutato", run("--hex", "#zzz").returncode != 0)
     check("file inesistente rifiutato", run("--check", "/tmp/non-esiste-xyz.html").returncode != 0)
 
+    # --- deroghe: ogni messaggio deve appartenere a un asse ------------------
+    # Il difetto che questo test esiste per prendere: la regola di fila dice
+    # «come display», quella di quota «è il display di», e le hint conoscevano
+    # solo la prima. `--deroga display:…` zittiva la ripetizione e lasciava
+    # passare la predominanza: una via d'uscita che funziona a meta e peggio di
+    # una che non c'e, perche nessuno la verifica.
+    mod = load()
+    tutti = mod.font_violations({"display": "X", "body": "Y", "mono": "Z"},
+                                [{"display": "X", "body": "Y", "mono": "Z"}] * 6)
+    tutti += mod.layout_violations(
+        {"grid_system": "rail", "radius_family": "pill", "hero_shape": "foto-piena"},
+        [{"grid_system": "rail", "radius_family": "pill", "hero_shape": "foto-piena"}] * 6)
+    check("i generatori producono messaggi da derogare", len(tutti) > 0, True)
+    coperti = mod.apply_deroghe(tutti, {a: "motivo" for a in mod.AXES}, {})
+    check("ogni violazione di ripetizione è attribuita a un asse",
+          [m for m in coperti if not m.startswith("[deroga")], [])
+    check("le deroghe non bloccano", mod.only_blocking(coperti), [])
+    check("senza deroga invece bloccano", len(mod.only_blocking(tutti)), len(tutti))
+
     return 1 if fails else 0
 
 

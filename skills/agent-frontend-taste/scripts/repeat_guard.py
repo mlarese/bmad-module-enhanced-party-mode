@@ -732,6 +732,13 @@ def parse_deroghe(values: list[str] | None) -> dict:
     for raw in values or []:
         axis, _, why = raw.partition(":")
         axis, why = axis.strip(), why.strip()
+        if axis and axis not in AXES and why:
+            raise SystemExit(
+                f"asse sconosciuto nella deroga: '{axis}'. Assi validi: "
+                f"{' · '.join(AXES)}. Un refuso qui non darebbe errore e la "
+                "deroga non coprirebbe niente: crederesti di aver dichiarato "
+                "un'eccezione che non esiste."
+            )
         if not axis or not why:
             raise SystemExit(
                 f"deroga malformata: '{raw}'. Serve `asse:motivo`, per esempio "
@@ -802,13 +809,24 @@ def violations(report: dict, last_sectors: list[str],
 
 
 # Quale violazione appartiene a quale asse — serve solo alle deroghe.
+# Ogni asse elenca **tutte** le forme in cui i suoi messaggi lo nominano: la
+# regola di fila dice «come display», quella di quota dice «è il display di», e
+# la prima versione conosceva solo la prima — quindi `--deroga display:…`
+# zittiva la ripetizione e lasciava passare la predominanza, cioè una via
+# d'uscita che funzionava a metà. Il test le genera tutte e pretende che nessuna
+# resti senza asse.
 _AXIS_HINTS = (
     ("hue", ("settore ripetuto", "famiglia predominante", "tinta unica",
              "scuro strutturale")),
-    ("display", ("come display",)), ("body", ("come body",)), ("mono", ("come mono",)),
-    ("grid_system", ("impaginazione",)), ("radius_family", ("famiglia di raggio",)),
+    ("display", ("come display", "il display di")),
+    ("body", ("come body", "il body di")),
+    ("mono", ("come mono", "il mono di")),
+    ("grid_system", ("impaginazione",)),
+    ("radius_family", ("famiglia di raggio",)),
     ("hero_shape", ("forma della hero",)),
 )
+
+AXES = tuple(a for a, _ in _AXIS_HINTS)
 
 
 def apply_deroghe(problems: list[str], deroghe: dict, report: dict) -> list[str]:
