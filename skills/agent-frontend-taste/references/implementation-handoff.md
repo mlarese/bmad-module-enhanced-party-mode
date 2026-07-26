@@ -12,9 +12,9 @@ craft. Non è una capability.
 | 1 | **Pre-flight** — cosa esiste e cosa vincola | `bmad_context.py` | no |
 | 2 | **Ricerca** — dominio, marketing, servizi reali | Vesper | no |
 | 3 | **Valutazione degli input + G1** — richiesta, ricerca, documenti, ambiguità | consiglio | solo internamente, se la ricerca è insufficiente (max 5 giri) |
-| 4 | **Kernel + `slice_plan` (G2)** — le decisioni, prese | consiglio | no: si dichiara, non si chiede |
+| 4 | **G2 — le decisioni, prese**: kernel + `slice_plan` (ramo A) o i quattro documenti (ramo B, §4.0) | consiglio | no: si dichiara, non si chiede |
 | 5 | **Implementazione** — pagina e codice | Vesper · Vera · `bmad-quick-dev` | no |
-| 6 | **Approvazione (G3)** — contro i documenti | consiglio | solo internamente, se una richiesta non è soddisfatta |
+| 6 | **Approvazione (G3)** — contro i documenti | consiglio | solo internamente, se una richiesta non è soddisfatta (max 5 rifiuti) |
 
 **Nessun passo si ferma sull'owner.** Le uniche fermate sono interne — la ricerca che
 torna indietro, il deliverable che torna in lavorazione — e si risolvono senza uscire
@@ -78,7 +78,8 @@ evidenza, è un'opinione con dei link sotto.
 Nello stesso giro chiude tutto ciò che, senza di lui, diventerebbe una domanda:
 **superficie** (landing · dashboard · mobile web app), **`activity`**, **`register`**,
 **perimetro reale**, **stack** quando nessuna fonte lo dichiara, **precedenza** fra
-fonti in conflitto. Per ogni voce: decisione + una riga di motivo + `fatto |
+fonti in conflitto — e il **ramo** (§4.0): via breve col kernel, o i quattro documenti
+perché il lavoro ha un back end. Per ogni voce: decisione + una riga di motivo + `fatto |
 assunzione`. Testo del goal: `references/autonomia.md` → *G1 — Lettura*.
 
 | Input | Cosa si verifica |
@@ -146,6 +147,68 @@ niente.
 
 Le decisioni che PRD, UX spec e architettura avrebbero preso vanno prese comunque.
 Non si chiedono all'owner: si prendono **in consiglio**, e all'owner arriva l'esito.
+
+### 4.0 La soglia: kernel o documenti veri
+
+Non tutto il lavoro merita lo stesso peso, e la differenza non è la dimensione della
+pagina: è **se c'è un dietro**. Il ramo lo decide **G1** e lo **dichiara**.
+
+**Ramo A — landing, pagina singola, solo front-end.** Nessuno stato che sopravvive
+alla visita: un form che manda una mail, nessun accesso, nessuna tabella da
+guardare il giorno dopo. Vale la **via breve**: kernel a 5 campi, `slice_plan`, spec
+di slice. PRD, UX spec e architettura **non si creano** — il kernel li sostituisce
+(§14), ed è tutto ciò che quella pagina può sostenere senza pagare tre workflow.
+
+**Ramo B — progetto con back end e front end.** Auth, dati che persistono, back
+office, API, ruoli, pagamenti, più superfici (landing *e* admin), più slice previste.
+Qui il kernel non basta: le decisioni sopravvivono al giorno della consegna, e devono
+essere leggibili da chi non era nella stanza.
+
+**I quattro documenti si producono in un solo goal, dentro il consiglio.** Non si
+invocano i workflow uno per uno: ognuno è una porta da cui il flusso può uscire e
+fermarsi ad aspettare l'owner — `bmad-generate-project-context` lo fa per
+costruzione (avanza per step, ognuno con approvazione), e gli altri lo fanno appena
+la modalità headless non viene riconosciuta. Un goal solo non ha porte.
+
+> **G2-B — Documenti (ramo B).** Produci in questa seduta, e senza una sola domanda
+> all'owner, i quattro documenti che vincoleranno il lavoro:
+> **PRD** (perimetro, requisiti, non-obiettivi) · **UX / page spec** (superfici,
+> flussi, stati) · **Architettura** (stack, confini, regole — da qui in poi lo stack
+> è legge) · **Project context** (le regole non ovvie che chi implementa deve
+> ricordare). Chiudi con la `slice_plan`. Formato: quello dei workflow BMAD
+> corrispondenti — `bmad-prd`, `bmad-ux`, `bmad-architecture`,
+> `project-context.md` — che qui servono da **stampo, non da flusso**. Ogni
+> affermazione è marcata `fatto | assunzione`. Contesto: ‹richiesta · dominio ·
+> esito della ricerca · pre-flight · sito del cliente›.
+
+Scrittura in `planning-artifacts/`, un file per documento. Poi si riprende il flusso
+normale: `slice_plan` → spec di slice (§4.2) → `bmad-quick-dev` per la parte
+applicativa, con i documenti come vincolo (§7).
+
+**Il gate resta**, e resta interno: prima della S1 il consiglio rilegge i quattro
+contro `bmad-check-implementation-readiness` come **checklist**, non come workflow da
+invocare — perimetro completo, flussi senza buchi, stack deployabile, regole
+applicabili. Ciò che manca si corregge nella stessa seduta.
+
+**`CLAUDE.md` e `AGENTS.md` restano fuori:** li mantiene il progetto, non questo
+skill. Il project context del ramo B è `project-context.md` in `planning-artifacts/`,
+che è artefatto di lavoro, non configurazione del repo.
+
+**I documenti che ti sei scritta da sola vincolano come gli altri** (§7): lo stack
+dell'architettura è obbligatorio anche se l'hai deciso tu un'ora fa. Con una
+differenza che va marcata: ciò che nessuno ha verificato è **assunzione**, scritta
+come tale, e correggerla più tardi è una decisione del consiglio + una varianza —
+mai una domanda all'owner. Un'architettura auto-generata che diventa intoccabile è
+peggio dell'assenza di architettura.
+
+**Il tetto dei cinque vale anche qui:** se il gate di readiness boccia, si corregge
+ciò che nomina, massimo cinque giri; al quinto si procede alla S1 dichiarando cosa
+resta scoperto, come varianza (§3.1, §6.1).
+
+Fallimento: PRD e architettura generati per una landing di una pagina; una slice con
+auth e dati partita col solo kernel; documenti generati e poi ignorati dal craft;
+i quattro documenti prodotti invocando i workflow uno per uno invece che in un goal —
+e il flusso che si ferma alla prima porta.
 
 ```bash
 bmad-party-mode --non-interactive
@@ -270,6 +333,34 @@ deliverable contro il kernel, i documenti vincolanti e i craft-rules; motiva ogn
 rifiuto nominando la richiesta non soddisfatta». **Vale come la review avversaria,
 non in aggiunta:** è la stessa passata ostile, fatta da più teste con giurisdizioni
 diverse.
+
+### 6.1 Il rifiuto ha un tetto: cinque
+
+Un consiglio che può rifiutare all'infinito non è esigente, è un ciclo che non
+termina — e senza nessuno fuori dal flusso a interromperlo, gira finché non finisce
+il tempo. Stessa forma del tetto sui rimandi della ricerca (§3.1), stessa ragione.
+
+1. **Massimo cinque rifiuti** per lo stesso deliverable. Ogni rifiuto nomina la
+   richiesta mancante e **quella** si corregge: chi rifiuta senza nominarla non ha
+   rifiutato, e il deliverable passa (§6).
+2. **Un rifiuto vale una volta sola.** La stessa richiesta mancante non può motivare
+   due rifiuti: se dopo la correzione qualcuno la ripropone, o nomina un aspetto
+   nuovo o il giro non conta. Rifiuti che si spostano di poco a ogni passata sono
+   gusto travestito da contratto — e il gusto non è un veto.
+3. **Al quinto si consegna comunque, dichiarando cosa resta aperto.** Non si torna
+   dall'owner a chiedere il permesso di consegnare: si scrive in una riga quale
+   richiesta non si è riusciti a soddisfare e perché, si marca come **varianza**
+   (§11), e la si porta nella slice successiva. Un deliverable che soddisfa il
+   contratto meno un punto dichiarato vale infinitamente più di un deliverable che
+   non esce.
+4. **Il conto si scrive** nello spec, come per i rimandi: zero rifiuti sempre
+   significa che nessuno guarda davvero; cinque spesso significa che il problema sta
+   nel kernel, non nel deliverable.
+5. **Il tetto è per deliverable, non per sessione:** non si azzera rigenerando la
+   pagina, o basterebbe ripartire da capo per ricominciare a girare.
+
+Fallimento: sesto rifiuto sullo stesso deliverable; rifiuto che ripete una richiesta
+già corretta; lavoro fermo in approvazione senza che nessuno nomini cosa manca.
 
 ---
 
@@ -489,17 +580,20 @@ applicata sempre**, anche a una pagina.
 | Codice applicativo | **`bmad-quick-dev`**, una run per spec di slice |
 | Craft della pagina | Vesper AF → **`agent-web-animations`** |
 | Slice pesante (S2 con auth e dati) | **`bmad-create-story`** · **`bmad-code-review`** |
-| Progetto che diventa vivo | **`bmad-prd`** · **`bmad-architecture`** · **`bmad-sprint-planning`** |
+| Progetto con back end e front end (ramo B) | i quattro documenti in **un solo goal** del consiglio (§4.0) — `bmad-prd` · `bmad-ux` · `bmad-architecture` come **stampo del formato**, non come flusso da invocare |
+| Progetto che diventa vivo, con più persone | **`bmad-sprint-planning`** e i workflow BMAD veri, quando c'è un team che li legge |
 
 **Si sale di peso, non si parte pesanti.**
 
 ## 15. Quando NON usare la via breve
 
-Torna alle fasi BMAD complete quando: il progetto è **vivo e multi-pagina** con più
-persone che ci lavorano; esistono già PRD o architettura (allora **vincolano**,
-§7); il dominio è **regolato** (sanitario, finanziario, pubblico); o l'owner chiede
-la pianificazione estesa. La via breve è il **default sui lavori nuovi**, non una
-sostituzione universale.
+La via breve è il default sulle **landing e le pagine singole** (ramo A, §4.0), non
+una sostituzione universale. I quattro documenti si producono — sempre in un solo
+goal, sempre senza fermate — quando: il lavoro ha **back end e front end** (ramo B,
+§4.0); il progetto è **vivo e multi-pagina** con più persone che ci lavorano; il
+dominio è **regolato** (sanitario, finanziario, pubblico); o l'owner chiede la
+pianificazione estesa. Se PRD o architettura **esistono già**, non si rigenerano:
+vincolano (§7), e il consiglio dice solo dove tacciono.
 
 ---
 
@@ -517,8 +611,9 @@ consiglio che invece di decidere produce domande da girare all'owner; party che
 sceglie font e palette (il craft non si vota); ricerca insufficiente accettata invece
 che rifatta; rimando che non nomina cosa manca; sesto rimando sullo stesso lavoro
 invece della decisione sull'evidenza; lavoro fermato al quinto rimando aspettando
-l'owner; rifiuto in approvazione che non nomina la richiesta mancante; **una qualsiasi
-domanda all'owner in mezzo al flusso** (`references/autonomia.md`).
+l'owner; rifiuto in approvazione che non nomina la richiesta mancante; **sesto rifiuto
+sullo stesso deliverable**, o rifiuto che ripete una richiesta già corretta; **una
+qualsiasi domanda all'owner in mezzo al flusso** (`references/autonomia.md`).
 
 **Contenuti:** lorem ipsum o copy da landing generica quando i testi non erano
 forniti; servizi inventati mentre il sito ne elencava altri; stock generico quando

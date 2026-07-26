@@ -32,12 +32,17 @@ una domanda ha fallito il goal — si rilancia il goal, non si gira la domanda.
 > non con una domanda. Decidi: superficie (landing · dashboard · mobile web app),
 > `activity`, `register` (il carattere del business), perimetro reale della
 > richiesta, stack quando nessuna fonte lo dichiara, precedenza fra fonti in
-> conflitto, e la lettura da dare a ogni punto ambiguo della richiesta. Contesto:
+> conflitto, **il ramo** (landing / solo front-end → kernel; progetto con back end e
+> front end → i quattro documenti), e la lettura da dare a ogni punto ambiguo.
+> Contesto:
 > ‹richiesta · dominio · luogo · esito del pre-flight · documenti trovati · sito del
 > cliente›. Per ogni voce: decisione + una riga di motivo + `fatto | assunzione`.
 > Nessuna domanda all'owner.
 
-### G2 — Kernel + `slice_plan` (decide cosa si costruisce)
+### G2 — Cosa si costruisce (due forme, il ramo lo decide G1)
+
+**G2-A — Kernel + `slice_plan`.** Landing, pagina singola, solo front-end: nessuno
+stato che sopravvive alla visita.
 
 > **Goal:** decidi il kernel di questa pagina — perimetro e servizi da mettere
 > online, flusso di conversione, sezioni, stack, vincoli di brand, cosa resta fuori,
@@ -45,13 +50,35 @@ una domanda ha fallito il goal — si rilancia il goal, non si gira la domanda.
 > ricerca · servizi trovati sul sito›. Chiudi con il SPEC kernel a cinque campi e la
 > `slice_plan`. Nessuna domanda all'owner: decidete.
 
+**G2-B — I quattro documenti.** Progetto con back end e front end: auth, dati che
+persistono, back office, API, ruoli, pagamenti, più superfici, più slice.
+
+> **Goal:** produci in questa seduta, e senza una sola domanda all'owner, i quattro
+> documenti che vincoleranno il lavoro: **PRD** (perimetro, requisiti,
+> non-obiettivi) · **UX / page spec** (superfici, flussi, stati) · **Architettura**
+> (stack, confini, regole — da qui in poi lo stack è legge) · **Project context**
+> (le regole non ovvie che chi implementa deve ricordare). Chiudi con la
+> `slice_plan`. Formato: quello dei workflow BMAD corrispondenti, che qui servono da
+> **stampo, non da flusso**. Ogni affermazione marcata `fatto | assunzione`.
+> Contesto: ‹richiesta · dominio · esito della ricerca · pre-flight · sito del
+> cliente›.
+
+**Un goal solo, non quattro workflow.** Ogni workflow invocato è una porta da cui il
+flusso può uscire e fermarsi ad aspettare: `bmad-generate-project-context` lo fa per
+costruzione (avanza per step, ognuno con approvazione dell'owner), gli altri appena
+la modalità headless non viene riconosciuta. Un goal non ha porte. I documenti che il
+consiglio si scrive **vincolano come quelli dell'owner**, ma ciò che nessuno ha
+verificato resta assunzione marcata, correggibile in consiglio con una varianza — mai
+con una domanda.
+
 ### G3 — Approvazione (decide se si consegna)
 
 > **Goal:** approva o rifiuta il deliverable contro il kernel, i documenti
 > vincolanti e i craft-rules. Approvabile se soddisfa **tutte** le richieste dei
 > documenti, anche se qualcuno l'avrebbe fatto diversamente: il gusto non è un veto.
-> Ogni rifiuto nomina la richiesta mancante. Parla chi ha giurisdizione. Nessuna
-> domanda all'owner.
+> Ogni rifiuto nomina la richiesta mancante, e la stessa richiesta non può motivare
+> due rifiuti. **Massimo cinque rifiuti**: al quinto si consegna dichiarando cosa
+> resta scoperto. Parla chi ha giurisdizione. Nessuna domanda all'owner.
 
 Su lavori piccoli i tre goal stanno in una chiamata sola; l'ordine logico resta:
 prima si legge, poi si decide, poi si approva.
@@ -88,12 +115,25 @@ risposta, senza invitare a fermare il lavoro e senza attendere niente. Stesso
 trattamento per la riga di onestà sui dati verosimili alla consegna: si dice, non si
 chiede.
 
-## Quando la ricerca non regge
+## Ogni ciclo interno ha un tetto: cinque
 
-Il rimando ha un tetto di **cinque** giri. Al quinto non si porta la questione
-all'owner: si **decide con l'evidenza migliore disponibile**, si dichiara in una riga
-quale delle tre cose mancava (domanda mal posta · fonti inesistenti · dato che solo
-l'owner ha) e si scrive la varianza. Il lavoro esce comunque.
+Tolte le fermate sull'owner, l'unico modo che resta a un flusso per non terminare è
+girare su sé stesso. Entrambi i cicli interni hanno lo stesso tetto, e la stessa via
+d'uscita: **si decide e si consegna, dichiarando cosa resta aperto.**
+
+- **Ricerca insufficiente → massimo cinque rimandi.** Al quinto non si porta la
+  questione all'owner: si **decide con l'evidenza migliore disponibile**, si dichiara
+  in una riga quale delle tre cose mancava (domanda mal posta · fonti inesistenti ·
+  dato che solo l'owner ha) e si scrive la varianza. Il lavoro esce comunque.
+- **Approvazione negata → massimo cinque rifiuti** (G3). Ogni rifiuto nomina la
+  richiesta mancante, e quella si corregge; la stessa richiesta non può motivare due
+  rifiuti. Al quinto si **consegna comunque**, scrivendo in una riga quale richiesta
+  è rimasta scoperta e perché, come varianza, e portandola nella slice successiva.
+  Non si chiede all'owner il permesso di consegnare.
+
+Il tetto è **per lavoro e per deliverable**, non per sessione: non si azzera
+rinominando il job o rigenerando la pagina. Il conto finisce nello spec — zero
+significa che nessuno guarda davvero, cinque che il problema sta a monte.
 
 ## L'unico confine che resta
 
@@ -108,5 +148,6 @@ distruggere.
 Una domanda all'owner in mezzo al lavoro. Un menù di opzioni. «Confermi?».
 «Preferisci A o B?». «Fammi sapere e procedo». Un catalogo aperto in attesa di una
 scelta. Un beat di scoping. Un consiglio che restituisce domande invece di decisioni.
-Un lavoro che si ferma al quinto rimando. Un avviso scritto come richiesta di
-permesso.
+Un lavoro che si ferma al quinto rimando. Un sesto rifiuto sullo stesso deliverable,
+o un rifiuto che ripete una richiesta già corretta. Un avviso scritto come richiesta
+di permesso.
