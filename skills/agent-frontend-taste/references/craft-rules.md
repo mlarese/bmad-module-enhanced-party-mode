@@ -59,52 +59,53 @@ Restano fuori dal riempimento i **fatti che fanno danno se creduti**: certificaz
 
 Fallimento: `TODO` nel file consegnato; blocco «dati da sostituire» in coda alla pagina o allo spec; `lorem ipsum`; una certificazione inventata.
 
-## La via breve: kernel + slice (default sui lavori nuovi)
+## Prima del codice: i documenti, poi le slice
 
-Le fasi BMAD complete costano più di quello che proteggono su una pagina. Comprimile in **un artefatto e una fermata**:
+Il flusso implementativo vive in `implementation-handoff.md`; i testi dei goal in
+`autonomia.md`. Qui sta solo ciò che serve sapere mentre fai craft:
 
-1. **Ricerca** (dominio, marketing, servizi dal sito) — nessuna fermata, è il tuo mestiere.
-1b. **Il consiglio valuta gli input e scioglie le ambiguità prima di decidere (G1):** **la richiesta stessa dell'owner**, ricerca di dominio e di marketing, PRD, architettura e documento di architettura, project context, spec già consegnati. Richiesta ambigua → si sceglie la lettura più probabile e la si **dichiara** nel kernel («l'ho letta come X, non Y»), non si torna con una domanda. Nello stesso giro si chiudono **superficie**, **`register`**, **perimetro** e **stack** quando non sono dichiarati da nessuna fonte. Chi produce la ricerca non la valida. Per giurisdizione (evidenza → Mary, deployabilità → Rex, WordPress → Niki, dati personali → Jane, claim → Elena, prezzi → commercialista, buchi → Murat). I documenti **restano vincolanti**: la valutazione dice quanto coprono e dove tacciono. Buco → decide e dichiara (varianza); contraddizione → vince la precedenza, il conflitto è varianza; dato sbagliato di fatto → si segnala in consegna; ricerca insufficiente → **si rifà**, unico caso in cui il lavoro torna indietro, con **tetto di cinque rimandi** (ogni rimando nomina cosa manca; al quinto si **decide con l'evidenza migliore**, si dichiara quale delle tre cose mancava — domanda mal posta · fonti inesistenti · dato che solo l'owner ha — e si scrive la varianza: il lavoro esce comunque). Verdetto: una riga per input dentro il kernel.
-2. **G2 — cosa si costruisce, in consiglio.** Il ramo lo decide G1 e lo dichiara. **Ramo A (landing, pagina singola, solo front-end):** `bmad-party-mode --non-interactive` con goal «decidi perimetro, servizi, flusso di conversione, sezioni, stack, vincoli, non-obiettivi e `slice_plan`; nessuna domanda all'owner» — **kernel a 5 campi, che sostituisce PRD + UX spec + architettura**. **Ramo B (progetto con back end e front end: auth, dati che persistono, back office, API, ruoli, più superfici):** un **solo goal** che produce i quattro documenti veri — PRD · UX/page spec · architettura · `project-context.md` — più la `slice_plan`, con i workflow BMAD come **stampo, non come flusso** (invocarli uno per uno apre porte da cui il lavoro esce a chiedere: `bmad-generate-project-context` si ferma a ogni step per costruzione). Disciplina: `implementation-handoff.md` §4.0. In entrambi i rami il consiglio decide *cosa* sta in pagina e *perché*; **il craft non si vota** (palette, font, hero restano tuoi). Fatti verificati e **assunzioni** restano separati e marcati — vale anche per i documenti che ti sei scritta da sola, che vincolano come gli altri. L'esito si **dichiara** all'owner in una battuta — non è una richiesta di conferma e non blocca.
-3. **`slice_plan` verticale** — ogni slice end-to-end e consegnabile da sola. Sito: **S1 landing** → **S2 back office** (accesso minimo reale + la schermata che gestisce ciò che la landing produce) → S3+. Dashboard/app: **S1 una schermata che fa una cosa vera con l'accesso che serve a farla** → **S2 auth completa** → S3+. Mai auth completa come S1; mai aprire una slice prima che la precedente sia consegnata e vista.
-3b. **Lo stesso consiglio approva il risultato (G3)** (`--non-interactive`, goal «approva o rifiuta contro kernel, documenti vincolanti e craft-rules»): **approvabile se soddisfa tutte le richieste dei documenti BMAD + craft-rules**, anche se qualcuno l'avrebbe fatto diversamente — il gusto non è un veto, e ogni rifiuto deve **nominare** la richiesta mancante. **Tetto di cinque rifiuti** per deliverable (la stessa richiesta non ne motiva due; al quinto si consegna dichiarando cosa resta scoperto, come varianza): un consiglio che rifiuta all'infinito è un ciclo che non termina, e senza fermate sull'owner nessuno lo interrompe. Parla chi ha giurisdizione (form → Jane, prezzo → commercialista, claim → Elena, WordPress → Niki, hosting → Rex, motion → Vera); chi non ce l'ha tace. Vale come la review avversaria, non in aggiunta.
-4. **Ogni slice diventa una spec eseguibile** — `bmad-spec` in **headless** (nessuna domanda, express), slug per slice `<progetto>-s<N>-<nome>`, Ready for Development (task con path, AC in Given/When/Then, zero TBD), ~900–1600 token **contati sul contratto applicativo**: gli assi di craft stanno nel DESIGN/spec di accompagnamento e la spec li referenzia, non li duplica. Le `open_questions[]` dell'express **si chiudono nello stesso giro** (decisione + assunzione marcata + varianza): una spec con domande aperte non è pronta, e quelle domande non hanno nessuno a cui andare. Il kernel — o i quattro documenti — è la **fonte** che le vincola tutte. Se sfora davvero, quasi sempre erano **due** slice.
-5. **Implementazione:** tu la pagina (AF → Vera) **e** la parte applicativa di quella spec (endpoint, persistenza, auth di slice), con la **disciplina di `bmad-quick-dev`** — `spec-template.md`, standard Ready for Development — **senza invocarlo**: quel workflow si ferma a chiedere in ogni ramo (`autonomia.md` → *I workflow che si fermano si usano come stampo*). Se lo lancia l'owner, si esegue com'è. A consegna fatta la spec resta in `implementation-artifacts/` e vincola la slice dopo; si aggiorna ri-derivandola sullo stesso slug, mai a mano. Dettaglio: `implementation-handoff.md` §4.2.
+1. **Ricerca** — dominio e marketing, entrambe **scritte** (§2). È il tuo mestiere e
+   non è una fermata.
+2. **G1 — lettura.** Il consiglio giudica gli input e scioglie ogni ambiguità che
+   sarebbe stata una domanda: superficie, `activity`, `register`, perimetro, stack,
+   precedenze. Ricerca insufficiente → si rifà, **max cinque rimandi**.
+3. **G2 — i sei documenti, prima del codice.** Se il pre-flight non li trova, li
+   scrive il consiglio **al completo**: ricerca di dominio · ricerca di marketing ·
+   PRD · documento UX · architettura · project context, più la `slice_plan`. Tre
+   criteri attraversano tutto — **architettura dell'app · sicurezza (OWASP) ·
+   vertical slice**. Il peso cambia col lavoro (una landing li ha corti), l'esistenza
+   no.
+4. **Tempra** — nessun documento passa com'è uscito: **casi limite** ·
+   **elicitazione con tutti i metodi applicabili** · **review adversarial**, in
+   consiglio, esiti dentro il documento (`implementation-handoff.md` §4.0b).
+5. **`slice_plan` verticale** — ogni slice end-to-end e consegnabile da sola. Sito:
+   S1 landing → S2 back office (accesso minimo reale) → S3+. App: S1 una schermata
+   che fa una cosa vera → S2 auth completa. Mai auth completa come S1; mai aprire una
+   slice prima che la precedente sia consegnata.
+6. **Una slice = una spec eseguibile** — `bmad-spec` headless, slug
+   `<progetto>-s<N>-<nome>`, Ready for Development, ~900–1600 token **sul contratto
+   applicativo**: gli assi di craft stanno nel DESIGN e la spec li referenzia. Le
+   `open_questions` si chiudono nello stesso giro.
+7. **Implementazione** — tu la pagina (AF → Vera) e la parte applicativa, con la
+   **disciplina** di `bmad-quick-dev` ma senza invocarlo.
+8. **G3 — approvazione** contro documenti + craft-rules, **max cinque rifiuti**.
 
-**Non è un flusso nuovo:** sono i workflow BMAD chiamati a pezzi — `bmad-spec` **invocato** per il kernel e le spec di slice; `bmad-quick-dev`, `bmad-prd`/`bmad-ux`/`bmad-architecture`, `bmad-create-story`/`bmad-code-review` usati come **stampo** dentro il flusso, perché hanno checkpoint e invocarli lo fermerebbe. **Si sale di peso, non si parte pesanti.**
+**Il craft non si vota.** Palette, tipografia, hero, griglia, superfici e motion
+restano tuoi: il consiglio decide *cosa* sta in pagina e *perché*, mai *come appare*.
+Hero archetype ed effetto motion li scegli da seed, con le esclusioni di MEMORY.
 
-**Le varianze si scrivono in `docs/varianze/YYYY-MM-DD-<slug>.md`** — cinque righe: atteso · deciso · perché · tipo (deviazione | assunzione da verificare | conflitto risolto) · scadenza. Si scrive solo dove tra sei mesi qualcuno chiederebbe «perché qui è così?»: assunzioni entrate in pagina, deviazioni da convenzioni, conflitti risolti, scelte contro un default dei craft-rules. Mai dentro il deliverable. Il pre-flight le rilegge **per prime**.
+**Prima di invocare un workflow BMAD, guarda se si ferma** (`HALT`, «ask the human»,
+«user must approve», un menu da scegliere): se ha un checkpoint sul percorso che
+useresti non si invoca — se ne prende il **formato** e il lavoro lo fa il consiglio o
+tu. Tabella verificata in `autonomia.md`.
 
-**Le indicazioni del progetto si leggono, non si gestiscono:** `CLAUDE.md` / `AGENTS.md` (stack, convenzioni, vincoli) sono la prima fonte da consultare — li mantiene il progetto, non tu. Se non le dicono → leggi i **documenti chiarificatori** in `docs/` e README (il pre-flight li elenca, ordinati per rilevanza) **prima** di dedurre lo stack dai file. Ambiguo → **decide G1** e la decisione si dichiara nel kernel + varianza; nessuna domanda, nessuna riga scritta nei file di configurazione del progetto.
+**Le varianze si scrivono in `docs/varianze/YYYY-MM-DD-<slug>.md`** — cinque righe:
+atteso · deciso · perché · tipo (deviazione | assunzione da verificare | conflitto
+risolto) · scadenza. Solo dove tra sei mesi qualcuno chiederebbe «perché qui è così?».
+Mai dentro il deliverable. Il pre-flight le rilegge per prime.
 
-La via breve vale sul **ramo A** (landing, pagina singola, solo front-end). Sul **ramo B** — back end e front end, progetto vivo e multi-pagina, dominio regolato, o richiesta esplicita dell'owner — si producono i quattro documenti (sempre in un solo goal, sempre senza fermate). Se PRD/architettura esistono già non si rigenerano: vincolano. Disciplina: `implementation-handoff.md` §§1-6 (il flusso) e §15 (quando non usarla).
-
-## Il consiglio decide — tre goal (nessuna domanda, mai)
-
-Ogni scelta che un umano avrebbe sciolto passa da qui. Il consiglio gira sempre
-`bmad-party-mode --non-interactive` e **decide**: un consiglio che restituisce una
-domanda ha fallito il goal, e il goal si rilancia — non si gira la domanda all'owner.
-Testo integrale dei tre goal: `references/autonomia.md`.
-
-| Goal | Quando | Decide |
-|---|---|---|
-| **G1 — Lettura** | dopo il pre-flight e la ricerca, prima del kernel | superficie · `register` · perimetro reale · stack non dichiarato · precedenza fra fonti in conflitto · ogni punto ambiguo della richiesta. Per voce: decisione + una riga di motivo + `fatto \| assunzione` |
-| **G2 — Cosa si costruisce** | prima del codice | **ramo A** (landing / solo FE): kernel a 5 campi + `slice_plan`. **ramo B** (BE + FE: auth, dati, back office): i quattro documenti — PRD · UX/page spec · architettura · `project-context.md` — in **un solo goal**, mai invocando i workflow uno per uno |
-| **G3 — Approvazione** | prima di consegnare | approva se soddisfa **tutte** le richieste dei documenti + craft-rules; ogni rifiuto nomina la richiesta mancante; **max 5 rifiuti**, poi si consegna dichiarando cosa resta scoperto |
-
-**Entrambi i cicli interni hanno tetto cinque** — rimandi della ricerca (G1) e rifiuti in approvazione (G3) — e la stessa via d'uscita: si decide, si consegna, si dichiara cosa resta aperto come varianza. Tolte le fermate sull'owner, l'unico modo che resta a un flusso per non terminare è girare su sé stesso. Una **regressione** non conta come rifiuto ripetuto; due andate e ritorni fra due richieste incompatibili si chiudono scegliendo quale cede (varianza).
-
-**Il ramo si promuove, mai il contrario:** quando una slice introduce il back end — auth reale, dati che persistono, API, ruoli, pagamenti — **prima** di aprirla si producono i quattro documenti, e da lì in poi il lavoro è ramo B, S3 compresa. Il kernel non si butta: diventa input del PRD. La promozione la dichiara G1 ed è una varianza (`implementation-handoff.md` §4.0).
-
-**Prima di invocare un workflow BMAD, guarda se si ferma** (`HALT`, «ask the human», «user must approve»): se ha un checkpoint sul percorso che useresti, non si invoca — se ne prende il **formato** e il lavoro lo fa il consiglio o tu. Elenco verificato in `autonomia.md`.
-
-Su lavori piccoli i tre goal stanno in una chiamata sola, ma l'ordine resta: prima si
-legge, poi si decide, poi si approva.
-
-**Il craft non si vota.** Palette, tipografia, hero, griglia, superfici e motion restano
-tuoi: il consiglio decide *cosa* sta in pagina e *perché*, mai *come appare*. Le scelte
-di craft che prima erano «a vista dell'owner» — hero archetype, effetto motion — le
-prendi tu da seed deterministico con le esclusioni di MEMORY, e le dichiari.
+**Le indicazioni del progetto si leggono, non si gestiscono:** `CLAUDE.md` /
+`AGENTS.md` sono la prima fonte da consultare — li mantiene il progetto, non tu.
 
 ## Il sito esistente del cliente (quando c'è)
 
@@ -184,7 +185,7 @@ Il difetto misurato non era l'accento — quelli erano diversi ogni volta — ma
 8. Dichiara in direzione: `locale: …` · `register: …` · `activity: …` · `palette_family: …` · **`hue_sector: …`** · **`ink_family: …`** · `fonts: Display + Body (+ terza voce)` · `radius_family: …` · perché — una riga che leghi i tre segnali all'esito, non etichette scollegate.
 9. Dopo approve: aggiorna MEMORY (`last_palette_families`, **`last_hue_sectors`**, **`last_ink_families`**, `last_font_pairs`, `last_registers`, `last_hero_treatments`, `last_hero_copy`, `last_radius_families`).
 10. **Il `register` non si sorteggia mai da seed.** Composizione, superfici e hero si estraggono apposta, per varietà; il carattere no: è un **fatto del business**, non una variabile estetica. Un seed che decide "luxury" per una trattoria produce una pagina coerente con sé stessa e falsa rispetto al cliente. Il carattere viene dal brief, dal dominio, dal sito del cliente o da **G1** — mai da `craft_axes.py`, mai da una domanda.
-11. **Se è ambiguo lo decide G1, e tu lo dichiari — non lo chiedi.** Quando le due letture darebbero design **opposti** (famigliare vs luxury, artigianale vs clinico) la questione va al consiglio con l'evidenza raccolta (dominio, luogo, prezzi, tono del sito, clientela), e il verdetto entra nel kernel: «l'ho letto come famigliare, non luxury — perché ‹riga di motivo›». Negli altri casi decidi da sola e dichiara. Sbagliare `register` è l'errore più caro del set — non si corregge cambiando un font, si rifà tutto — ed è **esattamente** per questo che si decide sull'evidenza e si scrive la riga: una lettura sbagliata dichiarata si vede subito, una domanda costa un giro sempre.
+11. **Se è ambiguo lo decide G1, e tu lo dichiari — non lo chiedi.** Quando le due letture darebbero design **opposti** (famigliare vs luxury, artigianale vs clinico) la questione va al consiglio con l'evidenza raccolta (dominio, luogo, prezzi, tono del sito, clientela), e il verdetto entra nei documenti: «l'ho letto come famigliare, non luxury — perché ‹riga di motivo›». Negli altri casi decidi da sola e dichiara. Sbagliare `register` è l'errore più caro del set — non si corregge cambiando un font, si rifà tutto — ed è **esattamente** per questo che si decide sull'evidenza e si scrive la riga: una lettura sbagliata dichiarata si vede subito, una domanda costa un giro sempre.
 12. Fallimento: `register` non dichiarato; luxury e famigliare della stessa categoria che escono identici; carattere dichiarato e poi contraddetto dal colore (una trattoria "famigliare" in nero/oro); carattere estratto da seed.
 
 ## Sistema tipografico (oltre la coppia)

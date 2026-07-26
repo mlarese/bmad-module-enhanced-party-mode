@@ -32,41 +32,77 @@ una domanda ha fallito il goal — si rilancia il goal, non si gira la domanda.
 > non con una domanda. Decidi: superficie (landing · dashboard · mobile web app),
 > `activity`, `register` (il carattere del business), perimetro reale della
 > richiesta, stack quando nessuna fonte lo dichiara, precedenza fra fonti in
-> conflitto, **il ramo** (landing / solo front-end → kernel; progetto con back end e
-> front end → i quattro documenti), e la lettura da dare a ogni punto ambiguo.
+> conflitto, **il peso dei documenti** (una landing li ha corti, un progetto con back
+> end pieni — ma esistono sempre), e la lettura da dare a ogni punto ambiguo.
 > Contesto:
 > ‹richiesta · dominio · luogo · esito del pre-flight · documenti trovati · sito del
 > cliente›. Per ogni voce: decisione + una riga di motivo + `fatto | assunzione`.
 > Nessuna domanda all'owner.
 
-### G2 — Cosa si costruisce (due forme, il ramo lo decide G1)
+### G2 — I documenti (tutto il consiglio, prima del codice)
 
-**G2-A — Kernel + `slice_plan`.** Landing, pagina singola, solo front-end: nessuno
-stato che sopravvive alla visita.
+**Quando il pre-flight non trova i documenti, il consiglio li produce.** Non è una
+scelta di peso del lavoro: è la condizione per scrivere codice sapendo cosa si sta
+scrivendo. Nessuna domanda all'owner in nessun passaggio.
 
-> **Goal:** decidi il kernel di questa pagina — perimetro e servizi da mettere
-> online, flusso di conversione, sezioni, stack, vincoli di brand, cosa resta fuori,
-> e il piano a slice verticali. Contesto: ‹dominio · luogo · register · esito della
-> ricerca · servizi trovati sul sito›. Chiudi con il SPEC kernel a cinque campi e la
-> `slice_plan`. Nessuna domanda all'owner: decidete.
+> **Goal:** prima che venga scritta una riga di codice, e senza una sola domanda
+> all'owner, produci ciò che manca fra: **ricerca di dominio** · **ricerca di
+> marketing** · **PRD** (perimetro, requisiti, non-obiettivi) · **documento UX /
+> page spec** (superfici, flussi, stati) · **architettura** (stack, confini, regole
+> — da qui in poi lo stack è legge) · **project context** (le regole non ovvie che
+> chi implementa deve ricordare). Chiudi con la `slice_plan`.
+>
+> **Tre criteri attraversano tutto e si dichiarano voce per voce:**
+> **architettura dell'app** (confini, responsabilità, cosa sta dove) ·
+> **sicurezza** (OWASP dal primo giorno: superficie d'attacco, dati personali,
+> autenticazione, ciò che il front end non può garantire e resta requisito per il
+> back end) · **vertical slice** (ogni pezzo end-to-end e consegnabile da solo).
+>
+> **Usa i workflow BMAD**: `bmad-prd`, `bmad-ux`, `bmad-architecture`, `bmad-spec`
+> si **invocano in headless**; quelli con checkpoint si usano come **stampo** —
+> vedi la tabella qui sotto. Ogni affermazione marcata `fatto | assunzione`.
+> Contesto: ‹richiesta · dominio · luogo · register · esito della ricerca ·
+> pre-flight · sito del cliente›.
 
-**G2-B — I quattro documenti.** Progetto con back end e front end: auth, dati che
-persistono, back office, API, ruoli, pagamenti, più superfici, più slice.
+**Convoca tutto il consiglio, non tre voci.** Il roster intero: chi non ha
+giurisdizione su un punto tace su quel punto, ma c'è — perché il valore è l'attrito,
+e un tavolo scelto da te contiene solo le obiezioni che ti aspettavi. Parla chi sa
+(evidenza → Mary · deployabilità → Rex · WordPress → Niki · dati personali → Jane ·
+claim → Elena · prezzi → commercialista · buchi → Murat · flusso → Sally · coerenza
+tecnica → Winston · craft → Vesper e Vera).
 
-> **Goal:** produci in questa seduta, e senza una sola domanda all'owner, i quattro
-> documenti che vincoleranno il lavoro: **PRD** (perimetro, requisiti,
-> non-obiettivi) · **UX / page spec** (superfici, flussi, stati) · **Architettura**
-> (stack, confini, regole — da qui in poi lo stack è legge) · **Project context**
-> (le regole non ovvie che chi implementa deve ricordare). Chiudi con la
-> `slice_plan`. Formato: quello dei workflow BMAD corrispondenti, che qui servono da
-> **stampo, non da flusso**. Ogni affermazione marcata `fatto | assunzione`.
-> Contesto: ‹richiesta · dominio · esito della ricerca · pre-flight · sito del
-> cliente›.
+**Il peso cambia, l'esistenza no.** Una landing ha un PRD di mezza pagina e
+un'architettura di dieci righe; un progetto con back end, auth e back office li ha
+pieni. Ciò che non cambia è che **esistano prima del codice**: un documento corto e
+vero batte un documento assente, e il costo di scriverlo su una landing è dieci
+minuti di consiglio, non tre workflow interattivi.
 
-**Un goal solo, non quattro workflow.** Vedi *I workflow che si fermano si usano come
-stampo*, qui sotto: un goal non ha porte. I documenti che il consiglio si scrive
-**vincolano come quelli dell'owner**, ma ciò che nessuno ha verificato resta
-assunzione marcata, correggibile in consiglio con una varianza — mai con una domanda.
+**Il `slice_plan` esce da qui**, e la `spec` di ogni slice da lì (§4.2 di
+`implementation-handoff.md`).
+
+**Un goal solo, non sei catene separate.** Il consiglio è il contenitore: dentro, i
+workflow headless si invocano davvero, quelli con checkpoint si usano come stampo
+(sotto). I documenti che il consiglio si scrive **vincolano come quelli dell'owner**,
+ma ciò che nessuno ha verificato resta assunzione marcata, correggibile in consiglio
+con una varianza — mai con una domanda.
+
+### G3 — Approvazione (decide se si consegna)
+
+> **Goal:** approva o rifiuta il deliverable contro i documenti vincolanti (§4.0) e
+> i craft-rules. Approvabile se soddisfa **tutte** le richieste dei
+> documenti, anche se qualcuno l'avrebbe fatto diversamente: il gusto non è un veto.
+> Ogni rifiuto nomina la richiesta mancante, e la stessa richiesta non può motivare
+> due rifiuti. **Massimo cinque rifiuti**: al quinto si consegna dichiarando cosa
+> resta scoperto. Parla chi ha giurisdizione. Nessuna domanda all'owner.
+
+Su lavori piccoli i tre goal stanno in una chiamata sola; l'ordine logico resta:
+prima si legge, poi si decide, poi si approva.
+
+**Il craft non si vota.** Palette, tipografia, hero, griglia, superfici e motion
+restano tuoi: il consiglio decide *cosa* sta in pagina e *perché*, mai *come appare*.
+Le scelte di craft che un tempo erano «a vista dell'owner» — hero archetype dal
+catalogo, effetto motion dalla gallery — le prendi tu da seed deterministico con le
+esclusioni di MEMORY, e le dichiari.
 
 ## I workflow che si fermano si usano come stampo, non come flusso
 
@@ -84,8 +120,11 @@ consiglio o Vesper, dentro il flusso.
 |---|---|---|
 | `bmad-quick-dev` | **sì**, in ogni ramo — `step-01` (spec attive → «ask user which to resume»), `step-02` (intent gaps · split · approve/edit), anche `step-oneshot` | **stampo**: `spec-template.md` e lo standard *Ready for Development*. Il codice applicativo lo scrive Vesper con quella disciplina |
 | `bmad-generate-project-context` | **sì**, per costruzione (avanza per step, ognuno con approvazione) | **stampo**: il consiglio scrive `project-context.md` |
-| `bmad-prd` · `bmad-ux` · `bmad-architecture` | hanno `references/headless.md` | **stampo** dentro il goal G2-B: un goal solo invece di tre inviti a fermarsi |
+| `bmad-prd` · `bmad-ux` · `bmad-architecture` | **no**: hanno `references/headless.md` | **si invocano** in headless, dentro il goal G2 |
 | `bmad-spec` | **no**: headless vero, express, slug fornito dal chiamante | **si invoca** (§4.2) |
+| `bmad-review-edge-case-hunter` | **no**: si ferma solo su input vuoto (errore, non domanda) | **si invoca** su ogni documento (tempra, §4.0b) |
+| `bmad-review-adversarial-general` | quasi: «zero findings → re-analyze **or ask for guidance**» | **si invoca**, con la clausola: zero findings → **si ri-analizza**, mai si chiede |
+| `bmad-advanced-elicitation` | **sì**: *è* un menu — «Choose a number (1-5), [r] Reshuffle, [a] List All» | **stampo**: si prende `methods.csv` (71 metodi) e si applicano **tutti quelli applicabili**, senza presentare niente |
 | `bmad-check-implementation-readiness` | — | **checklist**, riletta dal consiglio |
 
 **L'owner può sempre invocarli lui.** Se è lui a lanciare `bmad-quick-dev`, le
@@ -94,24 +133,6 @@ fermate se le è scelte: si esegue il workflow com'è. La regola vincola te, non
 Fallimento: un workflow con checkpoint invocato dentro il flusso; la disciplina di
 quel workflow **saltata** perché non lo si è invocato (lo stampo è obbligatorio quanto
 lo era il flusso); una porta scoperta dopo, perché nessuno ha guardato prima.
-
-### G3 — Approvazione (decide se si consegna)
-
-> **Goal:** approva o rifiuta il deliverable contro il kernel, i documenti
-> vincolanti e i craft-rules. Approvabile se soddisfa **tutte** le richieste dei
-> documenti, anche se qualcuno l'avrebbe fatto diversamente: il gusto non è un veto.
-> Ogni rifiuto nomina la richiesta mancante, e la stessa richiesta non può motivare
-> due rifiuti. **Massimo cinque rifiuti**: al quinto si consegna dichiarando cosa
-> resta scoperto. Parla chi ha giurisdizione. Nessuna domanda all'owner.
-
-Su lavori piccoli i tre goal stanno in una chiamata sola; l'ordine logico resta:
-prima si legge, poi si decide, poi si approva.
-
-**Il craft non si vota.** Palette, tipografia, hero, griglia, superfici e motion
-restano tuoi: il consiglio decide *cosa* sta in pagina e *perché*, mai *come appare*.
-Le scelte di craft che un tempo erano «a vista dell'owner» — hero archetype dal
-catalogo, effetto motion dalla gallery — le prendi tu da seed deterministico con le
-esclusioni di MEMORY, e le dichiari.
 
 ## Cosa non si chiede mai — e cosa si fa al suo posto
 
