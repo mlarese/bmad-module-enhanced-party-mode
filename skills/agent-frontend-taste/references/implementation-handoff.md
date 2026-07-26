@@ -13,7 +13,7 @@ craft. Non è una capability.
 | 2 | **Ricerca** — dominio, marketing, servizi reali | Vesper | no |
 | 3 | **Valutazione degli input + G1** — richiesta, ricerca, documenti, ambiguità | consiglio | solo internamente, se la ricerca è insufficiente (max 5 giri) |
 | 4 | **G2 — le decisioni, prese**: kernel + `slice_plan` (ramo A) o i quattro documenti (ramo B, §4.0) | consiglio | no: si dichiara, non si chiede |
-| 5 | **Implementazione** — pagina e codice | Vesper · Vera · `bmad-quick-dev` | no |
+| 5 | **Implementazione** — pagina e codice | Vesper · Vera (`bmad-quick-dev` come stampo, §4.2) | no |
 | 6 | **Approvazione (G3)** — contro i documenti | consiglio | solo internamente, se una richiesta non è soddisfatta (max 5 rifiuti) |
 
 **Nessun passo si ferma sull'owner.** Le uniche fermate sono interne — la ricerca che
@@ -182,8 +182,8 @@ la modalità headless non viene riconosciuta. Un goal solo non ha porte.
 > esito della ricerca · pre-flight · sito del cliente›.
 
 Scrittura in `planning-artifacts/`, un file per documento. Poi si riprende il flusso
-normale: `slice_plan` → spec di slice (§4.2) → `bmad-quick-dev` per la parte
-applicativa, con i documenti come vincolo (§7).
+normale: `slice_plan` → spec di slice (§4.2) → codice applicativo scritto con la
+disciplina di `bmad-quick-dev` (§4.2.7), con i documenti come vincolo (§7).
 
 **Il gate resta**, e resta interno: prima della S1 il consiglio rilegge i quattro
 contro `bmad-check-implementation-readiness` come **checklist**, non come workflow da
@@ -204,6 +204,31 @@ peggio dell'assenza di architettura.
 **Il tetto dei cinque vale anche qui:** se il gate di readiness boccia, si corregge
 ciò che nomina, massimo cinque giri; al quinto si procede alla S1 dichiarando cosa
 resta scoperto, come varianza (§3.1, §6.1).
+
+#### Il ramo si promuove: A → B, mai il contrario
+
+Il ramo lo decide G1 **prima** che la `slice_plan` esista, e la via breve prescrive
+proprio **S2 back office con accesso minimo reale** (§4.1): auth e persistenza, cioè
+un back end. Un lavoro nato ramo A arriva quindi alla seconda slice con la sostanza
+del ramo B e senza i documenti — il caso che la soglia doveva coprire, entrato dalla
+finestra.
+
+1. **La promozione scatta quando una slice introduce il back end** — auth reale, dati
+   che persistono, un'API, un ruolo, un pagamento — non quando qualcuno la
+   *ipotizza*. La S1 landing resta ramo A anche se la S2 è già scritta nel piano.
+2. **Prima di aprire quella slice, si producono i quattro documenti** (G2-B, goal
+   unico). Non si apre la slice e poi si documenta: sarebbe il back office costruito
+   senza architettura, cioè il difetto che la soglia esiste per evitare.
+3. **Il kernel non si butta: diventa input.** Perimetro, servizi e flusso di
+   conversione già decisi entrano nel PRD; ciò che il kernel diceva e i documenti
+   contraddicono è un conflitto da dichiarare (§7), non un refuso da cancellare.
+4. **Da lì in poi il lavoro è ramo B**, incluse le slice successive: non si torna
+   indietro alla via breve perché la S3 «è solo una pagina».
+5. **G1 dichiara la promozione** con una riga — cosa l'ha fatta scattare — e resta
+   una varianza (§11): è una deviazione dal ramo dichiarato all'inizio.
+
+Fallimento: S2 con auth e tabelle aperta col solo kernel; quattro documenti scritti
+*dopo* che il back office esiste; promozione decisa perché «prima o poi servirà».
 
 Fallimento: PRD e architettura generati per una landing di una pagina; una slice con
 auth e dati partita col solo kernel; documenti generati e poi ignorati dal craft;
@@ -261,34 +286,48 @@ servivano a fare.
   lavoro in parallelo su slice diverse dello stesso progetto.
 - Ogni slice consegnata lascia il suo spec: è così che la S2 non contraddice la S1.
 
-### 4.2 Una slice = una spec = un run di `bmad-quick-dev`
+### 4.2 Una slice = una spec eseguibile
 
 La `slice_plan` non è un elenco di intenzioni: **ogni slice diventa una spec
-eseguibile**, e la parte applicativa di quella spec la implementa `bmad-quick-dev`.
-Il taglio combacia per costruzione — quick-dev vuole *un singolo goal utente
-shippabile* per spec, che è la definizione stessa di slice verticale.
+eseguibile**, e il codice applicativo si scrive contro quella. Il taglio è quello di
+`bmad-quick-dev` — *un singolo goal utente shippabile* per spec — che è la definizione
+stessa di slice verticale.
 
 1. **La spec si genera con `bmad-spec`, in headless** (chiamata da skill = nessuna
-   domanda, modalità express: i buchi diventano `open_questions[]`, non fermate).
-   Slug per slice — `<progetto>-s1-<nome>`, `<progetto>-s2-<nome>` — così ogni
-   slice ha la sua cartella e riaprire lo stesso slug **aggiorna in place**
-   preservando gli ID capability.
-2. **Il kernel (G2) è la spec madre:** vincola tutte le slice e non si riscrive a
-   ogni giro. La spec di slice eredita da lì perimetro, vincoli e non-obiettivi, e
-   aggiunge solo ciò che quella slice deve fare.
-3. **Ready for Development, o non parte:** ogni task con path e azione, AC in
+   domanda, modalità express). Slug per slice — `<progetto>-s1-<nome>`,
+   `<progetto>-s2-<nome>` — così ogni slice ha la sua cartella e riaprire lo stesso
+   slug **aggiorna in place** preservando gli ID capability.
+2. **Le `open_questions[]` non sopravvivono alla generazione.** In express ogni buco
+   diventa una domanda aperta nel file: lì non può restare, perché non ha nessuno a
+   cui andare (nessuna domanda all'owner) e perché una spec con domande aperte non è
+   *Ready for Development*. Ognuna si chiude nello stesso giro — decisione del
+   consiglio, marcata **assunzione**, con varianza (§11) se pesa. Una spec si dichiara
+   pronta solo a `open_questions` vuote.
+3. **Il kernel (G2-A) o i quattro documenti (G2-B) sono la fonte:** vincolano tutte le
+   slice e non si riscrivono a ogni giro. La spec di slice eredita perimetro, vincoli
+   e non-obiettivi, e aggiunge solo ciò che quella slice deve fare.
+4. **Ready for Development, o non parte:** ogni task con path e azione, AC in
    Given/When/Then, zero placeholder e zero TBD. Un `TODO` nella spec è lo stesso
    difetto del `TODO` nella pagina (§10) — qui blocca l'implementazione, lì la
    consegna.
-4. **Misura:** ~900–1600 token per spec. Se una slice sfora, non si comprime: si
-   guarda se dentro ci sono **due deliverable shippabili separatamente** — allora
-   erano due slice, e la `slice_plan` si corregge. Se invece è un goal solo che
-   attraversa più strati, resta una spec: cross-layer non è multi-goal.
-5. **Chi fa cosa dentro la slice:** craft della pagina → Vesper (AF → Vera);
-   endpoint, persistenza, auth di slice, logica di dominio → `bmad-quick-dev`. La
-   spec le descrive entrambe: è il contratto che tiene insieme le due metà e che
-   l'approvazione (§6) rilegge.
-6. **A consegna fatta la spec resta** in `implementation-artifacts/` e vincola la
+5. **Il craft non entra nella spec eseguibile.** Gli assi dichiarati — palette,
+   `hue_sector`, `ink_family`, tipografia, griglia, superfici, hero, motion — vivono
+   nel **DESIGN.md / spec di accompagnamento** (§10), e la spec di slice li
+   **referenzia** in una riga. Duplicarli non aggiunge contratto: aggiunge un secondo
+   posto dove diventano falsi, e fa sforare la misura per un motivo che non c'entra
+   con il perimetro.
+6. **Misura:** ~900–1600 token per spec, **contati sul contratto applicativo**, non
+   sul craft (punto 5). Se sfora davvero, si guarda se dentro ci sono **due
+   deliverable shippabili separatamente** — allora erano due slice, e la `slice_plan`
+   si corregge. Se è un goal solo che attraversa più strati, resta una spec:
+   cross-layer non è multi-goal.
+7. **Chi fa cosa dentro la slice:** craft della pagina → Vesper (AF → Vera);
+   endpoint, persistenza, auth di slice, logica di dominio → **Vesper, con la
+   disciplina di `bmad-quick-dev`** — il suo `spec-template.md` e il suo standard
+   *Ready for Development* — **senza invocarlo**: quel workflow si ferma a chiedere
+   in ogni ramo (`autonomia.md` → *I workflow che si fermano si usano come stampo*).
+   Se è l'owner a lanciarlo, si esegue com'è: le fermate se le è scelte lui.
+8. **A consegna fatta la spec resta** in `implementation-artifacts/` e vincola la
    slice dopo. Nessuna spec si hand-edita: si ri-deriva con `bmad-spec` sullo
    stesso slug.
 
@@ -296,9 +335,11 @@ shippabile* per spec, che è la definizione stessa di slice verticale.
 
 ## 5. Implementazione
 
-Vesper la pagina (AF → Vera). **`bmad-quick-dev`** la parte applicativa che non è
-craft frontend: endpoint, persistenza, auth della slice, logica di dominio,
-seguendo architettura e convenzioni del repo. Il canone (§13) vale lì come qui.
+Vesper la pagina (AF → Vera) **e** la parte applicativa che non è craft frontend:
+endpoint, persistenza, auth della slice, logica di dominio, seguendo architettura e
+convenzioni del repo — con la **disciplina di `bmad-quick-dev`** (spec-template,
+Ready for Development) ma **senza invocarlo**, perché si ferma a chiedere in ogni
+ramo (§4.2.7, `autonomia.md`). Il canone (§13) vale lì come qui.
 
 **Casi limite, per iscritto** prima di chiudere: stati vuoti, errore, caricamento;
 testi lunghi/corti; molte/zero righe; mobile con tastiera aperta; offline se app.
@@ -343,10 +384,19 @@ il tempo. Stessa forma del tetto sui rimandi della ricerca (§3.1), stessa ragio
 1. **Massimo cinque rifiuti** per lo stesso deliverable. Ogni rifiuto nomina la
    richiesta mancante e **quella** si corregge: chi rifiuta senza nominarla non ha
    rifiutato, e il deliverable passa (§6).
-2. **Un rifiuto vale una volta sola.** La stessa richiesta mancante non può motivare
-   due rifiuti: se dopo la correzione qualcuno la ripropone, o nomina un aspetto
-   nuovo o il giro non conta. Rifiuti che si spostano di poco a ogni passata sono
-   gusto travestito da contratto — e il gusto non è un veto.
+2. **Un rifiuto vale una volta sola — ma una regressione non è una ripetizione.**
+   La stessa richiesta mancante non può motivare due rifiuti: se dopo la correzione
+   qualcuno la ripropone tale e quale, il giro non conta. Rifiuti che si spostano di
+   poco a ogni passata sono gusto travestito da contratto, e il gusto non è un veto.
+   **Diverso è quando la correzione l'ha rotta di nuovo:** se sistemare Y ha
+   ririotto X, quel rifiuto è valido — X ora è davvero mancante, e trattarlo come
+   ripetizione significherebbe consegnare X rotto senza che nessuno lo dica.
+2b. **L'oscillazione si chiude alla seconda andata e ritorno.** Se X e Y si
+   escludono a vicenda — sistemare l'uno rompe l'altro, due volte — il problema non
+   è il deliverable: è che il contratto chiede due cose incompatibili. Si sceglie
+   **quale delle due cede**, si dichiara perché, e la scelta è una **varianza**
+   (§11). Continuare a girare tra X e Y consuma i cinque giri per scoprire una cosa
+   che si sapeva al secondo.
 3. **Al quinto si consegna comunque, dichiarando cosa resta aperto.** Non si torna
    dall'owner a chiedere il permesso di consegnare: si scrive in una riga quale
    richiesta non si è riusciti a soddisfare e perché, si marca come **varianza**
@@ -357,7 +407,10 @@ il tempo. Stessa forma del tetto sui rimandi della ricerca (§3.1), stessa ragio
    significa che nessuno guarda davvero; cinque spesso significa che il problema sta
    nel kernel, non nel deliverable.
 5. **Il tetto è per deliverable, non per sessione:** non si azzera rigenerando la
-   pagina, o basterebbe ripartire da capo per ricominciare a girare.
+   pagina, o basterebbe ripartire da capo per ricominciare a girare. **Il contatore
+   riparte solo quando cambia il contratto:** una richiesta nuova dell'owner, una
+   slice diversa, un kernel emendato. Una correzione dello stesso deliverable contro
+   lo stesso contratto eredita il conto — anche se arriva mezz'ora dopo la consegna.
 
 Fallimento: sesto rifiuto sullo stesso deliverable; rifiuto che ripete una richiesta
 già corretta; lavoro fermo in approvazione senza che nessuno nomini cosa manca.
@@ -389,6 +442,26 @@ Quando esistono, **sono vincoli, non ispirazione**. Dal più forte:
 
 I documenti usati (path) si dichiarano **nello spec**, non dentro la pagina (§10).
 Se il job non produce spec, la catena si dichiara in chat.
+
+### 7.1 I documenti che ti sei scritta da sola
+
+Quelli prodotti dal consiglio nel ramo B (§4.0) **vincolano come gli altri**: lo stack
+è obbligatorio anche se l'hai deciso tu ieri. Ma sono nati pieni di **assunzioni
+marcate**, e un'assunzione promossa a legge senza che nessuno la guardi più è peggio
+dell'assenza del documento.
+
+- **Il pre-flight le rilegge per prime**, insieme alle varianze: le righe marcate
+  `assunzione` nei documenti generati sono la prima cosa che G1 vede alla passata
+  successiva.
+- **G1 le riconferma o le emenda**, sull'evidenza nuova (il repo è cresciuto, il sito
+  del cliente dice altro, la S1 ha insegnato qualcosa). Riconfermare è una riga;
+  emendare è una decisione + una varianza (§11) — mai una domanda all'owner.
+- **Un'assunzione verificata smette di essere tale:** si riscrive come fatto, e la
+  varianza che la portava si chiude. È l'unico modo in cui quei documenti migliorano
+  invece di irrigidirsi.
+- **G3 approva contro i documenti, non li giudica** (§6): se un documento è sbagliato
+  il posto per accorgersene è qui, non in approvazione — dove un errore di documento
+  diventa un deliverable coerente con l'errore.
 
 ## 8. Il sito esistente del cliente
 
@@ -577,7 +650,7 @@ applicata sempre**, anche a una pagina.
 |---|---|
 | Kernel a 5 campi (spec madre) | **`bmad-spec`** headless (poi `update` sulla slice dopo, non riscritto) |
 | Spec della singola slice | **`bmad-spec`** headless, slug `<progetto>-s<N>-<nome>` (§4.2) |
-| Codice applicativo | **`bmad-quick-dev`**, una run per spec di slice |
+| Codice applicativo | Vesper, con **`bmad-quick-dev` come stampo** (`spec-template.md` + Ready for Development): il workflow ha checkpoint in ogni ramo e non si invoca (`autonomia.md`) |
 | Craft della pagina | Vesper AF → **`agent-web-animations`** |
 | Slice pesante (S2 con auth e dati) | **`bmad-create-story`** · **`bmad-code-review`** |
 | Progetto con back end e front end (ramo B) | i quattro documenti in **un solo goal** del consiglio (§4.0) — `bmad-prd` · `bmad-ux` · `bmad-architecture` come **stampo del formato**, non come flusso da invocare |
@@ -612,8 +685,14 @@ sceglie font e palette (il craft non si vota); ricerca insufficiente accettata i
 che rifatta; rimando che non nomina cosa manca; sesto rimando sullo stesso lavoro
 invece della decisione sull'evidenza; lavoro fermato al quinto rimando aspettando
 l'owner; rifiuto in approvazione che non nomina la richiesta mancante; **sesto rifiuto
-sullo stesso deliverable**, o rifiuto che ripete una richiesta già corretta; **una
-qualsiasi domanda all'owner in mezzo al flusso** (`references/autonomia.md`).
+sullo stesso deliverable**, o rifiuto che ripete tale e quale una richiesta già
+corretta — ma anche una **regressione** scambiata per ripetizione e quindi taciuta;
+due andate e ritorni fra richieste incompatibili senza scegliere quale cede; **un
+workflow con checkpoint invocato dentro il flusso**, o la sua disciplina saltata
+perché non lo si è invocato; una slice con back end aperta senza promuovere il ramo;
+`open_questions` lasciate in una spec dichiarata pronta; assunzioni dei documenti
+auto-generati mai più rilette; **una qualsiasi domanda all'owner in mezzo al flusso**
+(`references/autonomia.md`).
 
 **Contenuti:** lorem ipsum o copy da landing generica quando i testi non erano
 forniti; servizi inventati mentre il sito ne elencava altri; stock generico quando

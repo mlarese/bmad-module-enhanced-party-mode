@@ -63,13 +63,37 @@ persistono, back office, API, ruoli, pagamenti, più superfici, più slice.
 > Contesto: ‹richiesta · dominio · esito della ricerca · pre-flight · sito del
 > cliente›.
 
-**Un goal solo, non quattro workflow.** Ogni workflow invocato è una porta da cui il
-flusso può uscire e fermarsi ad aspettare: `bmad-generate-project-context` lo fa per
-costruzione (avanza per step, ognuno con approvazione dell'owner), gli altri appena
-la modalità headless non viene riconosciuta. Un goal non ha porte. I documenti che il
-consiglio si scrive **vincolano come quelli dell'owner**, ma ciò che nessuno ha
-verificato resta assunzione marcata, correggibile in consiglio con una varianza — mai
-con una domanda.
+**Un goal solo, non quattro workflow.** Vedi *I workflow che si fermano si usano come
+stampo*, qui sotto: un goal non ha porte. I documenti che il consiglio si scrive
+**vincolano come quelli dell'owner**, ma ciò che nessuno ha verificato resta
+assunzione marcata, correggibile in consiglio con una varianza — mai con una domanda.
+
+## I workflow che si fermano si usano come stampo, non come flusso
+
+Un workflow BMAD invocato è una **porta**: se dentro ha un checkpoint, il lavoro esce
+di lì e si ferma ad aspettare l'owner — e la legge è saltata, non perché qualcuno
+abbia fatto una domanda, ma perché ha chiamato qualcosa che la fa al posto suo.
+
+**Prima di invocare un workflow, guarda se si ferma.** Cerca nel suo `SKILL.md` e nei
+suoi step: `HALT`, `ask the human`, `ask user`, `user must approve`, `wait for human`.
+Se ne trova anche uno solo sul percorso che useresti, quel workflow **non si invoca**:
+se ne prende il **formato** — template, criteri, disciplina — e il lavoro lo fa il
+consiglio o Vesper, dentro il flusso.
+
+| Workflow | Si ferma? | Come si usa |
+|---|---|---|
+| `bmad-quick-dev` | **sì**, in ogni ramo — `step-01` (spec attive → «ask user which to resume»), `step-02` (intent gaps · split · approve/edit), anche `step-oneshot` | **stampo**: `spec-template.md` e lo standard *Ready for Development*. Il codice applicativo lo scrive Vesper con quella disciplina |
+| `bmad-generate-project-context` | **sì**, per costruzione (avanza per step, ognuno con approvazione) | **stampo**: il consiglio scrive `project-context.md` |
+| `bmad-prd` · `bmad-ux` · `bmad-architecture` | hanno `references/headless.md` | **stampo** dentro il goal G2-B: un goal solo invece di tre inviti a fermarsi |
+| `bmad-spec` | **no**: headless vero, express, slug fornito dal chiamante | **si invoca** (§4.2) |
+| `bmad-check-implementation-readiness` | — | **checklist**, riletta dal consiglio |
+
+**L'owner può sempre invocarli lui.** Se è lui a lanciare `bmad-quick-dev`, le
+fermate se le è scelte: si esegue il workflow com'è. La regola vincola te, non lui.
+
+Fallimento: un workflow con checkpoint invocato dentro il flusso; la disciplina di
+quel workflow **saltata** perché non lo si è invocato (lo stampo è obbligatorio quanto
+lo era il flusso); una porta scoperta dopo, perché nessuno ha guardato prima.
 
 ### G3 — Approvazione (decide se si consegna)
 
