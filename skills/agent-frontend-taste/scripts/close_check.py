@@ -19,7 +19,9 @@ una cosa che si può verificare dopo, invece di una cosa che si dichiara.
 
 Cosa controlla:
   1. colore      — palette_guard: croma dello scuro, settore dominante, serie,
-                   i tre hard-reject (il motore vero sta in palette_guard.py)
+                   quota della famiglia, i tre hard-reject
+  1b. caratteri  — display/body/mono risolti anche attraverso le variabili, con
+                   le stesse due regole del colore: di fila e di quota
   2. responsive  — viewport meta, griglie che collassano, niente larghezze fisse
   3. finito      — nessun TODO / lorem ipsum / «da sostituire» nel consegnato
   4. traccia     — `dati_verosimili:` nel DESIGN.md quando i testi non erano dati
@@ -206,13 +208,15 @@ def check_colour(pg, text: str, last: list[str], ledger: Path | None,
     if not ok or not pairs:
         return 2, {}, [pg.unmeasurable_note(text)]
     report = pg.analyse(pairs, painted, small)
+    report["typefaces"] = pg.typefaces(text)
     rejects = pg.hard_rejects(text, pg.palette_colours(text, report["colours"]))
-    entries = []
+    entries, last_fonts = [], []
     if ledger:
         entries = pg.ledger_load(ledger)
+        last_fonts = pg.ledger_fonts(entries)
         if not any(s.strip() for s in last):
             last = pg.ledger_sectors(entries)
-    problems = pg.violations(report, last) + rejects
+    problems = pg.violations(report, last, last_fonts) + rejects
     if ledger:
         pg.ledger_record(ledger, entries, str(page.resolve()), report)
     return (1 if problems else 0), report, problems
@@ -294,6 +298,9 @@ def main() -> int:
             lines.append(f"- colore: settore **{report['dominant_sector']}** · "
                          f"`ink_family: {report['ink_family']}`"
                          + (f" ({ink.get('hex')}, croma {ink.get('chroma')})" if ink else ""))
+        faces = (report or {}).get("typefaces") or {}
+        if faces:
+            lines.append("- caratteri: " + " · ".join(f"{k} **{v}**" for k, v in faces.items()))
         lines.append(f"- responsive: {'ok' if resp_ok else 'da correggere'}")
         lines.append(f"- finito: {'nessun segnaposto' if fin_ok else 'da correggere'}")
         lines.append(f"- traccia: {'ok' if des_ok else 'da correggere'}")

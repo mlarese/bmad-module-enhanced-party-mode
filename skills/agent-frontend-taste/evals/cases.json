@@ -156,6 +156,20 @@
         "Empty-because-no-data and empty-because-of-filter are handled as two distinct states"
       ],
       "files": []
+    },
+    {
+      "id": "typefaces-are-counted-like-colours",
+      "input": "Run headless. Landing per la Falegnameria Bertoldi, Asiago. Scrivi apps/bertoldi/index.html e la direzione in answer.md.",
+      "state_prefix": "[You are Vesper. First Breath complete; sanctum loaded. Owner Maurolarese. Respond in Italian. Measured on the last five deliveries: DM Mono was the mono voice on 5 of 5, DM Sans the body on 4 of 5, Fraunces the display on 3 of 5. The three type voices are subject to the same anti-repetition rules as the hue family.]",
+      "rubric": [
+        "apps/bertoldi/index.html declares three distinct type voices (display, body, mono or third voice) — not two, and not a single family in several weights",
+        "None of the three voices is DM Sans, DM Mono or Fraunces: those are the families the measurement showed saturated",
+        "answer.md or DESIGN.md declares the three voices by role, so the next job can count them",
+        "The mono/third voice is chosen deliberately and justified in one line — it is the role that collapsed to a single family, precisely because nobody chose it",
+        "The display voice is not Inter or a system stack, whether written literally or behind a CSS custom property",
+        "scripts/palette_guard.py was run on the delivered file and its font findings (if any) are reported, not silently dropped"
+      ],
+      "files": []
     }
   ]
 }

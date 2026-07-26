@@ -114,14 +114,21 @@ def combo_css(combo: dict) -> str:
     )
 
 
-def judge(pg, combo: dict, last: list[str]) -> tuple[dict, list[str]]:
+def judge(pg, combo: dict, last: list[str],
+          last_fonts: list[dict] | None = None) -> tuple[dict, list[str]]:
     """(report, problemi) di una combinazione, misurata come una pagina vera."""
     css = combo_css(combo)
     pairs, painted, small, ok = pg.measured_pairs(css)
     if not ok or not pairs:
         return {}, ["la combinazione non è misurabile: servono ink, paper e accent in esadecimale"]
     report = pg.analyse(pairs, painted, small)
-    problems = pg.violations(report, last) + pg.hard_rejects(css, pg.palette_colours(css, report["colours"]))
+    # I caratteri della combinazione sono dichiarati nel JSON, non nel CSS del
+    # provino: si passano al guard nella stessa forma in cui li legge dal ledger.
+    report["typefaces"] = {r: (combo.get("fonts", {}).get(r) or {}).get("family")
+                           for r in ("display", "body", "mono")
+                           if (combo.get("fonts", {}).get(r) or {}).get("family")}
+    problems = (pg.violations(report, last, last_fonts)
+                + pg.hard_rejects(css, pg.palette_colours(css, report["colours"])))
     return report, problems
 
 
@@ -363,9 +370,13 @@ def main() -> int:
 
     pg = _palette_guard()
     last = [s for s in args.last.split(",") if s.strip()]
-    if not last and not args.no_ledger:
+    last_fonts: list[dict] = []
+    if not args.no_ledger:
         ledger = Path(args.ledger) if args.ledger else pg.default_ledger()
-        last = pg.ledger_sectors(pg.ledger_load(ledger))
+        entries = pg.ledger_load(ledger)
+        last_fonts = pg.ledger_fonts(entries)
+        if not last:
+            last = pg.ledger_sectors(entries)
 
     reports, bad = {}, []
     for c in combos:
@@ -374,7 +385,7 @@ def main() -> int:
             bad.append(f"{c.get('id', '?')}: manca {', '.join(missing) or 'id'}")
             reports[c.get("id", "?")] = {}
             continue
-        report, problems = judge(pg, c, last)
+        report, problems = judge(pg, c, last, last_fonts)
         reports[c["id"]] = report
         bad += [f"{c['id']} — {p}" for p in problems]
 

@@ -247,6 +247,30 @@ Il difetto misurato non era l'accento — quelli erano diversi ogni volta — ma
 3. **Lo scuro segue il `register`:** `famigliare` · `artigianale` · `popolare` → scuri **caldi** (bruno, seppia, ombra bruciata, testa di moro); `clinico` · `minimal` → freddi desaturati; `luxury` → profondo quasi-neutro con una sola vibrazione. Un'osteria famigliare con l'ink verde-bosco ha il carattere contraddetto dalla superficie più grande della pagina.
 4. **Non far coincidere ink e accento di settore:** se l'accento è verde, lo scuro non è verde — altrimenti la pagina ha una tinta sola in due luminosità.
 5. Dopo approve: MEMORY `last_ink_families` oltre a `last_hue_sectors`.
+### I caratteri si contano come i colori
+
+Misurato il 2026-07-26 sulle cinque pagine consegnate negli eval, leggendo le
+variabili e non solo i letterali: **`DM Mono` era il mono di 5 su 5** (100%),
+`DM Sans` il body di 4 su 5 (80%), `Fraunces` il display di 3 su 5 (60%). Peggio
+del verde, che stava al 57%. Non c'era **nessuna** regola: `last_font_pairs` in
+MEMORY è una nota, non un cancello, e sui font non esisteva alcun controllo di
+ripetizione.
+
+1. **Le stesse due regole del colore, per ruolo** (`display` · `body` · `mono`):
+   mai la stessa voce per **3 consegne di fila**, e mai una voce oltre **un terzo
+   delle ultime otto**. Le conta `palette_guard`, che ora registra i caratteri nel
+   ledger insieme ai settori.
+2. **Il mono è il punto cieco.** Display e body si scelgono con attenzione; la
+   terza voce si mette «quella che va bene» e diventa sempre la stessa. È l'unico
+   dei tre ruoli arrivato al 100%: contalo come gli altri.
+3. **Il controllo legge le variabili.** `--display: "Fraunces"` con
+   `h1 { font-family: var(--display) }` è il modo in cui queste regole dicono di
+   scrivere, e il vecchio hard-reject «Inter come display» **non poteva scattare
+   lì**: verificato, rilevava Inter dentro `h1` e non dentro `--display`. Ora
+   risolve le variabili, le dichiarazioni letterali e la forma abbreviata `font:`.
+4. Fallimento: la stessa voce mono su tre consegne di fila; una famiglia oltre un
+   terzo delle ultime otto; `last_font_pairs` aggiornato ma mai controllato.
+
 6. Fallimento: `ink_family` non dichiarato; scuro strutturale sopra S 15% non dichiarato; footer e hero della stessa tinta dell'accento; tre job di fila nella stessa famiglia; **una famiglia oltre un terzo degli ultimi otto lavori**; `verde` e `teal` alternati e contati come due cose diverse; ledger puntato dentro il progetto, dove riparte da zero a ogni cliente.
 
 8. Dichiara in direzione: `locale: …` · `register: …` · `activity: …` · `palette_family: …` · **`hue_sector: …`** · **`ink_family: …`** · `fonts: Display + Body (+ terza voce)` · `radius_family: …` · perché — una riga che leghi i tre segnali all'esito, non etichette scollegate.

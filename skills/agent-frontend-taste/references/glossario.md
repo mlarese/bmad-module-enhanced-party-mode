@@ -129,5 +129,6 @@ irriconoscibile ciò che tutti chiamano così. Ma si spiega la prima volta, semp
 | escaping | **neutralizzare** il testo che arriva da fuori, così non può diventare codice eseguito |
 | MEMORY `last_*` | l'elenco delle **ultime scelte fatte**, per non ripetersi |
 | famiglia di tinta | settori che l'occhio legge come **la stessa cosa** — `verde` e `teal` sono una famiglia sola. L'anti-ripetizione conta le famiglie, non i nomi |
+| voce (display · body · mono) | i **tre ruoli** dei caratteri: il font dei titoli, quello del testo, quello dei dettagli tecnici. Si contano separatamente, e il mono è quello che si ripete di più |
 | predominanza | quando un colore torna **troppo spesso**, non necessariamente di fila: si vede solo contando la quota sugli ultimi lavori |
 | ledger | il **registro** dei settori di colore già usati. Vive **fuori dai progetti** (`~/.claude/agent-frontend-taste/`), o si azzererebbe a ogni cliente e non conterebbe niente |

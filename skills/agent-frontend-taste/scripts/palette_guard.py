@@ -52,6 +52,7 @@ Exit: 0 pulito · 1 violazioni · 2 non misurabile (non dichiarare "guard pulito
 from __future__ import annotations
 
 import argparse
+import collections
 import colorsys
 import json
 import os
@@ -214,6 +215,131 @@ def ink_family(hue: float, sat: float, light: float) -> str:
     if 180 <= hue < 260:
         return "freddo"
     return "virato-accento"
+
+
+# --- caratteri ---------------------------------------------------------------
+# Il controllo sui font leggeva solo `font-family:` letterali. Vesper però
+# dichiara `--display: "Fraunces"` e scrive `h1 { font-family: var(--display) }`
+# — cioè lo stile che questi stessi reference insegnano — e su quelle pagine il
+# hard-reject «Inter come display» non poteva scattare: verificato, rileva Inter
+# scritto dentro `h1` e non lo rileva dentro `--display`. Stessa classe di
+# difetto di `BG_HEX_RE`, che era compilata e mai usata.
+GENERIC_FONT_RE = re.compile(
+    r"^(serif|sans-serif|monospace|cursive|fantasy|system-ui|ui-[\w-]+|"
+    r"-apple-system|BlinkMacSystemFont|Segoe UI|Roboto|Helvetica( Neue)?|Arial|"
+    r"Georgia|Menlo|Consolas|SF Mono|SFMono-Regular|Times( New Roman)?|"
+    r"Courier( New)?|Cambria|Palatino( Linotype)?|Iowan Old Style|"
+    r"inherit|initial|unset|revert)$", re.I)
+FONT_DECL_RE = re.compile(r"(--[\w-]+|font-family)\s*:\s*([^;{}\n]+)", re.I)
+QUOTED_FONT_RE = re.compile(r"\"([^\"\n]{2,40})\"|'([^'\n]{2,40})'")
+VAR_USE_RE = re.compile(r"font-family\s*:[^;{}]*var\((--[\w-]+)\)", re.I)
+LITERAL_FONT_RE = re.compile(r"font(?:-family)?\s*:\s*([^;{}\n]+)", re.I)
+BODY_SELECTOR_RE = re.compile(r"(?:^|[,\s])body(?:[\s,{.:]|$)", re.I)
+
+
+def _font_names(value: str) -> list[str]:
+    """I nomi veri in una dichiarazione: via le generiche e le funzioni CSS."""
+    got = [(a or b).strip() for a, b in QUOTED_FONT_RE.findall(value)]
+    if not got:
+        got = [n.strip() for n in value.split(",")
+               if re.match(r"^[A-Z][A-Za-z0-9 ]{2,30}$", n.strip())]
+    return [g for g in got if g and not GENERIC_FONT_RE.match(g)]
+
+
+def typefaces(text: str) -> dict[str, str]:
+    """{display, body, mono} — risolvendo le variabili, non solo i letterali."""
+    declared: dict[str, str] = {}
+    for prop, value in FONT_DECL_RE.findall(text):
+        names = _font_names(value)
+        if names and prop.startswith("--"):
+            declared[prop.lower()] = names[0]
+
+    out: dict[str, str] = {}
+    # 1. da come le variabili vengono *usate*: è il dato più forte
+    for selector, body in BLOCK_RE.findall(text):
+        for var in VAR_USE_RE.findall(body):
+            name = declared.get(var.lower())
+            if not name:
+                continue
+            if HEADING_SELECTOR_RE.search(selector):
+                out.setdefault("display", name)
+            elif BODY_SELECTOR_RE.search(selector):
+                out.setdefault("body", name)
+    # 2. dal nome della variabile, per ciò che resta
+    for var, name in declared.items():
+        role = ("display" if any(k in var for k in ("display", "head", "title", "serif"))
+                else "mono" if "mono" in var
+                else "body" if any(k in var for k in ("body", "sans", "text", "ui")) else None)
+        if role:
+            out.setdefault(role, name)
+    # 3. letterali, per le pagine scritte senza variabili: il ruolo si legge
+    #    dalla **generica di ripiego** nella stessa dichiarazione — chi scrive
+    #    `"DM Mono", monospace` ha gia detto qual e la voce mono. Copre anche la
+    #    forma abbreviata `font: 600 2rem/1 Fraunces, serif`.
+    tally = {"display": collections.Counter(), "body": collections.Counter(),
+             "mono": collections.Counter()}
+    for selector, body in BLOCK_RE.findall(text):
+        heading = bool(HEADING_SELECTOR_RE.search(selector))
+        is_body = bool(BODY_SELECTOR_RE.search(selector))
+        for decl in LITERAL_FONT_RE.findall(body):
+            names = _font_names(decl)
+            if not names:
+                continue
+            low = decl.lower()
+            if "monospace" in low or re.search(r"\bmono\b|\bcode\b", names[0], re.I):
+                role = "mono"
+            elif heading:
+                role = "display"
+            elif is_body:
+                role = "body"
+            elif "sans-serif" in low:
+                role = "body"
+            elif "serif" in low:
+                role = "display"
+            else:
+                continue
+            tally[role][names[0]] += 1
+    for role, counter in tally.items():
+        if role not in out and counter:
+            out[role] = counter.most_common(1)[0][0]
+    return out
+
+
+def font_violations(faces: dict, last_fonts: list[dict]) -> list[str]:
+    """Le stesse due forme del colore: di fila, e di quota.
+
+    Misurato sulle cinque pagine consegnate negli eval: `DM Mono` su **5 su 5**,
+    `DM Sans` su 4 e `Fraunces` su 3. Nessuna regola lo vietava, perché sui font
+    non c'era **nessun** controllo di ripetizione — solo `last_font_pairs` in
+    MEMORY, che è una nota, non un cancello.
+    """
+    out = []
+    if not faces or not last_fonts:
+        return out
+    for role in ("display", "body", "mono"):
+        here = faces.get(role)
+        if not here:
+            continue
+        prev = [(e.get(role) or "") for e in last_fonts]
+        streak = 0
+        for s in prev:
+            if s.lower() == here.lower():
+                streak += 1
+            else:
+                break
+        if streak >= 2:
+            out.append(f"carattere ripetuto: '{here}' come {role} dopo {streak} "
+                       f"consegne consecutive (max 2).")
+        window = [s for s in prev[:RECENT_WINDOW - 1] if s]
+        if len(window) >= 3:
+            n = sum(1 for s in window if s.lower() == here.lower()) + 1
+            tot = len(window) + 1
+            if n / tot > MAX_SHARE:
+                out.append(
+                    f"carattere predominante: '{here}' è il {role} di {n} delle "
+                    f"ultime {tot} consegne ({n / tot * 100:.0f}%, max "
+                    f"{MAX_SHARE * 100:.0f}%). Cambia voce.")
+    return out
 
 
 def is_small_component(selector: str) -> bool:
@@ -440,6 +566,14 @@ def hard_rejects(text: str, colours: list[dict]) -> list[str]:
             "che esce identica a sé stessa da anni."
         )
 
+    # Il display risolto attraverso le variabili, o il reject resta cieco sulle
+    # pagine scritte come questi reference insegnano (verificato).
+    display = typefaces(text).get("display", "")
+    if display and SYSTEM_FONT_RE.search(display) and not SERIF_HINT_RE.search(display):
+        out.append(
+            f"hard-reject Inter/system come display: `--display` → {display}. "
+            "Il display è una voce, non il font di sistema."
+        )
     for selector, body in BLOCK_RE.findall(text):
         if not HEADING_SELECTOR_RE.search(selector):
             continue
@@ -455,7 +589,8 @@ def hard_rejects(text: str, colours: list[dict]) -> list[str]:
     return out
 
 
-def violations(report: dict, last_sectors: list[str]) -> list[str]:
+def violations(report: dict, last_sectors: list[str],
+               last_fonts: list[dict] | None = None) -> list[str]:
     out = []
     # Every large dark surface is checked, not just the darkest one: the page
     # that started this had a compliant `--ink` and a green `--abete` in the hero.
@@ -507,6 +642,7 @@ def violations(report: dict, last_sectors: list[str]) -> list[str]:
                     f"{MAX_SHARE * 100:.0f}%). Non è una ripetizione di fila — è una "
                     "predominanza, e si vede solo contando. Cambia famiglia."
                 )
+    out += font_violations(report.get("typefaces") or {}, last_fonts or [])
     return out
 
 
@@ -548,6 +684,11 @@ def ledger_sectors(entries: list[dict]) -> list[str]:
     return [e.get("dominant_sector", "") for e in reversed(entries)]
 
 
+def ledger_fonts(entries: list[dict]) -> list[dict]:
+    """I caratteri dei job passati, più recente per primo — come i settori."""
+    return [{k: e.get(k) for k in ("display", "body", "mono")} for e in reversed(entries)]
+
+
 def ledger_record(path: Path, entries: list[dict], key: str, report: dict) -> None:
     """One record per file: a corrected page replaces its own earlier reading."""
     entries = [e for e in entries if e.get("key") != key]
@@ -557,6 +698,7 @@ def ledger_record(path: Path, entries: list[dict], key: str, report: dict) -> No
         "dominant_sector": report["dominant_sector"],
         "ink_family": report["ink_family"],
         "ink_hex": (report["ink"] or {}).get("hex"),
+        **{k: v for k, v in (report.get("typefaces") or {}).items()},
     })
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(entries[-50:], ensure_ascii=False, indent=1),
@@ -659,18 +801,21 @@ def main() -> int:
         raise SystemExit("nessun colore trovato: il file non dichiara hex?")
 
     report = analyse(pairs, painted, small)
+    report["typefaces"] = typefaces(text)
     rejects = hard_rejects(text, palette_colours(text, report["colours"])) if text else []
 
     last = [s for s in args.last.split(",")]
     ledger_path = (Path(args.ledger) if args.ledger
                    else (None if args.no_ledger else default_ledger()))
     entries: list[dict] = []
+    last_fonts: list[dict] = []
     if ledger_path:
         entries = ledger_load(ledger_path)
+        last_fonts = ledger_fonts(entries)
         if not any(s.strip() for s in last):
             last = ledger_sectors(entries)
 
-    problems = violations(report, last) + rejects
+    problems = violations(report, last, last_fonts) + rejects
 
     if ledger_path and args.check:
         ledger_record(ledger_path, entries, str(Path(args.check).resolve()), report)
@@ -679,7 +824,7 @@ def main() -> int:
         print(json.dumps({**report, "violations": problems, "hard_rejects": rejects},
                          ensure_ascii=False, indent=1))
     else:
-        print(render(report, violations(report, last), label, rejects))
+        print(render(report, violations(report, last, last_fonts), label, rejects))
     return 1 if problems else 0
 
 
