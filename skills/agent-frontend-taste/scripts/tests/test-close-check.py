@@ -176,6 +176,30 @@ def main() -> int:
 
     check("file inesistente rifiutato", run("/tmp/non-esiste-xyz.html").returncode != 0)
 
+    # --- cookie e informativa ------------------------------------------------
+    # Misurato: cookie su 0 pagine su 5 e privacy su 1, mentre tutte avevano un
+    # form o caricavano font da terzi.
+    mod = load()
+    pulita = "<html><body><p>solo testo</p></body></html>"
+    check("una pagina che non raccoglie e non carica da terzi non deve niente",
+          mod.check_privacy(pulita)[0], True)
+
+    con_form = '<html><body><form><input type="email"></form></body></html>'
+    ok, guai = mod.check_privacy(con_form)
+    check("un form senza informativa e un rilievo", ok, False)
+    check("e lo dice", any("informativa" in g for g in guai), True)
+
+    terzi = '<html><head><link href="https://fonts.googleapis.com/x"></head><body>x</body></html>'
+    ok, guai = mod.check_privacy(terzi)
+    check("risorse di terzi senza richiesta cookie sono un rilievo", ok, False)
+    check("e lo dice", any("cookie" in g for g in guai), True)
+
+    a_posto = ('<html><head><link href="https://fonts.googleapis.com/x"></head><body>'
+               '<form><input type="email"></form><a href="/privacy">Informativa</a>'
+               '<div class="cookie-banner">Consenso</div></body></html>')
+    check("con informativa e richiesta cookie non resta niente",
+          mod.check_privacy(a_posto), (True, []))
+
     print()
     print("tutti i test passati" if not fails else f"{fails} test falliti")
     return 1 if fails else 0

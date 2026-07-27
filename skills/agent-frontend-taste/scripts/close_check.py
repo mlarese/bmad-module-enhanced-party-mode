@@ -25,7 +25,9 @@ Cosa controlla:
   2. responsive  — viewport meta, griglie che collassano, niente larghezze fisse
   3. finito      — nessun TODO / lorem ipsum / «da sostituire» nel consegnato
   4. traccia     — `dati_verosimili:` nel DESIGN.md quando i testi non erano dati
-  5. consiglio   — `docs/consiglio/<slug>.md` con almeno una seduta registrata:
+  5. privacy     — informativa sempre quando la pagina raccoglie dati o carica
+                   risorse di terzi; richiesta cookie quando carica da terzi
+  6. consiglio   — `docs/consiglio/<slug>.md` con almeno una seduta registrata:
                    il consiglio decide tutto senza interpellare l'owner, e senza
                    quel file non resta scritto da nessuna parte chi c'era
   6. dashboard   — solo con `--surface dashboard`: profilo e logout sempre; ogni
@@ -226,6 +228,41 @@ def check_council(council: Path | None) -> tuple[bool, list[str]]:
     return True, []
 
 
+# --- cookie e privacy -------------------------------------------------------
+# Misurato il 2026-07-27 sulle cinque pagine consegnate: **cookie su 0 su 5**,
+# privacy su 1. Eppure quelle pagine hanno form di contatto — cioe raccolta di
+# dati personali — e caricano font da un terzo. `implementation-handoff.md`
+# §4.0 diceva gia che «un form di contatto e gia raccolta di dati personali:
+# Jane parla li, non alla slice dopo», ma non c'era nessuna regola sull'
+# artefatto e nessun controllo: il processo lo sapeva, la pagina no.
+FORM_RE = re.compile(r"<form\b|type=[\"']email[\"']|type=[\"']tel[\"']|name=[\"']email[\"']", re.I)
+THIRD_PARTY_RE = re.compile(r"(?:src|href)=[\"']https?://(?!(?:#|/))", re.I)
+COOKIE_RE = re.compile(r"cookie|consenso|consent", re.I)
+PRIVACY_RE = re.compile(r"privacy|informativa", re.I)
+
+
+def check_privacy(text: str) -> tuple[bool, list[str]]:
+    """Cookie e privacy: si pretendono quando la pagina li rende necessari.
+
+    Non e' un parere legale — quello e' di Jane. E' il controllo che
+    l'**artefatto** porti le due cose quando raccoglie dati o carica roba di
+    terzi, invece di lasciarle alla slice dopo.
+    """
+    raccoglie = bool(FORM_RE.search(text))
+    terzi = bool(THIRD_PARTY_RE.search(text))
+    if not raccoglie and not terzi:
+        return True, []
+    problems = []
+    if not PRIVACY_RE.search(text):
+        perche = "raccoglie dati personali" if raccoglie else "carica risorse da terzi"
+        problems.append(f"nessuna informativa privacy: la pagina {perche} e non "
+                        "la nomina da nessuna parte")
+    if terzi and not COOKIE_RE.search(text):
+        problems.append("nessuna richiesta cookie: la pagina carica risorse da terzi "
+                        "(font, mappe, script) prima di aver chiesto niente")
+    return not problems, problems
+
+
 def check_colour(pg, text: str, last: list[str], last_fonts: list[dict],
                  deroghe: dict) -> tuple[int, dict, list[str]]:
     """(stato, report, problemi) — stato 0 ok, 1 violazioni, 2 non misurabile.
@@ -312,11 +349,12 @@ def main() -> int:
         fin_ok, fin_problems = check_finished(text)
         des_ok, des_problems = check_design(design, text)
         cou_ok, cou_problems = check_council(council)
+        priv_ok, priv_problems = check_privacy(text)
         dash_ok, dash_problems = (check_dashboard(text, design, page)
                                   if args.surface == "dashboard" else (True, []))
 
         problems = (colour_problems + resp_problems + fin_problems
-                    + des_problems + cou_problems + dash_problems)
+                    + des_problems + cou_problems + dash_problems + priv_problems)
         # Le deroghe restano nel referto ma non fermano la consegna: è la
         # differenza fra un'eccezione dichiarata e un controllo spento.
         bloccanti = pg.only_blocking(problems)
@@ -354,6 +392,7 @@ def main() -> int:
         lines.append(f"- finito: {'nessun segnaposto' if fin_ok else 'da correggere'}")
         lines.append(f"- traccia: {'ok' if des_ok else 'da correggere'}")
         lines.append(f"- consiglio: {'registrato' if cou_ok else 'da correggere'}")
+        lines.append(f"- cookie e privacy: {'ok' if priv_ok else 'da correggere'}")
         if args.surface == "dashboard":
             auth = is_auth_screen(text, page)
             lines.append("- dashboard: " + ("schermata di accesso — profilo e uscita "

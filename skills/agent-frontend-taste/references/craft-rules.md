@@ -67,6 +67,39 @@ Restano fuori dal riempimento i **fatti che fanno danno se creduti**: certificaz
 
 Fallimento: `TODO` nel file consegnato; blocco «dati da sostituire» in coda alla pagina o allo spec; `lorem ipsum`; una certificazione inventata.
 
+## Cookie e informativa: ci sono sempre
+
+Misurato il 2026-07-27 sulle cinque pagine consegnate: **richiesta cookie su 0
+su 5**, informativa privacy su 1. Eppure quelle pagine hanno **form di contatto**
+— cioè raccolta di dati personali — e caricano i font da un terzo.
+`implementation-handoff.md` §4.0 lo diceva già («un form di contatto è già
+raccolta di dati personali: Jane parla lì, non alla slice dopo»), ma nessuna
+regola lo pretendeva **sull'artefatto** e nessuno lo controllava: il processo lo
+sapeva, la pagina no.
+
+1. **Informativa privacy: sempre**, se la pagina raccoglie un dato o carica una
+   risorsa di terzi. Un link nel footer che porta a una pagina vera, non un
+   `#` morto.
+2. **Richiesta cookie: sempre**, se la pagina carica da terzi (font, mappe,
+   analytics, embed). Non un banner decorativo: **prima si chiede, poi si
+   carica** — un banner che compare mentre il terzo ha già ricevuto l'IP non
+   chiede niente, informa dopo.
+3. **Il tecnico non si chiede, il resto sì.** I cookie necessari al
+   funzionamento non richiedono consenso; profilazione, misurazione e terze
+   parti sì. Se la pagina non ne ha bisogno, la strada più pulita è **non
+   caricare da terzi**: font ospitati in locale, niente banner da mostrare.
+4. **Il testo è di Jane, non tuo.** Tu porti il meccanismo e il posto; il
+   contenuto dell'informativa, le basi giuridiche e le durate li dà
+   `agent-gdpr-counsel`, e ciò che il front end non può garantire si scrive
+   come **requisito per il back end** nello spec (§13 punto 5). Non inventare
+   titolari, finalità o tempi di conservazione: sono fatti che feriscono se
+   creduti (§9).
+5. **`close_check` lo verifica** e non fa consegnare senza.
+
+Fallimento: form di contatto senza informativa; font di terzi caricati prima del
+consenso; banner che «informa» invece di chiedere; link privacy che punta a `#`;
+informativa scritta a braccio con finalità e durate inventate.
+
 ## L'output non si sovrascrive
 
 `{project-root}/apps/<slug>/` è il default, e il default vale per una cartella
