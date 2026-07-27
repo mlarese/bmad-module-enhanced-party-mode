@@ -236,7 +236,16 @@ def check_council(council: Path | None) -> tuple[bool, list[str]]:
 # Jane parla li, non alla slice dopo», ma non c'era nessuna regola sull'
 # artefatto e nessun controllo: il processo lo sapeva, la pagina no.
 FORM_RE = re.compile(r"<form\b|type=[\"']email[\"']|type=[\"']tel[\"']|name=[\"']email[\"']", re.I)
-THIRD_PARTY_RE = re.compile(r"(?:src|href)=[\"']https?://(?!(?:#|/))", re.I)
+# Un <a href> verso un terzo **non carica niente**: nessun cookie, nessun IP
+# trasferito finche nessuno clicca. Contavano come caricamento e una pagina con
+# un solo link a Instagram si vedeva chiedere il banner: un falso allarme, e i
+# falsi allarmi insegnano a ignorare il controllo. Qui contano solo le risorse
+# che il browser va a prendere da solo.
+THIRD_PARTY_RE = re.compile(
+    r"<(?:script|img|iframe|video|audio|source|embed)[^>]+src=[\"']https?://"
+    r"|<link[^>]+href=[\"']https?://"
+    r"|@import\s+url\(\s*[\"']?https?://"
+    r"|url\(\s*[\"']?https?://", re.I)
 COOKIE_RE = re.compile(r"cookie|consenso|consent", re.I)
 PRIVACY_RE = re.compile(r"privacy|informativa", re.I)
 
@@ -268,7 +277,12 @@ def check_privacy(text: str) -> tuple[bool, list[str]]:
 # catalogo ne ha sei — le due metà, la variante di pagina e le quattro
 # direzioni — e la scelta di quale resta di Vera, dal seed. Qui si verifica solo
 # che ce ne sia uno: una regola che vive solo in prosa non viene eseguita.
-CURTAIN_RE = re.compile(r"curtain|sipario|tenda", re.I)
+# Si cerca la **classe o il keyframe**, non la parola: «ogni tenda e cucita a
+# mano» in un negozio di tende faceva passare il controllo senza un effetto
+# applicato. Il copy non e il motion.
+CURTAIN_RE = re.compile(
+    r"fx--curtain[\w-]*|\bk-curtain[\w-]*|[\"'\s.]curtain[\w-]*[\"'\s{,;]"
+    r"|data-fx=[\"']curtain", re.I)
 
 
 def check_curtain(text: str, page: Path) -> tuple[bool, list[str]]:

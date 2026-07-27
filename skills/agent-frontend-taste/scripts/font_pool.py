@@ -52,7 +52,7 @@ COPPIE: list[tuple[str, str, str, str, str]] = [
     ("lora-dmsans",         "Lora",                "DM Sans",           "DM Mono",          "serif-morbido"),
     ("spectral-karla",      "Spectral",            "Karla",             "Overpass Mono",    "serif-editoriale"),
     ("bricolage-sourcesans","Bricolage Grotesque", "Source Sans 3",     "Source Code Pro",  "grottesco-espressivo"),
-    ("archivo-instrument",  "Archivo Expanded",    "Instrument Sans",   "Spline Sans Mono", "grottesco-largo"),
+    ("archivo-instrument",  "Archivo",             "Instrument Sans",   "Spline Sans Mono", "grottesco-largo"),
     ("anton-inter",         "Anton",               "Inter Tight",       "Roboto Mono",      "condensato"),
     ("oswald-lato",         "Oswald",              "Lato",              "Ubuntu Mono",      "condensato"),
     ("bebas-publicsans",    "Bebas Neue",          "Public Sans",       "Courier Prime",    "condensato"),
@@ -70,7 +70,7 @@ COPPIE: list[tuple[str, str, str, str, str]] = [
     ("italiana-hanken",     "Italiana",            "Hanken Grotesk",    "Fragment Mono",    "didone"),
     ("prata-albertsans",    "Prata",               "Albert Sans",       "Kode Mono",        "didone"),
     ("vollkorn-heebo",      "Vollkorn",            "Heebo",             "Sometype Mono",    "serif-morbido"),
-    ("petrona-onest",       "Petrona",             "Onest",             "Departure Mono",   "serif-editoriale"),
+    ("petrona-onest",       "Petrona",             "Onest",             "Syne Mono",        "serif-editoriale"),
 ]
 
 
@@ -118,8 +118,31 @@ def main() -> int:
     ap.add_argument("--last", default="", help="id, generi o nomi di font da escludere")
     ap.add_argument("--show", metavar="ID")
     ap.add_argument("--list", action="store_true")
+    ap.add_argument("--verify", action="store_true",
+                    help="chiede a Google Fonts se ogni famiglia esiste davvero (rete)")
     ap.add_argument("--format", choices=("md", "json"), default="md")
     args = ap.parse_args()
+
+    if args.verify:
+        # Nasce misurato: due famiglie su 86 non esistevano — «Archivo Expanded»
+        # (e' un asse di Archivo, non una famiglia) e «Departure Mono» (non e' su
+        # Google Fonts). Un nome sbagliato non da errore: il font ripiega e la
+        # riga del catalogo mente in silenzio.
+        import urllib.request
+        nomi = sorted({n for t_ in COPPIE for n in (t_[1], t_[2], t_[3])})
+        ko = []
+        for n in nomi:
+            u = "https://fonts.googleapis.com/css2?family=" + n.replace(" ", "+")
+            try:
+                urllib.request.urlopen(
+                    urllib.request.Request(u, headers={"User-Agent": "Mozilla/5.0"}),
+                    timeout=8).read(200)
+            except Exception as ex:
+                ko.append((n, getattr(ex, "code", type(ex).__name__)))
+        for n, c in ko:
+            print(f"  ! {n} non disponibile ({c})", file=sys.stderr)
+        print(f"  {len(nomi)} famiglie · non disponibili: {len(ko)}")
+        return 1 if ko else 0
 
     if args.show:
         t = [c for c in COPPIE if c[0] == args.show.strip().lower()]
