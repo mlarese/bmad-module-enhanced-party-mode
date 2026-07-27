@@ -195,6 +195,17 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
 .fx--seq-section .subj > *:nth-child(4) { animation-delay: .4s }
 @keyframes k-curtain { 0%,10% { clip-path: inset(0 50% 0 50%) } 46%,88% { clip-path: inset(0 0 0 0) } 100% { clip-path: inset(0 50% 0 50%) } }
 .fx--curtain .subj { animation: k-curtain 3.6s cubic-bezier(.7,0,.2,1) infinite; }
+/* Le quattro direzioni: la tenda che si apre da un lato solo. Il verso conta —
+   dal basso segue la lettura, dall'alto e' il sipario, i due laterali seguono o
+   contraddicono il verso di scorrimento. Una per pagina. */
+@keyframes k-curtain-up { 0%,10% { clip-path: inset(100% 0 0 0) } 46%,88% { clip-path: inset(0 0 0 0) } 100% { clip-path: inset(100% 0 0 0) } }
+.fx--curtain-up .subj { animation: k-curtain-up 3.6s cubic-bezier(.7,0,.2,1) infinite; }
+@keyframes k-curtain-down { 0%,10% { clip-path: inset(0 0 100% 0) } 46%,88% { clip-path: inset(0 0 0 0) } 100% { clip-path: inset(0 0 100% 0) } }
+.fx--curtain-down .subj { animation: k-curtain-down 3.6s cubic-bezier(.7,0,.2,1) infinite; }
+@keyframes k-curtain-left { 0%,10% { clip-path: inset(0 100% 0 0) } 46%,88% { clip-path: inset(0 0 0 0) } 100% { clip-path: inset(0 100% 0 0) } }
+.fx--curtain-left .subj { animation: k-curtain-left 3.6s cubic-bezier(.7,0,.2,1) infinite; }
+@keyframes k-curtain-right { 0%,10% { clip-path: inset(0 0 0 100%) } 46%,88% { clip-path: inset(0 0 0 0) } 100% { clip-path: inset(0 0 0 100%) } }
+.fx--curtain-right .subj { animation: k-curtain-right 3.6s cubic-bezier(.7,0,.2,1) infinite; }
 
 /* 12-23 testo */
 @keyframes k-char { 0%,10% { opacity: 0; transform: translateY(45%) } 42%,86% { opacity: 1; transform: none } 100% { opacity: 0; transform: translateY(-30%) } }
@@ -590,7 +601,7 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
 </head>
 <body>
 <header class="masthead">
-  <h1>Movimento — 117 esempi</h1>
+  <h1>Movimento — 121 esempi</h1>
 </header>
 
 <div class="toolbar">
@@ -1772,6 +1783,46 @@ body.is-paused .stage *, body.is-paused .stage { animation-play-state: paused !i
         <div class="body">
           <p class="eyebrow"><b>117</b> <code>card-depth</code></p>
           <h3>Card con profondità a strati</h3>
+        </div>
+      </article>
+      <article class="card" tabindex="0" role="button" aria-pressed="false"
+        data-id="curtain-up" data-n="118" data-cat="reveal"
+        data-cost="free" data-tech="CSS GSAP"
+        data-search="118 curtain-up curtain dal basso un pannello sale e scopre il contenuto sotto. hero e sezioni che entrano da sotto: la piu naturale nel senso della lettura. una direzione per pagina: quattro tende che si aprono da quattro lati sono un difetto, non un sistema. reveal / entrata css gsap gratis">
+        <span class="stage fx--curtain-up" aria-hidden="true"><i class="subj s-block"></i></span>
+        <div class="body">
+          <p class="eyebrow"><b>118</b> <code>curtain-up</code></p>
+          <h3>Curtain dal basso</h3>
+        </div>
+      </article>
+      <article class="card" tabindex="0" role="button" aria-pressed="false"
+        data-id="curtain-down" data-n="119" data-cat="reveal"
+        data-cost="free" data-tech="CSS GSAP"
+        data-search="119 curtain-down curtain dall&#x27;alto un pannello scende e scopre il contenuto sopra. aperture e sipari: il gesto piu teatrale dei quattro. una direzione per pagina: quattro tende che si aprono da quattro lati sono un difetto, non un sistema. reveal / entrata css gsap gratis">
+        <span class="stage fx--curtain-down" aria-hidden="true"><i class="subj s-block"></i></span>
+        <div class="body">
+          <p class="eyebrow"><b>119</b> <code>curtain-down</code></p>
+          <h3>Curtain dall&#x27;alto</h3>
+        </div>
+      </article>
+      <article class="card" tabindex="0" role="button" aria-pressed="false"
+        data-id="curtain-left" data-n="120" data-cat="reveal"
+        data-cost="free" data-tech="CSS GSAP"
+        data-search="120 curtain-left curtain da sinistra un pannello scorre a sinistra e scopre il contenuto. gallerie e carousel: segue il verso di lettura. una direzione per pagina: quattro tende che si aprono da quattro lati sono un difetto, non un sistema. reveal / entrata css gsap gratis">
+        <span class="stage fx--curtain-left" aria-hidden="true"><i class="subj s-block"></i></span>
+        <div class="body">
+          <p class="eyebrow"><b>120</b> <code>curtain-left</code></p>
+          <h3>Curtain da sinistra</h3>
+        </div>
+      </article>
+      <article class="card" tabindex="0" role="button" aria-pressed="false"
+        data-id="curtain-right" data-n="121" data-cat="reveal"
+        data-cost="free" data-tech="CSS GSAP"
+        data-search="121 curtain-right curtain da destra un pannello scorre a destra e scopre il contenuto. pannelli di dettaglio e ritorni indietro: il verso contrario, usato apposta. una direzione per pagina: quattro tende che si aprono da quattro lati sono un difetto, non un sistema. reveal / entrata css gsap gratis">
+        <span class="stage fx--curtain-right" aria-hidden="true"><i class="subj s-block"></i></span>
+        <div class="body">
+          <p class="eyebrow"><b>121</b> <code>curtain-right</code></p>
+          <h3>Curtain da destra</h3>
         </div>
       </article>
   </div>

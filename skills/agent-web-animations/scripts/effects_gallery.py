@@ -692,6 +692,17 @@ def _css_effects() -> str:
 .fx--seq-section .subj > *:nth-child(4) { animation-delay: .4s }
 @keyframes k-curtain { 0%,10% { clip-path: inset(0 50% 0 50%) } 46%,88% { clip-path: inset(0 0 0 0) } 100% { clip-path: inset(0 50% 0 50%) } }
 .fx--curtain .subj { animation: k-curtain 3.6s cubic-bezier(.7,0,.2,1) infinite; }
+/* Le quattro direzioni: la tenda che si apre da un lato solo. Il verso conta —
+   dal basso segue la lettura, dall'alto e' il sipario, i due laterali seguono o
+   contraddicono il verso di scorrimento. Una per pagina. */
+@keyframes k-curtain-up { 0%,10% { clip-path: inset(100% 0 0 0) } 46%,88% { clip-path: inset(0 0 0 0) } 100% { clip-path: inset(100% 0 0 0) } }
+.fx--curtain-up .subj { animation: k-curtain-up 3.6s cubic-bezier(.7,0,.2,1) infinite; }
+@keyframes k-curtain-down { 0%,10% { clip-path: inset(0 0 100% 0) } 46%,88% { clip-path: inset(0 0 0 0) } 100% { clip-path: inset(0 0 100% 0) } }
+.fx--curtain-down .subj { animation: k-curtain-down 3.6s cubic-bezier(.7,0,.2,1) infinite; }
+@keyframes k-curtain-left { 0%,10% { clip-path: inset(0 100% 0 0) } 46%,88% { clip-path: inset(0 0 0 0) } 100% { clip-path: inset(0 100% 0 0) } }
+.fx--curtain-left .subj { animation: k-curtain-left 3.6s cubic-bezier(.7,0,.2,1) infinite; }
+@keyframes k-curtain-right { 0%,10% { clip-path: inset(0 0 0 100%) } 46%,88% { clip-path: inset(0 0 0 0) } 100% { clip-path: inset(0 0 0 100%) } }
+.fx--curtain-right .subj { animation: k-curtain-right 3.6s cubic-bezier(.7,0,.2,1) infinite; }
 
 /* 12-23 testo */
 @keyframes k-char { 0%,10% { opacity: 0; transform: translateY(45%) } 42%,86% { opacity: 1; transform: none } 100% { opacity: 0; transform: translateY(-30%) } }

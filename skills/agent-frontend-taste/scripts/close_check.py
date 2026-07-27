@@ -263,6 +263,27 @@ def check_privacy(text: str) -> tuple[bool, list[str]]:
     return not problems, problems
 
 
+# --- la tenda ---------------------------------------------------------------
+# Regola dell'owner: su una landing almeno un effetto `curtain` c'e sempre. Il
+# catalogo ne ha sei — le due metà, la variante di pagina e le quattro
+# direzioni — e la scelta di quale resta di Vera, dal seed. Qui si verifica solo
+# che ce ne sia uno: una regola che vive solo in prosa non viene eseguita.
+CURTAIN_RE = re.compile(r"curtain|sipario|tenda", re.I)
+
+
+def check_curtain(text: str, page: Path) -> tuple[bool, list[str]]:
+    """Cerca anche nell'`anim.css`/`anim.js` accanto: il motion vive li."""
+    if CURTAIN_RE.search(text):
+        return True, []
+    for nome in ("anim.css", "anim.js"):
+        f = page.parent / nome
+        if f.is_file() and CURTAIN_RE.search(f.read_text(encoding="utf-8", errors="replace")):
+            return True, []
+    return False, ["nessun effetto `curtain`: su una landing ne va sempre almeno uno "
+                   "(sei varianti nel catalogo di Vera — due metà, pagina, e le "
+                   "quattro direzioni). `effects_gallery.py --show curtain-up`"]
+
+
 def check_colour(pg, text: str, last: list[str], last_fonts: list[dict],
                  deroghe: dict) -> tuple[int, dict, list[str]]:
     """(stato, report, problemi) — stato 0 ok, 1 violazioni, 2 non misurabile.
@@ -350,11 +371,14 @@ def main() -> int:
         des_ok, des_problems = check_design(design, text)
         cou_ok, cou_problems = check_council(council)
         priv_ok, priv_problems = check_privacy(text)
+        cur_ok, cur_problems = (check_curtain(text, page)
+                                if args.surface == "marketing" else (True, []))
         dash_ok, dash_problems = (check_dashboard(text, design, page)
                                   if args.surface == "dashboard" else (True, []))
 
         problems = (colour_problems + resp_problems + fin_problems
-                    + des_problems + cou_problems + dash_problems + priv_problems)
+                    + des_problems + cou_problems + dash_problems + priv_problems
+                    + cur_problems)
         # Le deroghe restano nel referto ma non fermano la consegna: è la
         # differenza fra un'eccezione dichiarata e un controllo spento.
         bloccanti = pg.only_blocking(problems)
@@ -393,6 +417,8 @@ def main() -> int:
         lines.append(f"- traccia: {'ok' if des_ok else 'da correggere'}")
         lines.append(f"- consiglio: {'registrato' if cou_ok else 'da correggere'}")
         lines.append(f"- cookie e privacy: {'ok' if priv_ok else 'da correggere'}")
+        if args.surface == "marketing":
+            lines.append(f"- tenda: {'presente' if cur_ok else 'da correggere'}")
         if args.surface == "dashboard":
             auth = is_auth_screen(text, page)
             lines.append("- dashboard: " + ("schermata di accesso — profilo e uscita "

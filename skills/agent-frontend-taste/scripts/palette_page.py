@@ -2,60 +2,33 @@
 # /// script
 # requires-python = ">=3.10"
 # ///
-"""La pagina delle combinazioni: colori e caratteri, viste prima di sceglierli.
+"""Il selettore: trenta colori, trenta caratteri, trenta forme. Si clicca.
 
-Perché esiste. La palette e i caratteri Vesper li decide da `locale + register +
-activity` sul batch misurato, e li consegna applicati: è la legge — il craft non
-si vota, e non si apre un catalogo in attesa di una scelta. Ma l'owner, la
-combinazione applicata, la vede **solo dentro la pagina finita**, e le altre che
-reggevano non le vede mai. Questa pagina gliele mostra: la scelta resta di
-Vesper, l'alternativa smette di essere invisibile.
+Perché è fatta così. La versione precedente mostrava da due a quattro
+**combinazioni confezionate**, ognuna con nome, motivo, provino e note: l'owner
+non vuole leggere, vuole vedere le possibilità e scegliere. E vuole sceglierle
+su assi **indipendenti** — questo colore con quel carattere e quell'altra forma.
 
-**Non è una domanda e non ferma niente.** Si genera *insieme* al lavoro
-consegnato, con la combinazione scelta già applicata e marcata «in uso». Se
-l'owner poi dice «metti la B», è lui che interviene di sua iniziativa — e allora
-la sua parola vince: si aggiorna il DESIGN, si rifà la pagina, si rigenera
-questa. Vedi `references/implementation-handoff.md` §10.1.
+Trenta per asse, non tre: sotto quella soglia si torna a proporre sempre le
+stesse cose. I trenta non si passano a mano, vengono dai cataloghi —
+`accent_pool.py --as-colours`, `font_pool.py`, `shape_pool.py` — che esistono
+perché la misura diceva il contrario del gusto: l'accento era `rosso` su 3
+pagine su 5 (quattro CTA entro venti gradi di tinta), `DM Mono` il mono di 5 su
+5, la pillola il raggio di 5 su 5.
 
-**Ogni combinazione mostrata è già legale.** Ognuna passa da `repeat_guard`
-prima di comparire — croma dello scuro strutturale, settore dominante, serie del
-ledger, i tre hard-reject. Una combinazione che l'owner non potrebbe scegliere
-non si mostra: sarebbe un'offerta che si ritira dopo averla fatta.
+**Niente prosa.** Ogni voce è un campione e un id. Nessun «perché», nessuna
+nota, nessuna riga di aiuto: se serve una spiegazione per capire un colore, il
+problema è il colore.
 
-Input: un JSON con le combinazioni derivate dal batch.
-
-    {
-      "project": "bellini", "surface": "marketing", "activity": "ortopedia",
-      "register": "professionale", "locale": "Verona", "seed": "2026072616",
-      "batch": {"count": 34, "source": "envato: medical, health"},
-      "applied": "A",
-      "combos": [
-        {"id": "A", "name": "Pietra e ottone",
-         "why": "lo scuro quasi-neutro regge il registro clinico; l'ottone…",
-         "colours": {"ink": "#14181c", "paper": "#f6f2ec", "accent": "#8a6a3b"},
-         "fonts": {
-           "display": {"family": "Fraunces", "stack": "Georgia, serif",
-                       "url": "https://fonts.googleapis.com/css2?family=Fraunces…"},
-           "body":    {"family": "Inter Tight", "stack": "system-ui, sans-serif"}},
-         "type": {"scale": "1.25", "tracking": "display -.02em · body 0"},
-         "buttons": {"radius": "3px", "shape": "pieno + fantasma",
-                     "pad": ".7em 1.4em", "case": "normale",
-                     "fill": "#8a6a3b", "label": "#f6f2ec", "ghost": "#14181c"}}
-      ]
-    }
-
-La forma dei pulsanti è un asse di craft, non una rifinitura: raggio, pieno o
-contornato, respiro e maiuscoletto cambiano il registro quanto il carattere.
-`fill`/`label`/`ghost` sono facoltativi — senza, il pieno usa l'accento sul
-paper e il fantasma il contorno dell'inchiostro.
+**La pagina non applica niente.** Si apre col doppio clic, non ha server, e
+produce una riga da rimandare a Vesper — `colore=… · font=… · forma=…`.
 
 Usage:
-    uv run scripts/palette_page.py combos.json --out apps/<slug>/palette.html
-    uv run scripts/palette_page.py combos.json --out … --ledger …/craft-ledger.json
-    uv run scripts/palette_page.py combos.json --out … --last verde,ambra
+    uv run scripts/palette_page.py --out apps/<slug>/palette.html --seed 2026072712
+    uv run scripts/palette_page.py meta.json --out … --no-ledger
 
-Exit: 0 pagina scritta · 1 una combinazione non è legale (si corregge e si
-      rilancia: non si mostra ciò che non si può scegliere) · 2 input illeggibile.
+Exit: 0 scritta · 1 un colore non è legale · 2 input illeggibile o accenti tutti
+      imparentati.
 """
 
 from __future__ import annotations
@@ -68,381 +41,354 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-ROLES = ("ink", "paper", "accent")
 
 
-def _repeat_guard():
-    spec = importlib.util.spec_from_file_location("repeat_guard", HERE / "repeat_guard.py")
+def _mod(nome: str):
+    spec = importlib.util.spec_from_file_location(nome, HERE / f"{nome}.py")
     if not spec or not spec.loader:
-        raise SystemExit("repeat_guard.py non trovato accanto a palette_page.py")
-    mod = importlib.util.module_from_spec(spec)
-    sys.modules.setdefault("repeat_guard", mod)
-    spec.loader.exec_module(mod)
-    return mod
-
-
-def combo_css(combo: dict) -> str:
-    """Il CSS di una combinazione — lo stesso che il guard misurerà.
-
-    `--accent` sta su `.spec__btn`: un accento su un bottone non è una
-    superficie grande, e il guard lo classifica per il nome del selettore.
-    """
-    cid = combo["id"]
-    col = combo["colours"]
-    btn = combo.get("buttons") or {}
-    extra = "".join(f"  --{k}: {v};\n" for k, v in col.items() if k not in ROLES)
-    fill = btn.get("fill") or col["accent"]
-    label = btn.get("label") or col["paper"]
-    ghost = btn.get("ghost") or col["ink"]
-    radius = btn.get("radius", "0")
-    pad = btn.get("pad", ".7em 1.35em")
-    case = "uppercase" if str(btn.get("case", "")).lower() in ("upper", "maiuscoletto") else "none"
-    track = ".08em" if case == "uppercase" else "0"
-    return (
-        f'[data-combo="{cid}"] {{\n'
-        f'  --ink: {col["ink"]};\n  --paper: {col["paper"]};\n'
-        f'  --accent: {col["accent"]};\n'
-        f'  --btn-fill: {fill};\n  --btn-label: {label};\n  --btn-ghost: {ghost};\n'
-        f'  --btn-radius: {radius};\n  --btn-pad: {pad};\n{extra}}}\n'
-        f'[data-combo="{cid}"] .spec__page {{ background: var(--paper); color: var(--ink); }}\n'
-        f'[data-combo="{cid}"] .spec__band {{ background: var(--ink); color: var(--paper); }}\n'
-        f'[data-combo="{cid}"] .spec__btn {{ background: var(--btn-fill); color: var(--btn-label);\n'
-        f'  border-radius: var(--btn-radius); padding: var(--btn-pad);\n'
-        f'  text-transform: {case}; letter-spacing: {track}; border: 1px solid var(--btn-fill); }}\n'
-        f'[data-combo="{cid}"] .spec__btn--ghost {{ background: transparent; color: var(--btn-ghost);\n'
-        f'  border: 1px solid var(--btn-ghost); }}\n'
-    )
-
-
-def judge(pg, combo: dict, last: list[str],
-          last_fonts: list[dict] | None = None) -> tuple[dict, list[str]]:
-    """(report, problemi) di una combinazione, misurata come una pagina vera."""
-    css = combo_css(combo)
-    pairs, painted, small, ok = pg.measured_pairs(css)
-    if not ok or not pairs:
-        return {}, ["la combinazione non è misurabile: servono ink, paper e accent in esadecimale"]
-    report = pg.analyse(pairs, painted, small)
-    # I caratteri della combinazione sono dichiarati nel JSON, non nel CSS del
-    # provino: si passano al guard nella stessa forma in cui li legge dal ledger.
-    report["typefaces"] = {r: (combo.get("fonts", {}).get(r) or {}).get("family")
-                           for r in ("display", "body", "mono")
-                           if (combo.get("fonts", {}).get(r) or {}).get("family")}
-    problems = (pg.violations(report, last, last_fonts)
-                + pg.hard_rejects(css, pg.palette_colours(css, report["colours"])))
-    return report, problems
-
-
-def font_decl(font: dict | None) -> str:
-    if not font:
-        return "inherit"
-    fam = font.get("family", "").strip()
-    stack = font.get("stack", "system-ui, sans-serif").strip()
-    return f'"{fam}", {stack}' if fam else stack
+        raise SystemExit(f"{nome}.py non trovato accanto a palette_page.py")
+    m = importlib.util.module_from_spec(spec)
+    sys.modules.setdefault(nome, m)
+    spec.loader.exec_module(m)
+    return m
 
 
 def e(x) -> str:
     return html_lib.escape(str(x if x is not None else ""), quote=True)
 
 
-def swatches(combo: dict, report: dict) -> str:
-    measured = {c["hex"].lower(): c for c in report.get("colours", [])}
+def dai_cataloghi() -> dict:
+    """I tre elenchi da trenta, senza passare per la riga di comando."""
+    ap, fp, sp = _mod("accent_pool"), _mod("font_pool"), _mod("shape_pool")
+    return {"colours": [ap.come_colore(z) for z in ap.ZONE],
+            "fonts": [fp.voce(t) for t in fp.COPPIE],
+            "shapes": [sp.voce(t) for t in sp.FORME]}
+
+
+# --- controlli ---------------------------------------------------------------
+
+def colori_illegali(pg, colours: list[dict], last: list[str],
+                    last_fonts: list[dict]) -> list[str]:
+    """Nessun colore che il guard poi rifiuterebbe: offrirlo e ritirarlo è peggio."""
+    guai = []
+    for c in colours:
+        css = (f'[data-c="{c["id"]}"] {{ --ink: {c["ink"]}; --paper: {c["paper"]};'
+               f' --accent: {c["accent"]}; }}\n'
+               f'[data-c="{c["id"]}"] .page {{ background: var(--paper); color: var(--ink); }}\n'
+               f'[data-c="{c["id"]}"] .band {{ background: var(--ink); color: var(--paper); }}\n'
+               f'[data-c="{c["id"]}"] .btn {{ background: var(--accent); color: var(--paper); }}\n')
+        pairs, painted, small, ok = pg.measured_pairs(css)
+        if not ok or not pairs:
+            guai.append(f"{c['id']}: non misurabile")
+            continue
+        rep = pg.analyse(pairs, painted, small)
+        for p in pg.hard_rejects(css, pg.palette_colours(css, rep["colours"])):
+            guai.append(f"{c['id']} — {p}")
+        for p in pg.violations(rep, last, last_fonts):
+            if "predominante" in p or "ripetut" in p:
+                continue          # la storia riguarda la consegna, non il catalogo
+            guai.append(f"{c['id']} — {p}")
+    return guai
+
+
+def famiglie(pg, colours: list[dict]) -> dict:
+    out: dict[str, list[str]] = {}
+    for c in colours:
+        try:
+            h, s_, l = pg.to_hsl(c["accent"])
+        except Exception:
+            continue
+        out.setdefault(pg.family_of(pg.sector_of(h, s_, l)), []).append(c["id"])
+    return out
+
+
+# --- pagina ------------------------------------------------------------------
+
+CSS = """
+:root{--paper:#f3f0ea;--ink:#171613;--ink2:#4a463f;--rule:#c9c2b4;
+--mono:ui-monospace,Menlo,Consolas,monospace;--sans:system-ui,-apple-system,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.5}
+.wrap{max-width:82rem;margin:0 auto;padding:clamp(1rem,3vw,2.5rem)}
+h1{font-size:1.15rem;margin:0 0 .2rem;letter-spacing:-.01em}
+.prov{font-family:var(--mono);font-size:.68rem;color:var(--ink2);
+border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+padding:.55rem 0;margin:.8rem 0 1.4rem;display:flex;flex-wrap:wrap;gap:.3rem 1.2rem}
+h2{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
+color:var(--ink2);margin:1.8rem 0 .7rem;font-weight:400}
+.grid{display:grid;gap:.5rem;grid-template-columns:repeat(auto-fill,minmax(8.5rem,1fr))}
+.opt{border:1px solid var(--rule);background:transparent;padding:0;cursor:pointer;
+font:inherit;text-align:left;overflow:hidden;display:block;width:100%}
+.opt:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.opt[aria-pressed="true"]{outline:2px solid var(--ink);outline-offset:-1px}
+.opt .id{display:block;font-family:var(--mono);font-size:.6rem;color:var(--ink2);
+padding:.3rem .4rem;border-top:1px solid var(--rule);white-space:nowrap;overflow:hidden;
+text-overflow:ellipsis}
+.sw{display:grid;grid-template-columns:1fr 1fr 1fr;height:2.6rem}
+.tp{display:block;padding:.5rem .45rem .35rem;min-height:2.6rem}
+.tp b{display:block;font-size:1.15rem;line-height:1.1;font-weight:500;
+white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tp i{font-style:normal;font-size:.6rem;color:var(--ink2);display:block;
+white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sh{display:grid;place-items:center;height:2.6rem}
+.sh span{font-size:.6rem;border:1px solid currentColor;line-height:1;color:var(--ink)}
+#prev{border:1px solid var(--rule)}
+#prevBand{padding:2rem 1.2rem}
+#prevBand p{margin:0}
+#prevEye{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;opacity:.8;margin-bottom:.5rem}
+#prevDisp{font-size:clamp(1.7rem,4.5vw,2.6rem);line-height:1;letter-spacing:-.03em}
+#prevBody{padding:1.1rem 1.2rem}
+#prevBody p{margin:0 0 .9rem;font-size:.92rem;max-width:60ch}
+.pb{display:inline-block;margin:0 .5rem .4rem 0;border:1px solid transparent}
+#out{margin:1rem 0 0;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+#outLine{font-family:var(--mono);font-size:.76rem;border:1px solid var(--rule);
+padding:.5rem .7rem;flex:1 1 22rem;min-width:0;overflow-x:auto;white-space:nowrap}
+#copy{font-family:var(--mono);font-size:.68rem;padding:.5rem .9rem;border:1px solid var(--ink);
+background:var(--ink);color:var(--paper);cursor:pointer}
+#fontwarn{display:none;background:#7a1f12;color:#fff;padding:.7rem 1rem;font-size:.8rem;margin:0 0 1rem}
+#fontwarn.on{display:block}
+@media(max-width:34rem){.grid{grid-template-columns:repeat(auto-fill,minmax(7rem,1fr))}}
+"""
+
+JS = """
+(function(){
+ var C=window.__POOL_C,F=window.__POOL_F,S=window.__POOL_S;
+ var sel={c:C[0],f:F[0],s:S[0]};
+ function byId(a,i){for(var k=0;k<a.length;k++){if(a[k].id===i)return a[k]}return a[0]}
+ function paint(){
+  var c=sel.c,f=sel.f,s=sel.s;
+  var p=document.getElementById('prev');
+  p.style.background=c.paper;p.style.color=c.ink;
+  var b=document.getElementById('prevBand');b.style.background=c.ink;b.style.color=c.paper;
+  document.getElementById('prevDisp').style.fontFamily='"'+f.display.family+'",'+f.display.stack;
+  document.getElementById('prevEye').style.fontFamily='"'+f.mono.family+'",'+f.mono.stack;
+  var bodyF='"'+f.body.family+'",'+f.body.stack;
+  document.getElementById('prevBody').style.fontFamily=bodyF;
+  var up=(s.case==='maiuscoletto');
+  [['pbFill',true],['pbGhost',false]].forEach(function(x){
+   var el=document.getElementById(x[0]);
+   el.style.borderRadius=s.radius;el.style.padding=s.pad;
+   el.style.textTransform=up?'uppercase':'none';el.style.letterSpacing=up?'.08em':'0';
+   el.style.fontFamily=bodyF;el.style.fontSize='.82rem';
+   if(s.shape==='sottolineato'){el.style.background='transparent';el.style.color=c.accent;
+    el.style.borderColor='transparent';el.style.textDecoration='underline';
+    el.style.textUnderlineOffset='4px';}
+   else if(x[1]){el.style.background=c.accent;el.style.color=c.paper;
+    el.style.borderColor=c.accent;el.style.textDecoration='none';}
+   else{el.style.background='transparent';el.style.color=c.ink;el.style.borderColor=c.ink;
+    el.style.textDecoration='none';}
+  });
+  document.getElementById('outLine').textContent=
+   'colore='+c.id+' \\u00b7 font='+f.id+' \\u00b7 forma='+s.id;
+ }
+ Array.prototype.forEach.call(document.querySelectorAll('.opt'),function(b){
+  b.addEventListener('click',function(){
+   var g=b.getAttribute('data-g'),i=b.getAttribute('data-i');
+   Array.prototype.forEach.call(document.querySelectorAll('.opt[data-g="'+g+'"]'),function(o){
+    o.setAttribute('aria-pressed',o===b?'true':'false');});
+   sel[g]=byId(g==='c'?C:(g==='f'?F:S),i);paint();
+  });
+ });
+ document.getElementById('copy').addEventListener('click',function(){
+  var t=document.getElementById('outLine').textContent;
+  if(navigator.clipboard){navigator.clipboard.writeText(t);}
+  else{var r=document.createRange();r.selectNode(document.getElementById('outLine'));
+   window.getSelection().removeAllRanges();window.getSelection().addRange(r);
+   document.execCommand('copy');}
+  var b=document.getElementById('copy'),o=b.textContent;b.textContent='copiato';
+  setTimeout(function(){b.textContent=o;},1200);
+ });
+ paint();
+ var nomi=[],visti={};
+ F.forEach(function(f){['display','body','mono'].forEach(function(r){
+  var n=f[r].family;if(!visti[n]){visti[n]=1;nomi.push(n);}});});
+ function check(){
+  var m=nomi.filter(function(n){
+   try{return !document.fonts.check('16px "'+n+'"');}catch(e){return false;}});
+  if(m.length<nomi.length*0.5)return;
+  var w=document.getElementById('fontwarn');w.className='on';
+  w.textContent='Non si sono caricati '+m.length+' caratteri su '+nomi.length+
+   ': quello che vedi e un ripiego, non la scelta.';
+ }
+ if(document.fonts&&document.fonts.ready){document.fonts.ready.then(check);}
+ else{window.addEventListener('load',check);}
+})();
+"""
+
+
+def griglia_colori(cs: list[dict]) -> str:
+    return "\n".join(
+        f'<button class="opt" data-g="c" data-i="{e(c["id"])}" '
+        f'aria-pressed="{"true" if i == 0 else "false"}">'
+        f'<span class="sw"><span style="background:{e(c["ink"])}"></span>'
+        f'<span style="background:{e(c["paper"])}"></span>'
+        f'<span style="background:{e(c["accent"])}"></span></span>'
+        f'<span class="id">{e(c["id"])}</span></button>'
+        for i, c in enumerate(cs))
+
+
+def griglia_font(fs: list[dict]) -> str:
     out = []
-    btn = combo.get("buttons") or {}
-    roles = dict(combo["colours"])
-    for key, name in (("fill", "pulsante"), ("label", "testo pulsante"), ("ghost", "pulsante contornato")):
-        hx = btn.get(key)
-        if hx and hx not in roles.values():
-            roles[name] = hx
-    for role, hx in roles.items():
-        m = measured.get(hx.lower(), {})
-        meta = " · ".join(x for x in (m.get("sector"),
-                          f"croma {m['chroma']}" if m.get("chroma") is not None else None) if x)
+    for i, f in enumerate(fs):
+        d, b = f["display"], f["body"]
         out.append(
-            f'<li><span class="sw" style="background:{e(hx)}"></span>'
-            f'<code>{e(hx)}</code><b>{e(role)}</b>'
-            f'<i>{e(meta)}</i></li>')
+            f'<button class="opt" data-g="f" data-i="{e(f["id"])}" '
+            f'aria-pressed="{"true" if i == 0 else "false"}">'
+            f'<span class="tp"><b style="font-family:&quot;{e(d["family"])}&quot;,{e(d["stack"])}">Aa</b>'
+            f'<i style="font-family:&quot;{e(b["family"])}&quot;,{e(b["stack"])}">{e(b["family"])}</i></span>'
+            f'<span class="id">{e(f["id"])}</span></button>')
     return "\n".join(out)
 
 
-def buttons_line(combo: dict) -> str:
-    """La forma del pulsante, detta a parole: è craft, e va letta senza aprire il CSS."""
-    b = combo.get("buttons") or {}
-    radius = str(b.get("radius", "0")).strip()
-    shape = ("spigolo vivo" if radius in ("0", "0px", "")
-             else "pillola" if radius in ("999px", "9999px", "50em", "100vmax")
-             else f"raggio {radius}")
-    given = (b.get("shape") or "pieno + fantasma").strip()
-    # "pillola piena · pillola" è una ripetizione: il nome umano e il fatto
-    # tecnico dicono la stessa cosa, e si tiene il nome.
-    bits = [given] + ([] if shape.split()[0].lower() in given.lower() else [shape])
-    if str(b.get("case", "")).lower() in ("upper", "maiuscoletto"):
-        bits.append("maiuscoletto")
-    if b.get("pad"):
-        bits.append(f"respiro {b['pad']}")
-    return " · ".join(bits)
+def griglia_forme(ss: list[dict]) -> str:
+    out = []
+    for i, s in enumerate(ss):
+        up = "text-transform:uppercase;letter-spacing:.08em;" if s["case"] == "maiuscoletto" else ""
+        stile = f'border-radius:{e(s["radius"])};padding:{e(s["pad"])};{up}'
+        if s["shape"] == "sottolineato":
+            stile += "border-color:transparent;text-decoration:underline;text-underline-offset:3px;"
+        out.append(
+            f'<button class="opt" data-g="s" data-i="{e(s["id"])}" '
+            f'aria-pressed="{"true" if i == 0 else "false"}">'
+            f'<span class="sh"><span style="{stile}">Aa</span></span>'
+            f'<span class="id">{e(s["id"])}</span></button>')
+    return "\n".join(out)
 
 
-def specimen(combo: dict, report: dict, applied: bool) -> str:
-    cid, f = combo["id"], combo.get("fonts", {})
-    disp, body = font_decl(f.get("display")), font_decl(f.get("body"))
-    ty = combo.get("type", {})
-    badge = '<span class="badge">in uso</span>' if applied else ""
-    tr = " · ".join(x for x in (f"scala {ty['scale']}" if ty.get("scale") else None,
-                                ty.get("tracking")) if x)
-    return f"""
-<section class="combo" data-combo="{e(cid)}" id="combo-{e(cid)}">
-  <header class="combo__head">
-    <h2><span class="id">{e(cid)}</span> {e(combo.get('name', ''))} {badge}</h2>
-    <p class="why">{e(combo.get('why', ''))}</p>
-  </header>
-  <div class="spec spec__page">
-    <div class="spec__band">
-      <p class="spec__eyebrow" style="font-family:{e(body)}">{e(combo.get('eyebrow', 'anteprima'))}</p>
-      <p class="spec__display" style="font-family:{e(disp)}">Aa — {e(combo.get('name', ''))}</p>
-    </div>
-    <div class="spec__body">
-      <p style="font-family:{e(body)}">Il quadro di questa combinazione applicato a un
-      paragrafo vero, perché una palette si giudica su un testo che si legge e non
-      su tre quadratini in fila. Qui sotto l'accento, dove finisce davvero: su
-      un'azione, non su una fascia.</p>
-      <span class="spec__btn" style="font-family:{e(body)}">Prenota una visita</span>
-      <span class="spec__btn spec__btn--ghost" style="font-family:{e(body)}">Scrivici</span>
-    </div>
-  </div>
-  <ul class="tokens">{swatches(combo, report)}</ul>
-  <dl class="meta">
-    <dt>pulsanti</dt><dd>{e(buttons_line(combo))}</dd>
-    <dt>caratteri</dt><dd><span data-font="{e(f.get('display',{}).get('family',''))}">{e(f.get('display',{}).get('family','—'))}</span>
-      · <span data-font="{e(f.get('body',{}).get('family',''))}">{e(f.get('body',{}).get('family','—'))}</span></dd>
-    <dt>tipografia</dt><dd>{e(tr or '—')}</dd>
-    <dt>settore</dt><dd>{e(report.get('dominant_sector','—'))} · scuro {e(report.get('ink_family','—'))}</dd>
-  </dl>
-</section>"""
-
-
-PAGE = """<!DOCTYPE html>
+PAGINA = """<!DOCTYPE html>
 <html lang="it" data-generated-by="palette_page.py">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Colori e caratteri — {project}</title>
-{links}
-<style>
-:root {{
-  --paper: #f3f0ea; --ink: #171613; --ink-2: #4a463f; --rule: #c9c2b4; --accent: #8a3f1d;
-  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-}}
-* {{ box-sizing: border-box; }}
-body {{ margin: 0; background: var(--paper); color: var(--ink);
-  font-family: var(--sans); line-height: 1.55; }}
-.wrap {{ max-width: 74rem; margin: 0 auto; padding: clamp(1.5rem, 4vw, 3.5rem); }}
-.kicker {{ font-family: var(--mono); font-size: .7rem; letter-spacing: .16em;
-  text-transform: uppercase; color: var(--ink-2); margin: 0 0 .6rem; }}
-h1 {{ font-size: clamp(1.7rem, 4vw, 2.6rem); line-height: 1.05; letter-spacing: -.03em; margin: 0 0 .5rem; }}
-.lede {{ max-width: 62ch; color: var(--ink-2); margin: 0 0 .5rem; }}
-.prov {{ font-family: var(--mono); font-size: .72rem; color: var(--ink-2);
-  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
-  padding: .7rem 0; margin: 1.5rem 0 2.5rem; display: flex; flex-wrap: wrap; gap: .4rem 1.4rem; }}
-.grid {{ display: grid; gap: 2.5rem; grid-template-columns: repeat(auto-fit, minmax(21rem, 1fr)); }}
-.combo {{ border: 1px solid var(--rule); padding: 1.1rem; display: flex; flex-direction: column; gap: .9rem; }}
-.combo__head h2 {{ font-size: 1.05rem; margin: 0 0 .3rem; display: flex; align-items: baseline; gap: .5rem; flex-wrap: wrap; }}
-.id {{ font-family: var(--mono); border: 1px solid var(--rule); padding: 0 .4em; font-size: .8em; }}
-.badge {{ font-family: var(--mono); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase;
-  background: var(--ink); color: var(--paper); padding: .15em .5em; }}
-.why {{ margin: 0; font-size: .86rem; color: var(--ink-2); }}
-.spec {{ border: 1px solid var(--rule); }}
-.spec__band {{ padding: 2.2rem 1.2rem; }}
-.spec__eyebrow {{ margin: 0 0 .5rem; font-size: .7rem; letter-spacing: .16em; text-transform: uppercase; opacity: .8; }}
-.spec__display {{ margin: 0; font-size: clamp(1.8rem, 5vw, 2.6rem); line-height: 1; letter-spacing: -.03em; }}
-.spec__body {{ padding: 1.2rem; }}
-.spec__body p {{ margin: 0 0 1rem; font-size: .92rem; }}
-.spec__btn {{ display: inline-block; padding: .6em 1.1em; font-size: .82rem;
-  margin: 0 .5rem .4rem 0; }}
-.tokens {{ list-style: none; margin: 0; padding: 0; display: grid; gap: .35rem; }}
-.tokens li {{ display: flex; align-items: center; gap: .5rem; font-size: .74rem; font-family: var(--mono); }}
-.tokens b {{ font-weight: 400; color: var(--ink-2); }}
-.tokens i {{ margin-left: auto; font-style: normal; color: var(--ink-2); font-size: .68rem; }}
-.sw {{ width: 1.15rem; height: 1.15rem; border: 1px solid var(--rule); flex: none; }}
-.meta {{ display: grid; grid-template-columns: auto 1fr; gap: .2rem .8rem; margin: 0; font-size: .76rem; }}
-.meta dt {{ font-family: var(--mono); font-size: .64rem; letter-spacing: .1em;
-  text-transform: uppercase; color: var(--accent); }}
-.meta dd {{ margin: 0; }}
-.how {{ margin: 2.5rem 0 0; padding: 1rem 1.1rem; border: 1px dashed var(--rule); max-width: 62ch; font-size: .88rem; }}
-#fontwarn {{ display: none; background: #7a1f12; color: #fff; padding: .8rem 1.1rem;
-  font-size: .82rem; margin: 0 0 1.5rem; }}
-#fontwarn.on {{ display: block; }}
-@media (max-width: 34rem) {{ .prov {{ gap: .3rem .9rem; }} }}
-</style>
+<title>__TITOLO__</title>
+__LINKS__
+<style>__CSS__</style>
 </head>
 <body>
 <div class="wrap">
-<p class="kicker">colori e caratteri</p>
-<h1>{project}</h1>
-<p class="lede">Le combinazioni che reggevano questo lavoro. Quella marcata
-<b>in uso</b> è applicata alla pagina consegnata; le altre sono già legali —
-sono passate dallo stesso controllo — e si possono chiedere.</p>
-<p class="prov">{prov}</p>
+<h1>__TITOLO__</h1>
+<p class="prov">__PROV__</p>
 <div id="fontwarn"></div>
-<div class="grid">{combos}
+
+<div id="prev">
+  <div id="prevBand"><p id="prevEye">Aa</p><p id="prevDisp">__TITOLO__</p></div>
+  <div id="prevBody">
+    <p>Il paragrafo di prova, col colore, il carattere e la forma scelti.</p>
+    <span class="pb" id="pbFill">Chiedi disponibilità</span>
+    <span class="pb" id="pbGhost">Scrivici</span>
+  </div>
 </div>
-<p class="how"><b>Per cambiare:</b> dimmi quale — «metti la B», o anche solo il
-carattere o il colore che preferisci di un'altra. Aggiorno il <code>DESIGN.md</code>,
-rifaccio la pagina con quella combinazione e rigenero questa. Non serve altro:
-questa pagina non aspetta una risposta, è solo il modo di vedere cosa c'era.</p>
+
+<div id="out">
+  <div id="outLine">colore=__C0__ · font=__F0__ · forma=__S0__</div>
+  <button id="copy">copia</button>
+</div>
+
+<h2>Colori</h2>
+<div class="grid">__GC__</div>
+<h2>Caratteri</h2>
+<div class="grid">__GF__</div>
+<h2>Forme</h2>
+<div class="grid">__GS__</div>
 </div>
 <script>
-// Un provino reso con un carattere di ripiego è peggio di nessun provino:
-// si sceglie una coppia che non si è mai vista. Se un font dichiarato non è
-// disponibile, lo si dice forte invece di lasciarlo passare.
-(function () {{
-  var names = [], seen = {{}};
-  document.querySelectorAll("[data-font]").forEach(function (n) {{
-    var f = (n.getAttribute("data-font") || "").trim();
-    if (f && !seen[f]) {{ seen[f] = 1; names.push(f); }}
-  }});
-  function check() {{
-    var missing = names.filter(function (f) {{
-      try {{ return !document.fonts.check('16px "' + f + '"'); }} catch (e) {{ return false; }}
-    }});
-    if (!missing.length) return;
-    var box = document.getElementById("fontwarn");
-    box.className = "on";
-    box.textContent = "Attenzione: " + missing.join(", ") +
-      (missing.length > 1 ? " non si sono caricati" : " non si è caricato") +
-      ". Quello che vedi è un carattere di ripiego, non la combinazione: " +
-      "non sceglierla da qui finché non si carica.";
-  }}
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(check);
-  else window.addEventListener("load", check);
-}})();
+window.__POOL_C=__JC__;window.__POOL_F=__JF__;window.__POOL_S=__JS__;
+__JSCODE__
 </script>
 </body>
 </html>
 """
 
 
-def build(data: dict, reports: dict[str, dict]) -> str:
-    b = data.get("batch") or {}
-    bits = [("progetto", data.get("project")), ("superficie", data.get("surface")),
-            ("attività", data.get("activity")), ("register", data.get("register")),
-            ("luogo", data.get("locale")), ("seed", data.get("seed")),
-            ("batch", f"{b.get('count', '?')} riferimenti · {b.get('source', '—')}")]
+def costruisci(dati: dict, pools: dict) -> str:
+    b = dati.get("batch") or {}
+    bits = [("progetto", dati.get("project")), ("superficie", dati.get("surface")),
+            ("attività", dati.get("activity")), ("register", dati.get("register")),
+            ("luogo", dati.get("locale")), ("seed", dati.get("seed")),
+            ("batch", f"{b.get('count', '?')} · {b.get('source', '—')}" if b else None)]
     prov = " ".join(f"<span><b>{e(k)}</b> {e(v)}</span>" for k, v in bits if v)
 
-    urls, links = [], []
-    for c in data["combos"]:
-        for f in (c.get("fonts") or {}).values():
-            u = (f or {}).get("url")
+    urls = []
+    for f in pools["fonts"]:
+        for r in ("display", "body", "mono"):
+            u = (f.get(r) or {}).get("url")
             if u and u not in urls:
                 urls.append(u)
     links = "\n".join(f'<link rel="stylesheet" href="{e(u)}">' for u in urls)
 
-    applied = data.get("applied")
-    blocks = "\n".join(specimen(c, reports[c["id"]], c["id"] == applied) for c in data["combos"])
-    css = "\n".join(combo_css(c) for c in data["combos"])
-    page = PAGE.format(project=e(data.get("project", "")), prov=prov,
-                       combos=blocks, links=links)
-    return page.replace("</style>", css + "</style>")
+    t = PAGINA
+    for k, v in (("__TITOLO__", e(dati.get("project", "Colori, caratteri, forme"))),
+                 ("__LINKS__", links), ("__CSS__", CSS), ("__PROV__", prov),
+                 ("__GC__", griglia_colori(pools["colours"])),
+                 ("__GF__", griglia_font(pools["fonts"])),
+                 ("__GS__", griglia_forme(pools["shapes"])),
+                 ("__C0__", e(pools["colours"][0]["id"])),
+                 ("__F0__", e(pools["fonts"][0]["id"])),
+                 ("__S0__", e(pools["shapes"][0]["id"])),
+                 ("__JC__", json.dumps(pools["colours"], ensure_ascii=False)),
+                 ("__JF__", json.dumps(pools["fonts"], ensure_ascii=False)),
+                 ("__JS__", json.dumps(pools["shapes"], ensure_ascii=False)),
+                 ("__JSCODE__", JS)):
+        t = t.replace(k, v)
+    return t
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="Pagina delle combinazioni colore/carattere")
-    ap.add_argument("combos", help="JSON con le combinazioni (- per stdin)")
+    ap = argparse.ArgumentParser(description="Selettore: colori, caratteri, forme")
+    ap.add_argument("dati", nargs="?", help="JSON coi metadati (- per stdin); "
+                                            "gli elenchi vengono dai cataloghi")
     ap.add_argument("--out", required=True, help="apps/<slug>/palette.html")
-    ap.add_argument("--ledger", help="registro dei settori di tinta "
-                    "(default: quello condiviso fra progetti)")
+    ap.add_argument("--seed", default="", help="seed YYYYMMDDHH")
+    ap.add_argument("--ledger", help="registro dei settori (default: quello condiviso)")
     ap.add_argument("--no-ledger", action="store_true", help="ignora il registro")
-    ap.add_argument("--last", default="", help="settori recenti, il più recente per primo")
     args = ap.parse_args()
 
-    raw = sys.stdin.read() if args.combos == "-" else Path(args.combos).read_text(encoding="utf-8")
-    try:
-        data = json.loads(raw)
-    except json.JSONDecodeError as exc:
-        print(f"JSON illeggibile: {exc}", file=sys.stderr)
-        return 2
-    combos = data.get("combos") or []
-    if len(combos) < 2:
-        print("servono almeno due combinazioni: una sola non è una combinazione, è la pagina",
-              file=sys.stderr)
-        return 2
-
-    applied = data.get("applied")
-    ids = [c.get("id") for c in combos]
-    if applied and applied not in ids:
-        print(f"`applied: {applied}` non e fra le combinazioni ({', '.join(map(str, ids))}): "
-              "la pagina non marcherebbe niente come «in uso», e l'owner vedrebbe "
-              "delle alternative senza sapere quale gli hai consegnato — cioe un menu.",
-              file=sys.stderr)
-        return 2
-    if len(set(ids)) != len(ids):
-        print(f"id ripetuti fra le combinazioni: {', '.join(map(str, ids))}", file=sys.stderr)
-        return 2
-
-    pg = _repeat_guard()
-
-    # Le combinazioni devono differire **nell'accento**, o la pagina mostra
-    # quattro volte la stessa proposta con quattro nomi. Misurato il 2026-07-27:
-    # sulle cinque pagine consegnate l'accento era `rosso` su tre, e i quattro
-    # esadecimali caldi stavano nella stessa zona terracotta. Il colore della CTA
-    # e' l'unica tinta che l'occhio guarda per primo: se non varia lui, non varia
-    # niente. Trenta zone in `accent_pool.py`.
-    fam = {}
-    for c in combos:
-        acc = (c.get("colours") or {}).get("accent")
-        if not acc:
-            continue
+    dati: dict = {}
+    if args.dati:
+        raw = sys.stdin.read() if args.dati == "-" else Path(args.dati).read_text(encoding="utf-8")
         try:
-            h, s_, l = pg.to_hsl(acc)
-        except Exception:
-            continue
-        fam.setdefault(pg.family_of(pg.sector_of(h, s_, l)), []).append(c.get("id"))
-    if len(fam) < min(2, len(combos)):
-        dett = " · ".join(f"{k}: {', '.join(map(str, v))}" for k, v in fam.items())
-        print("le combinazioni hanno l'accento nella stessa famiglia — "
-              f"{dett or 'nessun accento cromatico'}. Non sono alternative: e' una "
-              "proposta sola ripetuta, e la CTA e' il colore che l'owner guarda "
-              "per primo. Prendi zone diverse: "
-              "`uv run scripts/accent_pool.py --suggest 4 --seed <seed> --last <famiglie recenti>`.",
-              file=sys.stderr)
-        return 2
-    last = [s for s in args.last.split(",") if s.strip()]
+            dati = json.loads(raw)
+        except json.JSONDecodeError as exc:
+            print(f"JSON illeggibile: {exc}", file=sys.stderr)
+            return 2
+    if args.seed:
+        dati["seed"] = args.seed
+
+    pools = dai_cataloghi()
+    for k in ("colours", "fonts", "shapes"):
+        if dati.get(k):
+            pools[k] = dati[k]
+        if not pools[k]:
+            print(f"elenco `{k}` vuoto: quell'asse non comparirà", file=sys.stderr)
+
+    pg = _mod("repeat_guard")
+    last: list[str] = []
     last_fonts: list[dict] = []
     if not args.no_ledger:
-        ledger = Path(args.ledger) if args.ledger else pg.default_ledger()
-        entries = pg.ledger_load(ledger)
-        last_fonts = pg.ledger_fonts(entries)
-        if not last:
-            last = pg.ledger_sectors(entries)
+        led = Path(args.ledger) if args.ledger else pg.default_ledger()
+        voci = pg.ledger_load(led)
+        last, last_fonts = pg.ledger_sectors(voci), pg.ledger_fonts(voci)
 
-    reports, bad = {}, []
-    for c in combos:
-        missing = [r for r in ROLES if not (c.get("colours") or {}).get(r)]
-        if missing or not c.get("id"):
-            bad.append(f"{c.get('id', '?')}: manca {', '.join(missing) or 'id'}")
-            reports[c.get("id", "?")] = {}
-            continue
-        report, problems = judge(pg, c, last, last_fonts)
-        reports[c["id"]] = report
-        bad += [f"{c['id']} — {p}" for p in problems]
+    fam = famiglie(pg, pools["colours"])
+    if len(fam) < 2:
+        print("i colori proposti hanno l'accento tutto nella stessa famiglia "
+              f"({', '.join(fam) or 'nessuno cromatico'}): non sono alternative. "
+              "`accent_pool.py --as-colours` ne dà trenta su sette famiglie.",
+              file=sys.stderr)
+        return 2
 
-    if bad:
-        print("Queste combinazioni non si possono mostrare, perché non si potrebbero "
-              "scegliere:\n", file=sys.stderr)
-        for line in bad:
-            print(f"  - {line}", file=sys.stderr)
-        print("\nCorreggile e rilancia: una pagina che offre ciò che il guard rifiuta "
-              "è un'offerta che si ritira dopo averla fatta.", file=sys.stderr)
+    guai = colori_illegali(pg, pools["colours"], last, last_fonts)
+    if guai:
+        print("colori che il guard rifiuterebbe — non si mostrano:", file=sys.stderr)
+        for g in guai[:8]:
+            print(f"  - {g}", file=sys.stderr)
         return 1
 
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(build(data, reports), encoding="utf-8")
-    print(f"{out} — {len(combos)} combinazioni, tutte legali"
-          + (f", in uso: {applied}" if applied else ""))
-    if not applied:
-        print("nessuna marcata `applied`: la pagina non dice quale è stata consegnata")
+    out.write_text(costruisci(dati, pools), encoding="utf-8")
+    print(f"{out} — {len(pools['colours'])} colori · {len(pools['fonts'])} caratteri "
+          f"· {len(pools['shapes'])} forme · {len(fam)} famiglie di accento")
     return 0
 
 

@@ -118,3 +118,18 @@ Fallimento: stub solo-hero; oppure chiedere “quali sezioni vuoi?” quando puo
 5. **Forme alternate (obbligatorio):** mescola **quadrato** (~1×1), **largo** (~2×1), **alto** (~1×2) — e se serve uno span 3 per chiudere l’ultima riga senza buchi. Track con altezza definita. Seed ruota **quale** mosaico gapless usare, non spezza il tiling.
 6. Fallimento: celle vuote in mezzo alla gallery; inserimento caotico; due+ foto con la stessa animazione quando N ≤ pool; gallery tutta a quadrati uguali; batch con un solo fade simultaneo.
 
+## Almeno una tenda, sempre
+
+Su una landing va **sempre** almeno un effetto `curtain`. È una regola
+dell'owner, non una preferenza di craft: il gesto della tenda è quello che
+distingue un'apertura pensata da una pagina che appare e basta.
+
+Il catalogo di Vera ne ha **sei** — `curtain` (due metà), `curtain-page`, e le
+quattro direzioni `curtain-up` · `curtain-down` · `curtain-left` ·
+`curtain-right`. Quale, lo decide **il seed** come ogni altro effetto: il verso
+non è indifferente — dal basso segue la lettura, dall'alto è il sipario, i due
+laterali seguono o contraddicono lo scorrimento.
+
+**Una per pagina.** Quattro tende che si aprono da quattro lati non sono un
+sistema, sono un difetto. `close_check --surface marketing` verifica che ce ne
+sia una e non fa consegnare senza.

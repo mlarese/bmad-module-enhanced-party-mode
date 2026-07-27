@@ -185,6 +185,10 @@ Legenda tecnica: `CSS` = keyframes/transition, `IO` = IntersectionObserver, `GSA
 | 115 | Transizione tra immagini con displacement map | shader |
 | 116 | Testo 3D estruso | three.js |
 | 117 | Card con effetto profondita' (layer separati) | CSS 3D transforms |
+| 118 | Curtain dal basso | CSS/GSAP |
+| 119 | Curtain dall'alto | CSS/GSAP |
+| 120 | Curtain da sinistra | CSS/GSAP |
+| 121 | Curtain da destra | CSS/GSAP |
 
 ## Come scegliere
 

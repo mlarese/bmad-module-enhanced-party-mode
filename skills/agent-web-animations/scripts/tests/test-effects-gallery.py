@@ -45,7 +45,7 @@ def main() -> int:
     check("id unici", len(set(ids)), len(ids))
 
     numbers = [e["n"] for e in effects]
-    check("numerazione 1-117 senza buchi", numbers, list(range(1, 118)))
+    check("numerazione senza buchi", numbers, list(range(1, len(catalog["effects"]) + 1)))
 
     # The numbering is a promise: catalog.md is what people already cite.
     if CATALOG_MD.exists():

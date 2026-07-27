@@ -76,7 +76,11 @@ ZONE: list[dict] = [
     {"id": "polvere",    "hue": 210, "spread": 8,  "chroma": 20, "nota": "azzurro grigio; medicale, uffici, B2B quieto"},
     # — viola —
     {"id": "glicine",    "hue": 270, "spread": 8,  "chroma": 28, "nota": "viola tenue; floreale, wedding, profumeria"},
-    {"id": "ametista",   "hue": 285, "spread": 8,  "chroma": 45, "nota": "viola saturo; eventi, musica, formazione"},
+    # Croma 38, non 45: a 45 il rappresentante usciva `#8f39ac`, che cade nel
+    # hard-reject «purple-indigo AI» (hue 235–295 con saturazione ≥45). Un
+    # catalogo che propone un colore vietato e' un catalogo che ritira l'offerta
+    # dopo averla fatta — l'ha preso il guard alla prima generazione.
+    {"id": "ametista",   "hue": 285, "spread": 8,  "chroma": 38, "nota": "viola; eventi, musica, formazione"},
     {"id": "vinaccia",   "hue": 300, "spread": 8,  "chroma": 32, "nota": "viola rosato scuro; enoteche, teatri, atelier"},
     # — neutri caldi/freddi con una punta —
     {"id": "peltro",     "hue": 205, "spread": 15, "chroma": 12, "nota": "grigio freddo con punta; industria, archivi"},
@@ -140,6 +144,41 @@ def suggerisci(n: int, seed: str, escluse: list[str]) -> list[dict]:
     return scelte[:n]
 
 
+def _hex(h: float, c: float, l: float) -> str:
+    """HSL→hex con la croma del guard (che e' saturazione pesata sulla luminosita)."""
+    import colorsys
+    k = 1 - abs(2 * l / 100 - 1)
+    s = min(1.0, (c / 100) / k) if k else 0.0
+    r, g, b = colorsys.hls_to_rgb((h % 360) / 360, l / 100, s)
+    return "#%02x%02x%02x" % (round(r * 255), round(g * 255), round(b * 255))
+
+
+def come_colore(z: dict) -> dict:
+    """Una zona diventa un colore concreto: accento, carta, inchiostro.
+
+    L'inchiostro resta **quasi-neutro** (croma 3, sotto la soglia 4 del guard):
+    lo scuro strutturale colorato e' un hard-reject, e proporre trenta colori
+    che il guard poi rifiuta sarebbe un catalogo di cose non scegliibili.
+    """
+    z = arricchisci(z)
+    return {"id": z["id"], "settore": z["settore"], "famiglia": z["famiglia"],
+            "accent": _hex(z["hue"], z["chroma"], 45),
+            "paper": _hex(z["hue"], 6, 95),
+            "ink": _hex(z["hue"], 3, 12)}
+
+
+def scegli(seed: str, escluse: list[str]) -> dict:
+    """LA zona di questo lavoro, dal seed — non dal gusto.
+
+    E' il punto che mancava. Il catalogo esisteva e nessuno lo consultava: su
+    cinque CTA consegnate quattro stavano entro venti gradi di tinta (12°, 13°,
+    15°, 355°), pur avendo 21 zone fredde disponibili. Una regola in prosa non
+    sposta un pregiudizio; un sorteggio si'. Stesso schema dell'archetipo di
+    hero e del motion, che per questa ragione si prendono da seed.
+    """
+    return suggerisci(1, seed, escluse)[0]
+
+
 def riga(z: dict) -> str:
     return (f"  {z['id']:11s} {z['hue_range']:>11s}  croma ~{z['chroma']:<3d} "
             f"{z['settore']:8s} {z['nota']}")
@@ -152,6 +191,10 @@ def main() -> int:
     ap.add_argument("--last", default="", help="id, settori o famiglie da escludere")
     ap.add_argument("--show", metavar="ID", help="una zona sola")
     ap.add_argument("--list", action="store_true", help="tutte e trenta")
+    ap.add_argument("--as-colours", action="store_true",
+                    help="le zone come colori concreti {id, ink, paper, accent}")
+    ap.add_argument("--pick", action="store_true",
+                    help="LA zona di questo lavoro, dal seed: non si sceglie a naso")
     ap.add_argument("--format", choices=("md", "json"), default="md")
     args = ap.parse_args()
 
@@ -163,6 +206,23 @@ def main() -> int:
             return 1
         z = arricchisci(trovata[0])
         print(json.dumps(z, ensure_ascii=False, indent=1) if args.format == "json" else riga(z))
+        return 0
+
+    if args.pick:
+        z = come_colore(scegli(args.seed or "no-seed", args.last.split(",")))
+        print(json.dumps(z, ensure_ascii=False, indent=1) if args.format == "json"
+              else f"  {z['id']}  accent {z['accent']}  paper {z['paper']}  ink {z['ink']}"
+                   f"  ({z['famiglia']})")
+        return 0
+
+    if args.as_colours:
+        col = [come_colore(z) for z in ZONE]
+        if args.format == "json":
+            print(json.dumps(col, ensure_ascii=False, indent=1))
+        else:
+            for c in col:
+                print(f"  {c['id']:11s} accent {c['accent']}  paper {c['paper']}  "
+                      f"ink {c['ink']}  ({c['famiglia']})")
         return 0
 
     scelte = ([arricchisci(z) for z in ZONE] if args.list or not args.suggest
