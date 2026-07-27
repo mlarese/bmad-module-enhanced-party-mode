@@ -1,7 +1,7 @@
 code: epm
 name: "Enhanced Party Mode"
 description: "Consiglio di esperti craft/legal/infra/WP/fiscale per party mode e cantiere — Vesper, Vera, Jane, Elena, Rex, Niki, Dan Arrow."
-module_version: 1.24.0
+module_version: 1.25.0
 default_selected: false
 module_greeting: >
   Enhanced Party Mode (epm) è pronto.

@@ -46,6 +46,16 @@ def load():
 # Il registro del consiglio e diventato un controllo obbligatorio: senza, ogni
 # pagina esce 1 e i test sul colore misurerebbero un difetto che non c'e. Qui
 # se ne mette uno valido, cosi ogni asserzione continua a dire quello che dice.
+# Il lock e' obbligatorio come il registro: senza, ogni pagina esce 1 e i test
+# sul colore misurerebbero un difetto che non c'e.
+_LOCK = Path(_ISO) / "craft-lock.json"
+# La famiglia dichiarata qui deve essere quella che la fixture CLEAN ha davvero
+# (accento #B8895A → `terra`): un lock che non corrisponde alla propria fixture
+# fa fallire i test sul colore per un motivo che non c'entra con loro.
+_LOCK.write_text(json.dumps({"project": "test", "seed": "x-test",
+                             "colore": {"id": "mattone", "famiglia": "terra"},
+                             "font": {}, "forma": {}}), encoding="utf-8")
+
 _COUNCIL = Path(_ISO) / "consiglio.md"
 _COUNCIL.write_text("# Consiglio — test\n\n- **2026-07-26 · G3** — Vesper → approvata.\n",
                     encoding="utf-8")
@@ -61,6 +71,8 @@ def run(*args) -> subprocess.CompletedProcess:
     # con quello che il test misura. Chi vuole il registro lo passa.
     if "--ledger" not in argv:
         argv += ["--no-ledger"]
+    if "--lock" not in argv:
+        argv += ["--lock", str(_LOCK)]
     return subprocess.run([sys.executable, str(SCRIPT), *argv],
                           capture_output=True, text=True, env=_ENV)
 

@@ -30,7 +30,9 @@ Cosa controlla:
   6. consiglio   — `docs/consiglio/<slug>.md` con almeno una seduta registrata:
                    il consiglio decide tutto senza interpellare l'owner, e senza
                    quel file non resta scritto da nessuna parte chi c'era
-  6. dashboard   — solo con `--surface dashboard`: profilo e logout sempre; ogni
+  6. lock        — la pagina consegnata contro `craft-lock.json`: accento,
+                   caratteri e raggio devono essere quelli decisi **prima**
+  7. dashboard   — solo con `--surface dashboard`: profilo e logout sempre; ogni
                    tabella con paginazione e filtro con autocomplete; il DESIGN
                    dichiara `paginazione:` e `filtro:` (server side, strategia,
                    requisiti per il back end)
@@ -298,6 +300,44 @@ def check_curtain(text: str, page: Path) -> tuple[bool, list[str]]:
                    "quattro direzioni). `effects_gallery.py --show curtain-up`"]
 
 
+def _craft_lock():
+    spec = importlib.util.spec_from_file_location("craft_lock", HERE / "craft_lock.py")
+    if not spec or not spec.loader:
+        raise SystemExit("craft_lock.py non trovato accanto a close_check.py")
+    m = importlib.util.module_from_spec(spec)
+    sys.modules.setdefault("craft_lock", m)
+    spec.loader.exec_module(m)
+    return m
+
+
+def check_lock(lock_path: Path | None, report: dict) -> tuple[bool, list[str]]:
+    """La pagina contro il **lock**, non contro lo storico.
+
+    Deciso in consiglio: i cataloghi decidevano prima, i guard controllavano
+    dopo, e in mezzo — dove la pagina viene scritta — non c'era niente. Il
+    confronto col lock e' esatto: «il lock diceva salvia, la pagina e #db7055»,
+    invece di «rosso su 3 delle ultime 5». E non ha bisogno di uno storico, che
+    era quasi vuoto.
+
+    Senza lock non si consegna: se fosse opzionale, in tre giorni nessuno lo
+    scriverebbe piu.
+    """
+    if lock_path is None:
+        return False, ["nessun `--lock`: le decisioni di craft vanno materializzate "
+                       "**prima** di scrivere la pagina — `craft_lock.py --project "
+                       "<slug> --seed YYYYMMDDHH --out apps/<slug>/craft-lock.json`. "
+                       "Senza, nessuno puo' dire se la pagina rispetta le scelte o "
+                       "il pregiudizio"]
+    if not lock_path.is_file():
+        return False, [f"`{lock_path}` non esiste: il lock si scrive prima della pagina"]
+    try:
+        lock = json.loads(lock_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return False, [f"`{lock_path.name}` illeggibile: {exc}"]
+    guai = _craft_lock().scostamenti(lock, report)
+    return not guai, guai
+
+
 def check_colour(pg, text: str, last: list[str], last_fonts: list[dict],
                  deroghe: dict) -> tuple[int, dict, list[str]]:
     """(stato, report, problemi) — stato 0 ok, 1 violazioni, 2 non misurabile.
@@ -337,6 +377,8 @@ def main() -> int:
     ap.add_argument("pages", nargs="+", help="file HTML consegnati")
     ap.add_argument("--design", help="DESIGN.md di accompagnamento")
     ap.add_argument("--council", help="registro del consiglio, docs/consiglio/<slug>.md")
+    ap.add_argument("--lock", help="apps/<slug>/craft-lock.json — le scelte decise "
+                    "prima di scrivere la pagina")
     ap.add_argument("--surface", choices=("marketing", "dashboard", "mobile"),
                     help="dashboard → controlla anche paginazione e filtro delle tabelle")
     ap.add_argument("--ledger", help="registro dei settori di tinta "
@@ -354,6 +396,7 @@ def main() -> int:
     deroghe = pg.parse_deroghe(args.deroga)
     design = Path(args.design) if args.design else None
     council = Path(args.council) if args.council else None
+    lock_path = Path(args.lock) if args.lock else None
     ledger = (Path(args.ledger) if args.ledger
               else (None if args.no_ledger else pg.default_ledger()))
     last = args.last.split(",")
@@ -384,6 +427,7 @@ def main() -> int:
         fin_ok, fin_problems = check_finished(text)
         des_ok, des_problems = check_design(design, text)
         cou_ok, cou_problems = check_council(council)
+        lock_ok, lock_problems = check_lock(lock_path, report or {})
         priv_ok, priv_problems = check_privacy(text)
         cur_ok, cur_problems = (check_curtain(text, page)
                                 if args.surface == "marketing" else (True, []))
@@ -392,7 +436,7 @@ def main() -> int:
 
         problems = (colour_problems + resp_problems + fin_problems
                     + des_problems + cou_problems + dash_problems + priv_problems
-                    + cur_problems)
+                    + cur_problems + lock_problems)
         # Le deroghe restano nel referto ma non fermano la consegna: è la
         # differenza fra un'eccezione dichiarata e un controllo spento.
         bloccanti = pg.only_blocking(problems)
@@ -430,6 +474,7 @@ def main() -> int:
         lines.append(f"- finito: {'nessun segnaposto' if fin_ok else 'da correggere'}")
         lines.append(f"- traccia: {'ok' if des_ok else 'da correggere'}")
         lines.append(f"- consiglio: {'registrato' if cou_ok else 'da correggere'}")
+        lines.append(f"- lock: {'la pagina rispetta le scelte' if lock_ok else 'da correggere'}")
         lines.append(f"- cookie e privacy: {'ok' if priv_ok else 'da correggere'}")
         if args.surface == "marketing":
             lines.append(f"- tenda: {'presente' if cur_ok else 'da correggere'}")

@@ -134,6 +134,44 @@ def main() -> int:
     check("un colore che il guard rifiuta → exit 1", r.returncode, 1)
     check("e lo nomina", "1d5b62" in r.stderr or "a —" in r.stderr, True)
 
+    # --- il lock: differenziale sul seed, che e' il difetto che ha resistito -----
+    # Con `YYYYMMDDHH` tre progetti nella stessa ora ricevevano scelte IDENTICHE.
+    # Questo test lo avrebbe preso in tre secondi: due slug, stesso orario,
+    # esiti diversi. E' la forma che il consiglio ha reso obbligatoria — acceso
+    # contro spento devono differire, non basta che «funzioni».
+    cl = load("craft_lock")
+    a = cl.costruisci("hotel-mare", "2026072715", {})
+    b = cl.costruisci("falegnameria", "2026072715", {})
+    check("stesso orario, slug diversi → colori diversi",
+          a["colore"]["id"] != b["colore"]["id"], True)
+    check("…e caratteri diversi", a["font"]["id"] != b["font"]["id"], True)
+    check("…e forme diverse", a["forma"]["id"] != b["forma"]["id"], True)
+    check("stesso slug e stesso seed → stesso lock",
+          cl.costruisci("hotel-mare", "2026072715", {})["colore"]["id"],
+          a["colore"]["id"])
+    check("lo slug entra nel seed", "hotel-mare" in a["seed"], True)
+
+    # il clic dell'owner atterra nel lock
+    scelto = cl.applica_scelte(cl.costruisci("x", "2026072715", {}), ["colore=cobalto"])
+    check("la scelta dell'owner sovrascrive", scelto["colore"]["id"], "cobalto")
+    check("e resta scritto chi ha deciso", scelto["colore"]["scelto_da"], "owner")
+
+    # il confronto nomina lo scostamento
+    rep = {"accent": {"hex": "#db7055", "famiglia": "rosso"},
+           "typefaces": {"display": "Fraunces"},
+           "layout": {"radius_family": "pill"}}
+    lock = {"colore": {"id": "ottanio", "famiglia": "verde"},
+            "font": {"display": "Petrona"},
+            "forma": {"id": "soft-pieno", "radius_family": "soft"}}
+    sc = cl.scostamenti(lock, rep)
+    check("il confronto trova i tre scostamenti", len(sc), 3)
+    check("e nomina il colore atteso e quello trovato",
+          any("ottanio" in s and "db7055" in s for s in sc), True)
+    check("una pagina conforme non produce scostamenti",
+          cl.scostamenti(lock, {"accent": {"hex": "#33a8b3", "famiglia": "verde"},
+                                "typefaces": {"display": "Petrona"},
+                                "layout": {"radius_family": "soft"}}), [])
+
     print()
     print("tutti i test passati" if not fails else f"{fails} test falliti")
     return 1 if fails else 0

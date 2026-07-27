@@ -310,6 +310,53 @@ Il difetto misurato non era l'accento — quelli erano diversi ogni volta — ma
 3. **Lo scuro segue il `register`:** `famigliare` · `artigianale` · `popolare` → scuri **caldi** (bruno, seppia, ombra bruciata, testa di moro); `clinico` · `minimal` → freddi desaturati; `luxury` → profondo quasi-neutro con una sola vibrazione. Un'osteria famigliare con l'ink verde-bosco ha il carattere contraddetto dalla superficie più grande della pagina.
 4. **Non far coincidere ink e accento di settore:** se l'accento è verde, lo scuro non è verde — altrimenti la pagina ha una tinta sola in due luminosità.
 5. Dopo approve: MEMORY `last_ink_families` oltre a `last_hue_sectors`.
+### Il lock: le scelte esistono prima della pagina
+
+Deciso in consiglio il 2026-07-27, su una diagnosi che nessuno aveva formulato
+così: **il problema non era l'inventario, era l'esecuzione**, e il buco stava
+dove il lavoro accade.
+
+```
+cataloghi (decidono prima) → [ qui si scrive la pagina ] → guard (dopo)
+                                     ^ niente
+```
+
+I cataloghi si potevano ignorare senza che nessuno se ne accorgesse — nessuno
+confrontava il consegnato con ciò che il catalogo aveva detto. E i guard sono
+**statistici**: guardano lo storico, che era quasi vuoto (`accent_family` su 2
+voci su 11) e arriva comunque tardi, quando correggere costa un rifacimento. Un
+controllo che costa un rifacimento è un controllo che si impara a saltare.
+
+1. **Prima di scrivere una riga**: `craft_lock.py --project <slug> --seed
+   YYYYMMDDHH --out apps/<slug>/craft-lock.json`. Sorteggia dal seed **col
+   progetto dentro** accento, coppia tipografica, forma, hero ed effetti — e li
+   scrive su disco.
+2. **`close_check --lock` confronta la pagina col lock**, non con la storia. Il
+   messaggio diventa esatto: «il lock dice `ottanio` (verde), la pagina ha
+   `#db7055` (rosso)» invece di «rosso su 3 delle ultime 5».
+3. **Senza lock non si consegna.** Condizione posta al tavolo: se fosse
+   opzionale, in tre giorni nessuno lo scriverebbe più.
+4. **Il lock contiene *cosa*, non *perché*.** Le motivazioni stanno nel DESIGN,
+   o torna a essere il verbale che il registro del consiglio ha già sostituito.
+5. **Ci atterra anche il clic dell'owner:** la riga che il selettore produce si
+   applica con `--pick colore=… --pick font=… --pick forma=…`, e resta scritto
+   `scelto_da: owner`. Una cosa sola con due sorgenti — altrimenti quel clic
+   muore.
+6. **Il craft resta tuo:** il lock lo produce il tuo seed, non un voto. Smette
+   solo di essere una cosa che *dici* di aver fatto.
+
+### Due decisioni di segno opposto, prese in consiglio
+
+**Nessun cancello nuovo.** In una sola giornata ne sono stati corretti due per
+falsi positivi — un link esterno scambiato per caricamento di terzi, la parola
+«tenda» nel copy scambiata per un effetto applicato. Un controllo che sbaglia
+insegna a ignorare i controlli: la soglia in cui il rumore supera il segnale è
+vicina. Prima di aggiungerne un altro, si toglie o si stringe uno esistente.
+
+**Il ledger si lascia stare.** Con il lock scende di importanza: non è più il
+fondamento dell'anti-ripetizione, è un'anagrafe che si riempie da sé. Non vale
+lavoro dedicato.
+
 ### Il seed porta lo slug, o due lavori escono identici
 
 Misurato il 2026-07-27, ed è la spiegazione di «prende sempre gli stessi
