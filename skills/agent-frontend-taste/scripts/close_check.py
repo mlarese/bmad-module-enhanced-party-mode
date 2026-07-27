@@ -310,7 +310,19 @@ def _craft_lock():
     return m
 
 
-def check_lock(lock_path: Path | None, report: dict) -> tuple[bool, list[str]]:
+def _testo_esteso(text: str, page: Path) -> str:
+    """La pagina piu' l'`anim.css`/`anim.js` accanto: il motion vive li, e
+    cercarlo solo nell'HTML dichiarava mancante un effetto che c'era."""
+    parti = [text]
+    for nome in ("anim.css", "anim.js"):
+        f = page.parent / nome
+        if f.is_file():
+            parti.append(f.read_text(encoding="utf-8", errors="replace"))
+    return "\n".join(parti)
+
+
+def check_lock(lock_path: Path | None, report: dict, text: str = "",
+               page: Path | None = None) -> tuple[bool, list[str]]:
     """La pagina contro il **lock**, non contro lo storico.
 
     Deciso in consiglio: i cataloghi decidevano prima, i guard controllavano
@@ -332,9 +344,13 @@ def check_lock(lock_path: Path | None, report: dict) -> tuple[bool, list[str]]:
         return False, [f"`{lock_path}` non esiste: il lock si scrive prima della pagina"]
     try:
         lock = json.loads(lock_path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError as exc:
+    except (json.JSONDecodeError, OSError, UnicodeDecodeError) as exc:
         return False, [f"`{lock_path.name}` illeggibile: {exc}"]
-    guai = _craft_lock().scostamenti(lock, report)
+    if not isinstance(lock, dict):
+        return False, [f"`{lock_path.name}` non e' un lock: dentro c'e' "
+                       f"{type(lock).__name__}, servono le scelte di craft"]
+    esteso = _testo_esteso(text, page) if (text and page) else text
+    guai = _craft_lock().scostamenti(lock, report, esteso)
     return not guai, guai
 
 
@@ -427,7 +443,7 @@ def main() -> int:
         fin_ok, fin_problems = check_finished(text)
         des_ok, des_problems = check_design(design, text)
         cou_ok, cou_problems = check_council(council)
-        lock_ok, lock_problems = check_lock(lock_path, report or {})
+        lock_ok, lock_problems = check_lock(lock_path, report or {}, text, page)
         priv_ok, priv_problems = check_privacy(text)
         cur_ok, cur_problems = (check_curtain(text, page)
                                 if args.surface == "marketing" else (True, []))

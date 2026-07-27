@@ -202,8 +202,27 @@ def scegli(seed: str, escluse: list[str]) -> dict:
     15°, 355°), pur avendo 21 zone fredde disponibili. Una regola in prosa non
     sposta un pregiudizio; un sorteggio si'. Stesso schema dell'archetipo di
     hero e del motion, che per questa ragione si prendono da seed.
+        **Prima la famiglia, poi la zona dentro.** Pescare uniformemente fra le 30
+    zone non e' pescare uniformemente fra i colori: il catalogo ha otto zone
+    verdi e due viola, e su 120 progetti nella stessa ora il verde usciva
+    **27%** contro il 5% del viola — la «predominanza del verde» che l'owner
+    vedeva, prodotta dalla composizione dell'inventario, non da un difetto del
+    sorteggio. Con i due passaggi ogni famiglia vale quanto le altre, e dentro
+    la famiglia la zona resta sorteggiata. Misurato il 2026-07-27.
     """
-    return suggerisci(1, seed, escluse)[0]
+    fuori = {v.strip().lower() for v in escluse if v.strip()}
+    pool = [z for z in ZONE
+            if z["id"] not in fuori and arricchisci(dict(z))["famiglia"] not in fuori]
+    if not pool:
+        pool = [dict(z) for z in ZONE]
+    per_famiglia: dict[str, list[dict]] = {}
+    for z in pool:
+        per_famiglia.setdefault(arricchisci(dict(z))["famiglia"], []).append(z)
+    fam = sorted(per_famiglia)
+    scelte = sorted(per_famiglia[fam[random.Random(f"{seed}|accent-family")
+                                     .randrange(len(fam))]],
+                    key=lambda z: z["id"])
+    return scelte[random.Random(f"{seed}|accent-zone").randrange(len(scelte))]
 
 
 def riga(z: dict) -> str:

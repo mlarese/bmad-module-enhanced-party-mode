@@ -67,14 +67,31 @@ def _mod(nome: str, base: Path = HERE):
 
 def semina(seed: str, slug: str) -> str:
     """Ora **e** progetto. Con la sola ora due landing fatte nello stesso momento
-    ricevevano accento, carattere, forma, hero e motion identici — misurato."""
+    ricevevano accento, carattere, forma, hero e motion identici — misurato.
+
+    Il confronto e' sul **suffisso esatto**, non `slug in s`: con la sottostringa
+    `--project hotel --seed 2026072715-hotel-mare` vedeva «hotel» dentro il seed,
+    non aggiungeva niente, e i progetti `hotel` e `hotel-mare` ricevevano lo
+    stesso identico seed — cioe' la collisione che questo file esiste per
+    chiudere, rientrata dalla finestra. Misurato il 2026-07-27.
+    """
     s = (seed or "").strip()
     if not s:
         raise SystemExit("manca --seed (YYYYMMDDHH)")
-    return s if slug in s else f"{s}-{slug}"
+    slug = (slug or "").strip()
+    if not slug:
+        raise SystemExit("manca --project: il seed senza slug e' l'ora, e due "
+                         "lavori nella stessa ora escono identici")
+    return s if s == slug or s.endswith(f"-{slug}") else f"{s}-{slug}"
 
 
-def costruisci(slug: str, seed: str, escluse: dict) -> dict:
+def costruisci(slug: str, seed: str, escluse: dict, surface: str = "marketing") -> dict:
+    """`surface` non e' un dettaglio: la tenda obbligatoria e l'hero sono regole
+    da **landing**. Imporle a un back office significa bocciare una dashboard
+    perche' non ha una tenda — un falso positivo generato dal controllo stesso,
+    che e' il modo piu' rapido di insegnare a ignorarlo. Misurato il 2026-07-27:
+    `backoffice` riceveva `curtain-left` e un hero `magazine-cover-xl`.
+    """
     ap, fp, sp = _mod("accent_pool"), _mod("font_pool"), _mod("shape_pool")
     s = semina(seed, slug)
 
@@ -85,6 +102,7 @@ def costruisci(slug: str, seed: str, escluse: dict) -> dict:
     lock = {
         "project": slug,
         "seed": s,
+        "surface": surface,
         "colore": {"id": colore["id"], "famiglia": colore["famiglia"],
                    "accent": colore["accent"], "paper": colore["paper"],
                    "ink": colore["ink"]},
@@ -98,12 +116,16 @@ def costruisci(slug: str, seed: str, escluse: dict) -> dict:
     # hero ed effetti: se i cataloghi ci sono si sorteggiano, altrimenti si
     # dichiara l'assenza invece di inventare un valore.
     try:
+        if surface != "marketing":
+            raise StopIteration  # una dashboard non ha un archetipo hero
         hg = _mod("hero_gallery")
         arche = hg.load()["archetypes"] if hasattr(hg, "load") else []
         if arche:
             h = hg.suggest(arche, 1, s, escluse.get("hero", []))[0]
             lock["hero"] = {"id": h.get("id") or h.get("n"), "media": h.get("media"),
                             "placement": h.get("placement"), "panel": h.get("panel")}
+    except StopIteration:
+        pass
     except Exception as exc:
         lock["hero"] = {"non_sorteggiato": str(exc)[:80]}
 
@@ -112,8 +134,9 @@ def costruisci(slug: str, seed: str, escluse: dict) -> dict:
         eff = fx.load()["effects"]
         scelti = fx.suggest(eff, 3, s, escluse.get("effetti", []))
         tende = [e for e in eff if e["id"].startswith("curtain")]
-        if tende and not any(e["id"].startswith("curtain") for e in scelti):
-            # Regola dell'owner: su una landing almeno una tenda, sempre.
+        if surface == "marketing" and tende and not any(
+                e["id"].startswith("curtain") for e in scelti):
+            # Regola dell'owner: su una **landing** almeno una tenda, sempre.
             import random
             scelti[-1] = random.Random(f"{s}|curtain").choice(tende)
         lock["effetti"] = [e["id"] for e in scelti]
@@ -130,11 +153,18 @@ def applica_scelte(lock: dict, scelte: list[str]) -> dict:
     e' un clic che muore — l'ha detto Sally, ed era l'unica sua riga.
     """
     ap, fp, sp = _mod("accent_pool"), _mod("font_pool"), _mod("shape_pool")
+    visti: set[str] = set()
     for raw in scelte or []:
         asse, _, valore = raw.partition("=")
-        asse, valore = asse.strip().lower(), valore.strip()
+        # Minuscolo su entrambi: la riga la copia l'owner dal selettore, e un
+        # `colore=Cobalto` rifiutato per la maiuscola sembra un catalogo bucato.
+        asse, valore = asse.strip().lower(), valore.strip().lower()
         if not valore:
             raise SystemExit(f"scelta malformata: '{raw}'. Serve `asse=id`.")
+        if asse in visti:
+            # Due valori per lo stesso asse: uno dei due si perdeva in silenzio.
+            raise SystemExit(f"`{asse}` scelto due volte: dimmi quale vale.")
+        visti.add(asse)
         if asse == "colore":
             z = [x for x in ap.ZONE if x["id"] == valore]
             if not z:
@@ -162,32 +192,166 @@ def applica_scelte(lock: dict, scelte: list[str]) -> dict:
     return lock
 
 
-def scostamenti(lock: dict, report: dict) -> list[str]:
+TINTA_TOLLERATA = 15.0  # gradi: schiarite e hover si', un altro colore no
+
+
+def _distanza_tinta(a: str, b: str) -> float | None:
+    """Quanti gradi separano due tinte. None se una delle due non si misura."""
+    try:
+        pg = _mod("repeat_guard")
+        ha, hb = pg.to_hsl(a)[0], pg.to_hsl(b)[0]
+    except Exception:
+        return None
+    d = abs(ha - hb) % 360
+    return min(d, 360 - d)
+
+
+def _accento_presente(atteso: str, text: str) -> bool:
+    """Il valore del lock compare nella pagina, comunque sia scritto.
+
+    Senza `text` non si puo' dire: si torna alla misura per tinta invece di
+    accusare una pagina che non abbiamo letto.
+    """
+    if not text:
+        return True
+    h = (atteso or "").strip().lstrip("#").lower()
+    if len(h) != 6:
+        return True
+    basso = text.lower()
+    if f"#{h}" in basso:
+        return True
+    try:
+        r, g, b = (int(h[i:i + 2], 16) for i in (0, 2, 4))
+    except ValueError:
+        return True
+    import re as _re
+    return bool(_re.search(rf"rgba?\(\s*{r}\s*,\s*{g}\s*,\s*{b}\b", basso))
+
+
+def scostamenti(lock: dict, report: dict, text: str = "") -> list[str]:
     """Il confronto: cosa dice il lock, cosa dice la pagina consegnata.
 
     Esatto, non statistico. E' la differenza fra «rosso su 3 delle ultime 5,
     cambia famiglia» e «il lock diceva salvia, la pagina e' #db7055».
+
+    Tre cose che la prima versione lasciava passare, misurate il 2026-07-27:
+
+      · **confrontava il genere, non la scelta**: lock `lacca` `#b7502f`, pagina
+        `#db7055` — due rossi diversi, zero scostamenti. Il lock nomina UN
+        colore, non una famiglia;
+      · **il silenzio passava**: una pagina che non dichiarava display, accento
+        e raggio non produceva scostamenti, cioe' il modo piu' semplice di
+        superare il cancello era non dire niente;
+      · **effetti e hero erano decorativi**: scritti nel lock e controllati da
+        nessuno — la stessa classe di difetto di `--prefer`, codice inerte che
+        sembra funzionare perche' l'output e' plausibile.
+
+    Con `report` vuoto tace: la pagina non e' misurabile e lo dice gia' un
+    altro controllo. Due voci per lo stesso guaio insegnano a ignorarle.
     """
+    if not report:
+        return []
     out = []
+
     acc = report.get("accent") or {}
-    atteso = (lock.get("colore") or {}).get("famiglia")
-    if atteso and acc.get("famiglia") and acc["famiglia"] != atteso:
-        out.append(f"accento: il lock dice `{lock['colore']['id']}` ({atteso}), "
-                   f"la pagina ha {acc['hex']} ({acc['famiglia']})")
+    col = lock.get("colore") or {}
+    if col.get("famiglia"):
+        if not acc.get("hex"):
+            out.append(f"accento: il lock dice `{col['id']}`, la pagina non ne "
+                       "dichiara nessuno")
+        elif acc.get("famiglia") and acc["famiglia"] != col["famiglia"]:
+            out.append(f"accento: il lock dice `{col['id']}` ({col['famiglia']}), "
+                       f"la pagina ha {acc['hex']} ({acc['famiglia']})")
+        elif col.get("accent") and not _accento_presente(col["accent"], text):
+            # Il valore del lock non compare nella pagina. La tinta da sola non
+            # basta a dirlo: `zafferano` e `sabbia` distano 2°, `senape` e
+            # `grano` 1.9° — sono zone diverse del catalogo che la sola misura
+            # angolare non separa. Il valore esatto le separa tutte.
+            d = _distanza_tinta(col["accent"], acc["hex"])
+            quanto = (f" — {d:.0f}° di distanza" if d is not None and d > TINTA_TOLLERATA
+                      else "")
+            out.append(f"accento: il lock dice `{col['id']}` {col['accent']}, "
+                       f"la pagina ha {acc['hex']}{quanto}")
 
     faces = report.get("typefaces") or {}
     for ruolo in ("display", "body", "mono"):
         voluto = (lock.get("font") or {}).get(ruolo)
+        if not voluto:
+            continue
+        if not isinstance(voluto, str):
+            out.append(f"{ruolo}: il lock non dice un nome di carattere ma "
+                       f"{type(voluto).__name__} — lock da rifare")
+            continue
         avuto = faces.get(ruolo)
-        if voluto and avuto and voluto.lower() != avuto.lower():
+        if not isinstance(avuto, str):
+            avuto = ""
+        if not avuto:
+            # Il mono e' la terza voce: una landing puo' legittimamente non
+            # usarlo. Display e testo no — se non ci sono, non c'e' la pagina.
+            if ruolo != "mono":
+                out.append(f"{ruolo}: il lock dice `{voluto}`, la pagina non "
+                           "dichiara nessun carattere")
+        elif voluto.lower() != avuto.lower():
             out.append(f"{ruolo}: il lock dice `{voluto}`, la pagina ha `{avuto}`")
 
     lay = report.get("layout") or {}
-    voluto = (lock.get("forma") or {}).get("radius_family")
-    avuto = lay.get("radius_family")
-    if voluto and avuto and voluto != avuto:
-        out.append(f"raggio: il lock dice `{lock['forma']['id']}` ({voluto}), "
-                   f"la pagina ha {avuto}")
+    forma = lock.get("forma") or {}
+    if forma.get("radius_family"):
+        avuto = lay.get("radius_family")
+        if not avuto:
+            out.append(f"raggio: il lock dice `{forma['id']}`, la pagina non "
+                       "dichiara nessun raggio")
+        elif avuto != forma["radius_family"]:
+            out.append(f"raggio: il lock dice `{forma['id']}` "
+                       f"({forma['radius_family']}), la pagina ha {avuto}")
+
+    out += scostamenti_motion(lock, text)
+    return out
+
+
+def _token(ident: str, text: str) -> bool:
+    """L'id come **token**, non come sottostringa.
+
+    Con `in` nudo il lock che dice `pin` si accontentava di uno `spinner`, e
+    `rive` di `scroll-driven`: dieci id del catalogo sono contenuti in un altro.
+    Il confine e' su lettere e cifre, non sul trattino — cosi' `.fx-curtain-up`
+    vale per `curtain-up`, mentre `spinner` non vale per `pin`.
+    """
+    import re as _re
+    return bool(_re.search(rf"(?<![a-z0-9]){_re.escape(ident.lower())}(?![a-z0-9])",
+                           text.lower()))
+
+
+def scostamenti_motion(lock: dict, text: str) -> list[str]:
+    """Effetti e hero: senza questo il lock li scriveva e nessuno li leggeva.
+
+    Si cercano per **id** — la convenzione con cui il catalogo di Vera li
+    genera (`.fx-curtain-up`, `@keyframes k-curtain-up`, `data-fx="curtain-up"`)
+    e con cui l'hero si firma (`data-hero="…"`). Senza `text` tace: non e'
+    una pagina, e' una chiamata che non puo' sapere.
+    """
+    if not text:
+        return []
+    out = []
+    eff = lock.get("effetti")
+    # Quando il catalogo manca, `costruisci` scrive `{"non_sorteggiati": …}`:
+    # iterarci sopra dava le CHIAVI, e il referto accusava la pagina di non
+    # contenere un effetto chiamato «non_sorteggiati». Un falso positivo su un
+    # lock legittimo — e i falsi positivi sono la ragione per cui i controlli
+    # smettono di essere letti.
+    mancanti = ([e for e in eff if isinstance(e, str) and not _token(e, text)]
+                if isinstance(eff, list) else [])
+    if mancanti:
+        elenco = ", ".join(f"`{e}`" for e in mancanti)
+        verbo = "non si trova" if len(mancanti) == 1 else "non si trovano"
+        out.append(f"motion: il lock dice {elenco}, ma nella pagina {verbo}")
+
+    hero = lock.get("hero") or {}
+    hid = hero.get("id") if isinstance(hero, dict) else None
+    if hid is not None and f'data-hero="{hid}"' not in text:
+        out.append(f"hero: il lock dice l'archetipo `{hid}`, la pagina non lo "
+                   f'firma — serve `data-hero="{hid}"` sulla sezione hero, o '
+                   "l'hero nel lock e' una decisione che nessuno puo' verificare")
     return out
 
 
@@ -196,6 +360,10 @@ def main() -> int:
     ap_.add_argument("--project", help="slug del progetto")
     ap_.add_argument("--seed", default="", help="YYYYMMDDHH (lo slug lo aggiunge lui)")
     ap_.add_argument("--out", help="apps/<slug>/craft-lock.json")
+    ap_.add_argument("--surface", choices=("marketing", "dashboard", "app"),
+                     default="marketing",
+                     help="landing o back office: la tenda e l'hero sono regole "
+                          "da landing")
     ap_.add_argument("--pick", action="append", metavar="ASSE=ID",
                      help="la scelta dell'owner: colore=… font=… forma=…")
     ap_.add_argument("--last", action="append", metavar="ASSE=v,v",
@@ -208,8 +376,12 @@ def main() -> int:
         if not p.is_file():
             print(f"nessun lock in {p}", file=sys.stderr)
             return 1
-        print(json.dumps(json.loads(p.read_text(encoding="utf-8")),
-                         ensure_ascii=False, indent=1))
+        try:
+            print(json.dumps(json.loads(p.read_text(encoding="utf-8")),
+                             ensure_ascii=False, indent=1))
+        except (json.JSONDecodeError, OSError, UnicodeDecodeError) as exc:
+            print(f"{p} non e' leggibile come lock: {exc}", file=sys.stderr)
+            return 1
         return 0
 
     if not args.project or not args.out:
@@ -221,7 +393,8 @@ def main() -> int:
         a, _, v = raw.partition("=")
         escluse[a.strip().lower()] = [x.strip() for x in v.split(",") if x.strip()]
 
-    lock = applica_scelte(costruisci(args.project, args.seed, escluse), args.pick)
+    lock = applica_scelte(
+        costruisci(args.project, args.seed, escluse, args.surface), args.pick)
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(lock, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")

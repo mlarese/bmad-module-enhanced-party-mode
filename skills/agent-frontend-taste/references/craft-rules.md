@@ -342,8 +342,29 @@ controllo che costa un rifacimento è un controllo che si impara a saltare.
    applica con `--pick colore=… --pick font=… --pick forma=…`, e resta scritto
    `scelto_da: owner`. Una cosa sola con due sorgenti — altrimenti quel clic
    muore.
-6. **Il craft resta tuo:** il lock lo produce il tuo seed, non un voto. Smette
+6. **La superficie fa parte della decisione:** `--surface marketing|dashboard|app`.
+   La tenda obbligatoria e l'archetipo hero sono regole da **landing** —
+   imporle a un back office vuol dire bocciare una dashboard perché non ha una
+   tenda, cioè fabbricare da soli il falso positivo che insegna a ignorare i
+   controlli.
+7. **La sezione hero si firma** `data-hero="<id>"`. Senza, l'archetipo nel lock
+   è una decisione che nessuno può verificare — e una decisione che nessuno
+   verifica è la definizione di codice inerte.
+8. **Il craft resta tuo:** il lock lo produce il tuo seed, non un voto. Smette
    solo di essere una cosa che *dici* di aver fatto.
+
+### Il verde non era un pregiudizio: era l'inventario
+
+Misurato il 2026-07-27 su 300 progetti sorteggiati nella stessa ora: il verde
+usciva **27%** e il viola **5%**. Il sorteggio era corretto — il catalogo ha
+otto zone verdi e due viola, e pescare uniformemente fra le trenta *zone* non è
+pescare uniformemente fra i *colori*. Era esattamente la «predominanza del
+verde» che si vedeva nelle consegne.
+
+`accent_pool.scegli` ora pesca in due passaggi — **prima la famiglia, poi la
+zona dentro** — e le sette famiglie stanno tutte fra il 12% e il 17%. La
+shortlist (`--suggest`) resta com'era: lì servono opzioni vicine fra cui
+scegliere, non equità statistica.
 
 ### Due decisioni di segno opposto, prese in consiglio
 

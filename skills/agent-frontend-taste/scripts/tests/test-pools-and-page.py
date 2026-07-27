@@ -172,6 +172,129 @@ def main() -> int:
                                 "typefaces": {"display": "Petrona"},
                                 "layout": {"radius_family": "soft"}}), [])
 
+    # --- gli edge case, tutti misurati prima di essere corretti ---------------
+    # E1. `slug in s` era una SOTTOSTRINGA: `--project hotel` con seed
+    # `…-hotel-mare` vedeva «hotel» dentro, non aggiungeva niente, e i due
+    # progetti ricevevano lo stesso identico seed — la collisione che il lock
+    # esiste per chiudere, rientrata dalla finestra.
+    check("slug diverso, seed diverso anche quando uno contiene l'altro",
+          cl.semina("2026072715-hotel-mare", "hotel")
+          != cl.semina("2026072715-hotel-mare", "hotel-mare"), True)
+    check("un seed gia' completo non si allunga due volte",
+          cl.semina("2026072715-hotel-mare", "hotel-mare"), "2026072715-hotel-mare")
+    check("e i due progetti ricevono colori diversi",
+          cl.costruisci("hotel", "2026072715-hotel-mare", {})["colore"]["id"]
+          != cl.costruisci("hotel-mare", "2026072715-hotel-mare", {})["colore"]["id"], True)
+
+    # E2. la riga la copia l'owner dal selettore: la maiuscola non e' un errore
+    check("l'id dell'owner si accetta in maiuscolo",
+          cl.applica_scelte(cl.costruisci("x", "2026072715-x", {}),
+                            ["colore=COBALTO"])["colore"]["id"], "cobalto")
+
+    # E3. due valori per lo stesso asse: uno si perdeva in silenzio
+    try:
+        cl.applica_scelte(cl.costruisci("x", "2026072715-x", {}),
+                          ["colore=cobalto", "colore=lacca"])
+        check("un asse scelto due volte viene rifiutato", False, True)
+    except SystemExit as exc:
+        check("un asse scelto due volte viene rifiutato", "due volte" in str(exc), True)
+
+    # E4. confrontava la FAMIGLIA, non la scelta: `granata` al posto di `lacca`
+    # passava liscio. E la sola misura angolare non basterebbe — `zafferano` e
+    # `sabbia` distano 2°, `senape` e `grano` 1.9°: sono zone diverse del
+    # catalogo che nessun angolo separa. Il valore esatto le separa tutte.
+    rosso = {"colore": {"id": "lacca", "famiglia": "rosso", "accent": "#b7502f"}}
+    pag = {"accent": {"hex": "#a33a3f", "famiglia": "rosso"}}
+    sc = cl.scostamenti(rosso, pag, "<style>--accent:#a33a3f</style>")
+    check("un altro rosso al posto di quello del lock e' uno scostamento", len(sc), 1)
+    check("e nomina l'atteso e il trovato",
+          "lacca" in sc[0] and "a33a3f" in sc[0], True)
+    check("due zone a 2° di distanza non si confondono piu'",
+          len(cl.scostamenti({"colore": {"id": "zafferano", "famiglia": "terra",
+                                         "accent": "#c8892b"}},
+                             {"accent": {"hex": "#c9a678", "famiglia": "terra"}},
+                             "<style>--accent:#c9a678</style>")), 1)
+    check("la pagina che porta il valore del lock passa",
+          cl.scostamenti(rosso, {"accent": {"hex": "#b7502f", "famiglia": "rosso"}},
+                         "<style>--accent:#B7502F</style>"), [])
+    check("anche scritto in rgb()",
+          cl.scostamenti(rosso, {"accent": {"hex": "#c25a38", "famiglia": "rosso"}},
+                         "a { color: rgb(183, 80, 47); }"), [])
+    check("e senza testo si ricade sulla tinta invece di accusare",
+          cl.scostamenti(rosso, {"accent": {"hex": "#c25a38", "famiglia": "rosso"}}), [])
+
+    # E5. il silenzio passava: non dichiarare niente era il modo piu' semplice
+    # di superare il cancello.
+    muta = cl.scostamenti(lock, {"colours": [], "accent": {}, "typefaces": {}, "layout": {}})
+    check("una pagina che non dichiara niente non passa piu'", len(muta), 3)
+    check("il mono assente resta tollerato (una landing puo' non usarlo)",
+          any("mono" in s for s in muta), False)
+    check("con report vuoto tace: lo dice gia' `non misurabile`",
+          cl.scostamenti(lock, {}), [])
+
+    # E6. effetti e hero: scritti nel lock e letti da nessuno — inerti, la
+    # stessa classe di `--prefer`.
+    mot = {"effetti": ["curtain-up", "blur-in"], "hero": {"id": "h07"}}
+    check("gli effetti del lock assenti dalla pagina sono uno scostamento",
+          any("curtain-up" in s for s in cl.scostamenti(mot, {"a": 1}, "<html>niente</html>")), True)
+    check("l'hero non firmato e' uno scostamento",
+          any("hero" in s for s in cl.scostamenti(mot, {"a": 1}, "<html>niente</html>")), True)
+    check("una pagina che li porta davvero non produce scostamenti",
+          cl.scostamenti(mot, {"a": 1},
+                         '<section data-hero="h07" class="fx-curtain-up blur-in">'), [])
+    check("senza testo tace invece di accusare",
+          cl.scostamenti(mot, {"a": 1}), [])
+
+    # E7. gli id si cercano come TOKEN: dieci id del catalogo sono contenuti in
+    # un altro, e con `in` nudo il lock che diceva `pin` si accontentava di uno
+    # `spinner`.
+    check("`pin` non si accontenta di uno `spinner`",
+          any("pin" in s for s in
+              cl.scostamenti({"effetti": ["pin"]}, {"a": 1}, '<div class="spinner">')), True)
+    check("ma `.fx-pin` vale",
+          cl.scostamenti({"effetti": ["pin"]}, {"a": 1}, '<div class="fx-pin">'), [])
+
+    # E8. un lock legittimo senza cataloghi porta `{"non_sorteggiati": …}`:
+    # iterarci sopra dava le chiavi, e accusava la pagina di non avere un
+    # effetto chiamato «non_sorteggiati».
+    check("un lock senza cataloghi non produce accuse fasulle",
+          cl.scostamenti({"effetti": {"non_sorteggiati": "x"}}, {"a": 1}, "<html></html>"), [])
+    check("un campo non-stringa si dichiara invece di esplodere",
+          "lock da rifare" in
+          " ".join(cl.scostamenti({"font": {"display": 123}},
+                                  {"typefaces": {"display": "Inter"}})), True)
+
+    # E9. la tenda e l'hero sono regole da LANDING: imporle a un back office
+    # significa bocciare una dashboard perche' non ha una tenda.
+    land = cl.costruisci("backoffice", "2026072715", {}, "marketing")
+    dash = cl.costruisci("backoffice", "2026072715", {}, "dashboard")
+    check("su una landing la tenda c'e' sempre",
+          any(str(e).startswith("curtain") for e in land["effetti"]), True)
+    check("su una dashboard non si impone", "hero" in dash, False)
+    check("e la superficie resta scritta nel lock", dash["surface"], "dashboard")
+
+    # E10. il peso per famiglia: il catalogo ha 8 zone verdi e 2 viola, e senza
+    # il peso il verde usciva 27% contro il 5% del viola — la «predominanza del
+    # verde» che l'owner vedeva. Acceso contro spento devono differire.
+    # Il campione e' 300, non 120: con sette famiglie e 120 tiri la deviazione
+    # e' di ~4 punti, e una soglia stretta boccia il caso perche' e' caso.
+    import collections as _c
+    N = 300
+    fam = _c.Counter(cl.costruisci(f"p-{i}", "2026072715", {})["colore"]["famiglia"]
+                     for i in range(N))
+    grezzo = _c.Counter(ap.suggerisci(1, f"2026072715-p-{i}", [])[0]["famiglia"]
+                        for i in range(N))
+    check("senza peso una famiglia domina", max(grezzo.values()) / N > 0.24, True)
+    check("col peso nessuna famiglia supera un quinto",
+          max(fam.values()) / N <= 0.20, True)
+    check("e nessuna resta sotto un decimo", min(fam.values()) / N >= 0.10, True)
+    check("il divario fra la piu' e la meno frequente si dimezza",
+          (max(fam.values()) / min(fam.values()))
+          < (max(grezzo.values()) / min(grezzo.values())) / 2, True)
+    check("il sorteggio resta deterministico",
+          cl.costruisci("p-1", "2026072715", {})["colore"]["id"],
+          cl.costruisci("p-1", "2026072715", {})["colore"]["id"])
+
     print()
     print("tutti i test passati" if not fails else f"{fails} test falliti")
     return 1 if fails else 0
