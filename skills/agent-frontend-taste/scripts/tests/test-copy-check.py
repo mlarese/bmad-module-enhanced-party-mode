@@ -150,6 +150,27 @@ def main() -> int:
     check("le CTA non vengono accusate di non parlare del dominio",
           cc.problemi(solo_cta, lock["lessico"]), [])
 
+    # --- il corpus si trova da solo -----------------------------------------
+    # Chiedere di elencare a mano i file della ricerca era la fragilita' dei
+    # cataloghi che nessuno lanciava: se dipende dal ricordarsi, prima o poi non
+    # succede e il lessico resta vuoto senza che nessuno se ne accorga. La
+    # ricerca del consiglio e' gia' su disco, in planning-artifacts/.
+    finto = _ISO / "progetto"
+    (finto / "_bmad-output" / "planning-artifacts").mkdir(parents=True, exist_ok=True)
+    (finto / "_bmad-output" / "planning-artifacts" / "ricerca-dominio.md").write_text(
+        CORPUS, encoding="utf-8")
+    trovati = cl.dal_progetto(finto)
+    check("la ricerca su disco viene trovata senza elencarla", len(trovati) >= 1, True)
+    auto = cl.costruisci("x", trovati, [])
+    check("e da sola riempie il lessico",
+          {"navetta", "caparra", "reception"} <= set(auto["lessico"]), True)
+    check("mentre senza corpus il lessico resta vuoto",
+          cl.costruisci("x", [], [])["lessico"], [])
+    vuoto_dir = _ISO / "progetto-vuoto"
+    vuoto_dir.mkdir(parents=True, exist_ok=True)
+    check("un progetto senza documenti non inventa niente",
+          cl.dal_progetto(vuoto_dir), [])
+
     # --- un lessico povero si rifiuta invece di fingere ----------------------
     try:
         vuoto = cl.costruisci("x", [], [])

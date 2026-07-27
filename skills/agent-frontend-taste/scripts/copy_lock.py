@@ -45,6 +45,57 @@ HERE = Path(__file__).resolve().parent
 MINIMO = 8  # sotto questa soglia non e' un lessico, e' una manciata di parole
 
 
+def _bmad_context():
+    spec = importlib.util.spec_from_file_location("bmad_context", HERE / "bmad_context.py")
+    if not spec or not spec.loader:
+        return None
+    m = importlib.util.module_from_spec(spec)
+    sys.modules.setdefault("bmad_context", m)
+    spec.loader.exec_module(m)
+    return m
+
+
+def dal_progetto(root: Path) -> list[Path]:
+    """Il corpus si trova da solo: la ricerca e' gia' su disco.
+
+    Il consiglio scrive ricerca di dominio e ricerca di marketing in
+    `planning-artifacts/` — «una ricerca usata e persa» e' la ragione per cui ci
+    finiscono. Chiedere a chi esegue di **elencare a mano** quei file era la
+    fragilita' dei cataloghi che nessuno lanciava: se dipende dal ricordarsi,
+    prima o poi non succede, e il lessico resta vuoto senza che nessuno lo noti.
+
+    Si legge la config del progetto per `planning_artifacts`, come fa il
+    pre-flight, invece di indovinare il percorso.
+    """
+    root = Path(root)
+    cartelle: list[Path] = []
+    bc = _bmad_context()
+    if bc is not None:
+        try:
+            pian, impl = bc.read_config_paths(root)
+            cartelle += [pian, impl]
+        except Exception:
+            pass
+    cartelle += [root / "docs", root / "planning-artifacts",
+                 root / "_bmad-output" / "planning-artifacts"]
+
+    visti, out = set(), []
+    for c in cartelle:
+        if not c or not Path(c).is_dir():
+            continue
+        for f in sorted(Path(c).rglob("*.md")):
+            r = f.resolve()
+            if f.is_file() and r not in visti:
+                visti.add(r)
+                out.append(f)
+    for nome in ("project-context.md", "CLAUDE.md", "AGENTS.md", "README.md"):
+        f = root / nome
+        if f.is_file() and f.resolve() not in visti:
+            visti.add(f.resolve())
+            out.append(f)
+    return out
+
+
 def _cc():
     spec = importlib.util.spec_from_file_location("copy_check", HERE / "copy_check.py")
     if not spec or not spec.loader:
@@ -97,6 +148,7 @@ def costruisci(slug: str, corpus: list[Path], termini: list[str]) -> dict:
                 visti.add(pezzo)
                 lessico.append(pezzo)
     return {"project": slug, "fonti": [str(f) for f in corpus],
+            "documenti_letti": len(corpus),
             "dichiarati": a_mano, "lessico": lessico}
 
 
@@ -105,6 +157,9 @@ def main() -> int:
     ap.add_argument("--project", help="slug del progetto")
     ap.add_argument("--corpus", nargs="*", default=[],
                     help="i file gia' letti per il lavoro: ricerca, sito del cliente, PRD")
+    ap.add_argument("--da-progetto", metavar="ROOT",
+                    help="raccoglie da solo ricerca, PRD e documenti da "
+                         "planning-artifacts/ — la ricerca del consiglio e' gia' li'")
     ap.add_argument("--termini", default="",
                     help="parole del mestiere, separate da virgola — vengono prima")
     ap.add_argument("--out", help="apps/<slug>/copy-lock.json")
@@ -128,8 +183,15 @@ def main() -> int:
         print("servono --project e --out (o --show)", file=sys.stderr)
         return 2
 
-    lock = costruisci(args.project, [Path(c) for c in args.corpus],
-                      args.termini.split(","))
+    corpus = [Path(c) for c in args.corpus]
+    if args.da_progetto:
+        trovati = dal_progetto(Path(args.da_progetto))
+        if not trovati:
+            print(f"! in {args.da_progetto} non c'e' nessun documento da leggere: "
+                  "la ricerca del consiglio si scrive in planning-artifacts/",
+                  file=sys.stderr)
+        corpus += [f for f in trovati if f not in corpus]
+    lock = costruisci(args.project, corpus, args.termini.split(","))
     if len(lock["lessico"]) < MINIMO:
         print(f"lessico troppo povero ({len(lock['lessico'])} parole): dai un corpus "
               "vero — la ricerca di dominio, il sito del cliente — o elenca i termini "
