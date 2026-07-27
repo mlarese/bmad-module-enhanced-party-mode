@@ -277,6 +277,38 @@ Il difetto misurato non era l'accento — quelli erano diversi ogni volta — ma
 3. **Lo scuro segue il `register`:** `famigliare` · `artigianale` · `popolare` → scuri **caldi** (bruno, seppia, ombra bruciata, testa di moro); `clinico` · `minimal` → freddi desaturati; `luxury` → profondo quasi-neutro con una sola vibrazione. Un'osteria famigliare con l'ink verde-bosco ha il carattere contraddetto dalla superficie più grande della pagina.
 4. **Non far coincidere ink e accento di settore:** se l'accento è verde, lo scuro non è verde — altrimenti la pagina ha una tinta sola in due luminosità.
 5. Dopo approve: MEMORY `last_ink_families` oltre a `last_hue_sectors`.
+### L'accento è il colore della CTA, e non lo contava nessuno
+
+Misurato il 2026-07-27 sulle cinque pagine consegnate: l'accento era **`rosso`
+su 3 su 5**, e i quattro esadecimali caldi — `#bf7865`, `#7e222a`, `#B7502F`,
+`#e4b53e` — stavano tutti nella stessa zona terracotta-ocra.
+
+Il motivo è strutturale: il ledger registrava il **settore dominante**, che è
+fatto di fondo e scuro e quindi quasi sempre neutro, e la famiglia dello scuro.
+**L'accento non era in nessuna regola** — eppure è il colore del pulsante, cioè
+l'unica tinta che l'occhio guarda per prima. È lo stesso errore che portò a
+misurare l'hue invece del nome della famiglia, un piano più giù.
+
+1. **L'accento entra nel ledger e passa dalle due regole di sempre:** mai la
+   stessa famiglia per 3 consegne di fila, mai oltre un terzo delle ultime otto.
+   Lo misura `repeat_guard` (il colore più cromatico che **non** dipinge una
+   superficie grande) e `close_check` lo stampa.
+2. **Trenta zone, non trenta esadecimali** — `scripts/accent_pool.py`. La
+   palette resta derivata da `locale + register + activity`: quello che si
+   sorteggia è **in che zona della ruota cercare**, e il colore preciso lo trovi
+   tu lì dentro, sul luogo e sul carattere. Le trenta coprono la ruota intera,
+   non i 130° caldi in cui il gusto scivola da solo.
+   `--suggest N --seed … --last <famiglie recenti>` dà una shortlist che ha
+   **una zona per famiglia**: quattro proposte tutte terracotta sono una
+   proposta sola mostrata quattro volte.
+3. **La pagina delle combinazioni lo pretende:** `palette_page.py` **rifiuta**
+   un insieme di combinazioni i cui accenti stanno tutti nella stessa famiglia.
+   Era metà del difetto — non solo la landing usciva sempre con la stessa CTA,
+   ma anche la pagina che doveva mostrarne le alternative.
+4. Fallimento: accento nella stessa famiglia per tre consegne; una shortlist di
+   zone tutte imparentate; `palette.html` con quattro accenti dello stesso
+   colore in quattro nomi diversi.
+
 ### I caratteri si contano come i colori
 
 Misurato il 2026-07-26 sulle cinque pagine consegnate negli eval, leggendo le

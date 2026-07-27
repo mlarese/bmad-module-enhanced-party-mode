@@ -256,6 +256,46 @@ def main() -> int:
     check("le deroghe non bloccano", mod.only_blocking(coperti), [])
     check("senza deroga invece bloccano", len(mod.only_blocking(tutti)), len(tutti))
 
+    # --- l'accento: il colore della CTA, che nessuno contava -----------------
+    # Misurato sulle cinque pagine consegnate: `rosso` su 3 su 5, e i quattro
+    # esadecimali caldi nella stessa zona terracotta. Il ledger registrava il
+    # settore dominante — fatto di fondo e scuro, quasi sempre neutri — e mai
+    # l'accento, che e' l'unica tinta che l'occhio guarda per prima.
+    rep = {"colours": [
+        {"hex": "#f6f2ec", "sector": "neutro", "chroma": 3, "large_area": True},
+        {"hex": "#14181c", "sector": "neutro", "chroma": 2, "large_area": True},
+        {"hex": "#B7502F", "sector": "rosso", "chroma": 53, "large_area": False},
+        {"hex": "#63734D", "sector": "verde", "chroma": 18, "large_area": False}]}
+    a = mod.accent_of(rep)
+    check("l'accento e il piu cromatico fuori dalle superfici grandi", a["hex"], "#B7502F")
+    check("con la sua famiglia", a["famiglia"], "rosso")
+    check("una pagina senza accento cromatico non ne inventa uno",
+          mod.accent_of({"colours": [{"hex": "#111", "sector": "neutro",
+                                      "chroma": 1, "large_area": True}]}), {})
+
+    tre = [{"accent_family": "rosso"}] * 3
+    check("tre CTA di fila nella stessa famiglia → violazione",
+          len(mod.accent_violations(a, tre)) >= 1, True)
+    check("e cambiando zona si torna puliti",
+          mod.accent_violations({"famiglia": "blu"}, tre), [])
+
+    # il pool: trenta zone, e la shortlist non le prende imparentate
+    pool = SCRIPT.parent / "accent_pool.py"
+    check("il catalogo esiste", pool.is_file(), True)
+    spec2 = importlib.util.spec_from_file_location("accent_pool", pool)
+    ap = importlib.util.module_from_spec(spec2)
+    sys.modules["accent_pool"] = ap
+    spec2.loader.exec_module(ap)
+    check("trenta zone", len(ap.ZONE), 30)
+    check("che coprono tutta la ruota, non solo il caldo",
+          len({ap.settore(z["hue"]) for z in ap.ZONE}), 8)
+    scelte = ap.suggerisci(4, "2026072712", [])
+    check("la shortlist ha una zona per famiglia",
+          len({z["famiglia"] for z in scelte}), len(scelte))
+    check("e le esclusioni tolgono davvero la zona calda",
+          all(z["famiglia"] not in ("rosso", "terra")
+              for z in ap.suggerisci(4, "2026072712", ["rosso", "terra"])), True)
+
     return 1 if fails else 0
 
 

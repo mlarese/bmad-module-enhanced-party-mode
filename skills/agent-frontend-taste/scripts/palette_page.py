@@ -381,6 +381,32 @@ def main() -> int:
         return 2
 
     pg = _repeat_guard()
+
+    # Le combinazioni devono differire **nell'accento**, o la pagina mostra
+    # quattro volte la stessa proposta con quattro nomi. Misurato il 2026-07-27:
+    # sulle cinque pagine consegnate l'accento era `rosso` su tre, e i quattro
+    # esadecimali caldi stavano nella stessa zona terracotta. Il colore della CTA
+    # e' l'unica tinta che l'occhio guarda per primo: se non varia lui, non varia
+    # niente. Trenta zone in `accent_pool.py`.
+    fam = {}
+    for c in combos:
+        acc = (c.get("colours") or {}).get("accent")
+        if not acc:
+            continue
+        try:
+            h, s_, l = pg.to_hsl(acc)
+        except Exception:
+            continue
+        fam.setdefault(pg.family_of(pg.sector_of(h, s_, l)), []).append(c.get("id"))
+    if len(fam) < min(2, len(combos)):
+        dett = " · ".join(f"{k}: {', '.join(map(str, v))}" for k, v in fam.items())
+        print("le combinazioni hanno l'accento nella stessa famiglia — "
+              f"{dett or 'nessun accento cromatico'}. Non sono alternative: e' una "
+              "proposta sola ripetuta, e la CTA e' il colore che l'owner guarda "
+              "per primo. Prendi zone diverse: "
+              "`uv run scripts/accent_pool.py --suggest 4 --seed <seed> --last <famiglie recenti>`.",
+              file=sys.stderr)
+        return 2
     last = [s for s in args.last.split(",") if s.strip()]
     last_fonts: list[dict] = []
     if not args.no_ledger:

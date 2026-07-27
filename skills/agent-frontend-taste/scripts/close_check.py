@@ -242,6 +242,7 @@ def check_colour(pg, text: str, last: list[str], last_fonts: list[dict],
     report = pg.analyse(pairs, painted, small)
     report["typefaces"] = pg.typefaces(text)
     report["layout"] = pg.layout_signature(text)
+    report["accent"] = pg.accent_of(report)
     rejects = pg.hard_rejects(text, pg.palette_colours(text, report["colours"]))
     problems = pg.violations(report, last, last_fonts, deroghe) + rejects
     return (1 if problems else 0), report, problems
@@ -341,6 +342,10 @@ def main() -> int:
         faces = (report or {}).get("typefaces") or {}
         if faces:
             lines.append("- caratteri: " + " · ".join(f"{k} **{v}**" for k, v in faces.items()))
+        acc = (report or {}).get("accent") or {}
+        if acc:
+            lines.append(f"- accento (CTA): **{acc['hex']}** · famiglia "
+                         f"**{acc['famiglia']}** · croma {acc['chroma']}")
         lay = (report or {}).get("layout") or {}
         if lay:
             lines.append("- impaginazione: " + " · ".join(f"{k.split('_')[0]} **{v}**"

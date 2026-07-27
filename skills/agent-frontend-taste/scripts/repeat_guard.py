@@ -749,6 +749,54 @@ def parse_deroghe(values: list[str] | None) -> dict:
     return out
 
 
+def accent_of(report: dict) -> dict:
+    """L'accento: il colore piu cromatico che NON dipinge una superficie grande.
+
+    E' il colore del pulsante — l'unica tinta che l'occhio guarda davvero — e
+    non era contato da niente. Il ledger registrava il settore dominante, che e
+    fatto di fondo e scuro e quindi quasi sempre neutro, e la famiglia dello
+    scuro. Misurato il 2026-07-27: l'accento era `rosso` su 3 pagine su 5, e i
+    quattro esadecimali caldi stavano tutti nella stessa zona terracotta-ocra.
+    """
+    cand = [c for c in report.get("colours", [])
+            if not c.get("large_area") and c.get("sector") != "neutro"]
+    if not cand:
+        return {}
+    a = max(cand, key=lambda c: c["chroma"])
+    return {"hex": a["hex"], "sector": a["sector"],
+            "famiglia": family_of(a["sector"]), "chroma": a["chroma"]}
+
+
+def accent_violations(accent: dict, last: list[dict]) -> list[str]:
+    """Di fila e di quota, come gli altri assi. Trenta zone in `accent_pool.py`."""
+    out = []
+    here = (accent or {}).get("famiglia")
+    if not here or not last:
+        return out
+    prev = [(e.get("accent_family") or "") for e in last]
+    streak = 0
+    for s in prev:
+        if s == here:
+            streak += 1
+        else:
+            break
+    if streak >= 2:
+        out.append(f"accento ripetuto: la CTA e nella famiglia '{here}' dopo "
+                   f"{streak} consegne consecutive (max 2). "
+                   "Zone alternative: `accent_pool.py --suggest 4 --seed …`.")
+    window = [s for s in prev[:RECENT_WINDOW - 1] if s]
+    if len(window) >= 3:
+        n = sum(1 for s in window if s == here) + 1
+        tot = len(window) + 1
+        if n / tot > _share_cap("accent"):
+            out.append(
+                f"accento predominante: la CTA e nella famiglia '{here}' in {n} "
+                f"delle ultime {tot} consegne ({n / tot * 100:.0f}%, max "
+                f"{_share_cap('accent') * 100:.0f}%). E il colore che l'occhio "
+                "guarda per primo: cambia zona.")
+    return out
+
+
 def violations(report: dict, last_sectors: list[str],
                last_fonts: list[dict] | None = None,
                deroghe: dict | None = None) -> list[str]:
@@ -805,6 +853,7 @@ def violations(report: dict, last_sectors: list[str],
                 )
     out += font_violations(report.get("typefaces") or {}, last_fonts or [])
     out += layout_violations(report.get("layout") or {}, last_fonts or [])
+    out += accent_violations(report.get("accent") or {}, last_fonts or [])
     return apply_deroghe(out, deroghe or {}, report)
 
 
@@ -824,6 +873,7 @@ _AXIS_HINTS = (
     ("grid_system", ("impaginazione",)),
     ("radius_family", ("famiglia di raggio",)),
     ("hero_shape", ("forma della hero",)),
+    ("accent", ("accento ripetuto", "accento predominante")),
 )
 
 AXES = tuple(a for a, _ in _AXIS_HINTS)
@@ -896,7 +946,8 @@ def ledger_sectors(entries: list[dict]) -> list[str]:
 
 def ledger_fonts(entries: list[dict]) -> list[dict]:
     """I caratteri dei job passati, più recente per primo — come i settori."""
-    keys = ("display", "body", "mono", "grid_system", "radius_family", "hero_shape")
+    keys = ("display", "body", "mono", "grid_system", "radius_family",
+            "hero_shape", "accent_family")
     return [{k: e.get(k) for k in keys} for e in reversed(entries)]
 
 
@@ -911,6 +962,8 @@ def ledger_record(path: Path, entries: list[dict], key: str, report: dict) -> No
         "ink_hex": (report["ink"] or {}).get("hex"),
         **{k: v for k, v in (report.get("typefaces") or {}).items()},
         **{k: v for k, v in (report.get("layout") or {}).items()},
+        "accent_family": (report.get("accent") or {}).get("famiglia"),
+        "accent_hex": (report.get("accent") or {}).get("hex"),
     })
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(entries[-50:], ensure_ascii=False, indent=1),
@@ -1018,6 +1071,7 @@ def main() -> int:
     report = analyse(pairs, painted, small)
     report["typefaces"] = typefaces(text)
     report["layout"] = layout_signature(text)
+    report["accent"] = accent_of(report)
     rejects = hard_rejects(text, palette_colours(text, report["colours"])) if text else []
 
     last = [s for s in args.last.split(",")]

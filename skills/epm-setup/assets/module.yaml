@@ -1,7 +1,7 @@
 code: epm
 name: "Enhanced Party Mode"
 description: "Consiglio di esperti craft/legal/infra/WP/fiscale per party mode e cantiere — Vesper, Vera, Jane, Elena, Rex, Niki, Dan Arrow."
-module_version: 1.19.2
+module_version: 1.20.0
 default_selected: false
 module_greeting: >
   Enhanced Party Mode (epm) è pronto.
@@ -47,19 +47,16 @@ agents:
     icon: "🧾"
     description: "Counsel fiscale/contabile IT-hub + UE/mondo, anti-invenzione; memoria e Pulse scadenze. Non per bookkeeping generico, GDPR o tech-law."
 
-epm_demos_folder:
-  prompt: "Dove salvare le demo frontend di Vesper/Vera? (path relativo al progetto)"
-  default: "frontend-demos"
-  result: "{project-root}/{value}"
-
-epm_memory_folder:
-  prompt: "Dove tenere la memoria degli agenti del consiglio? (path relativo al progetto)"
-  default: "_bmad/memory/epm"
-  result: "{project-root}/{value}"
+# Nessuna variabile da chiedere. Ce n'erano due — dove salvare le demo e dove
+# tenere la memoria — e nessuna skill le leggeva: verificato, zero riferimenti
+# fuori da epm-setup. I fatti le contraddicevano pure: Vesper scrive in
+# `apps/<slug>/` per legge del suo skill, e i sanctum vivono in
+# `_bmad/memory/agent-<nome>/`, non in `_bmad/memory/epm/`. Chiedere all'utente
+# una decisione che poi nessuno usa e' peggio che non chiedergliela: gli fa
+# credere di avere una scelta.
 
 directories:
-  - "{epm_demos_folder}"
-  - "{epm_memory_folder}"
+  - "_bmad/memory"
 
 post-install-notes: >
   ESEGUI ORA epm-setup. L'installer ha copiato le skill, ma non registra il modulo
