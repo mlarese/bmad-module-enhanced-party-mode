@@ -51,7 +51,7 @@ che consegni.
 | Mobile web app | l'app che gira nel browser del telefono | 6 decisioni grafiche (`splash` · `app_background` · `brand_mark` · `onboarding` · `illustration` · `depth`) + 10 di shell · barra sempre visibile | `last_splashes` · `last_app_backgrounds` | `mobile_recipe.py` su corpus (`mobile-rules.md`) |
 | Fase implementativa | i documenti che vincolano il codice | PRD · architettura (stack **obbligatorio**) · page spec · project context — o analisi autonoma dichiarata | — | `bmad_context.py` (`implementation-handoff.md`) |
 | Inspiration | quanti riferimenti veri hai guardato prima di decidere | batch ≥30 | — | `hero_sample.py` / inspire-ops |
-| Motion | il movimento: quali effetti e con che numero di sorteggio | `motion_seed` · `motion_techniques` (2–4) | — | Vera **repeat**; seed `YYYYMMDDHH` |
+| Motion | il movimento: quali effetti e con che numero di sorteggio | `motion_seed` · `motion_techniques` (2–4) | — | Vera **repeat**; seed `YYYYMMDDHH-<slug>` |
 | Responsive | la pagina si adatta allo schermo, telefono compreso | viewport meta · breakpoints · touch · no overflow | — | **sempre** — desktop e mobile |
 | Output | dove finisce quello che consegni | cartella del progetto | `demo_output` | default `{project-root}/apps/<slug>/` — una per progetto, ogni superficie; dentro anche `DESIGN.md` e `palette.html` (§10.1); **se lo slug esiste non si sovrascrive** (§ *L'output non si sovrascrive*) |
 
@@ -310,6 +310,31 @@ Il difetto misurato non era l'accento — quelli erano diversi ogni volta — ma
 3. **Lo scuro segue il `register`:** `famigliare` · `artigianale` · `popolare` → scuri **caldi** (bruno, seppia, ombra bruciata, testa di moro); `clinico` · `minimal` → freddi desaturati; `luxury` → profondo quasi-neutro con una sola vibrazione. Un'osteria famigliare con l'ink verde-bosco ha il carattere contraddetto dalla superficie più grande della pagina.
 4. **Non far coincidere ink e accento di settore:** se l'accento è verde, lo scuro non è verde — altrimenti la pagina ha una tinta sola in due luminosità.
 5. Dopo approve: MEMORY `last_ink_families` oltre a `last_hue_sectors`.
+### Il seed porta lo slug, o due lavori escono identici
+
+Misurato il 2026-07-27, ed è la spiegazione di «prende sempre gli stessi
+template». Il seed era `YYYYMMDDHH`: **l'ora**. Tre landing diverse fatte nello
+stesso momento ricevevano accento, carattere, forma, hero e motion **identici**
+— non simili: gli stessi, perché tutti i cataloghi derivano dalla stessa
+stringa.
+
+E senza `--seed` era peggio: il default era la costante `"no-seed"`, quindi ogni
+invocazione restituiva per sempre la stessa voce. Sembrava una scelta e non lo
+era.
+
+1. **Il seed è `YYYYMMDDHH-<slug>`.** Ora *e* progetto. Basta questo a
+   decorrelare tutti i cataloghi in un colpo — accenti, caratteri, forme, hero,
+   effetti, assi di composizione — perché ognuno fa `Random(f"{seed}|<asse>")`:
+   nessuno script è stato toccato, è cambiata la stringa.
+2. **Senza seed gli script si fermano.** Una costante di ripiego è peggio di un
+   errore: l'errore lo vedi, la costante ti dà per sempre lo stesso risultato e
+   sembra una decisione.
+3. **Con la sola ora avvisano.** Se il seed non ha uno slug, lo dicono su
+   stderr: due lavori nella stessa ora avranno le stesse scelte.
+
+Prova, stesso orario e tre slug: `lacca` / `salvia` / `oliva` come accenti,
+`newsreader` / `bricolage` / `bodoni` come caratteri, tre forme diverse.
+
 ### L'accento è il colore della CTA, e non lo contava nessuno
 
 Misurato il 2026-07-27 sulle cinque pagine consegnate: l'accento era **`rosso`
@@ -530,7 +555,7 @@ After substantial static craft (AF on page/layout/hero/**dashboard**), invoke **
    - sinistra → `slide-left` · `left`
    - alto → `slide-up` · `up` · `down` / `slide-down`
    - accenti: `zoom` · `zoom-out` · `blur` · `wipe` · `flip` (max ~1/3, non maggioranza)
-3. **Seed = giorno + ora** `YYYYMMDDHH`. Dichiara `motion_seed: …` in DX/AF.
+3. **Seed = giorno + ora** `YYYYMMDDHH-<slug>`. Dichiara `motion_seed: …` in DX/AF.
 4. Procedura: `n = int(seed)`; `n % 3` = direzione dominante (0 destra, 1 sinistra, 2 alto) senza monopolio; ruota il pool con `n % pool_len`; gallery ≥4 → ≥1 per direzione.
 5. Fallimento: tutta la pagina mono-`up` / mono-direzione; seed assente su lavoro nuovo.
 

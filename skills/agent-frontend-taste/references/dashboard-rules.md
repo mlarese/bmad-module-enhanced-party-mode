@@ -25,7 +25,7 @@ teorico — un probe senza `--out` esplicito ha sovrascritto il corpus committat
 
 ## Minimo non negoziabile
 
-**Ricetta prima della shell (new shell / restyle sostanziale):** genera le decisioni con `dashboard_recipe.py` (seed `YYYYMMDDHH`, `--domain`, esclusioni da MEMORY; `--batch` per varianti sorelle) e dichiarali. Il corpus di riferimento si costruisce con `dashboard_corpus.py`. Il minimo non negoziabile è qui sotto; leve di ricerca misurate, decisioni e invarianti nel resto di questo file.
+**Ricetta prima della shell (new shell / restyle sostanziale):** genera le decisioni con `dashboard_recipe.py` (seed `YYYYMMDDHH-<slug>`, `--domain`, esclusioni da MEMORY; `--batch` per varianti sorelle) e dichiarali. Il corpus di riferimento si costruisce con `dashboard_corpus.py`. Il minimo non negoziabile è qui sotto; leve di ricerca misurate, decisioni e invarianti nel resto di questo file.
 
 **Themes — light + dark required**
 
@@ -234,7 +234,7 @@ Etica come per `inspire-ops.md`: poche request, UA onesto, niente `/api/*` di En
 
 ## La legge randomica (deterministica, non capricciosa)
 
-1. **Seed** `YYYYMMDDHH` — stesso clock di `craft_axes.py`, `hero_copy.py` e del motion. Stessa ora → stessa ricetta; ora dopo → ricetta diversa.
+1. **Seed** `YYYYMMDDHH-<slug>` — stesso clock di `craft_axes.py`, `hero_copy.py` e del motion. Stessa ora → stessa ricetta; ora dopo → ricetta diversa.
 2. **Uno stream RNG per decisione** (`random.Random("<seed>|<asse>")`). L'hash moltiplicativo di `craft_axes` va bene su pool da 6, ma su pool da 5 lascia sequenze visibili: misurato `radius_family` fermo su 2 valori su 5 per sei ore consecutive. Uno stream per decisione decorrela le decisioni e copre il pool.
 3. **Esclusioni da MEMORY**: `--last-palette`, `--last-radius`, `--last-type`, `--last-texture`, `--last-shell` togliono dal pool quello che hai appena consegnato. Se il pool si svuota, torna intero (mai bloccarsi).
 4. **Conflitti risolti e dichiarati**: coppie che direbbero due volte la stessa cosa vengono ripescate (shell `split-master-detail` + dettaglio `split-detail`; header `search-first` + `command-palette`; KPI `card-sparkline` + grafico `sparkline`; header `segmented-tabs` + filtri `saved-views`; `dense-pro` + tabella `comfortable-hairline`; shell senza colonna laterale + `faceted-panel`). Le sostituzioni finiscono nel blocco «Conflitti risolti» della ricetta.

@@ -39,7 +39,7 @@ più largo della skill — senza una regola, ogni app finiva con fondo bianco, i
 riflesso, lampo bianco all'avvio e un gradiente viola-indaco «perché fa app».
 
 **Ricetta prima della shell (new app / restyle sostanziale):** genera le decisioni con
-`mobile_recipe.py` (seed `YYYYMMDDHH`, `--domain`, esclusioni da MEMORY incluse
+`mobile_recipe.py` (seed `YYYYMMDDHH-<slug>`, `--domain`, esclusioni da MEMORY incluse
 `--last-splash` e `--last-background`; `--batch` per varianti sorelle) e dichiarali.
 Corpus con `mobile_corpus.py`. Leve misurate (e **leve morte**: i tag path che negli admin sono la leva, qui
 non esistono) e craft grafico nel resto di questo file. Il minimo non negoziabile:
@@ -120,7 +120,7 @@ mirror di asset, nessuna fonte che ha detto di no.
 
 ## La legge randomica (deterministica, non capricciosa)
 
-Identica a `dashboard-rules.md`: seed `YYYYMMDDHH`, **uno stream RNG per decisione**
+Identica a `dashboard-rules.md`: seed `YYYYMMDDHH-<slug>`, **uno stream RNG per decisione**
 (`random.Random("<seed>|<asse>")`), esclusioni da MEMORY (`--last-palette`,
 `--last-radius`, `--last-type`, `--last-shell`, **`--last-splash`**,
 **`--last-background`**), conflitti risolti e dichiarati, `--batch` mutuamente

@@ -232,7 +232,7 @@ lo era il flusso); una porta scoperta dopo, perché nessuno ha guardato prima.
 | «landing o dashboard?» | G1 decide da richiesta e dominio, e tu lo dichiari |
 | «famigliare o luxury?» (`register`) | G1 decide su dominio, luogo, prezzi, tono del sito |
 | «quale hero archetype?» | `hero_gallery.py --suggest N --seed … --last …` → il primo che regge |
-| «quale effetto motion?» | seed `YYYYMMDDHH` + `motion_techniques` dichiarate (Vera) |
+| «quale effetto motion?» | seed `YYYYMMDDHH-<slug>` + `motion_techniques` dichiarate (Vera) |
 | «quali sezioni vuoi?» | si inferiscono dal dominio e si dichiarano in una riga |
 | «quale stack?» | architettura → project context → documenti del repo → segnali del repo → G1 |
 | «confermi il perimetro?» | G2 lo decide, lo dichiara, non lo sottopone |

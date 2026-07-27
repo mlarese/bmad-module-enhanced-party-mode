@@ -94,6 +94,33 @@ SECTORS = [("rosso", 345, 15), ("terra", 15, 45), ("giallo", 45, 70), ("verde", 
 FAMILY = {"verde": "verde", "teal": "verde"}
 
 
+
+def _seed_o_muori(seed: str) -> str:
+    """Senza seed non si sceglie: una costante di ripiego e' peggio di un errore.
+
+    Il default era `"no-seed"`, cioe' una **costante**: senza `--seed` ogni
+    invocazione restituiva per sempre la stessa voce, e nessuno se ne accorgeva
+    perche' l'output sembrava una scelta. Misurato il 2026-07-27.
+
+    E il seed deve contenere **lo slug del progetto**, non solo l'ora: con
+    `YYYYMMDDHH-<slug>` due landing fatte nella stessa ora ricevevano accento, font,
+    forma, hero e motion **identici** — ed e' esattamente il «prende sempre gli
+    stessi template» che l'owner vedeva.
+    """
+    s = (seed or "").strip()
+    if not s:
+        raise SystemExit(
+            "manca --seed. Serve `YYYYMMDDHH-<slug>`, per esempio "
+            "`--seed 2026072715-hotel-mare`: senza, la scelta e' sempre la "
+            "stessa; con la sola ora, due progetti fatti nello stesso momento "
+            "ricevono le stesse identiche scelte."
+        )
+    if "-" not in s and "|" not in s:
+        print(f"! seed `{s}` senza slug di progetto: due lavori nella stessa ora "
+              "avranno le stesse scelte. Usa `YYYYMMDDHH-<slug>`.", file=__import__("sys").stderr)
+    return s
+
+
 def settore(hue: float) -> str:
     for nome, a, b in SECTORS:
         if a > b:
@@ -209,7 +236,7 @@ def main() -> int:
         return 0
 
     if args.pick:
-        z = come_colore(scegli(args.seed or "no-seed", args.last.split(",")))
+        z = come_colore(scegli(_seed_o_muori(args.seed), args.last.split(",")))
         print(json.dumps(z, ensure_ascii=False, indent=1) if args.format == "json"
               else f"  {z['id']}  accent {z['accent']}  paper {z['paper']}  ink {z['ink']}"
                    f"  ({z['famiglia']})")
@@ -226,7 +253,7 @@ def main() -> int:
         return 0
 
     scelte = ([arricchisci(z) for z in ZONE] if args.list or not args.suggest
-              else suggerisci(args.suggest, args.seed or "no-seed",
+              else suggerisci(args.suggest, _seed_o_muori(args.seed),
                               args.last.split(",")))
     if args.format == "json":
         print(json.dumps(scelte, ensure_ascii=False, indent=1))

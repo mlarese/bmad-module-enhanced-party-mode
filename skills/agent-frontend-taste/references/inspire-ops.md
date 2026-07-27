@@ -22,7 +22,7 @@ uv run scripts/hero_sample.py --list-activities
 
 **Misurato 2026-07-26:** Dribbble `?q=` ignora il termine (stesso set). Non usare DRB search per l’attività. Envato category paths sì.
 
-Seed `YYYYMMDDHH` → a different set each hour. Scorciatoia correzione piccola → no batch.
+Seed `YYYYMMDDHH-<slug>` → a different set each hour. Scorciatoia correzione piccola → no batch.
 
 Extract **structure** only — never hex/assets. Invented URLs or cloning one Envato template = failure.
 

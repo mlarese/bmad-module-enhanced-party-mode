@@ -55,6 +55,33 @@ MULTI = {"blocks", "words", "chars", "dots", "list", "nav"}
 # ------------------------------------------------------------------ catalog
 
 
+
+def _seed_o_muori(seed: str) -> str:
+    """Senza seed non si sceglie: una costante di ripiego e' peggio di un errore.
+
+    Il default era `"no-seed"`, cioe' una **costante**: senza `--seed` ogni
+    invocazione restituiva per sempre la stessa voce, e nessuno se ne accorgeva
+    perche' l'output sembrava una scelta. Misurato il 2026-07-27.
+
+    E il seed deve contenere **lo slug del progetto**, non solo l'ora: con
+    `YYYYMMDDHH-<slug>` due landing fatte nella stessa ora ricevevano accento, font,
+    forma, hero e motion **identici** — ed e' esattamente il «prende sempre gli
+    stessi template» che l'owner vedeva.
+    """
+    s = (seed or "").strip()
+    if not s:
+        raise SystemExit(
+            "manca --seed. Serve `YYYYMMDDHH-<slug>`, per esempio "
+            "`--seed 2026072715-hotel-mare`: senza, la scelta e' sempre la "
+            "stessa; con la sola ora, due progetti fatti nello stesso momento "
+            "ricevono le stesse identiche scelte."
+        )
+    if "-" not in s and "|" not in s:
+        print(f"! seed `{s}` senza slug di progetto: due lavori nella stessa ora "
+              "avranno le stesse scelte. Usa `YYYYMMDDHH-<slug>`.", file=__import__("sys").stderr)
+    return s
+
+
 def load(path: Path = CATALOG) -> dict:
     catalog = json.loads(path.read_text(encoding="utf-8"))
     validate(catalog)
@@ -1213,7 +1240,7 @@ def main() -> int:
     p.add_argument("--show", metavar="ID")
     p.add_argument("--kit", metavar="ID")
     p.add_argument("--suggest", type=int, metavar="N")
-    p.add_argument("--seed", default="", help="seed YYYYMMDDHH per una shortlist deterministica")
+    p.add_argument("--seed", default="", help="seed YYYYMMDDHH-<slug> per una shortlist deterministica")
     p.add_argument("--last", nargs="*", default=[], help="id/famiglie da escludere (anti-ripetizione)")
     p.add_argument("--prefer", metavar="ID,ID", default=None,
                    help="sostituisce la lista dei preferiti; stringa vuota = nessuna preferenza")
@@ -1263,7 +1290,7 @@ def main() -> int:
     entries = [e for e in effects if match_filters(e, parse_filters(args.filter, catalog))]
     if args.suggest:
         prefer = preferred_ids(args.prefer)
-        entries = suggest(entries, args.suggest, args.seed or "no-seed", args.last, prefer)
+        entries = suggest(entries, args.suggest, _seed_o_muori(args.seed), args.last, prefer)
         quanti = sum(1 for e in entries if e["id"] in prefer)
         print(f"shortlist: {quanti}/{len(entries)} dai preferiti "
               f"({len(prefer)} in lista, il resto del catalogo resta raggiungibile)",
