@@ -262,8 +262,16 @@ def scostamenti(lock: dict, report: dict, text: str = "") -> list[str]:
         elif acc.get("famiglia") and acc["famiglia"] != col["famiglia"]:
             out.append(f"accento: il lock dice `{col['id']}` ({col['famiglia']}), "
                        f"la pagina ha {acc['hex']} ({acc['famiglia']})")
-        elif col.get("accent") and not _accento_presente(col["accent"], text):
-            # Il valore del lock non compare nella pagina. La tinta da sola non
+        elif (col.get("accent")
+              and acc["hex"].strip().lower() != col["accent"].strip().lower()
+              and not _accento_presente(col["accent"], text)):
+            # Il colore misurato non e' quello del lock **e** il valore non
+            # compare nella pagina. La prima condizione da sola non basta a
+            # accusare: una pagina che scrive `hsl(15 59% 45%)` porta lo stesso
+            # identico colore, e il referto diceva «il lock dice #b7502f, la
+            # pagina ha #b7502f» — il falso positivo nella sua forma peggiore,
+            # quella che si contraddice da sola.
+            # La seconda da sola non basta a assolvere: la tinta non separa
             # basta a dirlo: `zafferano` e `sabbia` distano 2°, `senape` e
             # `grano` 1.9° — sono zone diverse del catalogo che la sola misura
             # angolare non separa. Il valore esatto le separa tutte.

@@ -217,6 +217,9 @@ def main() -> int:
     check("la pagina che porta il valore del lock passa",
           cl.scostamenti(rosso, {"accent": {"hex": "#b7502f", "famiglia": "rosso"}},
                          "<style>--accent:#B7502F</style>"), [])
+    check("un colore identico scritto in hsl() non e' uno scostamento",
+          cl.scostamenti(rosso, {"accent": {"hex": "#b7502f", "famiglia": "rosso"}},
+                         "a{--accent:hsl(15 59% 45%)}"), [])
     check("anche scritto in rgb()",
           cl.scostamenti(rosso, {"accent": {"hex": "#c25a38", "famiglia": "rosso"}},
                          "a { color: rgb(183, 80, 47); }"), [])
