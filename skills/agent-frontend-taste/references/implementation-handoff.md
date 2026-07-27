@@ -774,6 +774,28 @@ Non confondere i piani: nelle decisioni di design `hero_copy` è **dove** sta il
   orari, coperti, carta dei vini; una dashboard logistica ha spedizioni, giacenze,
   SLA. Registro coerente con palette e luogo. Lunghezze **misurate contro il
   layout**: una headline di 3 parole e una di 12 non stanno nello stesso blocco.
+- **Le parole del mestiere non si traducono.** Se il settore dice `reception`,
+  la pagina dice `reception` — non «ricevimento», non «accoglienza». Vale per
+  tutto il lessico che la lingua ha adottato così com'è: `check-in`, `spa`,
+  `brunch`, `coworking`, `dehors`, `know-how`, `dashboard`, `booking`,
+  `front office`, `SLA`, `standard`. Tradurle fa suonare la pagina come scritta
+  da fuori — ed è il segnale più veloce che chi l'ha scritta non conosce il
+  mestiere.
+
+  **L'eccesso opposto è simmetrico**, ed è già vietato qui sotto: non si
+  importano anglicismi che quel mestiere **non** usa. «Elevate your business»
+  non è lessico di settore, è gergo da landing generica.
+
+  **La prova non è la lingua: è cosa dice il settore.** Lo si legge nella
+  ricerca di dominio (§2) e sul sito del cliente (§8) — se lì c'è scritto
+  `reception`, quella è la parola. Nel dubbio vince la fonte, non l'istinto di
+  tradurre.
+
+  **Questa resta una regola e non diventa un controllo.** Una macchina non
+  distingue «accoglienza» legittimo da «accoglienza» messo al posto di
+  `reception`: servirebbe il lessico del settore, e un controllo che tira a
+  indovinare produce falsi allarmi — che insegnano a ignorare i controlli. La
+  legge in G3 chi ha letto la ricerca.
 - **Vietato:** lorem ipsum; «Your headline here» / «Sezione 1»; il gergo AI da
   landing generica (*Elevate your business*, *Unlock the power of*, *Seamlessly*);
   tre feature card che dicono la stessa cosa con tre sinonimi; CTA scollegate

@@ -133,3 +133,16 @@ laterali seguono o contraddicono lo scorrimento.
 **Una per pagina.** Quattro tende che si aprono da quattro lati non sono un
 sistema, sono un difetto. `close_check --surface marketing` verifica che ce ne
 sia una e non fa consegnare senza.
+
+## Le parole del mestiere restano come sono
+
+`reception` non diventa «ricevimento». Vale per tutto il lessico che il settore
+usa così com'è — `check-in`, `spa`, `brunch`, `coworking`, `dehors`, `booking`,
+`front office` — e la prova non è la lingua, è **cosa dice quel settore**: lo si
+legge nella ricerca di dominio e sul sito del cliente.
+
+Tradurle è il segnale più veloce che la pagina l'ha scritta qualcuno che non
+conosce il mestiere. L'eccesso opposto — infilare anglicismi che il mestiere non
+usa — è già vietato: «Elevate your business» non è lessico, è gergo.
+
+Disciplina completa: `implementation-handoff.md` §9.
