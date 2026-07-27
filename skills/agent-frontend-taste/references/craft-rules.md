@@ -366,6 +366,27 @@ zona dentro** — e le sette famiglie stanno tutte fra il 12% e il 17%. La
 shortlist (`--suggest`) resta com'era: lì servono opzioni vicine fra cui
 scegliere, non equità statistica.
 
+### L'italiano tradotto è un difetto di provenienza, non di lingua
+
+Il rilievo dell'owner era che il nostro italiano è la traduzione dall'inglese: la
+sintassi regge e il senso si perde. Il primo dato ha cambiato la diagnosi — il
+copy **fisso** del catalogo hero tiene («Cento anni di carte, una stanza»,
+«Quattro notti di musica in cava»), mentre marcisce quello scritto a runtime.
+Non è la lingua: è che il testo scritto guardando una cosa vera tiene, e il
+testo generato dal nulla ripiega sul vocabolario internazionale della landing,
+che in italiano non parla nessuno.
+
+Quindi si misura la **provenienza**, non lo stile: il lessico del mestiere si
+raccoglie prima (`copy_lock.py`), e ogni titolo ne usa almeno una parola. Più
+l'elenco delle formule importate, tarato perché le 75 stringhe di copy buono
+passino **tutte** pulite — un marcatore che accusa «Cento anni di carte» non è
+severo, è rotto.
+
+Quello che il consiglio ha **rifiutato** di misurare: la frase senza verbo come
+colpo finale, la domanda retorica, il periodo breve. Sono italiano legittimo, e
+vietarli produce prosa impaurita — grigia, e peggiore del calco perché non la
+nota nessuno.
+
 ### Due decisioni di segno opposto, prese in consiglio
 
 **Nessun cancello nuovo.** In una sola giornata ne sono stati corretti due per

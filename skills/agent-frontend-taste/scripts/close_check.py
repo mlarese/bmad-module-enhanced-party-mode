@@ -300,6 +300,40 @@ def check_curtain(text: str, page: Path) -> tuple[bool, list[str]]:
                    "quattro direzioni). `effects_gallery.py --show curtain-up`"]
 
 
+def _copy_check():
+    spec = importlib.util.spec_from_file_location("copy_check", HERE / "copy_check.py")
+    if not spec or not spec.loader:
+        raise SystemExit("copy_check.py non trovato accanto a close_check.py")
+    m = importlib.util.module_from_spec(spec)
+    sys.modules.setdefault("copy_check", m)
+    spec.loader.exec_module(m)
+    return m
+
+
+def check_copy(text: str, lessico_path: Path | None) -> tuple[bool, list[str]]:
+    """L'italiano consegnato: formule importate e lessico del dominio.
+
+    I marcatori girano **sempre** — non hanno bisogno di niente e non chiedono
+    permesso. Il lessico solo se il `copy-lock.json` c'e': senza corpus non si
+    puo' dire se un titolo parla del mestiere, e accusarlo lo stesso sarebbe
+    inventare. Chi consegna una landing il lessico ce l'ha, perche' la ricerca
+    di dominio l'ha gia' fatta.
+    """
+    cc = _copy_check()
+    lessico: list[str] = []
+    if lessico_path is not None:
+        if not lessico_path.is_file():
+            return False, [f"`{lessico_path}` non esiste: il lessico del dominio si "
+                           "raccoglie prima di scrivere (`copy_lock.py`)"]
+        try:
+            d = json.loads(lessico_path.read_text(encoding="utf-8"))
+            lessico = list(d.get("lessico") or []) if isinstance(d, dict) else list(d)
+        except (json.JSONDecodeError, OSError, UnicodeDecodeError) as exc:
+            return False, [f"`{lessico_path.name}` illeggibile: {exc}"]
+    guai = cc.problemi(text, lessico)
+    return not guai, guai
+
+
 def _craft_lock():
     spec = importlib.util.spec_from_file_location("craft_lock", HERE / "craft_lock.py")
     if not spec or not spec.loader:
@@ -393,6 +427,8 @@ def main() -> int:
     ap.add_argument("pages", nargs="+", help="file HTML consegnati")
     ap.add_argument("--design", help="DESIGN.md di accompagnamento")
     ap.add_argument("--council", help="registro del consiglio, docs/consiglio/<slug>.md")
+    ap.add_argument("--lessico", help="apps/<slug>/copy-lock.json — le parole del "
+                    "mestiere, raccolte prima di scrivere il copy")
     ap.add_argument("--lock", help="apps/<slug>/craft-lock.json — le scelte decise "
                     "prima di scrivere la pagina")
     ap.add_argument("--surface", choices=("marketing", "dashboard", "mobile"),
@@ -413,6 +449,7 @@ def main() -> int:
     design = Path(args.design) if args.design else None
     council = Path(args.council) if args.council else None
     lock_path = Path(args.lock) if args.lock else None
+    lessico_path = Path(args.lessico) if args.lessico else None
     ledger = (Path(args.ledger) if args.ledger
               else (None if args.no_ledger else pg.default_ledger()))
     last = args.last.split(",")
@@ -445,6 +482,7 @@ def main() -> int:
         cou_ok, cou_problems = check_council(council)
         lock_ok, lock_problems = check_lock(lock_path, report or {}, text, page)
         priv_ok, priv_problems = check_privacy(text)
+        copy_ok, copy_problems = check_copy(text, lessico_path)
         cur_ok, cur_problems = (check_curtain(text, page)
                                 if args.surface == "marketing" else (True, []))
         dash_ok, dash_problems = (check_dashboard(text, design, page)
@@ -452,7 +490,7 @@ def main() -> int:
 
         problems = (colour_problems + resp_problems + fin_problems
                     + des_problems + cou_problems + dash_problems + priv_problems
-                    + cur_problems + lock_problems)
+                    + cur_problems + lock_problems + copy_problems)
         # Le deroghe restano nel referto ma non fermano la consegna: è la
         # differenza fra un'eccezione dichiarata e un controllo spento.
         bloccanti = pg.only_blocking(problems)
@@ -491,6 +529,7 @@ def main() -> int:
         lines.append(f"- traccia: {'ok' if des_ok else 'da correggere'}")
         lines.append(f"- consiglio: {'registrato' if cou_ok else 'da correggere'}")
         lines.append(f"- lock: {'la pagina rispetta le scelte' if lock_ok else 'da correggere'}")
+        lines.append(f"- copy: {'italiano scritto, non tradotto' if copy_ok else 'da correggere'}")
         lines.append(f"- cookie e privacy: {'ok' if priv_ok else 'da correggere'}")
         if args.surface == "marketing":
             lines.append(f"- tenda: {'presente' if cur_ok else 'da correggere'}")
