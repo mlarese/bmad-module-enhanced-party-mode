@@ -23,6 +23,27 @@ from pathlib import Path
 SCRIPT = Path(__file__).resolve().parents[1] / "sync-module-yaml.py"
 SKILLS = SCRIPT.parents[2]
 
+
+def manifesto_di_questo_albero() -> Path | None:
+    """Il manifesto sta in due posti diversi, e sono **entrambi giusti**.
+
+    Nel repo sorgente `.claude-plugin/` sta dentro `skills/`, che è la radice
+    del plugin; nel repo di distribuzione sta alla radice del repo, perché lì la
+    radice del plugin è il repo. Il test cercava solo il primo, quindi arrivava
+    **rosso** ovunque il modulo venisse spedito — nel repo di distribuzione e in
+    ogni progetto che lo installa.
+
+    Una suite rossa all'arrivo è come non averne una, e peggio: insegna a
+    ignorarla. Il runner vive dentro lo skill proprio perché un'installazione
+    possa verificarsi da sola, e non può farlo se il primo test fallisce per il
+    posto in cui si trova.
+    """
+    for candidato in (SKILLS / ".claude-plugin" / "marketplace.json",
+                      SKILLS.parent / ".claude-plugin" / "marketplace.json"):
+        if candidato.is_file():
+            return candidato
+    return None
+
 fails = 0
 
 
@@ -47,9 +68,15 @@ def load():
 def main() -> int:
     mod = load()
 
-    # --- il manifesto vero di questo repo regge ------------------------------
-    check("il manifesto di questo repo e risolvibile",
-          mod.guai_manifesto(SKILLS / ".claude-plugin" / "marketplace.json"), [])
+    # --- il manifesto vero di questo albero regge ----------------------------
+    # Sorgente o distribuzione: si prende quello che c'e', e in entrambi i casi
+    # deve essere risolvibile. Se non c'e' nessuno dei due, quello si' e' un
+    # difetto — non un layout diverso.
+    manifesto = manifesto_di_questo_albero()
+    check("un manifesto esiste in questo albero", manifesto is not None)
+    if manifesto is not None:
+        check(f"il manifesto ({manifesto.parent.parent.name}/) e risolvibile",
+              mod.guai_manifesto(manifesto), [])
     check("module.yaml descrive gli agenti veri",
           mod.atteso(mod.ASSET.read_text(encoding="utf-8"), SKILLS),
           mod.ASSET.read_text(encoding="utf-8"))
