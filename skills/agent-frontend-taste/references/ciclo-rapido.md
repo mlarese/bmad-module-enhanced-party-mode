@@ -65,10 +65,55 @@ fino alla consegna.
 
 ---
 
+## 1bis. La sequenza, e perché è corta
+
+Misurato il 2026-07-29, dopo che l'owner ha detto «il rapido ci mette tanto lo
+stesso»: il ciclo faceva **~19 chiamate** e leggeva **~45.700 token** di
+reference prima della prima riga di HTML. I cataloghi non c'entravano — costano
+**0,05 s l'uno**. Il tempo stava nei giri e nella lettura.
+
+**Da leggere: due file.** `SKILL.md` e **`references/craft-rapido.md`**, che
+sostituisce `craft-rules.md` + `craft-marketing.md` + `autonomia.md` per questo
+ciclo (~2.400 token invece di ~25.600; il percorso intero passa da ~45.700 a
+**~8.900**). Non si carica `implementation-handoff.md`:
+descrive il ciclo completo.
+
+**Da eseguire: sette passi, in quest'ordine.**
+
+| | Passo | Perché lì |
+|---|---|---|
+| 1 | `bmad_context.py` | se esistono documenti vincolanti, vincolano — e costa niente |
+| 2 | **`craft_lock.py`** | **una chiamata**: colore · font · forma · hero · effetti |
+| 3 | `craft_axes.py` | griglia · superfici · tipografia |
+| 4 | **`index.html`** | **la bozza grafica esce qui**, non in fondo |
+| 5 | `DESIGN.md` | `ciclo:`, `brief:` in sei righe, `dati_verosimili:` |
+| 6 | `close_check.py --lock` | l'unico controllo, e li fa tutti |
+| 7 | `council_log.py --goal rapido` | una riga: chi ha deciso, e che seduta non c'è stata |
+
+**La pagina è il quarto passo, non l'ultimo.** La promessa del ciclo è «la bozza
+grafica subito»: se arriva dopo lessico, palette e cataloghi, la promessa è
+scritta e non mantenuta.
+
+**I cinque cataloghi separati non si chiamano.** `craft_lock.py` importa ed
+esegue lui `accent_pool`, `font_pool`, `shape_pool`, `hero_gallery` e
+`effects_gallery` (`craft_lock.py:95,121,133`): richiamarli darebbe gli **stessi
+identici valori** — stesso seed, stesse funzioni — al prezzo di cinque giri.
+La regola «i cataloghi si eseguono, non si citano» resta intera: il lock **è** il
+modo in cui si eseguono, e `scripts/tests/test-craft-lock-equivalenza.py` verifica
+che i due percorsi coincidano davvero.
+
+**Fuori dal percorso, in rapido:** `palette.html` (chiede due-quattro
+combinazioni *alternative* scritte a mano, cioè lavoro per pagine che non
+consegni), `copy_lock` (sotto le otto parole esce `1`), l'apertura dei cataloghi
+a video, `hero_sample` in rete. Se l'owner le vuole, si fanno — e allora ha
+chiesto quel tempo.
+
 ## 2. Cosa cambia, e cosa no
 
 | Passo | Ciclo completo | Ciclo rapido |
 |---|---|---|
+| **Lettura prima di scrivere** | `craft-rules` + superficie + `autonomia` + handoff (~45.700 token) | **`SKILL.md` + `craft-rapido.md`** (~8.900) |
+| **Cataloghi** | cinque chiamate separate | **una**: `craft_lock.py` le esegue tutte |
 | Pre-flight `bmad_context.py` | sì | **sì** — se documenti vincolanti esistono, vincolano lo stesso |
 | Avviso di apertura (§1.1) | sì | **sì**, in due righe (§4) |
 | Ricerca dominio + marketing | due file in `planning-artifacts/` | **a mente**, condensata nel blocco `brief:` del `DESIGN.md` |
@@ -78,9 +123,9 @@ fino alla consegna.
 | Controllo dei documenti — casi limite · elicitazione · adversarial | tre passate per documento | **nessuna** |
 | `slice_plan` · `bmad-spec` · `bmad-quick-dev` | sì | **no**: il ciclo rapido copre la pagina, non il dietro (§5) |
 | **`craft_lock.py` prima di scrivere** | sì | **sì** |
-| **Cataloghi eseguiti** (`accent_pool` · `font_pool` · `shape_pool` · `hero_gallery --suggest` · `craft_axes`) | sì | **sì** |
+| **Cataloghi eseguiti** | cinque chiamate + `craft_axes` | **sì, ma dentro il lock** — più `craft_axes`, che il lock non copre |
 | **`repeat_guard` + `close_check` a `0`** | sì | **sì** |
-| **`palette.html`** | sì | **sì** |
+| **`palette.html`** | sì | **no**, salvo richiesta: sono due-quattro combinazioni *alternative* da scrivere a mano, cioè lavoro per pagine che non consegni. Il lock su disco dice comunque cosa è stato scelto |
 | **Responsive · cookie · copy vero · zero `TODO`** | sì | **sì** |
 | Movimento | Vera invocata (`agent-web-animations`) | **movimento essenziale scritto da Vesper** (reveal allo scroll + hover, `prefers-reduced-motion`); Vera si invoca se l'owner la chiede |
 | Registro del consiglio | una riga per seduta | **una riga sola**, `--goal rapido` (§6) |
@@ -187,12 +232,13 @@ da un generatore:
 2. **Il lock prima di scrivere una riga:**
    `uv run scripts/craft_lock.py --project <slug> --seed … --surface marketing --out apps/<slug>/craft-lock.json`.
    **Senza lock non si consegna**, in nessuno dei due cicli.
-3. **I cataloghi si eseguono, non si citano:** `accent_pool --suggest`,
-   `font_pool`, `shape_pool`, `hero_gallery --suggest`, `craft_axes`. Se non li
-   lanci decide il pregiudizio, ed è misurato dove va a finire — terracotta,
-   pillola, `DM Mono`, griglia a rail. Sono i cataloghi a rendere *possibile* il
-   ciclo rapido: la decisione non è veloce perché è superficiale, è veloce perché
-   il sorteggio è già fatto.
+3. **I cataloghi si eseguono, non si citano — e il lock è il modo in cui si
+   eseguono.** Se non girano decide il pregiudizio, ed è misurato dove va a
+   finire: terracotta, pillola, `DM Mono`, griglia a rail. Sono loro a rendere
+   *possibile* il ciclo rapido — la decisione non è veloce perché è superficiale,
+   è veloce perché il sorteggio è già fatto. Ma li chiama **il lock**, in una
+   sola volta; richiamarli a parte darebbe gli stessi identici valori in cinque
+   giri. Resta separato solo `craft_axes`, che il lock non copre.
 4. **La hero si firma** `data-hero="<id>"`, o l'archetipo del lock non è
    verificabile.
 5. **`close_check` a `0`**, tutte le pagine in un colpo, `--lock` compreso.
@@ -211,8 +257,10 @@ da un generatore:
    una riga. Quello che non si fa è passare quattro parole e ignorare l'exit `1`.
 7. **Responsive** a ~375 e ~1280, **cookie e informativa** se la pagina raccoglie
    un dato o carica da terzi.
-8. **`palette.html`** accanto alla consegna, e la riga di onestà sui dati
-   verosimili in chat **più** `dati_verosimili:` nel `DESIGN.md`.
+8. **La riga di onestà sui dati verosimili** in chat **più** `dati_verosimili:`
+   nel `DESIGN.md`. (`palette.html` invece **non** si genera in rapido, §1bis:
+   il lock su disco dice già cosa è stato scelto, e le combinazioni *alternative*
+   sono lavoro per pagine che non consegni.)
 9. **La riga nel registro**, una sola:
 
    ```bash
