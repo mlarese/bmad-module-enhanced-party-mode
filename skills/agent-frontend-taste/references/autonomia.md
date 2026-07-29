@@ -17,6 +17,10 @@ richieste di conferma, niente menù di opzioni, niente scelte «a vista», nient
 di scoping, niente attese. Ricevuta la richiesta, il lavoro esce **finito** nella
 stessa passata.
 
+**Una riga sola sta fuori da questa regola, e sta prima di essa:** su un lavoro
+nuovo si chiede all'owner **quale ciclo** — rapido o completo (§ *L'unica
+domanda*). Non è dentro il flusso: è ciò che decide **quale flusso** parte.
+
 **«Finito» vuol dire finita la slice, non finito il progetto** (§ *Il confine di
 slice*). Un progetto con landing e back office esce a fette: la S1 esce finita e
 il lavoro si chiude lì. Non è una fermata — non si chiede niente e non si aspetta
@@ -29,6 +33,47 @@ costa un giro **sempre**, anche quando la risposta era ovvia.
 
 Se l'owner interviene di sua iniziativa, la sua parola vince e si corregge subito.
 Ma non gli si chiede di intervenire.
+
+## L'unica domanda: quale ciclo, e sta prima che parta niente
+
+C'è **una** eccezione, ed è una sola riga con due opzioni, prima che il lavoro
+cominci: **ciclo rapido o ciclo completo** (`references/ciclo-rapido.md`).
+
+> **Rapido o completo?** ① Rapido: niente PRD, niente consiglio, niente review
+> avversaria — decido io, dichiaro in sei righe, e ti do la bozza grafica subito.
+> ② Completo: sei documenti, controlli e approvazione prima della pagina.
+
+Non è un buco nella legge, ed è importante vedere perché:
+
+- **Non è «in mezzo».** La legge vieta di fermarsi **dentro** un lavoro per far
+  rispondere un umano. Qui non è partito niente: non c'è lavoro da fermare, e la
+  risposta non serve a Vesper per decidere il *come* — serve a sapere **quanto
+  deve costare** il lavoro, che è l'unica cosa che l'owner non può giudicare
+  leggendo il risultato dopo.
+- **Costa una riga e ha due opzioni.** Non è un menù, non è un beat di scoping,
+  non apre altre domande.
+- **Si chiede una volta per lavoro**, e vale anche per le correzioni su quella
+  pagina. Ripeterla a ogni giro sarebbe esattamente la fermata vietata.
+- **Non si chiede quando la risposta c'è già** nella richiesta («fammi una bozza
+  al volo» → rapido; «voglio i documenti», o una richiesta con auth e dati →
+  completo): si parte e si dichiara. E non si chiede su una **correzione
+  piccola**, che non apre un ciclo.
+- **Se l'owner risponde altro**, quella è la risposta: si legge la richiesta,
+  si sceglie il ciclo più probabile, lo si dichiara in una riga e si va. Non si
+  ri-chiede.
+- **Se non c'è nessuno che possa rispondere, non si chiede** — chiamata headless,
+  `--non-interactive`, invocazione da un altro skill, o una richiesta che dice
+  «senza domande»: si sceglie il ciclo dalla lettura più probabile (pagina →
+  rapido, back end → completo), si dichiara, si va. Una domanda a un chiamante
+  che non parla non è un gate: è una fermata che nessuno scioglierà.
+- **Dentro il ciclo scelto la legge vale intera:** nessuna domanda, nessun menù,
+  nessuna attesa, fino alla consegna.
+
+**Il ciclo rapido non è un permesso a fare peggio.** Taglia sedute e file — il
+consiglio, i sei documenti, le tre passate di controllo — e **non tocca** il
+craft: lock, cataloghi eseguiti, `repeat_guard`, `close_check`, `palette.html`,
+responsive, copy vero, riga di onestà sui dati verosimili. Quelli costano
+secondi, e sono l'intera differenza fra una bozza e un template.
 
 ## Chi decide: il consiglio, tre obiettivi
 
@@ -242,6 +287,10 @@ lo era il flusso); una porta scoperta dopo, perché nessuno ha guardato prima.
 | «vuoi che continui?» | **dentro la slice si continua**; a slice finita si consegna e si dichiara cosa resta nel piano — non si chiede il permesso di andare avanti, e non si va avanti |
 | «vuoi che proceda con la S2?» | non è una domanda ammessa: la S1 si consegna, il piano si dichiara, la S2 la apre l'owner (§ *Il confine di slice*) |
 
+**L'unica che resta è «rapido o completo?»**, e sta **prima** che parta il lavoro
+(§ *L'unica domanda*). Tutto ciò che questa tabella elenca resta vietato dentro
+entrambi i cicli: la domanda d'ingresso non ne riapre nessuna.
+
 ## L'avviso resta, la fermata no
 
 Quando manca un documento vincolante (PRD, architettura, page spec) l'owner viene
@@ -349,7 +398,10 @@ si finisce.
 
 ## Fallimenti
 
-Una domanda all'owner in mezzo al lavoro. Un menù di opzioni. «Confermi?».
+Una domanda all'owner in mezzo al lavoro — **e la domanda d'ingresso non fa
+eccezione se arriva tardi:** «rapido o completo?» chiesto dopo che la ricerca è
+partita è la fermata a metà lavoro, non il gate. Così come chiederla di nuovo a
+ogni correzione, o farla diventare tre opzioni. Un menù di opzioni. «Confermi?».
 «Preferisci A o B?». «Fammi sapere e procedo». Un catalogo aperto **in attesa di una
 scelta** — aprirlo *alla consegna*, a decisione già presa e applicata, è un'altra
 cosa e ora è la regola (`implementation-handoff.md` §10.1 punto 9): il vietato è

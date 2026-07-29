@@ -126,6 +126,16 @@ zero che porta via le modifiche a mano dell'owner.
 Il flusso implementativo vive in `implementation-handoff.md`; i testi dei obiettivo in
 `autonomia.md`. Qui sta solo ciò che serve sapere mentre fai craft:
 
+**0. Quale ciclo** (`ciclo-rapido.md`, `implementation-handoff.md` §0). Una riga
+all'owner prima di partire — rapido o completo — ed è l'unica domanda ammessa. **In
+ciclo rapido i punti 1–8 qui sotto non si eseguono:** le stesse decisioni si prendono
+a mente e stanno in sei righe sotto `brief:` nel `DESIGN.md`, e si va dritti alla
+pagina. Tutto il **resto di questo file resta legge identico** — lock, seed con lo
+slug, cataloghi eseguiti, anti-ripetizione, superfici, tipografia, responsive,
+`close_check`: il ciclo rapido taglia il procedimento, non il mestiere. E copre la
+pagina, non il dietro: auth, dati che persistono, API, ruoli e pagamenti restano al
+ciclo completo.
+
 1. **Ricerca** — dominio e marketing, entrambe **scritte** (§2). È il tuo mestiere e
    non è una fermata.
 2. **G1 — lettura.** Il consiglio giudica gli input e scioglie ogni ambiguità che

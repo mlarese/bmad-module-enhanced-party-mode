@@ -78,6 +78,10 @@ irriconoscibile ciò che tutti chiamano così. Ma si spiega la prima volta, semp
 
 | Termine | In parole semplici |
 |---|---|
+| **ciclo rapido** | la strada corta: **nessun documento, nessun consiglio, nessuna review avversaria**. Le stesse decisioni si prendono a mente e si scrivono in **sei righe** nel `DESIGN.md`, e l'owner riceve subito la **bozza grafica**. Il craft non cambia: lock, cataloghi e controlli finali restano |
+| **ciclo completo** | la strada lunga: **sei documenti**, tre passate di controllo e approvazione del consiglio **prima** della pagina. Più lento, ma resta scritto ciò che vincola le fette dopo |
+| **la domanda d'ingresso** | l'unica domanda ammessa all'owner — «rapido o completo?» — e sta **prima** che parta il lavoro. Due opzioni, una volta per lavoro. Dentro il ciclo scelto non se ne fa nessun'altra |
+| **`brief:`** | le **sei righe** che in ciclo rapido sostituiscono i sei documenti: cosa · per chi · perimetro · conversione · stack · sicurezza, ognuna marcata `fatto` o `assunzione` |
 | il consiglio | la **riunione degli agenti** installati (privacy, legale, fiscale, infra, WordPress, motion, più i ruoli BMAD) che decide invece di chiedere all'owner |
 | **G1** | primo giro: **si legge e si scioglie l'ambiguità** — cos'è questo lavoro, per chi, con che carattere |
 | **G2** | secondo giro: **si scrivono i sei documenti** prima del codice |

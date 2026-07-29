@@ -33,6 +33,34 @@ spacing:
 ---
 ```
 
+## Il ciclo, e il brief quando il ciclo è rapido
+
+Il ciclo scelto dall'owner si scrive sempre, in una riga: `ciclo: rapido` o
+`ciclo: completo` (`implementation-handoff.md` §0). Senza, fra sei mesi «qui manca
+il PRD» sembra una dimenticanza invece che una scelta.
+
+**In un posto solo.** `ciclo:` sta a livello alto, **fuori** dal blocco `brief:`
+— che in ciclo completo non esiste — e non si ripete dentro. Due posti dove
+scrivere la stessa cosa sono due posti dove può diventare falsa
+(`implementation-handoff.md` §4.2 punto 5).
+
+**In ciclo completo** il perimetro sta nei sei documenti di `planning-artifacts/`
+e qui basta il rimando. **In ciclo rapido quei documenti non esistono**, e le
+stesse decisioni stanno qui — sei righe, ognuna marcata `fatto | assunzione`
+(`ciclo-rapido.md` §3). Una riga che non ci sta è un lavoro che non era da ciclo
+rapido.
+
+```yaml
+ciclo: rapido        # ← qui, e in nessun altro posto
+brief:
+  cosa: '{cosa fa davvero il business, con le parole del settore}'        # assunzione
+  per_chi: '{chi compra, e l''obiezione che lo blocca}'                   # assunzione
+  perimetro: '{le sezioni che ci sono — e le due o tre che NON ci sono}'  # fatto
+  conversione: '{form | telefono | prenotazione, con o senza acconto}'    # fatto
+  stack: '{come si apre: HTML statico, o quello che il repo impone}'      # fatto
+  sicurezza: '{cosa raccoglie la pagina · cosa resta requisito del back end}'
+```
+
 ## Brand & Style
 
 {Postura editoriale. Hero = brand dominante. Una headline, una frase, un gruppo CTA. No dashboard in hero.}

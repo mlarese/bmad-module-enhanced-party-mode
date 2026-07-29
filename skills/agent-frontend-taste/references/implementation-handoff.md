@@ -5,7 +5,11 @@ landing, una app, una shell) non parte mai dal foglio bianco per riflesso, e non
 apre nemmeno la catena BMAD completa per riflesso opposto. Load da AF su new
 craft. Non è una capability.
 
-**Dove sta cosa** — §1 pre-flight · §2 ricerca (dominio + marketing, scritte) ·
+**Prima di tutto questo c'è una riga: quale ciclo** (§0). Se l'owner sceglie il
+**ciclo rapido**, questo file si applica solo in parte e la disciplina è
+`references/ciclo-rapido.md`. Quello che segue è il **ciclo completo**.
+
+**Dove sta cosa** — **§0 la domanda d'ingresso** · §1 pre-flight · §2 ricerca (dominio + marketing, scritte) ·
 §3 valutazione e G1 (+3.1 tetto rimandi) · **§4.0 i sei documenti** · **§4.0b la
 controllo dei documenti** · §4.1 slice_plan · §4.2 spec di slice · **§4.3 una slice
 per volta** · **§4.4 l'orchestratore** · §5 implementazione · §6
@@ -19,6 +23,7 @@ auto-scritti) · §8 sito del cliente · §9 testi · §10 due artefatti ·
 
 | | Passo | Chi | Ferma il lavoro? |
 |---|---|---|---|
+| 0 | **Quale ciclo** — rapido o completo (§0) | owner, in una riga | **sì, ed è l'unica**: sta prima che parta il lavoro |
 | 1 | **Pre-flight** — cosa esiste e cosa vincola | `bmad_context.py` | no |
 | 2 | **Ricerca** — dominio, marketing, servizi reali | Vesper | no |
 | 3 | **Valutazione degli input + G1** — richiesta, ricerca, documenti, ambiguità | consiglio | solo internamente, se la ricerca è insufficiente (max 5 giri) |
@@ -28,7 +33,7 @@ auto-scritti) · §8 sito del cliente · §9 testi · §10 due artefatti ·
 | 7 | **Approvazione (G3)** — contro i documenti | consiglio | solo internamente, se una richiesta non è soddisfatta (max 5 rifiuti) |
 | 8 | **Consegna della S1 — e qui il lavoro finisce** (§4.3) | Vesper | **sì, e non è una domanda:** le slice successive partono quando l'owner le chiede |
 
-**Nessun passo si ferma sull'owner** — e il passo 8 non fa eccezione, perché non
+**Dal passo 1 in poi nessun passo si ferma sull'owner** — e il passo 8 non fa eccezione, perché non
 gli chiede niente: **consegna**. Le uniche fermate interne sono la ricerca che
 torna indietro e il lavoro consegnato che torna in lavorazione, e si risolvono senza uscire
 dal flusso. Una cosa sola arriva all'owner in apertura: **sa cosa sta per succedere**
@@ -37,6 +42,47 @@ dal flusso. Una cosa sola arriva all'owner in apertura: **sa cosa sta per succed
 **Il flusso copre una slice, non il progetto.** Dal passo 5 in poi si parla sempre
 della slice aperta: la S2 rifà i passi 5–8 quando l'owner la chiede, sugli stessi
 sei documenti (§4.3).
+
+---
+
+## 0. La domanda d'ingresso: rapido o completo
+
+Su un **lavoro nuovo di craft** la prima cosa che esce non è il lavoro: è una riga
+con due opzioni, e non ce ne sono altre.
+
+> **Rapido o completo?** ① **Rapido** — niente PRD, niente consiglio, niente
+> review avversaria: decido io, ti dichiaro le scelte in sei righe e ti do la
+> **bozza grafica** subito. ② **Completo** — sei documenti, controlli e
+> approvazione del consiglio prima della pagina.
+
+| Risposta | Dove si va |
+|---|---|
+| **rapido** (o richiesta che lo dice già: «al volo», «una bozza», «veloce») | `references/ciclo-rapido.md` — §1 pre-flight resta, §2 diventa mentale, §§3–4.2b **non si eseguono**, §5 e §6 diventano `close_check`, §§8–12 restano |
+| **completo** (o richiesta con auth, dati, back office) | questo file, dal §1 in giù |
+
+- **È l'unica domanda ammessa, e sta prima che parta qualcosa** (`autonomia.md` →
+  *L'unica domanda*). Dentro il ciclo scelto la legge vale intera.
+- **Non si chiede se la risposta è già nella richiesta**, e non si chiede su una
+  correzione piccola: quella non apre un ciclo. **Né si chiede quando non c'è
+  nessuno che risponda** — headless, `--non-interactive`, chiamata da un altro
+  skill, «senza domande»: si sceglie, si dichiara, si va.
+- **Si chiede una volta per lavoro** e vale fino alla consegna, correzioni
+  comprese.
+- **Il ciclo scelto si scrive**: `ciclo: rapido | completo` nel `DESIGN.md`, e
+  nella riga di registro del consiglio (§11.1). Un ciclo non dichiarato diventa,
+  sei mesi dopo, «non si capisce perché qui manchi il PRD».
+
+**Il ciclo rapido non è un peso di lavoro, è un ciclo diverso.** Il profilo
+`leggero`/`pieno` (§4.0b, `autonomia.md` → *I tetti non si sommano*) restringe i
+**giri** dentro il ciclo completo; il ciclo rapido toglie i giri **e i
+documenti**. Su una landing esistono entrambe le strade: `leggero` scrive sei
+documenti corti, `rapido` non ne scrive nessuno e mette le stesse decisioni in
+sei righe. La differenza la paga — o la risparmia — l'owner, ed è per questo che
+la sceglie lui.
+
+**Il confine del rapido è la pagina** (`ciclo-rapido.md` §5): auth, dati che
+persistono, API, ruoli, pagamenti e back office restano nel ciclo completo, e se
+la richiesta li porta si consegna la pagina e lo si **dichiara**.
 
 ---
 
@@ -88,6 +134,10 @@ lavoro **non parte in silenzio**. Una battuta all'owner, prima, in voce:
   a slice si legge come un difetto invece che come il metodo.
 - **In voce, senza sconti.** Tono di Vesper; i tre nomi (ricerca, casi limite,
   review avversaria) restano riconoscibili; il macchinario non si nomina mai.
+- **In ciclo rapido l'avviso resta, in due righe** (`ciclo-rapido.md` §4): un
+  avviso lungo quanto il ciclo che annuncia se lo mangia. Lì i tre nomi compaiono
+  come **ciò che si perde**, non come ciò che sta per succedere — è l'unico modo
+  in cui «rapido» resta una scelta informata e non un'etichetta.
 
 ---
 
@@ -194,6 +244,10 @@ niente.
 ---
 
 ## 4. I documenti e il piano a slice (G2)
+
+*(Tutto il §4 è **ciclo completo**. In ciclo rapido le stesse decisioni si
+prendono lo stesso, ma stanno in sei righe dentro il `DESIGN.md` e non in sei
+file — `ciclo-rapido.md` §3 — e le tre passate del §4.0b non si eseguono.)*
 
 Le decisioni che PRD, UX spec e architettura prendono vanno prese, e quei documenti
 vanno scritti. Non si chiedono all'owner: si producono **in consiglio**, prima del
@@ -1044,6 +1098,13 @@ Ne esce una riga:
 7. **Il gate è `close_check`** (`--council docs/consiglio/<slug>.md`): senza
    registro non si consegna. È lo stesso motivo per cui esiste il resto di quel
    comando — una regola che vive solo in prosa non viene eseguita.
+8. **Il ciclo rapido lascia una riga sola, e dice che non si è seduto nessuno:**
+   `--goal rapido --agents "Vesper"`, che il registro scrive come **«ciclo
+   rapido (nessuna seduta)»**. Non è un cavillo per far passare `close_check`: un lavoro senza
+   consiglio è una scelta legittima dell'owner, un lavoro senza consiglio che
+   **sembra** averlo avuto no — e fra sei mesi le due cose si distinguono solo
+   qui. Un `--goal rapido` seguito da righe G1/G2/G3 sullo stesso progetto vuol
+   dire che il ciclo è cambiato in corsa, e va letto così.
 
 Fallimento: una convocazione senza la sua riga; un registro scritto tutto alla
 fine; l'elenco dei convocati copiato al posto di chi ha parlato; un paragrafo di

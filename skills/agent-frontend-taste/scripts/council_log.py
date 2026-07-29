@@ -23,6 +23,11 @@ Usage:
 
     uv run scripts/council_log.py {project-root} --project <slug> --check
 
+In **ciclo rapido** (`references/ciclo-rapido.md`) il consiglio non si riunisce, e
+la riga serve a dire proprio quello — `--goal rapido --agents "Vesper"`. Un lavoro
+senza consiglio è una scelta legittima dell'owner; un lavoro senza consiglio che
+*sembra* averlo avuto no, e fra sei mesi le due cose si distinguono solo qui.
+
 Exit: 0 scritto / registro presente · 1 registro assente o vuoto (in --check)
       · 2 riga rifiutata perché non è breve (non è un verbale)
 """
@@ -44,6 +49,10 @@ GOALS = {
     "g2": "G2 documenti",
     "controllo": "controllo documenti",
     "g3": "G3 approvazione",
+    # In ciclo rapido non si siede nessuno: la riga esiste per dire **quello**.
+    # Scritta com'era — «rapido» — sembrava il nome di una seduta veloce; scritta
+    # così dice che seduta non ce n'è stata (`references/ciclo-rapido.md` §6).
+    "rapido": "ciclo rapido (nessuna seduta)",
 }
 
 HEADER = """# Consiglio — {slug}
@@ -137,7 +146,7 @@ def main() -> int:
     ap.add_argument("root", help="{project-root}")
     ap.add_argument("--project", required=True, help="slug del progetto (la cartella in apps/)")
     ap.add_argument("--check", action="store_true", help="verifica che il registro esista e non sia vuoto")
-    ap.add_argument("--goal", help="G1 | G2 | controllo | G3 (o testo libero)")
+    ap.add_argument("--goal", help="G1 | G2 | controllo | G3 | rapido (o testo libero)")
     ap.add_argument("--agents", help="chi ha parlato, separati da virgola")
     ap.add_argument("--outcome", help="cosa si è deciso, in una riga")
     ap.add_argument("--slice", dest="slice_", help="la slice in corso, es. S1")
