@@ -116,6 +116,48 @@ def main() -> int:
             "skills": ["./epm-setup", "./agent-x"]}]}))
         check("e tace quando il manifesto e a posto", mod.guai_manifesto(mk), [])
 
+    # --- le due versioni devono coincidere -----------------------------------
+    # La regola «si propaga solo la versione» viveva solo in prosa: `--check
+    # --marketplace <distribuzione>` verificava i percorsi e diceva «allineato»
+    # con la sorgente a 1.30.0 e la distribuzione a 1.29.0. Differenziale:
+    # stessa versione tace, versione diversa parla e le nomina entrambe.
+    with tempfile.TemporaryDirectory() as td:
+        base = Path(td)
+        src = base / "skills"
+        (src / ".claude-plugin").mkdir(parents=True)
+        dist = base / "distribuzione" / ".claude-plugin"
+        dist.mkdir(parents=True)
+
+        def scrivi(p: Path, v: str, skills: list[str]) -> None:
+            p.write_text(json.dumps({"plugins": [{
+                "name": "epm", "source": "./", "version": v, "skills": skills}]}))
+
+        src_mk = src / ".claude-plugin" / "marketplace.json"
+        dist_mk = dist / "marketplace.json"
+
+        scrivi(src_mk, "1.30.0", ["./epm-setup"])
+        scrivi(dist_mk, "1.30.0", ["./skills/epm-setup"])
+        check("versioni uguali: tace", mod.guai_versione(src, dist_mk), [])
+
+        scrivi(dist_mk, "1.29.0", ["./skills/epm-setup"])
+        guai = mod.guai_versione(src, dist_mk)
+        check("versione indietro nella distribuzione: parla", len(guai), 1)
+        check("e nomina quella della sorgente", "1.30.0" in guai[0])
+        check("e nomina quella della distribuzione", "1.29.0" in guai[0])
+        check("e ricorda che i percorsi restano diversi", "percorsi" in guai[0])
+
+        # Senza --marketplace il confronto sarebbe con se stesso: non misura
+        # niente, e fingere di misurarlo sarebbe un verde comprato.
+        check("manifesto sorgente contro se stesso: niente da confrontare",
+              mod.guai_versione(src, src_mk), [])
+
+        # Un manifesto illeggibile o senza versione non e' un disallineamento:
+        # lo prende `guai_manifesto`, e raddoppiare il rilievo confonde.
+        scrivi(dist_mk, "1.30.0", ["./skills/epm-setup"])
+        (dist / "vuoto.json").write_text(json.dumps({"plugins": []}))
+        check("manifesto senza plugin: nessun rilievo di versione",
+              mod.guai_versione(src, dist / "vuoto.json"), [])
+
     # --- epm-setup allinea la versione da solo -------------------------------
     # La versione vive in quattro posti e uno solo si modifica. Qui si verifica
     # che `merge-config` la prenda da module.yaml invece di lasciare quella

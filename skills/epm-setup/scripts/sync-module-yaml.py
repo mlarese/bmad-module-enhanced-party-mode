@@ -73,12 +73,47 @@ def agenti(skills_root: Path) -> list[dict]:
     return out
 
 
-def versione(skills_root: Path) -> str | None:
-    mk = skills_root / ".claude-plugin" / "marketplace.json"
+def versione_di(mk: Path) -> str | None:
     if not mk.is_file():
         return None
     plugins = json.loads(mk.read_text(encoding="utf-8")).get("plugins") or []
     return plugins[0].get("version") if plugins else None
+
+
+def versione(skills_root: Path) -> str | None:
+    """La sorgente di verità della versione: il manifesto dentro `skills/`."""
+    return versione_di(skills_root / ".claude-plugin" / "marketplace.json")
+
+
+def guai_versione(skills_root: Path, mk: Path) -> list[str]:
+    """I due manifesti devono dire la **stessa versione**.
+
+    Perché esiste. I due `marketplace.json` sono legittimamente diversi — i
+    percorsi di `skills[]` si risolvono dalla radice del plugin, che qui è
+    `skills/` e nel repo di distribuzione è il repo — e da lì la regola: «non
+    copiare uno sull'altro, si propaga solo la **versione**».
+
+    Quella regola viveva solo in prosa. `--check --marketplace <distribuzione>`
+    verificava i percorsi e diceva «allineato» con la sorgente a 1.30.0 e la
+    distribuzione ferma a 1.29.0 — cioè taceva esattamente sull'unica cosa che
+    quel comando doveva propagare. È la stessa famiglia di difetto di
+    `./epm-setup` contro `./skills/epm-setup`: una regola scritta, nessuno che
+    la esegua, e il disallineamento che non dà errore.
+
+    Non morde quando `--marketplace` non è passato: lì il manifesto è già la
+    sorgente, e confrontarlo con sé stesso non misura niente.
+    """
+    sorgente_mk = (skills_root / ".claude-plugin" / "marketplace.json").resolve()
+    if mk.resolve() == sorgente_mk:
+        return []
+    qui, la = versione_di(sorgente_mk), versione_di(mk)
+    if qui is None or la is None:
+        return []
+    if qui != la:
+        return [f"versione disallineata: la sorgente dice {qui}, "
+                f"`{mk}` dice {la}. Si propaga **solo** la versione — "
+                "i percorsi dei due manifesti restano diversi ed è giusto"]
+    return []
 
 
 def blocco(agents: list[dict]) -> str:
@@ -149,14 +184,17 @@ def main() -> int:
     if not ASSET.is_file():
         raise SystemExit(f"manca {ASSET}")
 
+    mk = (Path(args.marketplace).resolve() if args.marketplace
+          else skills_root / ".claude-plugin" / "marketplace.json")
+
     testo = ASSET.read_text(encoding="utf-8")
     voluto = atteso(testo, skills_root)
     if args.check:
         guai = []
         if voluto != testo:
             guai.append(f"`{ASSET.name}` non descrive gli agenti veri: rigeneralo")
-        guai += guai_manifesto(Path(args.marketplace).resolve() if args.marketplace
-                               else skills_root / ".claude-plugin" / "marketplace.json")
+        guai += guai_manifesto(mk)
+        guai += guai_versione(skills_root, mk)
         for g in guai:
             print(f"  ! {g}")
         print("  allineato" if not guai else f"  {len(guai)} rilievi")
@@ -165,8 +203,7 @@ def main() -> int:
     if voluto != testo:
         ASSET.write_text(voluto, encoding="utf-8")
         print(f"aggiornato {ASSET}")
-    for g in guai_manifesto(Path(args.marketplace).resolve() if args.marketplace
-                            else skills_root / ".claude-plugin" / "marketplace.json"):
+    for g in guai_manifesto(mk) + guai_versione(skills_root, mk):
         print(f"  ! {g}")
     v = versione(skills_root)
     print(f"agenti: {len(agenti(skills_root))} · versione: {v or 'non dichiarata'}")
