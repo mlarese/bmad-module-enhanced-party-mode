@@ -25,18 +25,26 @@ SKILLS = SCRIPT.parents[2]
 
 
 def manifesto_di_questo_albero() -> Path | None:
-    """Il manifesto sta in due posti diversi, e sono **entrambi giusti**.
+    """Gli alberi in cui questo file può trovarsi sono **tre**, e solo due hanno
+    un manifesto.
 
-    Nel repo sorgente `.claude-plugin/` sta dentro `skills/`, che è la radice
-    del plugin; nel repo di distribuzione sta alla radice del repo, perché lì la
-    radice del plugin è il repo. Il test cercava solo il primo, quindi arrivava
-    **rosso** ovunque il modulo venisse spedito — nel repo di distribuzione e in
-    ogni progetto che lo installa.
+    - **sorgente** (`base-bmad`): `.claude-plugin/` sta dentro `skills/`, che è
+      la radice del plugin;
+    - **distribuzione**: sta alla radice del repo, perché lì la radice del
+      plugin è il repo;
+    - **progetto installato**: la skill vive in `.claude/skills/epm-setup/` e di
+      manifesto **non ce n'è nessuno** — l'installer copia le skill, non il
+      manifesto. È il layout giusto, non un difetto.
 
-    Una suite rossa all'arrivo è come non averne una, e peggio: insegna a
-    ignorarla. Il runner vive dentro lo skill proprio perché un'installazione
-    possa verificarsi da sola, e non può farlo se il primo test fallisce per il
-    posto in cui si trova.
+    Il test guardava solo il primo, e arrivava **rosso** negli altri due.
+    Misurato due volte, e la seconda ha corretto la prima: la correzione che
+    copriva la distribuzione lasciava rosso il progetto installato, e la riga
+    «che non ce ne sia nessuno resta un difetto» era falsa. Si vede solo
+    installando davvero e lanciando la suite da lì.
+
+    Conta perché il runner vive dentro lo skill proprio per far sì che
+    un'installazione possa verificarsi da sola. Una suite rossa all'arrivo è
+    come non averla, e peggio: insegna a ignorarla.
     """
     for candidato in (SKILLS / ".claude-plugin" / "marketplace.json",
                       SKILLS.parent / ".claude-plugin" / "marketplace.json"):
@@ -73,8 +81,10 @@ def main() -> int:
     # deve essere risolvibile. Se non c'e' nessuno dei due, quello si' e' un
     # difetto — non un layout diverso.
     manifesto = manifesto_di_questo_albero()
-    check("un manifesto esiste in questo albero", manifesto is not None)
-    if manifesto is not None:
+    if manifesto is None:
+        print("SKIP: nessun manifesto in questo albero (progetto installato) — "
+              "il manifesto si verifica dove vive, cioe' nel repo del modulo")
+    else:
         check(f"il manifesto ({manifesto.parent.parent.name}/) e risolvibile",
               mod.guai_manifesto(manifesto), [])
     check("module.yaml descrive gli agenti veri",
